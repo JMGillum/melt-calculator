@@ -1,9 +1,21 @@
 import weights
 import metals
+
+
 class CoinData:
-    def __init__(self,weight:float|int|weights.Weight=None,metal=None,fineness=None,precious_metal_weight=None,years=None,country=None,denomination=None,nickname=None):
-        if isinstance(weight,float) or isinstance(weight,int):
-            self.weight = weights.Weight(weight,weights.Units.GRAMS)
+    def __init__(
+        self,
+        weight: float | int | weights.Weight = None,
+        metal=None,
+        fineness=None,
+        precious_metal_weight=None,
+        years=None,
+        country=None,
+        denomination=None,
+        nickname=None,
+    ):
+        if isinstance(weight, float) or isinstance(weight, int):
+            self.weight = weights.Weight(weight, weights.Units.GRAMS)
         else:
             self.weight = weight
         self.metal = metal
@@ -13,14 +25,25 @@ class CoinData:
         self.country = country
         self.denomination = denomination
         self.nickname = nickname
-        if precious_metal_weight is None and weight is not None and fineness is not None:
-           self.precious_metal_weight = weights.Weight(round(self.weight.as_troy_ounces()*self.fineness,4),weights.Units.TROY_OUNCES) 
+        if (
+            precious_metal_weight is None
+            and weight is not None
+            and fineness is not None
+        ):
+            self.precious_metal_weight = weights.Weight(
+                round(self.weight.as_troy_ounces() * self.fineness, 4),
+                weights.Units.TROY_OUNCES,
+            )
 
     def yearsList(self):
         if self.years is not None:
-            if isinstance(self.years,int):
+            if isinstance(self.years, int):
                 return str(self.years)
-            if isinstance(self.years,list) and len(self.years) > 0 and isinstance(self.years[0],int):
+            if (
+                isinstance(self.years, list)
+                and len(self.years) > 0
+                and isinstance(self.years[0], int)
+            ):
                 string = ""
                 start_year = None
                 previous_year = None
@@ -54,10 +77,9 @@ class CoinData:
                 return "Silver"
         return "Unknown metal"
 
-
-    def asAString(self,format:str):
-        """ Very simple attempt at a format string for information
-        %c - country  
+    def asAString(self, format: str):
+        """Very simple attempt at a format string for information
+        %c - country
         %d - denomination
         %y - years
         %a - actual precious metal weight
@@ -68,15 +90,31 @@ class CoinData:
         %n - nickname
         """
         string = format
-        string = string.replace("%c",'Unknown country' if self.country is None else self.country.title())
-        string =string.replace("%d",str(self.denomination))
-        string =string.replace("%y","Unknown years" if self.years is None else self.yearsList())
-        string =string.replace("%m","Unknown metal" if self.metal is None else self.metalString())
-        string =string.replace("%f",str(self.fineness))
-        string =string.replace("%F",str(self.fineness*100))
-        string =string.replace("%a","Unknown weight" if not isinstance(self.precious_metal_weight,weights.Weight) else f'{self.precious_metal_weight.as_troy_ounces()} toz')
-        string =string.replace("%w","Unknown weight" if not isinstance(self.weight,weights.Weight) else f'{self.weight.as_grams()}g')
-        string = string.replace("%n","" if self.nickname is None else self.nickname)
+        string = string.replace(
+            "%c", "Unknown country" if self.country is None else self.country.title()
+        )
+        string = string.replace("%d", str(self.denomination))
+        string = string.replace(
+            "%y", "Unknown years" if self.years is None else self.yearsList()
+        )
+        string = string.replace(
+            "%m", "Unknown metal" if self.metal is None else self.metalString()
+        )
+        string = string.replace("%f", str(self.fineness))
+        string = string.replace("%F", str(self.fineness * 100))
+        string = string.replace(
+            "%a",
+            "Unknown weight"
+            if not isinstance(self.precious_metal_weight, weights.Weight)
+            else f"{self.precious_metal_weight.as_troy_ounces()} toz",
+        )
+        string = string.replace(
+            "%w",
+            "Unknown weight"
+            if not isinstance(self.weight, weights.Weight)
+            else f"{self.weight.as_grams()}g",
+        )
+        string = string.replace("%n", "" if self.nickname is None else self.nickname)
         return string
 
     def __str__(self):
@@ -95,4 +133,4 @@ class CoinData:
         string += f" (weight: {'Unknown weight' if not isinstance(self.precious_metal_weight,weights.Weight) else f'{self.precious_metal_weight.as_troy_ounces()} toz'})"
         return string
         """
-        #return f"[{'Unknown years' if self.years is None else self.yearsList()}] {self.denomination} ({'Unknown' if self.country is None else self.country.title()}) ... {self.metal.title()}[fineness:{self.fineness}](weight:{'Unknown weight' if not isinstance(self.precious_metal_weight,weights.Weight) else f'{self.precious_metal_weight.as_troy_ounces()} toz'})"
+        # return f"[{'Unknown years' if self.years is None else self.yearsList()}] {self.denomination} ({'Unknown' if self.country is None else self.country.title()}) ... {self.metal.title()}[fineness:{self.fineness}](weight:{'Unknown weight' if not isinstance(self.precious_metal_weight,weights.Weight) else f'{self.precious_metal_weight.as_troy_ounces()} toz'})"

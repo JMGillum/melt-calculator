@@ -1,20 +1,22 @@
 from enum import Enum
 
+
 class Units(Enum):
     """Enumeration class for different units of measure"""
-    GRAMS=0
-    OUNCES=1
-    TROY_OUNCES=2
+
+    GRAMS = 0
+    OUNCES = 1
+    TROY_OUNCES = 2
 
 
 class Weight:
-    def __init__(self,weight:float|int,units:Units):
-        if isinstance(weight,int):
+    def __init__(self, weight: float | int, units: Units):
+        if isinstance(weight, int):
             weight = float(weight)
         self.weight = weight
         self.units = units
 
-    def get_weight(self,units:Units):
+    def get_weight(self, units: Units):
         if units == Units.GRAMS:
             return self.as_grams
         if units == Units.OUNCS:
