@@ -198,7 +198,7 @@ def coinsFrance():
 
 def coinsGermany():
     """Builds a CoinCollection object about the precious metal content of German coins"""
-    mark_10 = CoinData(years=list(range(1871,1916)),denomination = "10 Mark",metal = Metals.GOLD,weight=1.9913,fineness=0.900,retention=0.97)
+    mark_10 = CoinData(years=list(range(1871,1916)),denomination = "10 Mark",metal = Metals.GOLD,weight=3.9825,fineness=0.900,retention=0.97)
 
     german_10_mark = collection.Value(coins=mark_10,face_value=10)
 
