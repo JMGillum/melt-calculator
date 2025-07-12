@@ -1,8 +1,12 @@
 import collection
 import data
+from data import silver_spot_price, gold_spot_price
 import search
+from metals import Metals
 
-silver_spot_price = 36.00
+def price(data):
+    if isinstance(data,collection.CoinCollection):
+        data.price(silver_spot_price,gold_spot_price)
 
 
 # United States
@@ -10,6 +14,9 @@ united_states = data.coinsUnitedStates()
 
 # France
 france = data.coinsFrance()
+
+# Germany
+germany = data.coinsGermany()
 
 # Mexico
 mexico = data.coinsMexico()
@@ -19,10 +26,11 @@ italy = data.coinsItaly()
 
 
 data = collection.CoinCollection(
-    countries=sorted([united_states, mexico, france, italy], key=lambda country: country.name),
+    countries=sorted([united_states, mexico, france, germany, italy], key=lambda country: country.name),
     name="Precious Metals",
 )
 
+price(data)
 
 data.tree.cascading_set_fancy(True)
 interactive_mode = False

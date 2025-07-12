@@ -2,6 +2,9 @@ import collection
 from coinData import CoinData
 from metals import Metals
 
+silver_spot_price = 36.00
+gold_spot_price = 3350.00
+
 
 def coinsItaly():
     centesimi_20 = CoinData(years=list(range(1863,1918)),denomination = "20 centesimi",weight=1,fineness=0.835)
@@ -189,6 +192,16 @@ def coinsFrance():
     )
 
     return collection.Country(denominations=[centime, franc], name="France")
+
+
+def coinsGermany():
+    mark_10 = CoinData(years=list(range(1871,1916)),denomination = "10 Mark",metal = Metals.GOLD,weight=1.9913,fineness=0.900,retention=0.97)
+
+    german_10_mark = collection.Value(coins=mark_10,face_value=10)
+
+    mark = collection.Denomination(values=[german_10_mark],name="Mark")
+
+    return collection.Country(denominations=[mark],name="Germany")
 
 
 def coinsMexico():

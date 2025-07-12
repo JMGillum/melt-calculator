@@ -6,12 +6,20 @@ class Value:
     """Models a value of a denomination, and can have multiple sets of years, with
     different characteristics."""
 
+
+    coin_string = "[%y] ... %a %m (%w @ %F%)"
+    coin_string_name = "%n [%y] ... %a %m (%w @ %F%)"
+    coin_string_value = " - [Melt: $%v Sell: $%V]"
+    coin_string_value_default_retention = " - [Melt: $%v Sell: $(%V)]"
+
+
     def __init__(
         self,
         coins: CoinData | list[CoinData] | None = None,
         face_value: int | float | None = None,
         name: str | None = None,
     ):
+        self.show_value = True
         self.name = ""
         if name is not None:
             self.name = name
@@ -25,6 +33,20 @@ class Value:
         if coins is not None:
             self.addCoin(coins)
 
+    def getCoinString(self,coin:CoinData):
+        string = ""
+        if isinstance(coin,CoinData):
+            if coin.nickname is None:
+                string = Value.coin_string
+            else:
+                string = Value.coin_string_name
+            if self.show_value:
+                if coin.default_retention:
+                    string += Value.coin_string_value_default_retention
+                else:
+                    string += Value.coin_string_value
+        return string
+    
     def addCoin(self, coin: CoinData | list[CoinData]):
         """Adds a coin/coins to the list of iterations. Ex: 1916-1945 dimes, 1946-1964 dimes, 1965-present dimes"""
         if isinstance(coin, CoinData):
@@ -36,10 +58,23 @@ class Value:
                 if isinstance(item, CoinData):
                     self.coins.append(item)
                     if item.nickname is None:
-                        nodes.append(item.asAString("[%y] ... %a %m (%w @ %F%)"))
+                        nodes.append(item.asAString(self.getCoinString(item)))
                     else:
-                        nodes.append(item.asAString("%n [%y] ... %a %m (%w @ %F%)"))
+                        nodes.append(item.asAString(self.getCoinString(item)))
             self.tree.set_nodes(nodes)
+
+
+    def price(self,silver_price,gold_price):
+        """Determines the price of coins based on precious metal prices"""
+        nodes = []
+        for item in self.coins:
+            if isinstance(item,CoinData):
+                item.price(silver_price,gold_price)
+                if item.nickname is None:
+                    nodes.append(item.asAString(self.getCoinString(item)))
+                else:
+                    nodes.append(item.asAString(self.getCoinString(item)))
+        self.tree.set_nodes(nodes)
 
     def print(self):
         if self.name is not None:
@@ -75,6 +110,15 @@ class Denomination:
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
 
+    def price(self,silver_price,gold_price):
+        """Determines the price of coins based on precious metal prices"""
+        nodes = []
+        for item in self.values:
+            if isinstance(item,Value):
+                item.price(silver_price,gold_price)
+                nodes.append(item.tree)
+        self.tree.set_nodes(nodes)
+
     def print(self):
         if self.name is not None:
             print(self.name)
@@ -109,6 +153,16 @@ class Country:
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
 
+    def price(self,silver_price,gold_price):
+        """Determines the price of coins based on precious metal prices"""
+        nodes = []
+        for item in self.denominations:
+            if isinstance(item,Denomination):
+                item.price(silver_price,gold_price)
+                nodes.append(item.tree)
+        self.tree.set_nodes(nodes)
+        
+
     def print(self):
         if self.name is not None:
             print(self.name)
@@ -140,6 +194,15 @@ class CoinCollection:
                     self.countries.append(item)
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
+    
+    def price(self,silver_price,gold_price):
+        """Determines the price of coins based on precious metal prices"""
+        nodes = []
+        for item in self.countries:
+            if isinstance(item,Country):
+                item.price(silver_price,gold_price)
+                nodes.append(item.tree)
+        self.tree.set_nodes(nodes)
 
     def print(self):
         if self.name is not None:

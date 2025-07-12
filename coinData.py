@@ -13,6 +13,8 @@ class CoinData:
         country=None,
         denomination=None,
         nickname=None,
+        value = None,
+        retention = None
     ):
         if isinstance(weight, float) or isinstance(weight, int):
             self.weight = weights.Weight(weight, weights.Units.GRAMS)
@@ -34,6 +36,13 @@ class CoinData:
                 round(self.weight.as_troy_ounces() * self.fineness, 4),
                 weights.Units.TROY_OUNCES,
             )
+        self.value = value
+        if retention is None: # Percentage of melt value that coin is typically bought at
+            self.default_retention = True
+            self.retention = 1.00
+        else:
+            self.default_retention = False
+            self.retention = retention 
 
     def yearsList(self):
         if self.years is not None:
@@ -76,6 +85,14 @@ class CoinData:
             elif self.metal == metals.Metals.SILVER:
                 return "Silver"
         return "Unknown metal"
+    
+    def price(self,silver_price,gold_price):
+        if self.metal is not None and self.weight is not None:
+            if self.metal == metals.Metals.GOLD:
+                self.value = self.precious_metal_weight.as_troy_ounces() * gold_price
+            elif self.metal == metals.Metals.SILVER:
+                self.value = self.precious_metal_weight.as_troy_ounces() * silver_price
+        
 
     def asAString(self, format: str):
         """Very simple attempt at a format string for information
@@ -88,12 +105,20 @@ class CoinData:
         %F - fineness as a percent (fineness*100)
         %w - weight
         %n - nickname
+        %v - value
+        %V - Price retention value (value * retention percentage)
         """
         string = format
         string = string.replace(
             "%c", "Unknown country" if self.country is None else self.country.title()
         )
         string = string.replace("%d", str(self.denomination))
+        string = string.replace(
+            "%v", "Unknown value" if self.value is None else str(round(self.value,2))
+        )
+        string = string.replace(
+            "%V", "Unknown value" if (self.value is None) else str(round(self.value*self.retention,2))
+        )
         string = string.replace(
             "%y", "Unknown years" if self.years is None else self.yearsList()
         )
@@ -119,9 +144,9 @@ class CoinData:
 
     def __str__(self):
         if self.nickname is not None and self.nickname != "":
-            return self.asAString("%n (%c) %d [%y] ... %a %m (%w @ %f%)")
+            return self.asAString("%n (%c) %d [%y] ... %a %m (%w @ %f%) - $%v")
         else:
-            return self.asAString("(%c) %d [%y] ... %a %m (%w @ %f%)")
+            return self.asAString("(%c) %d [%y] ... %a %m (%w @ %f%) - $%v")
         """
         string = ""
         string += f"{'Unknown country' if self.country is None else f'({self.country.title()})'}"
