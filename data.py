@@ -7,6 +7,7 @@ gold_spot_price = 3350.00
 
 
 def coinsItaly():
+    """Builds a CoinCollection object about the precious metal content of Italian coins"""
     centesimi_20 = CoinData(years=list(range(1863,1918)),denomination = "20 centesimi",weight=1,fineness=0.835)
 
 
@@ -28,6 +29,7 @@ def coinsItaly():
     return collection.Country(denominations=[centesimi],name="Italy")
 
 def coinsFrance():
+    """Builds a CoinCollection object about the precious metal content of French coins"""
     centimes_20 = CoinData(
         years=list(range(1848, 1921)),
         denomination="20 centimes",
@@ -195,6 +197,7 @@ def coinsFrance():
 
 
 def coinsGermany():
+    """Builds a CoinCollection object about the precious metal content of German coins"""
     mark_10 = CoinData(years=list(range(1871,1916)),denomination = "10 Mark",metal = Metals.GOLD,weight=1.9913,fineness=0.900,retention=0.97)
 
     german_10_mark = collection.Value(coins=mark_10,face_value=10)
@@ -205,6 +208,7 @@ def coinsGermany():
 
 
 def coinsMexico():
+    """Builds a CoinCollection object about the precious metal content of Mexican coins"""
     mexico_un_peso = CoinData(
         years=[
             x
@@ -228,6 +232,7 @@ def coinsMexico():
 
 
 def coinsUnitedStates():
+    """Builds a CoinCollection object about the precious metal content of United States coins"""
     barber_dime = CoinData(
         nickname="Barber Dime",
         years=[x for x in list(range(1892, 1917))],

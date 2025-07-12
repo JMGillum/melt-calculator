@@ -7,6 +7,7 @@ class Value:
     different characteristics."""
 
 
+    # Templates for printing information about one of the member coins
     coin_string = "[%y] ... %a %m (%w @ %F%)"
     coin_string_name = "%n [%y] ... %a %m (%w @ %F%)"
     coin_string_value = " - [Melt: $%v Sell: $%V]"
@@ -34,6 +35,7 @@ class Value:
             self.addCoin(coins)
 
     def getCoinString(self,coin:CoinData):
+        """Returns a format string for use with a CoinData object. Depends on settings and information about the coin"""
         string = ""
         if isinstance(coin,CoinData):
             if coin.nickname is None:
@@ -52,7 +54,7 @@ class Value:
         if isinstance(coin, CoinData):
             coin = [coin]
         if isinstance(coin, list):
-            coins = sorted(list(self.coins + coin), key=lambda x: x.years[0])
+            coins = sorted(list(self.coins + coin), key=lambda x: x.years[0]) # Sorts member coins by first year available
             nodes = []
             for item in coins:
                 if isinstance(item, CoinData):
@@ -61,7 +63,7 @@ class Value:
                         nodes.append(item.asAString(self.getCoinString(item)))
                     else:
                         nodes.append(item.asAString(self.getCoinString(item)))
-            self.tree.set_nodes(nodes)
+            self.tree.set_nodes(nodes) # Updates tree for printout
 
 
     def price(self,silver_price,gold_price):
@@ -77,6 +79,7 @@ class Value:
         self.tree.set_nodes(nodes)
 
     def print(self):
+        """Prints out the information about its member coins"""
         if self.name is not None:
             print(self.name)
         if self.coins is not None and isinstance(self.coins, list):

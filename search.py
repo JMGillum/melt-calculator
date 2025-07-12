@@ -4,8 +4,8 @@ from country import CountryName
 
 
 class Search:
-    minimum_year = 1800
-    current_year = 2025
+    minimum_year = 1800 # Minimum number to be interpreted as a year instead of a denomination
+    current_year = 2025 # Current year (used for determining if a number is a year or denomination)
 
     def __init__(self):
         self.country = None
@@ -17,14 +17,15 @@ class Search:
         self.data = None
 
     def parseSearchString(self, text: str):
-        """Search must be of the form <country> <year> <value> <denomination>"""
-        numbers = re.findall("\d+", text)
-        words = re.findall("[a-zA-Z]+", text)
+        """Parses a string to extract the country's name, year, denomination, and face value"""
+        numbers = re.findall("\d+", text) # Regex finds all strings of digits
+        words = re.findall("[a-zA-Z]+", text) # Same for words
 
         year = ""
         denomination = ""
         country = ""
         face_value = ""
+        # If more than two numbers, picks year and denomination
         if len(numbers) >= 2:
             if len(numbers[0]) != 4 and len(numbers[1]) == 4:
                 year = numbers[1]
@@ -32,21 +33,22 @@ class Search:
             else:
                 year = numbers[0]
                 face_value = numbers[1]
-        elif len(numbers) == 1:
-            if len(numbers[0]) == 4:
+        elif len(numbers) == 1: # Only one number found
+            if len(numbers[0]) == 4: # Checks if number is 4 digits (a year), then checks if within provided range
                 temp = int(numbers[0])
                 if temp >= Search.minimum_year and temp <= Search.current_year:
                     year = numbers[0]
-                else:
+                else: # If not, uses number as face value
                     face_value = numbers[0]
             else:
                 face_value = numbers[0]
 
         country_names = Search.countryNames()
 
+        # Sets the country name and denomination
         if len(words) >= 2:
             for word in words:
-                temp = Search.validCountry(country_names, word)
+                temp = Search.validCountry(country_names, word) # checks if word is a valid country name
                 if temp is not None:
                     country = temp
                     words.remove(word)
@@ -63,6 +65,7 @@ class Search:
                 f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value}"
             )
 
+        # Sets values to None if they weren't found
         if country == "":
             self.country = None
         else:
@@ -81,6 +84,7 @@ class Search:
             self.denomination = denomination
 
     def search(self):
+        """Searches the data based on the set parameters"""
         country_name = self.country
         year = self.year
         denomination = self.denomination
@@ -105,7 +109,7 @@ class Search:
         # Narrows down the countries if possible
         if country_name is not None:
             countries = Search.lookupCountry(data, country_name)
-            if (
+            if ( # if country is provided, return entire Country object.
                 year is None
                 and denomination is None
                 and face_value is None
@@ -121,7 +125,7 @@ class Search:
         if denomination is not None:
             for item in countries:
                 denominations += Search.lookupDenomination(item, denomination)
-            if year is None and face_value is None and nickname is None:
+            if year is None and face_value is None and nickname is None: # If only denomination (and optionally country) is provided, return denomination objects
                 return denominations
         if (
             denominations is None or len(denominations) <= 0
@@ -130,6 +134,7 @@ class Search:
             for item in countries:
                 denominations += item.denominations
 
+        # One of the more specific parameters is provided, so narrow down results more
         if face_value is not None:
             for item in denominations:
                 values += Search.lookupValue(item, face_value)
@@ -138,12 +143,14 @@ class Search:
             for item in denominations:
                 values += item.values
 
+        # Narrows down years
         if year is not None and not (year == ""):
             coins = []
             for item in values:
                 coins += Search.lookupYear(item, year)
             return coins
 
+        # Narrows down by nickname
         if nickname is not None and not (nickname == ""):
             coins = []
             for item in values:
@@ -156,12 +163,14 @@ class Search:
         return coins
 
     def performSearch(self, data: collection.CoinCollection, search_string: str):
+        """Function to be called from outside of class. Performs search of provided string on provided data"""
         self.data = data
         self.parseSearchString(search_string)
         # return self.search(data,country_name=arguments[0],year=arguments[1],denomination=arguments[3],face_value=arguments[2])
         return self.search()
 
     def lookupCountry(data: collection.CoinCollection, name: str | list[str]):
+        """Looks up the country object in the collection"""
         if isinstance(name, str):
             return [x for x in data.countries if x.name.lower() == name.lower()]
         elif isinstance(name, list):
@@ -173,9 +182,11 @@ class Search:
             return countries
 
     def lookupDenomination(data: collection.Country, name: str):
+        """Looks up the denomination within the country object"""
         return [x for x in data.denominations if x.name.lower() == name.lower()]
 
     def lookupValue(data: collection.Denomination, face_value: int):
+        """Looks up a face value within a denomination"""
         try:
             face_value = int(face_value)
         except ValueError:
@@ -183,9 +194,11 @@ class Search:
         return [x for x in data.values if x.face_value == face_value]
 
     def lookupValueByNickname(data: collection.Value, nickname: str):
+        """Looks up CoinData objects from a Value based on nicknames"""
         return [x for x in data.coins if x.nickname.lower() == nickname.lower()]
 
     def lookupYear(data: collection.Value, year: int):
+        """Looks up CoinData objects from a Value based on year"""
         try:
             year = int(year)
         except ValueError:
@@ -193,6 +206,7 @@ class Search:
         return [x for x in data.coins if year in x.years]
 
     def validCountry(countries, text):
+        """Determines if the string is a valid country name"""
         for name in countries:
             answer = name.lookup(text)
             if answer is not None:
@@ -200,6 +214,7 @@ class Search:
         return None
 
     def countryNames():
+        """Initialization function for country names"""
         france = CountryName("France", ["French"])
         mexico = CountryName("Mexico", ["Mexican"])
         united_states = CountryName(

@@ -1,11 +1,14 @@
 class CountryName:
+    """Class for representing a country along with its alternative names."""
     def __init__(self, name: str, other_names: str | list[str] | None = None):
+        """Name is primary name, other names is a list of alternative names. Ex: name=France, other_names=[French,Francais]"""
         self.name = name
         if isinstance(other_names, str):
             other_names = [other_names]
         self.other_names = other_names
 
     def lookup(self, text: str, case_sensitive=False):
+        """Determines if the provided string is one of the country's associated names. Returns the country's official/primary name if it is. Returns None if it isn't"""
         if case_sensitive:
             if text == self.name:
                 return self.name
