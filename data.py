@@ -3,6 +3,27 @@ from coinData import CoinData
 from metals import Metals
 
 
+def coinsItaly():
+    centesimi_20 = CoinData(years=list(range(1863,1918)),denomination = "20 centesimi",weight=1,fineness=0.835)
+
+
+
+    silver_coins = [centesimi_20]
+    gold_coins = []
+
+    for item in silver_coins:
+        item.metal = Metals.SILVER
+        item.country = "Italy"
+    for item in gold_coins:
+        item.metal = Metals.GOLD
+        item.country = "Italy"
+
+    italy_20_centesimi = collection.Value(coins=[centesimi_20],face_value=20)
+
+    centesimi = collection.Denomination(values=[italy_20_centesimi],name="Centesimi")
+
+    return collection.Country(denominations=[centesimi],name="Italy")
+
 def coinsFrance():
     centimes_20 = CoinData(
         years=list(range(1848, 1921)),

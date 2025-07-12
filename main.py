@@ -14,15 +14,18 @@ france = data.coinsFrance()
 # Mexico
 mexico = data.coinsMexico()
 
+# Italy
+italy = data.coinsItaly()
+
 
 data = collection.CoinCollection(
-    countries=sorted([united_states, mexico, france], key=lambda country: country.name),
+    countries=sorted([united_states, mexico, france, italy], key=lambda country: country.name),
     name="Precious Metals",
 )
 
 
 data.tree.cascading_set_fancy(True)
-interactive_mode = True
+interactive_mode = False
 
 lines = []
 if interactive_mode:
