@@ -1,10 +1,6 @@
 import collection
 from coinData import CoinData
 from metals import Metals
-import weights
-
-
-
     
 def coinsFrance():
 
@@ -78,7 +74,7 @@ def coinsFrance():
 
 def coinsMexico():
 
-    mexico_un_peso = CoinData(years = [x for x in list(range(1920,1946)) if x not in (list(range(1928,1932))+[1936,1937,1939,1941,1942])],country="Mexico",metal=Metals.SILVER,denomination = "1 Peso", weight = weights.Weight(16.66,weights.Units.GRAMS),fineness=0.72,precious_metal_weight=weights.Weight(0.3857,weights.Units.TROY_OUNCES))
+    mexico_un_peso = CoinData(years = [x for x in list(range(1920,1946)) if x not in (list(range(1928,1932))+[1936,1937,1939,1941,1942])],country="Mexico",metal=Metals.SILVER,denomination = "1 Peso", weight = 16.66,fineness=0.72)
 
     mexico_un_peso = collection.Value(coins=mexico_un_peso,name="Un Peso",face_value=1)
 
@@ -88,26 +84,26 @@ def coinsMexico():
 
 
 def coinsUnitedStates():
-    barber_dime = CoinData(nickname="Barber Dime",years=[x for x in list(range(1892,1917))],country="United States",metal=Metals.SILVER,denomination = "10 cents",weight = weights.Weight(2.50,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.07234,weights.Units.TROY_OUNCES))
-    mercury_dime = CoinData(nickname="Mercury Dime",years=[x for x in list(range(1916,1946)) if x not in [1922,1932,1933]],country="United States",metal=Metals.SILVER,denomination = "10 cents",weight = weights.Weight(2.50,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.07234,weights.Units.TROY_OUNCES))
-    roosevelt_dime = CoinData(nickname="Roosevelt Dime",years=[x for x in list(range(1946,1965))],country="United States",metal=Metals.SILVER,denomination = "10 cents",weight = weights.Weight(2.50,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.07234,weights.Units.TROY_OUNCES))
+    barber_dime = CoinData(nickname="Barber Dime",years=[x for x in list(range(1892,1917))],country="United States",metal=Metals.SILVER,denomination = "10 cents",weight = 2.5,fineness=0.900)
+    mercury_dime = CoinData(nickname="Mercury Dime",years=[x for x in list(range(1916,1946)) if x not in [1922,1932,1933]],country="United States",metal=Metals.SILVER,denomination = "10 cents",weight = 2.5, fineness=0.900)
+    roosevelt_dime = CoinData(nickname="Roosevelt Dime",years=[x for x in list(range(1946,1965))],country="United States",metal=Metals.SILVER,denomination = "10 cents",weight = 2.5, fineness=0.900)
 
     dimes = collection.Value(coins=[barber_dime,mercury_dime,roosevelt_dime],name="Dimes",face_value=10)
 
-    standing_liberty_quarter = CoinData(nickname="Standing Liberty Quarter",years=[x for x in list(range(1916,1931)) if x not in [1922]],country="United States",metal=Metals.SILVER,denomination = "25 cents",weight = weights.Weight(6.25,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.18084,weights.Units.TROY_OUNCES))
-    washington_quarter = CoinData(nickname="Washington Quarter",years=[x for x in list(range(1932,1965)) if x not in [1933]],country="United States",metal=Metals.SILVER,denomination = "25 cents",weight = weights.Weight(6.25,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.18084,weights.Units.TROY_OUNCES))
+    standing_liberty_quarter = CoinData(nickname="Standing Liberty Quarter",years=[x for x in list(range(1916,1931)) if x not in [1922]],country="United States",metal=Metals.SILVER,denomination = "25 cents",weight = 6.25,fineness=0.900)
+    washington_quarter = CoinData(nickname="Washington Quarter",years=[x for x in list(range(1932,1965)) if x not in [1933]],country="United States",metal=Metals.SILVER,denomination = "25 cents",weight = 6.25,fineness=0.900)
 
     quarters = collection.Value(coins=[standing_liberty_quarter,washington_quarter],name = "Quarters",face_value=25)
 
-    walking_liberty_half = CoinData(nickname = "Walking Liberty Half",years=[x for x in list(range(1916,1948)) if x not in ([1922]+list(range(1924,1927))+list(range(1930,1933)))],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = weights.Weight(12.5,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.36169,weights.Units.TROY_OUNCES))
-    benjamin_half = CoinData(nickname = "Benjamin Half",years=[x for x in list(range(1948,1964))],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = weights.Weight(12.5,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.36169,weights.Units.TROY_OUNCES))
-    kennedy_half_1 = CoinData(nickname = "90% Kennedy Half",years=[1964],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = weights.Weight(12.5,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.36169,weights.Units.TROY_OUNCES))
-    kennedy_half_2 = CoinData(nickname="40% Kennedy Half",years=[x for x in list(range(1965,1971))],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = weights.Weight(11.5,weights.Units.GRAMS),fineness=0.400,precious_metal_weight=weights.Weight(0.1479,weights.Units.TROY_OUNCES))
+    walking_liberty_half = CoinData(nickname = "Walking Liberty Half",years=[x for x in list(range(1916,1948)) if x not in ([1922]+list(range(1924,1927))+list(range(1930,1933)))],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = 12.5,fineness=0.900)
+    benjamin_half = CoinData(nickname = "Benjamin Half",years=[x for x in list(range(1948,1964))],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = 12.5,fineness=0.900)
+    kennedy_half_1 = CoinData(nickname = "90% Kennedy Half",years=[1964],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = 12.5,fineness=0.900)
+    kennedy_half_2 = CoinData(nickname="40% Kennedy Half",years=[x for x in list(range(1965,1971))],country="United States",metal=Metals.SILVER,denomination = "50 cents",weight = 11.5,fineness=0.400)
 
     halves = collection.Value(coins=[walking_liberty_half,benjamin_half,kennedy_half_1,kennedy_half_2],name="Halves",face_value=50)
 
-    morgan_dollar = CoinData(nickname="Morgan Dollar",years=[x for x in (list(range(1878,1905))+[1921])],country="United States",metal=Metals.SILVER,denomination = "1 dollar",weight = weights.Weight(26.73,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.77344,weights.Units.TROY_OUNCES))
-    peace_dollar = CoinData(nickname="Peace Dollar",years=[x for x in (list(range(1921,1929))+[1934,1935])],country="United States",metal=Metals.SILVER,denomination = "1 dollar",weight = weights.Weight(26.73,weights.Units.GRAMS),fineness=0.900,precious_metal_weight=weights.Weight(0.77344,weights.Units.TROY_OUNCES))
+    morgan_dollar = CoinData(nickname="Morgan Dollar",years=[x for x in (list(range(1878,1905))+[1921])],country="United States",metal=Metals.SILVER,denomination = "1 dollar",weight = 26.73,fineness=0.900)
+    peace_dollar = CoinData(nickname="Peace Dollar",years=[x for x in (list(range(1921,1929))+[1934,1935])],country="United States",metal=Metals.SILVER,denomination = "1 dollar",weight = 26.73,fineness=0.900)
 
     dollar_coins = collection.Value(coins=[morgan_dollar,peace_dollar],name="Dollar Coins",face_value=1)
 
