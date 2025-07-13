@@ -2,25 +2,20 @@ from coinData import CoinData
 from tree import Tree
 
 
+
 class Value:
     """Models a value of a denomination, and can have multiple sets of years, with
     different characteristics."""
 
 
-    # Templates for printing information about one of the member coins
-    coin_string = "[%y] ... %a %m (%w @ %F%)"
-    coin_string_name = "%n [%y] ... %a %m (%w @ %F%)"
-    coin_string_value = " - [Melt: $%v Sell: $%V]"
-    coin_string_value_default_retention = " - [Melt: $%v Sell: $(%V)]"
 
 
     def __init__(
         self,
-        coins: CoinData | list[CoinData] | None = None,
+        coins: CoinData|list[CoinData]| None = None,
         face_value: int | float | None = None,
         name: str | None = None,
     ):
-        self.show_value = True
         self.name = ""
         if name is not None:
             self.name = name
@@ -34,35 +29,25 @@ class Value:
         if coins is not None:
             self.addCoin(coins)
 
-    def getCoinString(self,coin:CoinData):
-        """Returns a format string for use with a CoinData object. Depends on settings and information about the coin"""
-        string = ""
-        if isinstance(coin,CoinData):
-            if coin.nickname is None:
-                string = Value.coin_string
-            else:
-                string = Value.coin_string_name
-            if self.show_value:
-                if coin.default_retention:
-                    string += Value.coin_string_value_default_retention
-                else:
-                    string += Value.coin_string_value
-        return string
     
-    def addCoin(self, coin: CoinData | list[CoinData]):
+    def addCoin(self, coin:CoinData|list[CoinData]):
         """Adds a coin/coins to the list of iterations. Ex: 1916-1945 dimes, 1946-1964 dimes, 1965-present dimes"""
         if isinstance(coin, CoinData):
             coin = [coin]
         if isinstance(coin, list):
             coins = sorted(list(self.coins + coin), key=lambda x: x.years[0]) # Sorts member coins by first year available
             nodes = []
+            self.coins = []
             for item in coins:
                 if isinstance(item, CoinData):
                     self.coins.append(item)
+                    nodes.append(item.tree)
+                    """
                     if item.nickname is None:
                         nodes.append(item.asAString(self.getCoinString(item)))
                     else:
                         nodes.append(item.asAString(self.getCoinString(item)))
+                    """
             self.tree.set_nodes(nodes) # Updates tree for printout
 
 
@@ -72,10 +57,13 @@ class Value:
         for item in self.coins:
             if isinstance(item,CoinData):
                 item.price(silver_price,gold_price)
+                nodes.append(item.tree)
+                """
                 if item.nickname is None:
                     nodes.append(item.asAString(self.getCoinString(item)))
                 else:
                     nodes.append(item.asAString(self.getCoinString(item)))
+                """
         self.tree.set_nodes(nodes)
 
     def print(self):

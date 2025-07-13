@@ -1,8 +1,54 @@
 import weights
+from datetime import datetime
 import metals
+from tree import Tree
+
+class Purchase:
+    """Models a coin purchase with information about the price paid, quantity, date of purchase, mint date, and mint mark"""
+    def __init__(self,price=None,quantity=None,purchase_date=None,mint_date=None,mint_mark=None):
+        try:
+            self.price = float(price)
+        except ValueError:
+            self.price = -1.00
+        try:
+            if quantity is None:
+                self.quantity = 1
+            else:
+                self.quantity = int(quantity)
+        except ValueError:
+            self.quantity = -1
+        self.purchase_date = purchase_date
+        self.mint_date = mint_date
+        self.mint_mark = mint_mark
+
+    def __str__(self):
+        string = ""
+        if self.purchase_date is not None:
+            if isinstance(self.purchase_date,datetime):
+                string += f"({self.purchase_date.strftime('%m/%d/%y')})"
+            elif isinstance(self.purchase_date,str) and not (self.purchase_date == ""):
+                string += f"({self.purchase_date})"
+        if self.mint_date is not None and not(self.mint_date == ""):
+            string += f" {self.mint_date}"
+            if self.mint_mark is not None and not(self.mint_mark == ""):
+                string += f"{self.mint_mark}"
+        if self.price is not None:
+            string += f" - ${self.price:.2f}"
+        if self.quantity is not None:
+            if self.quantity> 1:
+                string += f" x{self.quantity}"
+                if self.price is not None and self.price >= 0:
+                    string += f" (${self.price*self.quantity})"
+        return string
 
 
 class CoinData:
+    # Templates for printing information about one of the member coins
+    coin_string = "[%y] ... %a %m (%w @ %F%)"
+    coin_string_name = "%n [%y] ... %a %m (%w @ %F%)"
+    coin_string_value = " - [Melt: $%v Sell: $%V]"
+    coin_string_value_default_retention = " - [Melt: $%v Sell: $(%V)]"
+
     def __init__(
         self,
         weight: float | int | weights.Weight = None,
@@ -14,12 +60,14 @@ class CoinData:
         denomination=None,
         nickname=None,
         value = None,
-        retention = None
+        retention = None,
+        purchases = None
     ):
         if isinstance(weight, float) or isinstance(weight, int):
             self.weight = weights.Weight(weight, weights.Units.GRAMS)
         else:
             self.weight = weight
+        self.show_value = True
         self.metal = metal
         self.fineness = fineness
         self.precious_metal_weight = precious_metal_weight
@@ -43,6 +91,38 @@ class CoinData:
         else:
             self.default_retention = False
             self.retention = retention 
+        self.collection = []
+        self.tree = Tree(name=self.asAString(self.getCoinString()),nodes=self.collection)
+        self.collection = self.addCollection(purchases)
+
+    def getCoinString(self):
+        """Returns a format string for use with a CoinData object. Depends on settings and information about the coin"""
+        string = ""
+        if self.nickname is None:
+            string = CoinData.coin_string
+        else:
+            string = CoinData.coin_string_name
+        if self.show_value:
+            if self.default_retention:
+                string += CoinData.coin_string_value_default_retention
+            else:
+                string += CoinData.coin_string_value
+        return string
+
+
+    def addCollection(self,purchases):
+        if isinstance(purchases,Purchase):
+            purchases = [purchases]
+        if isinstance(purchases,list):
+            if self.collection is not None:
+                purchases = self.collection + purchases
+            self.collection = []
+            nodes = []
+            for item in purchases:
+                if isinstance(item,Purchase):
+                    self.collection.append(item)
+                    nodes.append(str(item))
+            self.tree.set_nodes(nodes)
 
     def yearsList(self):
         if self.years is not None:
@@ -87,11 +167,14 @@ class CoinData:
         return "Unknown metal"
     
     def price(self,silver_price,gold_price):
+        """Determines the price of the coin based on precious metal prices"""
         if self.metal is not None and self.weight is not None:
             if self.metal == metals.Metals.GOLD:
                 self.value = self.precious_metal_weight.as_troy_ounces() * gold_price
             elif self.metal == metals.Metals.SILVER:
                 self.value = self.precious_metal_weight.as_troy_ounces() * silver_price
+        self.name = self.asAString(self.getCoinString())
+        self.tree.set_name(self.name)
         
 
     def asAString(self, format: str):
@@ -114,10 +197,10 @@ class CoinData:
         )
         string = string.replace("%d", str(self.denomination))
         string = string.replace(
-            "%v", "Unknown value" if self.value is None else str(round(self.value,2))
+                "%v", "Unknown value" if self.value is None else f"{round(self.value,2):.2f}"
         )
         string = string.replace(
-            "%V", "Unknown value" if (self.value is None) else str(round(self.value*self.retention,2))
+                "%V", "Unknown value" if (self.value is None) else f"{round(self.value*self.retention,2):.2f}"
         )
         string = string.replace(
             "%y", "Unknown years" if self.years is None else self.yearsList()

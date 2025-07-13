@@ -1,6 +1,8 @@
+from datetime import datetime
 import collection
-from coinData import CoinData
+from coinData import CoinData,Purchase
 from metals import Metals
+
 
 silver_spot_price = 36.00
 gold_spot_price = 3350.00
@@ -84,6 +86,7 @@ def coinsFrance():
         weight=10,
         fineness=0.68,
     )
+    franc_10_1.addCollection(Purchase(price=8.00,mint_date=1931,purchase_date = datetime(2025,7,4)))
     franc_10_2 = CoinData(
         years=list(range(1848, 1915)),
         denomination="10 Francs",
@@ -121,6 +124,7 @@ def coinsFrance():
         weight=15,
         fineness=0.9,
     )
+    franc_100_1.addCollection(Purchase(price=11.95,purchase_date=datetime(2025,7,3),mint_date=1982))
     franc_100_2 = CoinData(
         years=list(range(1848, 1915)),
         denomination="100 Francs",
@@ -199,6 +203,7 @@ def coinsFrance():
 def coinsGermany():
     """Builds a CoinCollection object about the precious metal content of German coins"""
     mark_10 = CoinData(years=list(range(1871,1916)),denomination = "10 Mark",metal = Metals.GOLD,weight=3.9825,fineness=0.900,retention=0.97)
+    mark_10.addCollection(Purchase(price=373.98,purchase_date=datetime(2025,7,5),mint_date=1898,mint_mark="A"))
 
     german_10_mark = collection.Value(coins=mark_10,face_value=10)
 
