@@ -111,6 +111,7 @@ class CoinData:
 
 
     def addCollection(self,purchases):
+        """Adds purchase data to the coin"""
         if isinstance(purchases,Purchase):
             purchases = [purchases]
         if isinstance(purchases,list):
@@ -118,10 +119,20 @@ class CoinData:
                 purchases = self.collection + purchases
             self.collection = []
             nodes = []
+            average = 0.00
+            count = 0
+            occurances = 0
+            # Adds information about the purchases to the tree
             for item in purchases:
                 if isinstance(item,Purchase):
                     self.collection.append(item)
                     nodes.append(str(item))
+                    if item.price is not None:
+                        average += (item.price * item.quantity)
+                        count = count + item.quantity
+                        occurances = occurances + 1
+            if occurances > 1: # Provides the average price if more than 2 occurances
+                nodes.append(f"Average: {average/count:.2f}")
             self.tree.set_nodes(nodes)
 
     def yearsList(self):

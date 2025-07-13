@@ -24,9 +24,12 @@ mexico = data.coinsMexico()
 # Italy
 italy = data.coinsItaly()
 
+# Canada
+canada = data.coinsCanada()
+
 
 data = collection.CoinCollection(
-    countries=sorted([united_states, mexico, france, germany, italy], key=lambda country: country.name),
+    countries=sorted([canada,united_states, mexico, france, germany, italy], key=lambda country: country.name),
     name="Precious Metals",
 )
 
