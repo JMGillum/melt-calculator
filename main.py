@@ -3,8 +3,10 @@ import collection
 import data as d
 import search
 from metals import Metals
+import country
 
-import test
+
+
 
 
 def setupParser():
@@ -50,29 +52,37 @@ try:
 except ValueError:
     print(f"Gold price provided is invalid type. Using value (${d.gold_spot_price:.2f}) defined in data.py instead.")
 
-# United States
-united_states = d.coinsUnitedStates()
 
-# France
-france = d.coinsFrance()
+if args["country"] and isinstance(args["country"],str):
+    build = search.Search.lookupCountryBuild(args["country"])
+    if build is not None:
+        result = build[1]()
+        data =collection.CoinCollection(countries=[result],name="Results")
+else:
+    # United States
+    united_states = d.coinsUnitedStates()
 
-# Germany
-germany = d.coinsGermany()
+    # France
+    france = d.coinsFrance()
 
-# Mexico
-mexico = d.coinsMexico()
+    # Germany
+    germany = d.coinsGermany()
 
-# Italy
-italy = d.coinsItaly()
+    # Mexico
+    mexico = d.coinsMexico()
 
-# Canada
-canada = d.coinsCanada()
+    # Italy
+    italy = d.coinsItaly()
+
+    # Canada
+    canada = d.coinsCanada()
 
 
-data = collection.CoinCollection(
-    countries=sorted([canada,united_states, mexico, france, germany, italy], key=lambda country: country.name),
-    name="Precious Metals",
-)
+    data = collection.CoinCollection(
+        countries=sorted([canada,united_states, mexico, france, germany, italy], key=lambda x: x.name),
+        name="Precious Metals",
+    )
+
 
 if display_price:
     price(data,args["silver"],args["gold"])

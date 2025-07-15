@@ -1,6 +1,7 @@
 import re
 import collection
 from country import CountryName
+import data
 
 
 class Search:
@@ -213,8 +214,22 @@ class Search:
                 return answer
         return None
 
-    def countryNames():
-        """Initialization function for country names"""
+    def lookupCountryBuild(name,countries=None):
+        """Finds the coin build function of a country, if the country is valid.
+        Returns a tuple of (countryName,buildFunction) on success, None on fail."""
+        if countries is None:
+            countries = Search.countryNames(with_functions=True)
+        for item in countries:
+            if isinstance(item,tuple):
+                answer = item[0].lookup(name)
+                if answer is not None:
+                    return item
+        return None
+
+
+    def countryNames(with_functions=False):
+        """Initialization function for country names. Optional with_functions parameter
+        will return a list of tuples of the form (CountryName,country coin build function)"""
         france = CountryName("France", ["French"])
         mexico = CountryName("Mexico", ["Mexican"])
         united_states = CountryName(
@@ -222,5 +237,15 @@ class Search:
             ["US", "USA", "United States of America", "America", "American"],
         )
         germany = CountryName("Germany", ["Deutschland", "German"])
+        italy = CountryName("Italy",["Italian","Italia"])
+        canada = CountryName("Canada",["Canadian"])
 
-        return [france, mexico, united_states, germany]
+        if with_functions:
+            france = (france,data.coinsFrance)
+            mexico = (mexico,data.coinsMexico)
+            united_states = (united_states,data.coinsUnitedStates)
+            germany = (germany,data.coinsGermany)
+            italy = (italy,data.coinsItaly)
+            canada = (canada,data.coinsCanada)
+
+        return [france, mexico, united_states, germany,italy,canada]
