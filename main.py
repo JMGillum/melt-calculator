@@ -59,27 +59,15 @@ if args["country"] and isinstance(args["country"],str):
         result = build[1]()
         data = collection.CoinCollection(countries=[result],name="Results")
 else:
-    # United States
-    united_states = d.coinsUnitedStates()
+    # Builds Country objects for each country defined in data.countries
+    country_coins = []
+    for country in d.countries:
+        country_coins.append(country[1]())
+    country_coins = sorted(country_coins, key = lambda x: x.name)
 
-    # France
-    france = d.coinsFrance()
-
-    # Germany
-    germany = d.coinsGermany()
-
-    # Mexico
-    mexico = d.coinsMexico()
-
-    # Italy
-    italy = d.coinsItaly()
-
-    # Canada
-    canada = d.coinsCanada()
-
-
+    # Creates the final CoinCollection object of all of the countries
     data = collection.CoinCollection(
-        countries=sorted([canada,united_states, mexico, france, germany, italy], key=lambda x: x.name),
+        countries=sorted(country_coins, key=lambda x: x.name),
         name="Precious Metals",
     )
 
