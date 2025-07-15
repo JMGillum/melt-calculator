@@ -123,6 +123,7 @@ class Search:
             countries = data.countries
 
         # Narrows down the denomination if possible
+        print(denomination)
         if denomination is not None:
             for item in countries:
                 denominations += Search.lookupDenomination(item, denomination)
@@ -143,6 +144,7 @@ class Search:
             values = []
             for item in denominations:
                 values += item.values
+
 
         # Narrows down years
         if year is not None and not (year == ""):

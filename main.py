@@ -52,7 +52,9 @@ try:
 except ValueError:
     print(f"Gold price provided is invalid type. Using value (${d.gold_spot_price:.2f}) defined in data.py instead.")
 
+data = None
 
+# If a country was specified on the command line, build its object here
 if args["country"] and isinstance(args["country"],str):
     build = search.Search.countryInfo(args["country"])
     if build is not None:
@@ -71,36 +73,100 @@ else:
         name="Precious Metals",
     )
 
+# Narrow down results if any of the more specific filters are present in the command line
+if args["year"] or args["denomination"] or args["face_value"]:
+    fail = False
+    year = None
+    face_value = None
+    try:
+        if args["year"] is not None:
+            year = int(args["year"])
+    except ValueError:
+        print(f"The specified year ({args['year']}) is not valid. It must be an integer")
+        fail = True
+    try:
+        if args["face_value"] is not None:
+            index = args["face_value"].find(".")
+            if index > 0:
+                is_float = False
+                for i in range(index+1,len(args["face_value"])):
+                    if not (args["face_value"][i] == '0'):
+                        face_value = float(args["face_value"])
+                        is_float = True
+                        break
+                if not is_float:
+                    face_value = int(args["face_value"][:index])
+            else:
+                face_value = int(args["face_value"])
+    except ValueError:
+        print(f"The specified face_value ({args['face_value']}) is not valid. It must be a number")
+        fail = True
+
+    print(year)
+    print(f"FACE VALUE: {type(face_value)}: {face_value}")
+    if not fail:
+        print("VALID")
+        lines = []
+        if data is not None:
+            s = search.Search()
+            s.data = data
+            s.year = year
+            s.face_value = face_value
+            s.denomination = args["denomination"]
+            results = s.search()
+        else:
+            results = None
+        if results is None or len(results) == 0:
+            print("No results found")
+        else:
+            if not isinstance(results, list):
+                results = [results]
+            for item in results:
+                if isinstance(item, collection.Country) or isinstance(
+                    item, collection.Denomination
+                ):
+                    item.tree.cascading_set_fancy(True)
+                    lines += item.tree.print()
+                else:
+                    print(item)
+        for item in lines:
+            print(item)
+
+            
+
+
 
 if display_price:
-    price(data,args["silver"],args["gold"])
+    if data is not None:
+        price(data,args["silver"],args["gold"])
     print(f"Silver Spot: ${d.silver_spot_price:.2f}")
     print(f"Gold Spot: ${d.gold_spot_price:.2f}")
 
-data.tree.cascading_set_fancy(True)
-interactive_mode = False
+if data is not None:
+    data.tree.cascading_set_fancy(True)
+    interactive_mode = False
 
 
-lines = []
-if interactive_mode:
-    s = search.Search()
-    results = s.performSearch(data, "France")
-    # results = search.performSearch(data, "France")
-    if results is None or len(results) == 0:
-        print("No results found")
+    lines = []
+    if interactive_mode: # Test section. Will probably be deleted in the future
+        s = search.Search()
+        results = s.performSearch(data, "France")
+        # results = search.performSearch(data, "France")
+        if results is None or len(results) == 0:
+            print("No results found")
+        else:
+            if not isinstance(results, list):
+                results = [results]
+            for item in results:
+                if isinstance(item, collection.Country) or isinstance(
+                    item, collection.Denomination
+                ):
+                    item.tree.cascading_set_fancy(True)
+                    lines += item.tree.print()
+                else:
+                    print(item)
     else:
-        if not isinstance(results, list):
-            results = [results]
-        for item in results:
-            if isinstance(item, collection.Country) or isinstance(
-                item, collection.Denomination
-            ):
-                item.tree.cascading_set_fancy(True)
-                lines += item.tree.print()
-            else:
-                print(item)
-else:
-    lines = data.tree.print()
+        lines = data.tree.print()
 
-for line in lines:
-    print(line)
+    for line in lines:
+        print(line)
