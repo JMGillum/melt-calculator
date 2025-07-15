@@ -44,18 +44,18 @@ class Search:
             else:
                 face_value = numbers[0]
 
-        country_names = Search.countryNames()
+        country_names = data.countries
 
         # Sets the country name and denomination
         if len(words) >= 2:
             for word in words:
-                temp = Search.validCountry(country_names, word) # checks if word is a valid country name
+                temp = Search.validCountry(word) # checks if word is a valid country name
                 if temp is not None:
                     country = temp
                     words.remove(word)
                     break
         elif len(words) > 0:
-            temp = Search.validCountry(country_names, words[0])
+            temp = Search.validCountry(words[0])
             if temp:
                 country = temp
             else:
@@ -206,25 +206,45 @@ class Search:
             return []
         return [x for x in data.coins if year in x.years]
 
-    def validCountry(countries, text):
-        """Determines if the string is a valid country name"""
-        for name in countries:
-            answer = name.lookup(text)
-            if answer is not None:
-                return answer
+    def countryInfo(name,return_name=True,return_build=True,countries=None):
+        """Returns information about a country, if it exists.  
+        Name is the name of the country  
+        return_name is boolean for whether the proper/main name of the country will be returned
+        return_build is boolean for whether the build function of the country will be returned
+        countries is a list of (countryName,buildFunction) tuples to search through. If not provided,
+        the ones specified in data.countries will be used."""
+        if return_name or return_build:
+            if countries is None:
+                countries = data.countries
+                if not isinstance(countries,list):
+                    countries = [countries]
+                for item in countries:
+                    item_name = item
+                    if isinstance(item,tuple):
+                        item_name = item[0]
+                    else:
+                        item = (item,None)
+                    answer = item_name.lookup(name)
+                    if answer is not None: # Determines what to return
+                        if return_name and return_build:
+                            return item
+                        if return_name and not return_build:
+                            return item_name
+                        if not return_name and return_build:
+                            return item[1]
+                        else:
+                            return None
         return None
+
+    def validCountry(text,countries=None):
+        """Determines if the string is a valid country name. Returns country's
+        proper/main name on success, and None on failure. Wrapper for Search.countryInfo()"""
+        return Search.countryInfo(text,return_build=False,countries=countries)
 
     def lookupCountryBuild(name,countries=None):
         """Finds the coin build function of a country, if the country is valid.
         Returns a tuple of (countryName,buildFunction) on success, None on fail."""
-        if countries is None:
-            countries = Search.countryNames(with_functions=True)
-        for item in countries:
-            if isinstance(item,tuple):
-                answer = item[0].lookup(name)
-                if answer is not None:
-                    return item
-        return None
+        return Search.countryInfo(name,return_name=False,countries=countries)
 
 
     def countryNames(with_functions=False):

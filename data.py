@@ -3,6 +3,7 @@ import collection
 from coinData import CoinData,Purchase
 from metals import Metals
 import weights
+from country import CountryName
 
 
 silver_spot_price = 36.00
@@ -395,3 +396,16 @@ def coinsCanada():
     dollars = collection.Denomination(values=[canada_5_dollars],name="Dollars")
     
     return collection.Country(denominations=[dollars],name="Canada")
+
+
+countries = [
+        (CountryName("France", ["French"]),coinsFrance),
+        (CountryName("Mexico", ["Mexican"]),coinsMexico),
+        (CountryName(
+            "United States",
+            ["US", "USA", "United States of America", "America", "American"],
+        ),coinsUnitedStates),
+        (CountryName("Germany", ["Deutschland", "German"]),coinsGermany),
+        (CountryName("Italy",["Italian","Italia"]),coinsItaly),
+        (CountryName("Canada",["Canadian"]),coinsCanada),
+        ]

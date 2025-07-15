@@ -54,10 +54,10 @@ except ValueError:
 
 
 if args["country"] and isinstance(args["country"],str):
-    build = search.Search.lookupCountryBuild(args["country"])
+    build = search.Search.countryInfo(args["country"])
     if build is not None:
         result = build[1]()
-        data =collection.CoinCollection(countries=[result],name="Results")
+        data = collection.CoinCollection(countries=[result],name="Results")
 else:
     # United States
     united_states = d.coinsUnitedStates()
