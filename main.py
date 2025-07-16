@@ -104,6 +104,7 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
                 else:
                     print(f"No country was found with the name {search_object.country_name}")
             if build is not None:
+                search_object.country_name = build[0].name
                 result = build[1](not args["hide_collection"])
                 if args["verbose"]:
                     print(f"Successfully built coin data for country {build[0].name}")
