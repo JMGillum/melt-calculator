@@ -159,61 +159,8 @@ if args["year"] or args["denomination"] or args["face_value"]:
             lines = results.tree.print()
             for line in lines:
                 print(line)
-
-            """ Attempt 2
-            result_countries = []
-            result_denominations = []
-            result_values = []
-            result_coins = []
-            if not isinstance(results, list):
-                results = [results]
-            for item in results:
-                if isinstance(item,collection.Country):
-                    result_countries.append(item)
-                if isinstance(item,collection.Denomination):
-                    result_denominations.append(item)
-                if isinstance(item,collection.Value):
-                    result_values.append(item)
-                if isinstance(item,coinData.CoinData):
-                    result_coins.append(item)
-
-            if args["verbose"]:
-                print("Search Results:")
-                print(f"Countries found: {result_countries}")
-                print(f"Denominations found: {result_denominations}")
-                print(f"Values found: {result_values}")
-                print(f"Coins found: {result_coins}")
-            for coin in result_coins:
-                match = [x for x in result_countries if x.name.lower() == coin.country.lower()]
-                if match is None or len(match) == 0:
-                    if args["verbose"]:
-                        print("Coin has the following information:")
-                        print(f"  Country:      {coin.country}")
-                        print(f"  Face Value:   {coin.face_value}")
-                        print(f"  Denomination: {coin.denomination}")
-                        print(f"  Years:        {coin.years}")
-                    denomination = None
-                    value = None
-                    country = None
-                    result_countries.append(country)
-
-                else:
-                    for item in match:
-                        print(f"Match! coin: {coin.country} country: {country.name}")
-            """
-
-            """ Attempt 1
-            if isinstance(item, collection.Country) or isinstance(
-                item, collection.Denomination
-            ):
-                item.tree.cascading_set_fancy(True)
-                lines += item.tree.print()
-            else:
-                print(f"result: {item}")
-            """
-
-            
-
+        for line in data.tree.print():
+            print(line)
 
 
 
