@@ -228,10 +228,6 @@ class Search:
         """Returns a deepcopy of the results of the search. This object should be able to be printed or used as normal CoinCollection data."""
         self.data = copy.deepcopy(self.data)
 
-        countries = []
-        denominations = []
-        values = []
-        coins = []
 
         if self.country_name is not None:
             countries = Search.lookupCountry(self.data,self.country_name) 
@@ -240,39 +236,134 @@ class Search:
             else:
                 self.data.countries = []
                 return self.data
+        else:
+            countries = self.data.countries
 
-        if self.denomination is not None:
-            for country in self.data.countries:
+        if self.debug:
+            print("Results have been filtered down to:")
+            for c in self.data.countries:
+                print(f"  {c.name}")
+
+        if self.denomination is None:
+            if self.face_value is None and self.nickname is None and self.year is None:
+                return self.data
+
+        else: # A denomination is defined
+            # Searches through each country in the data
+            country_index = 0
+            while country_index < len(self.data.countries):
+                country = self.data.countries[country_index]
                 temp = Search.lookupDenomination(country,self.denomination)
-                if denominations is not None and len(temp) > 0:
-                    country.denominations = denominations
-                    denominations += temp
-                else:
-                    self.data.countries.remove(country)
 
-        if self.face_value is not None:
-            for denomination in denominations:
-                temp = Search.lookupValue(denomination,self.face_value)
-                if temp is not None and len(temp) > 0:
-                    denomination.values = temp
-                    values += temp
-                else:
-                    del(denomination)
+                # If the denomination(s) was not found within the country, delete the country
+                if temp is None or len(temp) == 0:
+                    del self.data.countries[country_index]
+                    country_index -= 1
+                else: # Sets the denominations for the country to be only the one desired
+                    self.data.countries[country_index].denominations = temp
+                country_index += 1 # End of loop
 
-        if self.nickname is not None or self.year is not None:
-            for value in values:
-                temp = []
-                temp2 = []
-                if self.nickname is not None:
-                    temp = Search.lookupCoinByNickname(value,self.nickname)
-                if self.year is not None:
-                    temp2 = Search.lookupYear(value,self.year)
-                temp = list((set(temp)|set(temp2)))
-                if temp is not None and len(temp) > 0:
-                    value.coins = temp
-                    coins += temp
-                else:
-                    del(value)
+        if self.debug:
+            print("Results have been filtered down to:")
+            for c in countries:
+                print(f"  {c.name}")
+                for denomination in c.denominations:
+                    print(f"    {denomination.name}")
+
+
+        # Narrows down by face value, if applicable
+        if self.face_value is None:
+            if self.nickname is None and self.year is None:
+                return self.data
+            
+        else:
+            # Loops through each country in the data
+            country_index = 0
+            while country_index < len(self.data.countries):
+
+                # Loops through each denomination within the country
+                denomination_index = 0
+                while denomination_index < len(self.data.countries[country_index].denominations):
+                    denomination = self.data.countries[country_index].denominations[denomination_index]
+                    temp = Search.lookupValue(denomination,self.face_value)
+                    
+                    # If the face value was not found within the denomination, delete the denomination
+                    if temp is None or len(temp) == 0: 
+                        del(self.data.countries[country_index].denominations[denomination_index])
+                        denomination_index-=1 
+                    denomination_index +=1 # End of denomination loop
+
+                # If the country has no remaining denominations, delete the country
+                if len(self.data.countries[country_index].denominations) == 0:
+                    del(self.data.countries[country_index])
+                    country_index-=1
+                country_index+=1 # End of country loop
+
+        if self.debug:
+            print("Results have been filtered down to:")
+            for c in countries:
+                print(f"  {c.name}")
+                for denomination in c.denominations:
+                    print(f"    {denomination.name}")
+                    for value in denomination.values:
+                        print(f"      {value.name}")
+
+
+        # Narrows down by nickname and/or year, if applicable
+        if self.nickname is None and self.year is None:
+            return self.data
+        else:
+
+            # Loops through each country in the data
+            country_index = 0
+            while country_index < len(self.data.countries):
+
+                # Loops through each denomination within the country
+                denomination_index = 0
+                while denomination_index < len(self.data.countries[country_index].denominations):
+
+                    # Loops through each value within the denomination
+                    value_index = 0
+                    while value_index < len(self.data.countries[country_index].denominations[denomination_index].values):
+                        temp = []
+                        temp2 = []
+
+                        # Shorthand for value being tested
+                        value = self.data.countries[country_index].denominations[denomination_index].values[value_index]
+                        if self.nickname is not None: # Tries to find coin by nickname, if applicable
+                            temp = Search.lookupCoinByNickname(value,self.nickname)
+                        if self.year is not None: # Tries to find coin by year, if applicable
+                            temp2 = Search.lookupYear(value,self.year)
+                        temp = list((set(temp)|set(temp2))) # Removes duplicates if searching by both nickname and year
+                        if temp is None or len(temp) == 0: # If no coins were found, remove the value
+                            del(self.data.countries[country_index].denominations[denomination_index].values[value_index])
+                            value_index -= 1
+                        value_index+=1 # End of value loop
+
+                    # If no values remain in this denomination, delete the denomination
+                    if len(self.data.countries[country_index].denominations[denomination_index].values) == 0:
+                        del(self.data.countries[country_index].denominations[denomination_index])
+                        denomination_index-=1
+                    denomination_index+=1 # End of denomination loop
+
+                # If no denominations remain in this country, delete the country
+                if len(self.data.countries[country_index].denominations) == 0:
+                    del(self.data.countries[country_index])
+                    country_index-=1
+                country_index+=1 # End of country loop
+            
+        
+        if self.debug:
+            print("Results have been filtered down to:")
+            for c in countries:
+                print(f"  {c.name}")
+                for denomination in c.denominations:
+                    print(f"    {denomination.name}")
+                    for value in denomination.values:
+                        print(f"      {value.name}")
+                        for coin in value.coins:
+                            print(f"        {coin.yearsList()}")
+
 
         return self.data
 
