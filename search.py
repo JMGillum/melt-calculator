@@ -2,20 +2,22 @@ import re
 import collection
 from country import CountryName
 import data
+import copy
 
 
 class Search:
     minimum_year = 1800 # Minimum number to be interpreted as a year instead of a denomination
     current_year = 2025 # Current year (used for determining if a number is a year or denomination)
 
-    def __init__(self):
-        self.country = None
-        self.year = None
-        self.denomination = None
-        self.face_value = None
-        self.nickname = None
-        self.debug = False  # Flag for whether to print out information or not
-        self.data = None
+    def __init__(self,country_name=None,year=None,denomination=None,face_value=None,nickname=None,debug=False,data=None,text=None):
+        self.country_name = country_name
+        self.year = year
+        self.denomination = denomination
+        self.face_value = face_value
+        self.nickname = nickname
+        self.debug = debug  # Flag for whether to print out information or not
+        self.data = data
+        self.text = text
 
     def parseSearchString(self, text: str):
         """Parses a string to extract the country's name, year, denomination, and face value"""
@@ -84,45 +86,62 @@ class Search:
         else:
             self.denomination = denomination
 
-    def search(self):
-        """Searches the data based on the set parameters"""
-        country_name = self.country
-        year = self.year
-        denomination = self.denomination
-        face_value = self.face_value
-        nickname = self.nickname
-        data = self.data
-        if country_name == "":
-            country_name = None
-        if year == "":
-            year = None
-        if denomination == "":
-            denomination = None
-        if face_value == "":
-            face_value = None
-        if nickname == "":
-            nickname = None
+    def search(self,country_name=None,year=None,denomination=None,face_value=None,nickname=None,data=None,as_a_collection=False):
+        """Searches the data based on the set parameters. as_a_collection will return a CoinCollection object of a deepcopy of the results."""
+        # Sets member variables to the values of any provided parameters
+        if country_name is not None:
+            self.country_name = country_name
+        if year is not None:
+            self.year = year
+        if denomination is not None:
+            self.denomination = denomination
+        if face_value is not None:
+            self.face_value = face_value
+        if nickname is not None:
+            self.nickname = nickname
+        if data is not None:
+            self.data = data
+
+        # Converts empty strings to None type
+        if self.country_name == "":
+            self.country_name = None
+        if self.year == "":
+            self.year = None
+        if self.denomination == "":
+            self.denomination = None
+        if self.face_value == "":
+            self.face_value = None
+        if self.nickname == "":
+            self.nickname = None
+
+        if self.debug:
+            print("Search parameters are as follows:")
+            print(f"  Country:      {self.country_name}")
+            print(f"  Year:         {self.year}")
+            print(f"  Denomination: {self.denomination}")
+            print(f"  Face Value:   {self.face_value}")
+            print(f"  Nickname:     {self.nickname}")
+            print(f"  Returning:    {'Collection' if as_a_collection else 'Any'}")
+        if as_a_collection:
+            return self.__searchReturnCollection()
+        else:
+            return self.__searchReturnAny()
+
+
+    def __searchReturnAny(self):
+        """Returns a list of any matching objects. Can by Country(s),Denomination(s), or CoinData"""
         coins = []
         countries = []
         denominations = []
         values = []
-
-        if self.debug:
-            print("Search parameters are as follows:")
-            print(f"  Country:      {country_name}")
-            print(f"  Year:         {year}")
-            print(f"  Denomination: {denomination}")
-            print(f"  Face Value:   {face_value}")
-            print(f"  Nickname:     {nickname}")
-
         # Narrows down the countries if possible
-        if country_name is not None:
-            countries = Search.lookupCountry(data, country_name)
+        if self.country_name is not None:
+            countries = Search.lookupCountry(data, self.country_name)
             if ( # if country is provided, return entire Country object.
-                year is None
-                and denomination is None
-                and face_value is None
-                and nickname is None
+                self.year is None
+                and self.denomination is None
+                and self.face_value is None
+                and self.nickname is None
             ):
                 return countries
         if (
@@ -136,10 +155,10 @@ class Search:
                 print(f"  {item.name}")
 
         # Narrows down the denomination if possible
-        if denomination is not None:
+        if self.denomination is not None:
             for item in countries:
-                denominations += Search.lookupDenomination(item, denomination)
-            if year is None and face_value is None and nickname is None: # If only denomination (and optionally country) is provided, return denomination objects
+                denominations += Search.lookupDenomination(item, self.denomination)
+            if self.year is None and self.face_value is None and self.nickname is None: # If only denomination (and optionally country) is provided, return denomination objects
                 return denominations
         if (
             denominations is None or len(denominations) <= 0
@@ -154,9 +173,9 @@ class Search:
                 print(f"  {item.name}")
 
         # One of the more specific parameters is provided, so narrow down results more
-        if face_value is not None:
+        if self.face_value is not None:
             for item in denominations:
-                values += Search.lookupValue(item, face_value)
+                values += Search.lookupValue(item, self.face_value)
         if values is None or len(values) <= 0:
             values = []
             for item in denominations:
@@ -168,10 +187,10 @@ class Search:
                 print(f"  {item.name}")
 
         # Narrows down years
-        if year is not None and not (year == ""):
+        if self.year is not None and not (self.year == ""):
             coins = []
             for item in values:
-                coins += Search.lookupYear(item, year)
+                coins += Search.lookupYear(item, self.year)
             if self.debug:
                 print("Search found the following coins: ")
                 for item in coins:
@@ -182,10 +201,10 @@ class Search:
             print("Search could not narrow down by year.")
 
         # Narrows down by nickname
-        if nickname is not None and not (nickname == ""):
+        if self.nickname is not None and not (self.nickname == ""):
             coins = []
             for item in values:
-                coins += Search.lookupValueByNickname(item, nickname)
+                coins += Search.lookupCoinByNickname(item, self.nickname)
             if self.debug:
                 print("Search found the following coins: ")
                 for item in coins:
@@ -204,6 +223,60 @@ class Search:
                 print(f"  {item}")
 
         return coins
+
+    def __searchReturnCollection(self):
+        """Returns a deepcopy of the results of the search. This object should be able to be printed or used as normal CoinCollection data."""
+        self.data = copy.deepcopy(self.data)
+
+        countries = []
+        denominations = []
+        values = []
+        coins = []
+
+        if self.country_name is not None:
+            countries = Search.lookupCountry(self.data,self.country_name) 
+            if countries is not None and len(countries) > 0:
+                self.data.countries = countries
+            else:
+                self.data.countries = []
+                return self.data
+
+        if self.denomination is not None:
+            for country in self.data.countries:
+                temp = Search.lookupDenomination(country,self.denomination)
+                if denominations is not None and len(temp) > 0:
+                    country.denominations = denominations
+                    denominations += temp
+                else:
+                    self.data.countries.remove(country)
+
+        if self.face_value is not None:
+            for denomination in denominations:
+                temp = Search.lookupValue(denomination,self.face_value)
+                if temp is not None and len(temp) > 0:
+                    denomination.values = temp
+                    values += temp
+                else:
+                    del(denomination)
+
+        if self.nickname is not None or self.year is not None:
+            for value in values:
+                temp = []
+                temp2 = []
+                if self.nickname is not None:
+                    temp = Search.lookupCoinByNickname(value,self.nickname)
+                if self.year is not None:
+                    temp2 = Search.lookupYear(value,self.year)
+                temp = list((set(temp)|set(temp2)))
+                if temp is not None and len(temp) > 0:
+                    value.coins = temp
+                    coins += temp
+                else:
+                    del(value)
+
+        return self.data
+
+
 
     def performSearch(self, data: collection.CoinCollection, search_string: str):
         """Function to be called from outside of class. Performs search of provided string on provided data"""
@@ -236,7 +309,7 @@ class Search:
             return []
         return [x for x in data.values if x.face_value == face_value]
 
-    def lookupValueByNickname(data: collection.Value, nickname: str):
+    def lookupCoinByNickname(data: collection.Value, nickname: str):
         """Looks up CoinData objects from a Value based on nicknames"""
         return [x for x in data.coins if x.nickname.lower() == nickname.lower()]
 
