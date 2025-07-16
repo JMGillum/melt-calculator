@@ -19,10 +19,12 @@ class Search:
         self.data = data
         self.text = text
 
-    def parseSearchString(self, text: str):
+    def parseSearchString(self, text: str|None=None):
         """Parses a string to extract the country's name, year, denomination, and face value"""
-        numbers = re.findall("\d+", text) # Regex finds all strings of digits
-        words = re.findall("[a-zA-Z]+", text) # Same for words
+        if text is not None:
+            self.text = text
+        numbers = re.findall("\d+", self.text) # Regex finds all strings of digits
+        words = re.findall("[a-zA-Z]+", self.text) # Same for words
 
         year = ""
         denomination = ""
@@ -53,9 +55,10 @@ class Search:
             for word in words:
                 temp = Search.validCountry(word) # checks if word is a valid country name
                 if temp is not None:
-                    country = temp
+                    country = temp.name
                     words.remove(word)
                     break
+            denomination = words[0]
         elif len(words) > 0:
             temp = Search.validCountry(words[0])
             if temp:
@@ -70,9 +73,9 @@ class Search:
 
         # Sets values to None if they weren't found
         if country == "":
-            self.country = None
+            self.country_name = None
         else:
-            self.country = country
+            self.country_name = country
         if year == "":
             self.year = None
         else:

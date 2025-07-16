@@ -1,4 +1,4 @@
-__version_info__ = ("0","2","0")
+__version_info__ = ("0","2","1")
 __version__ = ".".join(__version_info__)
 import argparse
 import collection
@@ -14,16 +14,20 @@ import coinData
 
 def setupParser():
     parser = argparse.ArgumentParser(description="Prints information and prices on various coins made of gold and silver. These command line arguments are optional.")
-    parser.add_argument("-v","--version",action="version",version=f"%(prog)s {__version__}")
-    parser.add_argument("-g","--gold",metavar="PRICE",help="Use to supply the gold price for melt value calculations.")
-    parser.add_argument("-s","--silver",metavar="PRICE",help="Use to supply the silver price for melt value calculations.")
     parser.add_argument("-c","--country",metavar="COUNTRY",help="Name of the country to return results for. Ex: France")
-    parser.add_argument("-y","--year",metavar="YEAR",help="Year of coin to return results for. Ex: 1898")
+    parser.add_argument("-C","--hide_collection",action="store_true",help="Use to disable printing of the personal collection of coins. Does nothing when used with --owned flag")
     parser.add_argument("-d","--denomination",metavar="DENOMINATION",help="Coin denomination to return results for. Ex: Franc")
     parser.add_argument("-f","--face_value",metavar="FACE_VALUE",help="Face value of coin to return results for. Ex: 10")
+    parser.add_argument("-F","--search_file",metavar="FILE",help="Name of file containing searches. Multiple searches are supported, and must be separated by newlines.")
+    parser.add_argument("-g","--gold",metavar="PRICE",help="Use to supply the gold price for melt value calculations.")
+    parser.add_argument("-o","--owned",action="store_true",help="Show only the coins that are in the personal collection. Takes precedence over --hide_collection. Does nothing when used with the --not_owned flag.")
+    parser.add_argument("-O","--not_owned",action="store_true",help="Show only the coins that are not in the personal collection. Does nothing when used with the --owned flag.")
     parser.add_argument("-p","--hide_price",action="store_true",help="Use to disable printing of the melt value of the coins.")
-    parser.add_argument("-C","--hide_collection",action="store_true",help="Use to disable printing of the personal collection of coins.")
+    parser.add_argument("-s","--silver",metavar="PRICE",help="Use to supply the silver price for melt value calculations.")
+    parser.add_argument("-S","--search_string",metavar="STRING",help="String enclosed in quotes, containing a search to be performed. Ex: \'1898 German 10 mark\'")
+    parser.add_argument("-v","--version",action="version",version=f"%(prog)s {__version__}")
     parser.add_argument("-V","--verbose",action="store_true",help="Turns on additional printing. Useful for debugging.")
+    parser.add_argument("-y","--year",metavar="YEAR",help="Year of coin to return results for. Ex: 1898")
     return parser
 
 
@@ -58,14 +62,24 @@ except ValueError:
 
 data = None
 
+search_parameter_country = args["country"]
+search_parameter_year = args["year"]
+search_parameter_denomination = args["denomination"]
+search_parameter_face_value = args["face_value"]
+search_object = search.Search(country_name=args["country"],year=args["year"],denomination=args["denomination"],face_value=args["face_value"],debug=args["verbose"],text=args["search_string"])
+
+if args["search_string"]:
+    search_object.parseSearchString()
+
+
 # If a country was specified on the command line, build its object here
-if args["country"] and isinstance(args["country"],str):
-    build = search.Search.countryInfo(args["country"])
+if search_object.country_name is not None:
+    build = search.Search.countryInfo(search_object.country_name)
     if args["verbose"]:
         if build is not None:
-            print(f"Country {build[0].name} was successfully found from {args['country']}.")
+            print(f"Country {build[0].name} was successfully found from {search_object.country_name}.")
         else:
-            print(f"No country was found with the name {args['country']}")
+            print(f"No country was found with the name {search_object.country_name}")
     if build is not None:
         result = build[1](not args["hide_collection"])
         if args["verbose"]:
@@ -93,42 +107,42 @@ if display_price:
     print(f"Silver Spot: ${d.silver_spot_price:.2f}")
     print(f"Gold Spot: ${d.gold_spot_price:.2f}")
 # Narrow down results if any of the more specific filters are present in the command line
-if args["year"] or args["denomination"] or args["face_value"]:
+if search_object.country_name or search_object.denomination or search_object.face_value:
     fail = False
     year = None
     face_value = None
     try:
-        if args["year"] is not None:
-            year = int(args["year"])
+        if search_object.year is not None:
+            year = int(search_object.year)
             if args["verbose"]:
                 print(f"Year was successfully converted to {year}")
         else:
             if args["verbose"]:
                 print("Year was not provided. Ignoring...")
     except ValueError:
-        print(f"The specified year ({args['year']}) is not valid. It must be an integer")
+        print(f"The specified year ({search_object.year}) is not valid. It must be an integer")
         fail = True
     try:
-        if args["face_value"] is not None:
-            index = args["face_value"].find(".")
+        if search_object.face_value is not None and isinstance(search_object.face_value,str):
+            index = search_object.face_value.find(".")
             if index > 0:
                 is_float = False
-                for i in range(index+1,len(args["face_value"])):
-                    if not (args["face_value"][i] == '0'):
-                        face_value = float(args["face_value"])
+                for i in range(index+1,len(search_object.face_value)):
+                    if not (search_object.face_value[i] == '0'):
+                        face_value = float(search_object.face_value)
                         is_float = True
                         break
                 if not is_float:
-                    face_value = int(args["face_value"][:index])
+                    face_value = int(search_object.face_value[:index])
             else:
-                face_value = int(args["face_value"])
+                face_value = int(search_object.face_value)
             if args["verbose"]:
-                print(f"face value was successfully converted to {face_value}")
+                print(f"face value was successfully converted to {search_object.face_value}")
         else:
             if args["verbose"]:
                 print("face_value was not provided. Ignoring...")
     except ValueError:
-        print(f"The specified face_value ({args['face_value']}) is not valid. It must be a number")
+        print(f"The specified face_value ({search_object.face_value}) is not valid. It must be a number")
         fail = True
 
     if not fail:
@@ -136,23 +150,20 @@ if args["year"] or args["denomination"] or args["face_value"]:
             print("The year and/or face_value arguments were successfully converted.")
         lines = []
         if data is not None:
-            s = search.Search()
-            s.data = data
-            s.year = year
-            s.face_value = face_value
-            s.debug = args["verbose"]
-            s.denomination = args["denomination"]
-            results = s.search(as_a_collection=True)
+            search_object.data = data
+            search_object.year = year
+            search_object.face_value = face_value
+            results = search_object.search(as_a_collection=True)
         else:
             results = None
         if results is None:
             print(f"No results found for {args['country']} {year} {args['denomination']} {face_value}")
         else: # Search found some results
             # Sorts results into their types and stores them in their respective lists
-            text_year = f'{year} ' if year else ""
-            text_country = f'{args["country"]} ' if args["country"] else ""
-            text_face_value = f'{face_value} ' if face_value else ""
-            text_denomination = args["denomination"] if args["denomination"] else ""
+            text_year = f'{search_object.year} ' if year else ""
+            text_country = f'{search_object.country_name} ' if search_object.country_name else ""
+            text_face_value = f'{search_object.face_value} ' if search_object.face_value else ""
+            text_denomination = search_object.denomination if search_object.denomination else ""
             results.tree.set_name(f"Results for \'{text_year}{text_country}{text_face_value}{text_denomination}\'")
             results.rebuildTree()
             results.tree.cascading_set_fancy(True)
