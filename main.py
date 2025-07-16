@@ -159,8 +159,6 @@ if args["year"] or args["denomination"] or args["face_value"]:
             lines = results.tree.print()
             for line in lines:
                 print(line)
-        for line in data.tree.print():
-            print(line)
 
 
 
