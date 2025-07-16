@@ -461,7 +461,7 @@ def coinsCanada(show_personal_collection=True):
 
     canada_5_dollars = collection.Value(coins=dollar_5,name="5 Dollar Coins",face_value=5)
 
-    dollars = collection.Denomination(values=[canada_5_dollars],name="Dollars")
+    dollars = collection.Denomination(values=[canada_5_dollars],name="Dollar")
     
     canada = collection.Country(denominations=[dollars],name="Canada")
 
@@ -483,6 +483,7 @@ def coinsCanada(show_personal_collection=True):
         dollar_5.addCollection([Purchase(price=33.9,purchase_date=datetime(2025,4,18)),Purchase(price=37.95,purchase_date=datetime(2025,6,24)),Purchase(price=38.2,purchase_date=datetime(2025,7,8))])
         # Personal collection above
     return canada
+
 
 
 countries = [
