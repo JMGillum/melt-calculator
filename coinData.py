@@ -44,8 +44,8 @@ class Purchase:
 
 class CoinData:
     # Templates for printing information about one of the member coins
-    coin_string = "[%y] ... %a %m (%w @ %F%)"
-    coin_string_name = "%n [%y] ... %a %m (%w @ %F%)"
+    coin_string = "[%y] ... %a %m (%w @ %p%)"
+    coin_string_name = "%n [%y] ... %a %m (%w @ %p%)"
     coin_string_value = " - [Melt: $%v Sell: $%V]"
     coin_string_value_default_retention = " - [Melt: $%v Sell: $(%V)]"
 
@@ -57,6 +57,7 @@ class CoinData:
         precious_metal_weight=None,
         years=None,
         country=None,
+        face_value=None,
         denomination=None,
         nickname=None,
         value = None,
@@ -74,6 +75,7 @@ class CoinData:
         self.precious_metal_weight = precious_metal_weight
         self.years = years
         self.country = country
+        self.face_value = face_value
         self.denomination = denomination
         self.nickname = nickname
         if (
@@ -123,15 +125,34 @@ class CoinData:
         if isinstance(purchases,list):
             if self.collection is not None:
                 purchases = self.collection + purchases
-            self.collection = []
-            nodes = []
+            if purchases is not None:
+                self.collection = []
+                nodes = []
+                average = 0.00
+                count = 0
+                occurances = 0
+                # Adds information about the purchases to the tree
+                for item in purchases:
+                    if isinstance(item,Purchase):
+                        self.collection.append(item)
+                        nodes.append(str(item))
+                        if item.price is not None:
+                            average += (item.price * item.quantity)
+                            count = count + item.quantity
+                            occurances = occurances + 1
+                if occurances > 1: # Provides the average price if more than 2 occurances
+                    nodes.append(f"Average: {average/count:.2f}")
+            self.tree.set_nodes(nodes)
+
+    def rebuildTree(self):
+        nodes = []
+        if self.collection is not None:
             average = 0.00
             count = 0
             occurances = 0
             # Adds information about the purchases to the tree
-            for item in purchases:
+            for item in self.collection:
                 if isinstance(item,Purchase):
-                    self.collection.append(item)
                     nodes.append(str(item))
                     if item.price is not None:
                         average += (item.price * item.quantity)
@@ -139,7 +160,9 @@ class CoinData:
                         occurances = occurances + 1
             if occurances > 1: # Provides the average price if more than 2 occurances
                 nodes.append(f"Average: {average/count:.2f}")
-            self.tree.set_nodes(nodes)
+
+        self.tree.set_name(self.asAString(self.getCoinString()))
+        self.tree.set_nodes(nodes)
 
     def yearsList(self):
         if self.years is not None:
@@ -197,12 +220,13 @@ class CoinData:
     def asAString(self, format: str):
         """Very simple attempt at a format string for information
         %c - country
+        %F - face value
         %d - denomination
         %y - years
         %a - actual precious metal weight
         %m - metal
         %f - fineness
-        %F - fineness as a percent (fineness*100)
+        %p - fineness as a percent (fineness*100)
         %w - weight
         %n - nickname
         %v - value
@@ -213,6 +237,7 @@ class CoinData:
             "%c", "Unknown country" if self.country is None else self.country.title()
         )
         string = string.replace("%d", str(self.denomination))
+        string = string.replace("%F", str(self.face_value))
         string = string.replace(
                 "%v", "Unknown value" if self.value is None else f"{round(self.value,2):.2f}"
         )
@@ -226,7 +251,7 @@ class CoinData:
             "%m", "Unknown metal" if self.metal is None else self.metalString()
         )
         string = string.replace("%f", str(self.fineness))
-        string = string.replace("%F", str(self.fineness * 100))
+        string = string.replace("%p", str(self.fineness * 100))
         string = string.replace(
             "%a",
             "Unknown weight"
@@ -244,9 +269,9 @@ class CoinData:
 
     def __str__(self):
         if self.nickname is not None and self.nickname != "":
-            return self.asAString("%n (%c) %d [%y] ... %a %m (%w @ %f%) - $%v")
+            return self.asAString("%n (%c) %F %d [%y] ... %a %m (%w @ %f%) - $%v")
         else:
-            return self.asAString("(%c) %d [%y] ... %a %m (%w @ %f%) - $%v")
+            return self.asAString("(%c) %F %d [%y] ... %a %m (%w @ %f%) - $%v")
         """
         string = ""
         string += f"{'Unknown country' if self.country is None else f'({self.country.title()})'}"

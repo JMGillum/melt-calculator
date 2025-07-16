@@ -50,6 +50,13 @@ class Value:
                     """
             self.tree.set_nodes(nodes) # Updates tree for printout
 
+    def rebuildTree(self):
+        nodes = []
+        for item in self.coins:
+            item.rebuildTree()
+            nodes.append(item.tree)
+        self.tree.set_nodes(nodes)
+
     def togglePrice(self,show_price:bool):
         for coin in self.coins:
             coin.togglePrice(show_price)
@@ -83,11 +90,12 @@ class Denomination:
     """Models a denomination of the currency. Ex: Francs, Marks, Dollars"""
 
     def __init__(
-        self, values: Value | list[Value] | None = None, name: str | None = None
+            self, values: Value | list[Value] | None = None, name: str | None = None
     ):
         self.name = ""
-        if self.name is not None:
+        if name is not None:
             self.name = name
+        self.country = ""
         self.values = []  # Collection of values of the denomination
         self.tree = Tree(name=self.name, nodes=self.values)
         if values is not None:
@@ -104,6 +112,13 @@ class Denomination:
                     self.values.append(item)
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
+
+    def rebuildTree(self):
+        nodes = []
+        for item in self.values:
+            item.rebuildTree()
+            nodes.append(item.tree)
+        self.tree.set_nodes(nodes)
 
     def togglePrice(self,show_price:bool):
         for value in self.values:
@@ -152,6 +167,13 @@ class Country:
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
 
+    def rebuildTree(self):
+        nodes = []
+        for item in self.denominations:
+            item.rebuildTree()
+            nodes.append(item.tree)
+        self.tree.set_nodes(nodes)
+
     def togglePrice(self,show_price:bool):
         for denomination in self.denominations:
             denomination.togglePrice(show_price)
@@ -197,6 +219,13 @@ class CoinCollection:
                     self.countries.append(item)
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
+
+    def rebuildTree(self):
+        nodes = []
+        for item in self.countries:
+            item.rebuildTree()
+            nodes.append(item.tree)
+        self.tree.set_nodes(nodes)
     
     def togglePrice(self,show_price:bool):
         for country in self.countries:
