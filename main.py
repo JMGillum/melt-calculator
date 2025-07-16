@@ -20,8 +20,6 @@ def setupParser():
     parser.add_argument("-f","--face_value",metavar="FACE_VALUE",help="Face value of coin to return results for. Ex: 10")
     parser.add_argument("-F","--search_file",metavar="FILE",help="Name of file containing searches. Multiple searches are supported, and must be separated by newlines.")
     parser.add_argument("-g","--gold",metavar="PRICE",help="Use to supply the gold price for melt value calculations.")
-    parser.add_argument("-o","--owned",action="store_true",help="Show only the coins that are in the personal collection. Takes precedence over --hide_collection. Does nothing when used with the --not_owned flag.")
-    parser.add_argument("-O","--not_owned",action="store_true",help="Show only the coins that are not in the personal collection. Does nothing when used with the --owned flag.")
     parser.add_argument("-p","--hide_price",action="store_true",help="Use to disable printing of the melt value of the coins.")
     parser.add_argument("-s","--silver",metavar="PRICE",help="Use to supply the silver price for melt value calculations.")
     parser.add_argument("-S","--search_string",metavar="STRING",help="String enclosed in quotes, containing a search to be performed. Ex: \'1898 German 10 mark\'")
