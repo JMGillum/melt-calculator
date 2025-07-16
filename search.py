@@ -291,6 +291,8 @@ class Search:
                     if temp is None or len(temp) == 0: 
                         del(self.data.countries[country_index].denominations[denomination_index])
                         denomination_index-=1 
+                    else: # Sets value to be those found by the search
+                        self.data.countries[country_index].denominations[denomination_index].values = temp
                     denomination_index +=1 # End of denomination loop
 
                 # If the country has no remaining denominations, delete the country
@@ -338,6 +340,8 @@ class Search:
                         if temp is None or len(temp) == 0: # If no coins were found, remove the value
                             del(self.data.countries[country_index].denominations[denomination_index].values[value_index])
                             value_index -= 1
+                        else: # Sets coins to be only those found within specs
+                            self.data.countries[country_index].denominations[denomination_index].values[value_index].coins=temp
                         value_index+=1 # End of value loop
 
                     # If no values remain in this denomination, delete the denomination
