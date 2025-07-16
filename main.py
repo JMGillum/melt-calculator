@@ -77,6 +77,11 @@ else:
 if data is not None and args["hide_price"]:
     data.togglePrice(not args["hide_price"])
 
+if display_price:
+    if data is not None:
+        price(data,args["silver"],args["gold"])
+    print(f"Silver Spot: ${d.silver_spot_price:.2f}")
+    print(f"Gold Spot: ${d.gold_spot_price:.2f}")
 # Narrow down results if any of the more specific filters are present in the command line
 if args["year"] or args["denomination"] or args["face_value"]:
     fail = False
@@ -106,10 +111,7 @@ if args["year"] or args["denomination"] or args["face_value"]:
         print(f"The specified face_value ({args['face_value']}) is not valid. It must be a number")
         fail = True
 
-    print(year)
-    print(f"FACE VALUE: {type(face_value)}: {face_value}")
     if not fail:
-        print("VALID")
         lines = []
         if data is not None:
             s = search.Search()
@@ -121,7 +123,7 @@ if args["year"] or args["denomination"] or args["face_value"]:
         else:
             results = None
         if results is None or len(results) == 0:
-            print("No results found")
+            print(f"No results found for {args['country']} {year} {args['denomination']} {face_value}")
         else:
             if not isinstance(results, list):
                 results = [results]
@@ -140,14 +142,10 @@ if args["year"] or args["denomination"] or args["face_value"]:
 
 
 
-if display_price:
-    if data is not None:
-        price(data,args["silver"],args["gold"])
-    print(f"Silver Spot: ${d.silver_spot_price:.2f}")
-    print(f"Gold Spot: ${d.gold_spot_price:.2f}")
 
-if data is not None:
-    data.tree.cascading_set_fancy(True)
+else: 
+    if data is not None:
+        data.tree.cascading_set_fancy(True)
     interactive_mode = False
 
 
