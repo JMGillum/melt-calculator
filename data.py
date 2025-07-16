@@ -10,7 +10,7 @@ silver_spot_price = 36.00
 gold_spot_price = 3350.00
 
 
-def coinsItaly():
+def coinsItaly(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of Italian coins"""
     centesimi_20 = CoinData(years=list(range(1863,1918)),denomination = "20 centesimi",weight=1,fineness=0.835)
 
@@ -29,10 +29,14 @@ def coinsItaly():
     italy_20_centesimi = collection.Value(coins=[centesimi_20],face_value=20)
 
     centesimi = collection.Denomination(values=[italy_20_centesimi],name="Centesimi")
+    if show_personal_collection:
+        # Personal collection below
+        pass
+        # Personal collection above
 
     return collection.Country(denominations=[centesimi],name="Italy")
 
-def coinsFrance():
+def coinsFrance(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of French coins"""
     centimes_20 = CoinData(
         years=list(range(1848, 1921)),
@@ -126,7 +130,6 @@ def coinsFrance():
         weight=15,
         fineness=0.9,
     )
-    franc_100_1.addCollection(Purchase(price=11.95,purchase_date=datetime(2025,7,3),mint_date=1982))
     franc_100_2 = CoinData(
         years=list(range(1848, 1915)),
         denomination="100 Francs",
@@ -199,22 +202,31 @@ def coinsFrance():
         name="Franc",
     )
 
+    if show_personal_collection:
+        # Personal collection below
+        franc_100_1.addCollection(Purchase(price=11.95,purchase_date=datetime(2025,7,3),mint_date=1982))
+        # Personal collection above
+
     return collection.Country(denominations=[centime, franc], name="France")
 
 
-def coinsGermany():
+def coinsGermany(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of German coins"""
     mark_10 = CoinData(years=list(range(1871,1916)),denomination = "10 Mark",metal = Metals.GOLD,weight=3.9825,fineness=0.900,retention=0.97)
-    mark_10.addCollection(Purchase(price=373.98,purchase_date=datetime(2025,7,5),mint_date=1898,mint_mark="A"))
 
     german_10_mark = collection.Value(coins=mark_10,face_value=10)
 
     mark = collection.Denomination(values=[german_10_mark],name="Mark")
 
+    if show_personal_collection:
+        # Personal collection below
+        mark_10.addCollection(Purchase(price=373.98,purchase_date=datetime(2025,7,5),mint_date=1898,mint_mark="A"))
+        # Personal collection above
+
     return collection.Country(denominations=[mark],name="Germany")
 
 
-def coinsMexico():
+def coinsMexico(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of Mexican coins"""
     mexico_un_peso = CoinData(
         years=[
@@ -235,10 +247,15 @@ def coinsMexico():
 
     peso = collection.Denomination(values=[mexico_un_peso], name="Peso")
 
+    if show_personal_collection:
+        # Personal collection below
+        # Personal collection above
+        pass
+
     return collection.Country(denominations=peso, name="Mexico")
 
 
-def coinsUnitedStates():
+def coinsUnitedStates(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of United States coins"""
     barber_dime = CoinData(
         nickname="Barber Dime",
@@ -258,7 +275,6 @@ def coinsUnitedStates():
         weight=2.5,
         fineness=0.900,
     )
-    mercury_dime.addCollection(Purchase(price=2.56,purchase_date=datetime(2025,7,12),quantity=1))
     roosevelt_dime = CoinData(
         nickname="Roosevelt Dime",
         years=[x for x in list(range(1946, 1965))],
@@ -268,7 +284,6 @@ def coinsUnitedStates():
         weight=2.5,
         fineness=0.900,
     )
-    roosevelt_dime.addCollection([Purchase(price=2.56,purchase_date=datetime(2025,7,12),quantity=48),Purchase(price=0.1,purchase_date=datetime(2025,7,12),quantity=1)])
 
     dimes = collection.Value(
         coins=[barber_dime, mercury_dime, roosevelt_dime], name="Dimes", face_value=10
@@ -283,7 +298,6 @@ def coinsUnitedStates():
         weight=6.25,
         fineness=0.900,
     )
-    barber_quarter.addCollection(Purchase(price=6.43,purchase_date=datetime(2025,7,12),quantity=4))
     standing_liberty_quarter = CoinData(
         nickname="Standing Liberty Quarter",
         years=[x for x in list(range(1916, 1931)) if x not in [1922]],
@@ -293,7 +307,6 @@ def coinsUnitedStates():
         weight=6.25,
         fineness=0.900,
     )
-    standing_liberty_quarter.addCollection(Purchase(price=6.43,purchase_date=datetime(2025,7,12),quantity=4))
     washington_quarter = CoinData(
         nickname="Washington Quarter",
         years=[x for x in list(range(1932, 1965)) if x not in [1933]],
@@ -303,7 +316,6 @@ def coinsUnitedStates():
         weight=6.25,
         fineness=0.900,
     )
-    washington_quarter.addCollection(Purchase(price=2.56,purchase_date=datetime(2025,7,12),quantity=28))
     quarters = collection.Value(
         coins=[barber_quarter,standing_liberty_quarter, washington_quarter],
         name="Quarters",
@@ -323,7 +335,6 @@ def coinsUnitedStates():
         weight=12.5,
         fineness=0.900,
     )
-    walking_liberty_half.addCollection(Purchase(price=12.86,purchase_date=datetime(2025,7,12),quantity=9))
     benjamin_half = CoinData(
         nickname="Benjamin Half",
         years=[x for x in list(range(1948, 1964))],
@@ -333,7 +344,6 @@ def coinsUnitedStates():
         weight=12.5,
         fineness=0.900,
     )
-    benjamin_half.addCollection(Purchase(price=12.86,purchase_date=datetime(2025,7,12),quantity=1))
     kennedy_half_1 = CoinData(
         nickname="90% Kennedy Half",
         years=[1964],
@@ -385,16 +395,30 @@ def coinsUnitedStates():
     cents = collection.Denomination(values=[dimes, quarters, halves], name="Cents")
     dollars = collection.Denomination(values=[dollar_coins], name="Dollars")
 
+    if show_personal_collection:
+        # Personal collection below
+        mercury_dime.addCollection(Purchase(price=2.56,purchase_date=datetime(2025,7,12),quantity=1))
+        roosevelt_dime.addCollection([Purchase(price=2.56,purchase_date=datetime(2025,7,12),quantity=48),Purchase(price=0.1,purchase_date=datetime(2025,7,12),quantity=1)])
+        barber_quarter.addCollection(Purchase(price=6.43,purchase_date=datetime(2025,7,12),quantity=4))
+        standing_liberty_quarter.addCollection(Purchase(price=6.43,purchase_date=datetime(2025,7,12),quantity=4))
+        washington_quarter.addCollection(Purchase(price=2.56,purchase_date=datetime(2025,7,12),quantity=28))
+        walking_liberty_half.addCollection(Purchase(price=12.86,purchase_date=datetime(2025,7,12),quantity=9))
+        benjamin_half.addCollection(Purchase(price=12.86,purchase_date=datetime(2025,7,12),quantity=1))
+        # Personal collection above
+
     return collection.Country(denominations=[cents, dollars], name="United States")
 
-def coinsCanada():
+def coinsCanada(show_personal_collection=True):
     dollar_5 = CoinData(nickname="Silver Maple Leaf Bullion",years=list(range(1988,2026)),country="Canada",metal=Metals.SILVER,denomination="5 dollars",weight=31.11,fineness=0.9999,precious_metal_weight=weights.Weight(1,weights.Units.TROY_OUNCES))
-    dollar_5.addCollection([Purchase(price=33.9,purchase_date=datetime(2025,4,18)),Purchase(price=37.95,purchase_date=datetime(2025,6,24)),Purchase(price=38.2,purchase_date=datetime(2025,7,8))])
 
     canada_5_dollars = collection.Value(coins=dollar_5,name="5 Dollar Coins",face_value=5)
 
     dollars = collection.Denomination(values=[canada_5_dollars],name="Dollars")
     
+    if show_personal_collection:
+        # Personal collection below
+        dollar_5.addCollection([Purchase(price=33.9,purchase_date=datetime(2025,4,18)),Purchase(price=37.95,purchase_date=datetime(2025,6,24)),Purchase(price=38.2,purchase_date=datetime(2025,7,8))])
+        # Personal collection above
     return collection.Country(denominations=[dollars],name="Canada")
 
 

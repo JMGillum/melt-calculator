@@ -1,3 +1,5 @@
+__version_info__ = ("0","0","1")
+__version__ = ".".join(__version_info__)
 import argparse
 import collection
 import data as d
@@ -10,17 +12,16 @@ import country
 
 
 def setupParser():
-    __version_info__ = ("0","0","1")
-    __version__ = ".".join(__version_info__)
     parser = argparse.ArgumentParser(description="Prints information and prices on various coins made of gold and silver. These command line arguments are optional.")
     parser.add_argument("-v","--version",action="version",version=f"%(prog)s {__version__}")
-    parser.add_argument("-n","--no_price",action="store_true",help="Use to disable printing of the melt value of the coins.")
     parser.add_argument("-g","--gold",metavar="PRICE",help="Use to supply the gold price for melt value calculations.")
     parser.add_argument("-s","--silver",metavar="PRICE",help="Use to supply the silver price for melt value calculations.")
     parser.add_argument("-c","--country",metavar="COUNTRY",help="Name of the country to return results for. Ex: France")
     parser.add_argument("-y","--year",metavar="YEAR",help="Year of coin to return results for. Ex: 1898")
     parser.add_argument("-d","--denomination",metavar="DENOMINATION",help="Coin denomination to return results for. Ex: Franc")
     parser.add_argument("-f","--face_value",metavar="FACE_VALUE",help="Face value of coin to return results for. Ex: 10")
+    parser.add_argument("-p","--hide_price",action="store_true",help="Use to disable printing of the melt value of the coins.")
+    parser.add_argument("-C","--hide_collection",action="store_true",help="Use to disable printing of the personal collection of coins.")
     return parser
 
 
@@ -38,7 +39,7 @@ def price(data,silver_price=None,gold_price=None):
 parser = setupParser()
 args = vars(parser.parse_args())
 print(f"arguments: {args}")
-display_price = not args["no_price"]
+display_price = not args["hide_price"]
 
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
 try:
@@ -58,13 +59,13 @@ data = None
 if args["country"] and isinstance(args["country"],str):
     build = search.Search.countryInfo(args["country"])
     if build is not None:
-        result = build[1]()
+        result = build[1](not args["hide_collection"])
         data = collection.CoinCollection(countries=[result],name="Results")
 else:
     # Builds Country objects for each country defined in data.countries
     country_coins = []
     for country in d.countries:
-        country_coins.append(country[1]())
+        country_coins.append(country[1](not args["hide_collection"]))
     country_coins = sorted(country_coins, key = lambda x: x.name)
 
     # Creates the final CoinCollection object of all of the countries
