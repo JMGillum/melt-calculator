@@ -1,4 +1,4 @@
-__version_info__ = ("0","0","1")
+__version_info__ = ("0","1","0")
 __version__ = ".".join(__version_info__)
 import argparse
 import collection
@@ -22,6 +22,7 @@ def setupParser():
     parser.add_argument("-f","--face_value",metavar="FACE_VALUE",help="Face value of coin to return results for. Ex: 10")
     parser.add_argument("-p","--hide_price",action="store_true",help="Use to disable printing of the melt value of the coins.")
     parser.add_argument("-C","--hide_collection",action="store_true",help="Use to disable printing of the personal collection of coins.")
+    parser.add_argument("-V","--verbose",action="store_true",help="Turns on additional printing. Useful for debugging.")
     return parser
 
 
@@ -38,7 +39,8 @@ def price(data,silver_price=None,gold_price=None):
 
 parser = setupParser()
 args = vars(parser.parse_args())
-print(f"arguments: {args}")
+if args["verbose"]:
+    print(f"arguments: {args}")
 display_price = not args["hide_price"]
 
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
@@ -58,8 +60,15 @@ data = None
 # If a country was specified on the command line, build its object here
 if args["country"] and isinstance(args["country"],str):
     build = search.Search.countryInfo(args["country"])
+    if args["verbose"]:
+        if build is not None:
+            print(f"Country {build[0].name} was successfully found from {args['country']}.")
+        else:
+            print(f"No country was found with the name {args['country']}")
     if build is not None:
         result = build[1](not args["hide_collection"])
+        if args["verbose"]:
+            print(f"Successfully built coin data for country {build[0].name}")
         data = collection.CoinCollection(countries=[result],name="Results")
 else:
     # Builds Country objects for each country defined in data.countries
@@ -90,6 +99,11 @@ if args["year"] or args["denomination"] or args["face_value"]:
     try:
         if args["year"] is not None:
             year = int(args["year"])
+            if args["verbose"]:
+                print(f"Year was successfully converted to {year}")
+        else:
+            if args["verbose"]:
+                print("Year was not provided. Ignoring...")
     except ValueError:
         print(f"The specified year ({args['year']}) is not valid. It must be an integer")
         fail = True
@@ -107,17 +121,25 @@ if args["year"] or args["denomination"] or args["face_value"]:
                     face_value = int(args["face_value"][:index])
             else:
                 face_value = int(args["face_value"])
+            if args["verbose"]:
+                print(f"face value was successfully converted to {face_value}")
+        else:
+            if args["verbose"]:
+                print("face_value was not provided. Ignoring...")
     except ValueError:
         print(f"The specified face_value ({args['face_value']}) is not valid. It must be a number")
         fail = True
 
     if not fail:
+        if args["verbose"]:
+            print("The year and/or face_value arguments were successfully converted.")
         lines = []
         if data is not None:
             s = search.Search()
             s.data = data
             s.year = year
             s.face_value = face_value
+            s.debug = args["verbose"]
             s.denomination = args["denomination"]
             results = s.search()
         else:
@@ -134,7 +156,7 @@ if args["year"] or args["denomination"] or args["face_value"]:
                     item.tree.cascading_set_fancy(True)
                     lines += item.tree.print()
                 else:
-                    print(item)
+                    print(f"result: {item}")
         for item in lines:
             print(item)
 

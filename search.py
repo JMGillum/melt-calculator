@@ -107,6 +107,14 @@ class Search:
         denominations = []
         values = []
 
+        if self.debug:
+            print("Search parameters are as follows:")
+            print(f"  Country:      {country_name}")
+            print(f"  Year:         {year}")
+            print(f"  Denomination: {denomination}")
+            print(f"  Face Value:   {face_value}")
+            print(f"  Nickname:     {nickname}")
+
         # Narrows down the countries if possible
         if country_name is not None:
             countries = Search.lookupCountry(data, country_name)
@@ -122,8 +130,12 @@ class Search:
         ):  # Country doesn't exist in data or name wasn't provided
             countries = data.countries
 
+        if self.debug:
+            print("Search filtered down to the following countries: ")
+            for item in countries:
+                print(f"  {item.name}")
+
         # Narrows down the denomination if possible
-        print(denomination)
         if denomination is not None:
             for item in countries:
                 denominations += Search.lookupDenomination(item, denomination)
@@ -136,6 +148,11 @@ class Search:
             for item in countries:
                 denominations += item.denominations
 
+        if self.debug:
+            print("Search filtered down to the following denominations: ")
+            for item in denominations:
+                print(f"  {item.name}")
+
         # One of the more specific parameters is provided, so narrow down results more
         if face_value is not None:
             for item in denominations:
@@ -145,23 +162,46 @@ class Search:
             for item in denominations:
                 values += item.values
 
+        if self.debug:
+            print("Search filtered down to the following values: ")
+            for item in values:
+                print(f"  {item.name}")
 
         # Narrows down years
         if year is not None and not (year == ""):
             coins = []
             for item in values:
                 coins += Search.lookupYear(item, year)
+            if self.debug:
+                print("Search found the following coins: ")
+                for item in coins:
+                    print(f"  {item}")
             return coins
+
+        if self.debug:
+            print("Search could not narrow down by year.")
 
         # Narrows down by nickname
         if nickname is not None and not (nickname == ""):
             coins = []
             for item in values:
                 coins += Search.lookupValueByNickname(item, nickname)
+            if self.debug:
+                print("Search found the following coins: ")
+                for item in coins:
+                    print(f"  {item}")
             return coins
+
+        if self.debug:
+            print("Search could not narrow down by face value.")
 
         for item in values:
             coins += item.coins
+
+        if self.debug:
+            print("Search found the following coins: ")
+            for item in coins:
+                print(f"  {item}")
 
         return coins
 
