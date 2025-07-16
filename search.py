@@ -62,7 +62,7 @@ class Search:
         elif len(words) > 0:
             temp = Search.validCountry(words[0])
             if temp:
-                country = temp
+                country = temp.name
             else:
                 denomination = words[0]
 

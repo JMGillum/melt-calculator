@@ -87,6 +87,8 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
             else:
                 search_object = search.Search(country_name=item[0],year=item[1],denomination=item[2],face_value=item[3])
         elif isinstance(item,str):
+            if args["verbose"]:
+                print(f"The search string to be parsed is: {item}")
             search_object = search.Search(text=item)
         search_object.debug=args["verbose"]
 
@@ -197,35 +199,13 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
 
 
 
-    else: 
-        if data is not None:
-            data.tree.cascading_set_fancy(True)
-        interactive_mode = False
+        else: # If only the country was specified
+            if data is not None:
+                data.tree.cascading_set_fancy(True)
+                for line in data.tree.print():
+                    print(line)
 
 
-        lines = []
-        if interactive_mode: # Test section. Will probably be deleted in the future
-            s = search.Search()
-            results = s.performSearch(data, "France")
-            # results = search.performSearch(data, "France")
-            if results is None or len(results) == 0:
-                print("No results found")
-            else:
-                if not isinstance(results, list):
-                    results = [results]
-                for item in results:
-                    if isinstance(item, collection.Country) or isinstance(
-                        item, collection.Denomination
-                    ):
-                        item.tree.cascading_set_fancy(True)
-                        lines += item.tree.print()
-                    else:
-                        print(item)
-        else:
-            lines = data.tree.print()
-
-        for line in lines:
-            print(line)
 else:
     # Builds Country objects for each country defined in data.countries
     country_coins = []
