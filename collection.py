@@ -50,6 +50,10 @@ class Value:
                     """
             self.tree.set_nodes(nodes) # Updates tree for printout
 
+    def togglePrice(self,show_price:bool):
+        for coin in self.coins:
+            coin.togglePrice(show_price)
+
 
     def price(self,silver_price,gold_price):
         """Determines the price of coins based on precious metal prices"""
@@ -101,6 +105,10 @@ class Denomination:
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
 
+    def togglePrice(self,show_price:bool):
+        for value in self.values:
+            value.togglePrice(show_price)
+
     def price(self,silver_price,gold_price):
         """Determines the price of coins based on precious metal prices"""
         nodes = []
@@ -144,6 +152,10 @@ class Country:
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
 
+    def togglePrice(self,show_price:bool):
+        for denomination in self.denominations:
+            denomination.togglePrice(show_price)
+
     def price(self,silver_price,gold_price):
         """Determines the price of coins based on precious metal prices"""
         nodes = []
@@ -185,6 +197,10 @@ class CoinCollection:
                     self.countries.append(item)
                     nodes.append(item.tree)
             self.tree.set_nodes(nodes)
+    
+    def togglePrice(self,show_price:bool):
+        for country in self.countries:
+            country.togglePrice(show_price)
     
     def price(self,silver_price,gold_price):
         """Determines the price of coins based on precious metal prices"""

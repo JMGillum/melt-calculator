@@ -61,13 +61,14 @@ class CoinData:
         nickname=None,
         value = None,
         retention = None,
-        purchases = None
+        purchases = None,
+        show_value = True
     ):
         if isinstance(weight, float) or isinstance(weight, int):
             self.weight = weights.Weight(weight, weights.Units.GRAMS)
         else:
             self.weight = weight
-        self.show_value = True
+        self.show_value = show_value
         self.metal = metal
         self.fineness = fineness
         self.precious_metal_weight = precious_metal_weight
@@ -94,6 +95,11 @@ class CoinData:
         self.collection = []
         self.tree = Tree(name=self.asAString(self.getCoinString()),nodes=self.collection)
         self.collection = self.addCollection(purchases)
+
+    def togglePrice(self,show_price:bool):
+        self.show_value = show_price
+        self.tree.set_name(self.asAString(self.getCoinString()))
+
 
     def getCoinString(self):
         """Returns a format string for use with a CoinData object. Depends on settings and information about the coin"""

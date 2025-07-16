@@ -74,6 +74,9 @@ else:
         name="Precious Metals",
     )
 
+if data is not None and args["hide_price"]:
+    data.togglePrice(not args["hide_price"])
+
 # Narrow down results if any of the more specific filters are present in the command line
 if args["year"] or args["denomination"] or args["face_value"]:
     fail = False
