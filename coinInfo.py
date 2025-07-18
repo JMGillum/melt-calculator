@@ -441,7 +441,8 @@ class Coins:
             matches = [x for x in found_denominations if Coins.denominations[x].name.lower() == denomination.lower()]
             if matches:
                 try:
-                    found_values = Coins.denominations[matches[0]]
+                    for match in matches:
+                        found_values += Coins.denominations[match]
                 except KeyError:
                     return None
             else:
@@ -460,7 +461,8 @@ class Coins:
             matches = [x for x in found_values if (Coins.values[x].name == face_value or str(Coins.values[x].name).lower() == str(face_value).lower())]
             if matches:
                 try: 
-                    found_coins = Coins.values[matches[0]]
+                    for match in matches:
+                        found_coins = Coins.values[match]
                 except KeyError:
                     return None
             else:
@@ -481,7 +483,8 @@ class Coins:
             matches = [x for x in found_coins if year in (Coins.coins[x].years if isinstance(Coins.coins[x],CoinData) else Coins.coins[x].data.years)]
             if matches:
                 try:
-                    results.append(matches[0])
+                    for match in matches:
+                        results += [match]
                 except KeyError:
                     return None
             else:
