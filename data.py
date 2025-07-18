@@ -31,7 +31,7 @@ def applyBasicInformation(country_tree,country_name,silver_coins,gold_coins):
 def coinsFrance(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of French coins"""
 
-    coinInfo.buildCountry("france")
+    return coinInfo.buildCountry("france")
 
     purchase_0 = Purchase(price=8.00,mint_date=1931,purchase_date = datetime(2025,7,4))
     centimes_20 = Node(data=CoinData(
