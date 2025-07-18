@@ -52,6 +52,9 @@ if args["verbose"]:
     print(f"arguments: {args}")
 display_price = not args["hide_price"]
 
+if not args["hide_collection"]:
+    Coins.linkPurchases() # Links purchases to all of the coinData objects stored in coinInfo.Coins
+
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
 try:
     if args["silver"] is not None:
@@ -213,8 +216,7 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
                     print(line)
 
 
-else:
-    Coins.linkPurchases()
+else: 
     # Builds Country objects for each country defined in data.countries
     countries = list(Coins.countries.keys())
     data = Coins.buildTree(countries)

@@ -268,7 +268,14 @@ class Coins:
     }
 
 
-    def linkPurchases():
+    def removePurchases():
+        for coin_id in list(Coins.coins.keys()):
+            coin = Coins.coins[coin_id]
+            coin.nodes = []
+
+    def linkPurchases(keep_old_purchases=False):
+        if not keep_old_purchases:
+            Coins.removePurchases()
         for purchase in purchases:
             try:
                 coin = Coins.coins[purchase]
