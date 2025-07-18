@@ -12,6 +12,20 @@ silver_spot_price = 36.00
 gold_spot_price = 3350.00
 
 
+def applyBasicInformation(country_tree,country_name,silver_coins,gold_coins):
+    for denomination in country_tree.nodes:
+        for value in denomination.nodes:
+            for coin in value.nodes:
+                coin.face_value = value.name
+                coin.denomination = denomination.name
+                coin.country = country_name
+                if coin in silver_coins:
+                    coin.metal = Metals.SILVER
+                    silver_coins.remove(coin)
+                if coin in gold_coins:
+                    coin.metal = Metals.GOLD
+                    gold_coins.remove(coin)
+
 
 def coinsFrance(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of French coins"""
@@ -192,27 +206,11 @@ def coinsFrance(show_personal_collection=True):
     france_franc_tree = Tree(name="Franc",nodes=france_franc)
     france = Tree(name="France",nodes=[france_centime_tree,france_franc_tree])
 
-    for coin in silver_coins:
-        coin.metal = Metals.SILVER
-    for coin in gold_coins:
-        coin.metal = Metals.GOLD
-
-    for denomination in france.nodes:
-        for value in denomination.nodes:
-            for coin in value.nodes:
-                coin.face_value = value.name
-                coin.denomination = denomination.name
-                coin.country = "France"
-                if coin in silver_coins:
-                    coin.metal = Metals.SILVER
-                    silver_coins.remove(coin)
-                if coin in gold_coins:
-                    coin.metal = Metals.GOLD
-                    gold_coins.remove(coin)
+    applyBasicInformation(france,"France",silver_coins,gold_coins)
     return france
 
 
-
+    """
     france = collection.Country(denominations=[centime, franc], name="France")
 
     for denomination in france.denominations:
@@ -228,6 +226,7 @@ def coinsFrance(show_personal_collection=True):
                     coin.metal = Metals.GOLD
                     gold_coins.remove(coin)
 
+    """
     if show_personal_collection:
         # Personal collection below
         franc_10_1.addCollection(Purchase(price=8.00,mint_date=1931,purchase_date = datetime(2025,7,4)))
