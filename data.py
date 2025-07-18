@@ -34,7 +34,7 @@ def coinsFrance(show_personal_collection=True):
         years=list(range(1848, 1921)),
         weight=1,
         fineness=0.9,
-    ),name="JARVIS",nodes=[purchase_0])
+    ),nodes=[purchase_0])
 
     centimes_50_1 = CoinData(
         years=list(range(1848, 1867)),
@@ -203,7 +203,7 @@ def coinsFrance(show_personal_collection=True):
     """
 
     france_centime = [centimes_20_tree,centimes_50_tree]
-    france_centime_tree = Tree(name="",nodes=france_centime)
+    france_centime_tree = Tree(name="Centime",nodes=france_centime)
     france_franc = [franc_1_tree,franc_2_tree,franc_5_tree,franc_10_tree,franc_20_tree,franc_50_tree,franc_100_tree]
     france_franc_tree = Tree(name="Franc",nodes=france_franc)
     france = Tree(name="France",nodes=[france_centime_tree,france_franc_tree])
