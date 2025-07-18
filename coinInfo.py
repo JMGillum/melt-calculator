@@ -23,7 +23,7 @@ class NamedList:
 
 class Coins:
     coins = {
-        "centimes_20": CoinData(
+        "centimes_20": Node(data= CoinData(
             years=list(range(1848, 1921)),
             weight=1,
             fineness=0.9,
@@ -31,8 +31,8 @@ class Coins:
             country="France",
             face_value=20,
             denomination="Centimes"
-        ),
-        "centimes_50_1": CoinData(
+        )),
+        "centimes_50_1": Node(data=CoinData(
             years=list(range(1848, 1867)),
             weight=2.5,
             fineness=0.9,
@@ -40,8 +40,8 @@ class Coins:
             country="France",
             face_value=50,
             denomination="Centimes"
-        ),
-        "centimes_50_2": CoinData(
+        )),
+        "centimes_50_2": Node(data=CoinData(
             years=list(range(1866, 1921)),
             weight=2.5,
             fineness=0.835,
@@ -49,8 +49,8 @@ class Coins:
             country="France",
             face_value=50,
             denomination="Centimes"
-        ),
-        "franc_1_1": CoinData(
+        )),
+        "franc_1_1": Node(CoinData(
             years=list(range(1848, 1867)),
             weight=5,
             fineness=0.9,
@@ -58,8 +58,8 @@ class Coins:
             country="France",
             face_value=1,
             denomination="Franc"
-        ),
-        "franc_1_2": CoinData(
+        )),
+        "franc_1_2": Node(CoinData(
             years=list(range(1866, 1921)),
             weight=5,
             fineness=0.835,
@@ -67,8 +67,8 @@ class Coins:
             country="France",
             face_value=1,
             denomination="Franc"
-        ),
-        "franc_2": CoinData(
+        )),
+        "franc_2": Node(CoinData(
             years=list(range(1848, 1921)),
             weight=10,
             fineness=0.9,
@@ -76,8 +76,8 @@ class Coins:
             country="France",
             face_value=2,
             denomination="Franc"
-        ),
-        "franc_5_1": CoinData(
+        )),
+        "franc_5_1": Node(CoinData(
             years=list(range(1848, 1921)),
             weight=25,
             fineness=0.9,
@@ -85,8 +85,8 @@ class Coins:
             country="France",
             face_value=5,
             denomination="Franc"
-        ),
-        "franc_5_2": CoinData(
+        )),
+        "franc_5_2": Node(CoinData(
             years=list(range(1960, 1970)),
             weight=12,
             fineness=0.835,
@@ -94,8 +94,8 @@ class Coins:
             country="France",
             face_value=5,
             denomination="Franc"
-        ),
-        "franc_5_3": CoinData(
+        )),
+        "franc_5_3": Node(CoinData(
             years=list(range(1848, 1915)),
             weight=1.6129,
             fineness=0.9,
@@ -103,8 +103,8 @@ class Coins:
             country="France",
             face_value=5,
             denomination="Franc"
-        ),
-        "franc_10_1": CoinData(
+        )),
+        "franc_10_1": Node(CoinData(
             years=[x for x in list(range(1929, 1940)) if x not in [1935, 1936]],
             weight=10,
             fineness=0.68,
@@ -112,8 +112,8 @@ class Coins:
             country="France",
             face_value=10,
             denomination="Franc"
-        ),
-        "franc_10_2": CoinData(
+        )),
+        "franc_10_2": Node(CoinData(
             years=list(range(1848, 1915)),
             weight=3.2258,
             fineness=0.90,
@@ -121,7 +121,7 @@ class Coins:
             country="France",
             face_value=10,
             denomination="Franc"
-        ),
+        )),
         "franc_20_1": Node(data=CoinData(
             years=[x for x in range(1906, 1915)],
             weight=6.4516,
@@ -131,7 +131,7 @@ class Coins:
             face_value=20,
             denomination="Franc"
         ),nodes=[]),
-        "franc_20_2": CoinData(
+        "franc_20_2": Node(CoinData(
             years=list(range(1929, 1940)),
             weight=20,
             fineness=0.68,
@@ -139,8 +139,8 @@ class Coins:
             country="France",
             face_value=20,
             denomination="Franc"
-        ),
-        "franc_50": CoinData(
+        )),
+        "franc_50": Node(CoinData(
             years=list(range(1848, 1915)),
             weight=16.129,
             fineness=0.9,
@@ -148,8 +148,8 @@ class Coins:
             country="France",
             face_value=20,
             denomination="Franc"
-        ),
-        "franc_100_1": CoinData(
+        )),
+        "franc_100_1": Node(CoinData(
             years=[x for x in range(1982, 2001)],
             weight=15,
             fineness=0.9,
@@ -157,8 +157,8 @@ class Coins:
             country="France",
             face_value=100,
             denomination="Franc"
-        ),
-        "franc_100_2": CoinData(
+        )),
+        "franc_100_2": Node(CoinData(
             years=list(range(1848, 1915)),
             weight=32.2581,
             fineness=0.9,
@@ -166,8 +166,8 @@ class Coins:
             country="France",
             face_value=100,
             denomination="Franc"
-        ),
-        "franc_100_3": CoinData(
+        )),
+        "franc_100_3": Node(CoinData(
             years=list(range(1929, 1937)),
             weight=6.55,
             fineness=0.9,
@@ -175,7 +175,7 @@ class Coins:
             country="France",
             face_value=100,
             denomination="Franc"
-        ),
+        )),
     }
 
     # Used to build the tree from just a coin object
