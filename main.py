@@ -53,7 +53,7 @@ if args["verbose"]:
 display_price = not args["hide_price"]
 
 if not args["hide_collection"]:
-    Coins.linkPurchases() # Links purchases to all of the coinData objects stored in coinInfo.Coins
+    Coins.linkPurchases(True) # Links purchases to all of the coinData objects stored in coinInfo.Coins
 
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
 try:
