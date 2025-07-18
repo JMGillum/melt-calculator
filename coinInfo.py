@@ -2,6 +2,7 @@ from coinData import CoinData
 from tree.tree import Tree
 from tree.node import Node
 from metals import Metals
+from purchases import purchases
 
 class NamedList:
     def __init__(self, name, items):
@@ -257,6 +258,15 @@ class Coins:
         "france": NamedList("France", ["centimes", "franc"]),
     }
 
+
+    def linkPurchases():
+        for purchase in purchases:
+            try:
+                coin = Coins.coins[purchase]
+                coin.nodes += purchases[purchase]
+
+            except KeyError:
+                print(f"{purchase} is not a valid key")
 
     def buildCountry(country, first_time=True):
         """country is name, first_time will apply metals and country"""

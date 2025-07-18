@@ -214,6 +214,7 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
 
 
 else:
+    Coins.linkPurchases()
     # Builds Country objects for each country defined in data.countries
     country_coins = []
     for country in Coins.countries:
