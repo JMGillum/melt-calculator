@@ -76,6 +76,7 @@ if args["country"] or args["denomination"] or args["face_value"] or args["year"]
     fail = False
     year = None
     face_value = None
+    # Attempts to convert year and face_value to numeric data type (int or float(only for face_value))
     try:
         if args["year"] is not None:
             year = int(args["year"])
@@ -110,15 +111,10 @@ if args["country"] or args["denomination"] or args["face_value"] or args["year"]
         print(f"The specified face_value ({args['face_value']}) is not valid. It must be a number")
         fail = True
 
-    if not fail:
-        data = None
+    if not fail: # The year and face_value could be converted to numeric types if applicable
         if args["verbose"]:
             print("The year and/or face_value arguments were successfully converted.")
-        lines = []
-        if data is not None:
-            results = None
-        else:
-            results = None
+        results = Coins.search(country=args["country"],denomination=args["denomination"],year=year,face_value=face_value,debug=args["verbose"])
         if results is None:
             print(f"No results found for {args['country']} {year} {args['denomination']} {face_value}")
         else: # Search found some results
@@ -127,14 +123,12 @@ if args["country"] or args["denomination"] or args["face_value"] or args["year"]
             text_country = f'{args["country"]} ' if args["country"] else ""
             text_face_value = f'{face_value} ' if args["face_value"] else ""
             text_denomination = args["denomination"] if args["denomination"] else ""
-            results.tree.set_name(f"Results for \'{text_year}{text_country}{text_face_value}{text_denomination}\'".strip())
-            results.rebuildTree()
-            results.tree.cascading_set_fancy(True)
-            lines = results.tree.print()
-            for line in lines:
+            results.set_name(f"Results for \'{text_year}{text_country}{text_face_value}{text_denomination}\'".strip())
+            results.cascading_set_fancy(True)
+            for line in results.print():
                 print(line)
 
-else: 
+else: # Simply prints out all of the coins.
     # Builds Country objects for each country defined in data.countries
     countries = list(Coins.countries.keys())
     data = Coins.buildTree(countries,debug=args["verbose"])
