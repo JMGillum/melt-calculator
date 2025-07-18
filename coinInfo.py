@@ -268,6 +268,13 @@ class Coins:
     }
 
 
+    def togglePrice(show_price=True):
+        for coin_id in list(Coins.coins.keys()):
+            coin = Coins.coins[coin_id]
+            if isinstance(coin,Node):
+                coin = coin.data
+            coin.togglePrice(show_price) 
+
     def price(silver_price,gold_price):
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]

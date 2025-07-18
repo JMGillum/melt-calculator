@@ -48,7 +48,6 @@ parser = setupParser()
 args = vars(parser.parse_args())
 if args["verbose"]:
     print(f"arguments: {args}")
-display_price = not args["hide_price"]
 
 if not args["hide_collection"]:
     Coins.linkPurchases(True) # Links purchases to all of the coinData objects stored in coinInfo.Coins
@@ -68,6 +67,8 @@ except ValueError:
 
 if not args["hide_price"]:
     price()
+else:
+    Coins.togglePrice(False)
 
 # List of input for searches. Items are either a tuple of (country,year,denomination,face_value) or are searches as strings
 if args["country"] or args["year"] or args["denomination"] or args["face_value"] or args["search_string"] or args["search_file"] or not sys.stdin.isatty():
@@ -139,7 +140,7 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
         if data is not None and args["hide_price"]:
             data.togglePrice(not args["hide_price"])
 
-        if display_price:
+        if not args["hide_price"]:
             if data is not None:
                 price(data,args["silver"],args["gold"])
             print(f"Silver Spot: ${d.silver_spot_price:.2f}")
@@ -221,7 +222,7 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
 else: 
     # Builds Country objects for each country defined in data.countries
     countries = list(Coins.countries.keys())
-    data = Coins.buildTree(countries)
+    data = Coins.buildTree(countries,debug=args["verbose"])
 
     data.set_name("Precious Metals")
     data.cascading_set_fancy(True)
