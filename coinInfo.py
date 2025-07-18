@@ -178,7 +178,29 @@ class Coins:
         ),
     }
 
+    # Used to build the tree from just a coin object
+    coins_reverse_build = {
+        "centimes_20": ("centimes_20","centimes","france"),
+        "centimes_50_1": ("centimes_50","centimes","france"),
+        "centimes_50_2": ("centimes_50","centimes","france"),
+        "franc_1_1": ("franc_1","franc","france"),
+        "franc_1_2": ("franc_1","franc","france"),
+        "franc_2": ("franc_2","franc","france"),
+        "franc_5_1": ("franc_5","franc","france"),
+        "franc_5_2": ("franc_5","franc","france"),
+        "franc_5_3": ("franc_5","franc","france"),
+        "franc_10_1": ("franc_10","franc","france"),
+        "franc_10_2": ("franc_10","franc","france"),
+        "franc_20_1": ("franc_20","franc","france"),
+        "franc_20_2": ("franc_20","franc","france"),
+        "franc_50": ("franc_50","franc","france"),
+        "franc_100_1": ("franc_100","franc","france"),
+        "franc_100_2": ("franc_100","franc","france"),
+        "franc_100_3": ("franc_100","franc","france"),
+    }
 
+
+    # Indicates which coins are made of silver
     silver_coins = [
         "centimes_20",
         "centimes_50_1",
@@ -193,6 +215,7 @@ class Coins:
         "franc_100_1",
     ]
 
+    # Indicates which coins are made of gold
     gold_coins = [
         "franc_5_3",
         "franc_10_2",
@@ -260,6 +283,80 @@ class Coins:
                 current_denominations.append(Tree(name=denomination, nodes=current_values))
         return Tree(name=str(Coins.countries[country]), nodes=current_denominations)
 
+
+    def buildTree(coin_ids,debug=False):
+        results = Tree(name="Results",nodes=[])
+        needed_countries = {}
+        needed_denominations = {}
+        needed_values = {}
+        for coin_id in coin_ids:
+            try:
+                information = Coins.coins_reverse_build[coin_id]
+                try:
+                    value_found = needed_values[information[0]]
+                    needed_values[information[0]] = (value_found + [coin_id])
+                except KeyError: # coin_id's value is not a valid key in needed_values yet
+                    needed_values[information[0]] = [coin_id]
+
+                try:
+                    denominations_found = needed_denominations[information[1]]
+                    if not [x for x in denominations_found if x == information[0]]:
+                        needed_denominations[information[1]] = (denominations_found + [information[0]])
+                except KeyError: # coin_id's value is not a valid key in needed_values yet
+                    needed_denominations[information[1]] = [information[0]]
+                try:
+                    countries_found = needed_countries[information[2]]
+                    if not [x for x in countries_found if x == information[1]]:
+                        needed_countries[information[2]] = (countries_found + [information[1]])
+                except KeyError:
+                    needed_countries[information[2]] = [information[1]]
+
+
+            except KeyError: # coin_id is not a valid key in coins_reverse_build
+                pass
+            if debug:
+                print(f"---{coin_id}---")
+                print(f"Values: {needed_values}")
+                print(f"Denominations: {needed_denominations}")
+                print(f"Countries: {needed_countries}")
+                print()
+
+        for country in needed_countries:
+            current_denominations = []
+            for denomination in Coins.countries[country]:
+                if denomination in needed_denominations:
+                    current_values = []
+                    for value in Coins.denominations[denomination]:
+                        if value in needed_values:
+                            current_coins = []
+                            for coin in Coins.values[value]:
+                                if coin in coin_ids:
+                                    temp = Coins.coins[coin]
+                                    if isinstance(temp,Node):
+                                        current_coins.append(temp)
+                                    else:
+                                        current_coins.append(Node(data=Coins.coins[coin]))
+                            # Sorts the coins by first year available
+                            current_coins = sorted(current_coins, key=lambda x: x.data.years[0])
+                            if isinstance(Coins.values[value], NamedList):
+                                current_values.append(
+                                    Tree(name=str(Coins.values[value]), nodes=current_coins)
+                                )
+                            else:
+                                current_values.append(Tree(name=value, nodes=current_coins))
+                    if isinstance(Coins.denominations[denomination], NamedList):
+                        current_denominations.append(
+                            Tree(name=str(Coins.denominations[denomination]), nodes=current_values)
+                        )
+                    else:
+                        current_denominations.append(Tree(name=denomination, nodes=current_values))
+            return Tree(name=str(Coins.countries[country]), nodes=current_denominations)
+
+
+
+        return results
+            
+    
     def search(country=None,denomination=None,face_value=None,year=None,debug=False):
         found_denominations = list(Coins.denominations.keys())
         if country is not None:
@@ -332,5 +429,5 @@ class Coins:
             for item in results:
                 print(f"  {item}")
 
-        return results
+        return Coins.buildTree(results)
 
