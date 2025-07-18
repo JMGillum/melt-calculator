@@ -1,4 +1,4 @@
-__version_info__ = ("0","2","2")
+__version_info__ = ("0","3","0")
 __version__ = ".".join(__version_info__)
 import argparse
 import collection
@@ -35,16 +35,14 @@ def setupParser():
     return parser
 
 
-def price(data,silver_price=None,gold_price=None):
+def price(silver_price=None,gold_price=None):
     silver = d.silver_spot_price
     gold = d.gold_spot_price
     if silver_price is not None and (isinstance(silver_price,int) or isinstance(silver_price,float)):
         silver = silver_price
     if gold_price is not None and (isinstance(gold_price,int) or isinstance(gold_price,float)):
         gold = gold_price
-    if isinstance(data,collection.CoinCollection):
-        data.price(silver,gold)
-
+    Coins.price(silver,gold)
 
 parser = setupParser()
 args = vars(parser.parse_args())
@@ -54,6 +52,7 @@ display_price = not args["hide_price"]
 
 if not args["hide_collection"]:
     Coins.linkPurchases(True) # Links purchases to all of the coinData objects stored in coinInfo.Coins
+
 
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
 try:
@@ -66,6 +65,9 @@ try:
         d.gold_spot_price = round(float(args["gold"]),2)
 except ValueError:
     print(f"Gold price provided is invalid type. Using value (${d.gold_spot_price:.2f}) defined in data.py instead.")
+
+if not args["hide_price"]:
+    price()
 
 # List of input for searches. Items are either a tuple of (country,year,denomination,face_value) or are searches as strings
 if args["country"] or args["year"] or args["denomination"] or args["face_value"] or args["search_string"] or args["search_file"] or not sys.stdin.isatty():

@@ -268,10 +268,21 @@ class Coins:
     }
 
 
+    def price(silver_price,gold_price):
+        for coin_id in list(Coins.coins.keys()):
+            coin = Coins.coins[coin_id]
+            if isinstance(coin,Node):
+                coin = coin.data
+            if coin.metal == Metals.SILVER:
+                coin.value = coin.precious_metal_weight.as_troy_ounces() * silver_price
+            if coin.metal == Metals.GOLD:
+                coin.value = coin.precious_metal_weight.as_troy_ounces() * gold_price
+
     def removePurchases():
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
-            coin.nodes = []
+            if isinstance(coin,Node):
+                coin.nodes = []
 
     def linkPurchases(keep_old_purchases=False):
         if not keep_old_purchases:
@@ -279,8 +290,8 @@ class Coins:
         for purchase in purchases:
             try:
                 coin = Coins.coins[purchase]
-                coin.nodes += purchases[purchase]
-
+                if isinstance(coin,Node):
+                    coin.nodes += purchases[purchase]
             except KeyError:
                 print(f"{purchase} is not a valid key")
 
