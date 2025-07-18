@@ -266,7 +266,11 @@ class Coins:
             for value in Coins.denominations[denomination]:
                 current_coins = []
                 for coin in Coins.values[value]:
-                    current_coins.append(Node(data=Coins.coins[coin]))
+                    temp = Coins.coins[coin]
+                    if isinstance(temp,Node):
+                        current_coins.append(temp)
+                    else:
+                        current_coins.append(Node(data=temp))
                 # Sorts the coins by first year available
                 current_coins = sorted(current_coins, key=lambda x: x.data.years[0])
                 if isinstance(Coins.values[value], NamedList):
@@ -336,7 +340,7 @@ class Coins:
                                     if isinstance(temp,Node):
                                         current_coins.append(temp)
                                     else:
-                                        current_coins.append(Node(data=Coins.coins[coin]))
+                                        current_coins.append(Node(data=temp))
                             # Sorts the coins by first year available
                             current_coins = sorted(current_coins, key=lambda x: x.data.years[0])
                             if isinstance(Coins.values[value], NamedList):

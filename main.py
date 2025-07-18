@@ -8,6 +8,7 @@ from metals import Metals
 import country
 import coinData
 from tree.tree import Tree
+from coinInfo import Coins
 
 import sys
 
@@ -215,8 +216,8 @@ if args["country"] or args["year"] or args["denomination"] or args["face_value"]
 else:
     # Builds Country objects for each country defined in data.countries
     country_coins = []
-    for country in d.countries:
-        country_coins.append(country[1](not args["hide_collection"]))
+    for country in Coins.countries:
+        country_coins.append(Coins.buildCountry(country))
     country_coins = sorted(country_coins, key = lambda x: x.name)
 
     data = Tree(name="Precious Metals",nodes = country_coins)
