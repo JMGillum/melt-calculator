@@ -268,6 +268,9 @@ class CoinData:
         return string
 
     def __str__(self):
+        return self.asAString(self.getCoinString())
+        
+        # Deprecated
         if self.nickname is not None and self.nickname != "":
             return self.asAString("%n (%c) %F %d [%y] ... %a %m (%w @ %f%) - $%v")
         else:

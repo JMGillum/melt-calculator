@@ -7,6 +7,7 @@ import search
 from metals import Metals
 import country
 import coinData
+from tree.tree import Tree
 
 import sys
 
@@ -218,6 +219,12 @@ else:
         country_coins.append(country[1](not args["hide_collection"]))
     country_coins = sorted(country_coins, key = lambda x: x.name)
 
+    data = Tree(name="Precious Metals",nodes = country_coins)
+    data.cascading_set_fancy(True)
+    for line in data.print():
+        print(line)
+
+""" Deprecated
     # Creates the final CoinCollection object of all of the countries
     data = collection.CoinCollection(
         countries=sorted(country_coins, key=lambda x: x.name),
@@ -227,3 +234,4 @@ else:
         data.tree.cascading_set_fancy(True)
         for line in data.tree.print():
             print(line)
+"""
