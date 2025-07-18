@@ -5,14 +5,24 @@ from tree.node import Node
 tab = "    "
 
 def print_reverse_build():
-    print(f"{tab}coins_reverse_build ="+" {")
+    coins_reverse_build = [f"{tab}coins_reverse_build ="+" {"]
+    values_reverse_build = [f"{tab}values_reverse_build ="+" {"]
+    denominations_reverse_build = [f"{tab}denominations_reverse_build ="+" {"]
     for country in Coins.countries:
         for denomination in Coins.countries[country]:
+            denominations_reverse_build += [f"{tab}{tab}\"{denomination}\": (\"{country}\"),"]
             for value in Coins.denominations[denomination]:
+                values_reverse_build += [f"{tab}{tab}\"{value}\": (\"{denomination}\",\"{country}\"),"]
                 for coin in Coins.values[value]:
-                    print(f"{tab}{tab}\"{coin}\": (\"{value}\",\"{denomination}\",\"{country}\"),")
-    print(f"{tab}"+"}")
-    print()
+                    coins_reverse_build += [f"{tab}{tab}\"{coin}\": (\"{value}\",\"{denomination}\",\"{country}\"),"]
+    coins_reverse_build += [f"{tab}"+"}"]
+    values_reverse_build += [f"{tab}"+"}"]
+    denominations_reverse_build += [f"{tab}"+"}"]
+
+    for item in [coins_reverse_build,values_reverse_build,denominations_reverse_build]:
+        for line in item:
+            print(line)
+        print()
 
 
 def print_metals():
