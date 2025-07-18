@@ -321,6 +321,7 @@ class Coins:
                 print(f"Countries: {needed_countries}")
                 print()
 
+        current_countries = []
         for country in needed_countries:
             current_denominations = []
             for denomination in Coins.countries[country]:
@@ -350,7 +351,14 @@ class Coins:
                         )
                     else:
                         current_denominations.append(Tree(name=denomination, nodes=current_values))
-            return Tree(name=str(Coins.countries[country]), nodes=current_denominations)
+            
+            if isinstance(Coins.countries[country], NamedList):
+                current_countries.append(
+                    Tree(name=str(Coins.countries[country]), nodes=current_denominations)
+                )
+            else:
+                current_countries.append(Tree(name=country, nodes=current_denominations))
+        return Tree(name="Results", nodes=current_countries)
 
 
 
@@ -415,19 +423,18 @@ class Coins:
             matches = [x for x in found_coins if year in (Coins.coins[x].years if isinstance(Coins.coins[x],CoinData) else Coins.coins[x].data.years)]
             if matches:
                 try:
-                    results.append(Coins.coins[matches[0]])
+                    results.append(matches[0])
                 except KeyError:
                     return None
             else:
                 return None
         else:
-            for coin in found_coins:
-                results += Coins.coins[coin]
+            results = found_coins
 
         if debug:
             print("Results:")
             for item in results:
                 print(f"  {item}")
 
-        return Coins.buildTree(results)
+        return Coins.buildTree(results,debug)
 
