@@ -67,157 +67,72 @@ except ValueError:
 
 if not args["hide_price"]:
     price()
+    print(f"Silver Spot: ${d.silver_spot_price:.2f}")
+    print(f"Gold Spot: ${d.gold_spot_price:.2f}")
 else:
     Coins.togglePrice(False)
 
-# List of input for searches. Items are either a tuple of (country,year,denomination,face_value) or are searches as strings
-if args["country"] or args["year"] or args["denomination"] or args["face_value"] or args["search_string"] or args["search_file"] or not sys.stdin.isatty():
-    inputs = [(args["country"],args["year"],args["denomination"],args["face_value"])]
-    if not sys.stdin.isatty():
-        inputs = sys.stdin
-    else:
-        if args["search_file"]:
-            with open(args["search_file"],"r") as f:
-                inputs += f.readlines()
-        if args["search_string"]:
-            inputs.append(args["search_string"])
-
-    data = None
-
-    search_parameter_country = args["country"]
-    search_parameter_year = args["year"]
-    search_parameter_denomination = args["denomination"]
-    search_parameter_face_value = args["face_value"]
-    search_object = search.Search(country_name=args["country"],year=args["year"],denomination=args["denomination"],face_value=args["face_value"],debug=args["verbose"],text=args["search_string"])
-
-    for item in inputs:
-        if item is None:
-            continue
-        search_object = None
-        if isinstance(item,tuple):
-            if item[0] is None and item[1] is None and item[2] is None and item[3] is None:
-                continue
-            else:
-                search_object = search.Search(country_name=item[0],year=item[1],denomination=item[2],face_value=item[3])
-        elif isinstance(item,str):
+if args["country"] or args["denomination"] or args["face_value"] or args["year"]:
+    fail = False
+    year = None
+    face_value = None
+    try:
+        if args["year"] is not None:
+            year = int(args["year"])
             if args["verbose"]:
-                print(f"The search string to be parsed is: {item}")
-            search_object = search.Search(text=item)
-        search_object.debug=args["verbose"]
-
-        if search_object.text:
-            search_object.parseSearchString()
-
-
-
-        # If a country was specified on the command line, build its object here
-        if search_object.country_name is not None:
-            build = search.Search.countryInfo(search_object.country_name)
-            if args["verbose"]:
-                if build is not None:
-                    print(f"Country {build[0].name} was successfully found from {search_object.country_name}.")
-                else:
-                    print(f"No country was found with the name {search_object.country_name}")
-            if build is not None:
-                search_object.country_name = build[0].name
-                result = build[1](not args["hide_collection"])
-                if args["verbose"]:
-                    print(f"Successfully built coin data for country {build[0].name}")
-                data = collection.CoinCollection(countries=[result],name="Results")
+                print(f"Year was successfully converted to {year}")
         else:
-            # Builds Country objects for each country defined in data.countries
-            country_coins = []
-            for country in d.countries:
-                country_coins.append(country[1](not args["hide_collection"]))
-            country_coins = sorted(country_coins, key = lambda x: x.name)
+            if args["verbose"]:
+                print("Year was not provided. Ignoring...")
+    except ValueError:
+        print(f"The specified year ({args['year']}) is not valid. It must be an integer")
+        fail = True
+    try:
+        if args["face_value"] is not None and isinstance(args["face_value"],str):
+            index = args["face_value"].find(".")
+            if index > 0:
+                is_float = False
+                for i in range(index+1,len(args["face_value"])):
+                    if not (args["face_value"][i] == '0'):
+                        face_value = float(args["face_value"])
+                        is_float = True
+                        break
+                if not is_float:
+                    face_value = int(args["face_value"][:index])
+            else:
+                face_value = int(args["face_value"])
+            if args["verbose"]:
+                print(f"face value was successfully converted to {args['face_value']}")
+        else:
+            if args["verbose"]:
+                print("face_value was not provided. Ignoring...")
+    except ValueError:
+        print(f"The specified face_value ({args['face_value']}) is not valid. It must be a number")
+        fail = True
 
-            # Creates the final CoinCollection object of all of the countries
-            data = collection.CoinCollection(
-                countries=sorted(country_coins, key=lambda x: x.name),
-                name="Precious Metals",
-            )
-
-        if data is not None and args["hide_price"]:
-            data.togglePrice(not args["hide_price"])
-
-        if not args["hide_price"]:
-            if data is not None:
-                price(data,args["silver"],args["gold"])
-            print(f"Silver Spot: ${d.silver_spot_price:.2f}")
-            print(f"Gold Spot: ${d.gold_spot_price:.2f}")
-        # Narrow down results if any of the more specific filters are present in the command line
-        if search_object.country_name or search_object.denomination or search_object.face_value:
-            fail = False
-            year = None
-            face_value = None
-            try:
-                if search_object.year is not None:
-                    year = int(search_object.year)
-                    if args["verbose"]:
-                        print(f"Year was successfully converted to {year}")
-                else:
-                    if args["verbose"]:
-                        print("Year was not provided. Ignoring...")
-            except ValueError:
-                print(f"The specified year ({search_object.year}) is not valid. It must be an integer")
-                fail = True
-            try:
-                if search_object.face_value is not None and isinstance(search_object.face_value,str):
-                    index = search_object.face_value.find(".")
-                    if index > 0:
-                        is_float = False
-                        for i in range(index+1,len(search_object.face_value)):
-                            if not (search_object.face_value[i] == '0'):
-                                face_value = float(search_object.face_value)
-                                is_float = True
-                                break
-                        if not is_float:
-                            face_value = int(search_object.face_value[:index])
-                    else:
-                        face_value = int(search_object.face_value)
-                    if args["verbose"]:
-                        print(f"face value was successfully converted to {search_object.face_value}")
-                else:
-                    if args["verbose"]:
-                        print("face_value was not provided. Ignoring...")
-            except ValueError:
-                print(f"The specified face_value ({search_object.face_value}) is not valid. It must be a number")
-                fail = True
-
-            if not fail:
-                if args["verbose"]:
-                    print("The year and/or face_value arguments were successfully converted.")
-                lines = []
-                if data is not None:
-                    search_object.data = data
-                    search_object.year = year
-                    search_object.face_value = face_value
-                    results = search_object.search(as_a_collection=True)
-                else:
-                    results = None
-                if results is None:
-                    print(f"No results found for {args['country']} {year} {args['denomination']} {face_value}")
-                else: # Search found some results
-                    # Sorts results into their types and stores them in their respective lists
-                    text_year = f'{search_object.year} ' if year else ""
-                    text_country = f'{search_object.country_name} ' if search_object.country_name else ""
-                    text_face_value = f'{search_object.face_value} ' if search_object.face_value else ""
-                    text_denomination = search_object.denomination if search_object.denomination else ""
-                    results.tree.set_name(f"Results for \'{text_year}{text_country}{text_face_value}{text_denomination}\'".strip())
-                    results.rebuildTree()
-                    results.tree.cascading_set_fancy(True)
-                    lines = results.tree.print()
-                    for line in lines:
-                        print(line)
-
-
-
-        else: # If only the country was specified
-            if data is not None:
-                data.tree.cascading_set_fancy(True)
-                for line in data.tree.print():
-                    print(line)
-
+    if not fail:
+        data = None
+        if args["verbose"]:
+            print("The year and/or face_value arguments were successfully converted.")
+        lines = []
+        if data is not None:
+            results = None
+        else:
+            results = None
+        if results is None:
+            print(f"No results found for {args['country']} {year} {args['denomination']} {face_value}")
+        else: # Search found some results
+            # Sorts results into their types and stores them in their respective lists
+            text_year = f'{year} ' if year else ""
+            text_country = f'{args["country"]} ' if args["country"] else ""
+            text_face_value = f'{face_value} ' if args["face_value"] else ""
+            text_denomination = args["denomination"] if args["denomination"] else ""
+            results.tree.set_name(f"Results for \'{text_year}{text_country}{text_face_value}{text_denomination}\'".strip())
+            results.rebuildTree()
+            results.tree.cascading_set_fancy(True)
+            lines = results.tree.print()
+            for line in lines:
+                print(line)
 
 else: 
     # Builds Country objects for each country defined in data.countries
