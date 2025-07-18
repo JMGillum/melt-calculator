@@ -1,7 +1,7 @@
 import weights
 from datetime import datetime
 import metals
-from tree import Tree
+from tree.tree import Tree
 
 class Purchase:
     """Models a coin purchase with information about the price paid, quantity, date of purchase, mint date, and mint mark"""

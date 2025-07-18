@@ -1,5 +1,5 @@
 from coinData import CoinData
-from tree import Tree
+from tree.tree import Tree
 
 
 
