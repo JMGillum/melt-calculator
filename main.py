@@ -218,10 +218,11 @@ else:
     # Builds Country objects for each country defined in data.countries
     country_coins = []
     for country in Coins.countries:
-        country_coins.append(Coins.buildCountry(country))
-    country_coins = sorted(country_coins, key = lambda x: x.name)
+        country_coins.append(country)
+    data = Coins.buildTree(country_coins,debug=True)
+    #country_coins = sorted(country_coins, key = lambda x: x.name)
 
-    data = Tree(name="Precious Metals",nodes = country_coins)
+    data.set_name("Precious Metals")
     data.cascading_set_fancy(True)
     for line in data.print():
         print(line)

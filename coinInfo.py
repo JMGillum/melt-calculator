@@ -15,8 +15,17 @@ class NamedList:
         else:
             return ""
 
+
+    def __list__(self):
+        if self.items:
+            return self.items
+        else:
+            return ""
+
+
     def __getitem__(self, key):
         return self.items[key]
+
 
     def __setitem__(self, key, newvalue):
         self.items[key] = newvalue
@@ -324,10 +333,23 @@ class Coins:
                         needed_countries[information[2]] = (countries_found + [information[1]])
                 except KeyError:
                     needed_countries[information[2]] = [information[1]]
-
-
             except KeyError: # coin_id is not a valid key in coins_reverse_build
-                pass
+                try:
+                    information = Coins.values[coin_id]
+                    coin_ids += list(information)
+                except KeyError:
+                    try:
+                        information = Coins.denominations[coin_id]
+                        coin_ids += list(information)
+                    except KeyError:
+                        try:
+                            information = Coins.countries[coin_id]
+                            coin_ids += list(information)
+                        except KeyError:
+                            pass
+                        
+
+
             if debug:
                 print(f"---{coin_id}---")
                 print(f"Values: {needed_values}")
@@ -372,10 +394,7 @@ class Coins:
                 )
             else:
                 current_countries.append(Tree(name=country, nodes=current_denominations))
-        return Tree(name="Results", nodes=current_countries)
-
-
-
+        results = Tree(name="Results", nodes=current_countries)
         return results
             
     
