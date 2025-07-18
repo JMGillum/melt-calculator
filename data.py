@@ -6,6 +6,7 @@ import weights
 from country import CountryName
 from tree.node import Node
 from tree.tree import Tree
+import coinInfo
 
 
 silver_spot_price = 36.00
@@ -29,12 +30,15 @@ def applyBasicInformation(country_tree,country_name,silver_coins,gold_coins):
 
 def coinsFrance(show_personal_collection=True):
     """Builds a CoinCollection object about the precious metal content of French coins"""
+
+    coinInfo.buildCountry("france")
+
     purchase_0 = Purchase(price=8.00,mint_date=1931,purchase_date = datetime(2025,7,4))
     centimes_20 = Node(data=CoinData(
         years=list(range(1848, 1921)),
         weight=1,
         fineness=0.9,
-    ),nodes=[purchase_0])
+    ),nodes=[])
 
     centimes_50_1 = CoinData(
         years=list(range(1848, 1867)),
