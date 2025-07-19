@@ -1,3 +1,27 @@
+"""
+   Author: Josh Gillum              .
+   Date: 18 July 2025              ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    The CountryName class stores a proper/primary name of a country 
+    (technically doesn't have to be), as well as any associated alternative 
+    names. An example would be:
+        Proper name: United States of America
+        Alternative names:  United States,
+                            US,
+                            USA,
+                            etc.
+
+    The class features a lookup, which checks if the provided text is one of 
+    the country's names, and provides the proper name if it is. This is useful
+    for checking input, and then printing out the proper name.
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 class CountryName:
     """Class for representing a country along with its alternative names."""
 
@@ -34,4 +58,4 @@ class CountryName:
                 print(f"{name}, ")
 
     def __str__(self):
-        return self.name()
+        return self.name
