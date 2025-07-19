@@ -5,6 +5,8 @@ import data as d
 import search
 from coinInfo import Coins
 
+import sys
+
 
 COUNTRY = 0
 DENOMINATION = 1
@@ -158,7 +160,9 @@ if args["country"] or args["denomination"] or args["year"] or args["face_value"]
 else:
     arguments_list = []
 input_strings = []
-if args["search_file"]:
+if not sys.stdin.isatty():
+    input_strings = sys.stdin
+elif args["search_file"]:
     with open(args["search_file"], "r") as f:
         input_strings = f.readlines()
 if args["search_string"]:
