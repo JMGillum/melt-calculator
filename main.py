@@ -1,3 +1,44 @@
+"""
+   Author: Josh Gillum              .
+   Date: 18 July 2025              ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    This script is a useful tool for figuring out the intrinsic or "melt"
+    value of various different world coins. It prints them out in a tree
+    structure.
+
+    Searching for specific coins or groups of coins is also supported. Searches
+    can be as specific as '1898 German 10 Mark', or simply '1866'. The first
+    would show the single coin (along with its associated country and 
+    denomination). The second search would simply return all coins that were
+    minted in 1866.
+
+    Run the script with the '--help' flag to see a list of a supported command
+    line arguments. The most useful of which are probably:
+        -S <search_string> this allows you to provide a string representing
+            your search query
+        -s <silver_price> this allows you to supply the silver price to be
+            used when calculating value
+        -g <gold_price> same as with silver price, but for gold.
+
+    * Checkout the data.py to change the default gold and silver prices that are
+    used when you don't manually supply one.
+    * Checkout purchases.py to add your own personal collection. This lets
+    you quickly see what your purchases of a single coin are, and how they
+    compare to its intrinsic value.
+    * Checkout coinInfo.py to add other coins to the program if you aren't
+    happy with the selection.
+
+    Finally, make sure to read README.md or README.txt for more information
+    about the program and how to use it to its fullest potential.
+
+    Thank you.
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
 __version_info__ = ("0", "3", "0")
 __version__ = ".".join(__version_info__)
 import argparse
@@ -5,15 +46,16 @@ import data as d
 import search
 from coinInfo import Coins
 
-import sys
+import sys # Used to check if stdin is not from a terminal (piping input)
 
-
+# Enumeration used for argument tuples for searches
 COUNTRY = 0
 DENOMINATION = 1
 YEAR = 2
 FACE_VALUE = 3
 
 
+# Initializes all of the available command line arguments
 def setupParser():
     parser = argparse.ArgumentParser(
         description="Prints information and prices on various coins made of gold and silver. These command line arguments are optional."
@@ -54,6 +96,7 @@ def setupParser():
         metavar="PRICE",
         help="Use to supply the gold price for melt value calculations.",
     )
+    """
     parser.add_argument(
         "-o",
         "--owned",
@@ -66,6 +109,7 @@ def setupParser():
         action="store_true",
         help="Show only the coins that are not in the personal collection. Does nothing when used with the --owned flag.",
     )
+    """
     parser.add_argument(
         "-p",
         "--hide_price",
@@ -102,6 +146,7 @@ def setupParser():
     return parser
 
 
+# Calculates the value of every defined coin.
 def price(silver_price=None, gold_price=None):
     silver = d.silver_spot_price
     gold = d.gold_spot_price
@@ -121,6 +166,7 @@ args = vars(parser.parse_args())
 if args["verbose"]:
     print(f"arguments: {args}")
 
+# Links all the defined purchases to their respective coins
 if not args["hide_collection"]:
     Coins.linkPurchases(
         True
@@ -143,12 +189,14 @@ except ValueError:
         f"Gold price provided is invalid type. Using value (${d.gold_spot_price:.2f}) defined in data.py instead."
     )
 
+
+# Prints out the precious metal prices and calculates the coins' worth
 if not args["hide_price"]:
     price()
     print(f"Silver Spot: ${d.silver_spot_price:.2f}")
     print(f"Gold Spot: ${d.gold_spot_price:.2f}")
 else:
-    Coins.togglePrice(False)
+    Coins.togglePrice(False) # Disables printing of the value of coins
 
 
 # Determines if the user provided any search criteria, either by
@@ -160,18 +208,23 @@ if args["country"] or args["denomination"] or args["year"] or args["face_value"]
 else:
     arguments_list = []
 input_strings = []
-if not sys.stdin.isatty():
+# If multiple searches are to be performed
+if not sys.stdin.isatty(): # Input is a piped in file
     input_strings = sys.stdin
-elif args["search_file"]:
+elif args["search_file"]: # Search file was provided
     with open(args["search_file"], "r") as f:
         input_strings = f.readlines()
 if args["search_string"]:
     input_strings.append(args["search_string"])
+
+# Parses all of the search strings and gets 4 element tuples of arguments
 for item in input_strings:
     arguments_list.append(search.parseSearchString(item, debug=args["verbose"]))
 
+# Goes through each set of arguments and searches
 if arguments_list:
     for arguments in arguments_list:  # Loops through each search
+        # At least one argument is defined
         if (
             arguments[COUNTRY]
             or arguments[DENOMINATION]
