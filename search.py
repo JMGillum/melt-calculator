@@ -1,14 +1,12 @@
 import re
-import collection
-from country import CountryName
+from countryName import CountryName
 import data
-import copy
 
 
 minimum_year = 1800
 current_year = 2025
 
-def countryNames(with_functions=False):
+def countryNames():
     """Initialization function for country names. Optional with_functions parameter
     will return a list of tuples of the form (CountryName,country coin build function)"""
     france = CountryName("France", ["French"])
@@ -20,14 +18,6 @@ def countryNames(with_functions=False):
     germany = CountryName("Germany", ["Deutschland", "German"])
     italy = CountryName("Italy",["Italian","Italia"])
     canada = CountryName("Canada",["Canadian"])
-
-    if with_functions:
-        france = (france,data.coinsFrance)
-        mexico = (mexico,data.coinsMexico)
-        united_states = (united_states,data.coinsUnitedStates)
-        germany = (germany,data.coinsGermany)
-        italy = (italy,data.coinsItaly)
-        canada = (canada,data.coinsCanada)
 
     return [france, mexico, united_states, germany,italy,canada]
 
@@ -41,7 +31,7 @@ def countryInfo(name,return_name=True,return_build=True,countries=None):
     the ones specified in data.countries will be used."""
     if return_name or return_build:
         if countries is None:
-            countries = data.countries
+            countries = countryNames()
             if not isinstance(countries,list):
                 countries = [countries]
             for item in countries:
@@ -101,8 +91,6 @@ def parseSearchString(text: str,debug:bool=False):
                 face_value = numbers[0]
         else:
             face_value = numbers[0]
-
-    country_names = data.countries
 
     # Sets the country name and denomination
     if len(words) >= 2:

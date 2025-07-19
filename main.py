@@ -1,16 +1,10 @@
 __version_info__ = ("0","3","0")
 __version__ = ".".join(__version_info__)
 import argparse
-import collection
 import data as d
 import search
-from metals import Metals
-import country
-import coinData
-from tree.tree import Tree
 from coinInfo import Coins
 
-import sys
 
 COUNTRY=0
 DENOMINATION=1

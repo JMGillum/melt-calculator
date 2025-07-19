@@ -1,7 +1,6 @@
 import weights
 from datetime import datetime
 import metals
-from tree.tree import Tree
 
 class Purchase:
     """Models a coin purchase with information about the price paid, quantity, date of purchase, mint date, and mint mark"""
@@ -62,7 +61,6 @@ class CoinData:
         nickname=None,
         value = None,
         retention = None,
-        purchases = None,
         show_value = True
     ):
         if isinstance(weight, float) or isinstance(weight, int):
@@ -94,13 +92,9 @@ class CoinData:
         else:
             self.default_retention = False
             self.retention = retention 
-        self.collection = []
-        self.tree = Tree(name=self.asAString(self.getCoinString()),nodes=self.collection)
-        self.collection = self.addCollection(purchases)
 
     def togglePrice(self,show_price:bool):
         self.show_value = show_price
-        self.tree.set_name(self.asAString(self.getCoinString()))
 
 
     def getCoinString(self):
@@ -118,51 +112,6 @@ class CoinData:
         return string
 
 
-    def addCollection(self,purchases):
-        """Adds purchase data to the coin"""
-        if isinstance(purchases,Purchase):
-            purchases = [purchases]
-        if isinstance(purchases,list):
-            if self.collection is not None:
-                purchases = self.collection + purchases
-            if purchases is not None:
-                self.collection = []
-                nodes = []
-                average = 0.00
-                count = 0
-                occurances = 0
-                # Adds information about the purchases to the tree
-                for item in purchases:
-                    if isinstance(item,Purchase):
-                        self.collection.append(item)
-                        nodes.append(str(item))
-                        if item.price is not None:
-                            average += (item.price * item.quantity)
-                            count = count + item.quantity
-                            occurances = occurances + 1
-                if occurances > 1: # Provides the average price if more than 2 occurances
-                    nodes.append(f"Average: {average/count:.2f}")
-            self.tree.set_nodes(nodes)
-
-    def rebuildTree(self):
-        nodes = []
-        if self.collection is not None:
-            average = 0.00
-            count = 0
-            occurances = 0
-            # Adds information about the purchases to the tree
-            for item in self.collection:
-                if isinstance(item,Purchase):
-                    nodes.append(str(item))
-                    if item.price is not None:
-                        average += (item.price * item.quantity)
-                        count = count + item.quantity
-                        occurances = occurances + 1
-            if occurances > 1: # Provides the average price if more than 2 occurances
-                nodes.append(f"Average: {average/count:.2f}")
-
-        self.tree.set_name(self.asAString(self.getCoinString()))
-        self.tree.set_nodes(nodes)
 
     def yearsList(self):
         if self.years is not None:
@@ -206,16 +155,6 @@ class CoinData:
                 return "Silver"
         return "Unknown metal"
     
-    def price(self,silver_price,gold_price):
-        """Determines the price of the coin based on precious metal prices"""
-        if self.metal is not None and self.weight is not None:
-            if self.metal == metals.Metals.GOLD:
-                self.value = self.precious_metal_weight.as_troy_ounces() * gold_price
-            elif self.metal == metals.Metals.SILVER:
-                self.value = self.precious_metal_weight.as_troy_ounces() * silver_price
-        self.name = self.asAString(self.getCoinString())
-        self.tree.set_name(self.name)
-        
 
     def asAString(self, format: str):
         """Very simple attempt at a format string for information
@@ -269,21 +208,3 @@ class CoinData:
 
     def __str__(self):
         return self.asAString(self.getCoinString())
-        
-        # Deprecated
-        if self.nickname is not None and self.nickname != "":
-            return self.asAString("%n (%c) %F %d [%y] ... %a %m (%w @ %f%) - $%v")
-        else:
-            return self.asAString("(%c) %F %d [%y] ... %a %m (%w @ %f%) - $%v")
-        """
-        string = ""
-        string += f"{'Unknown country' if self.country is None else f'({self.country.title()})'}"
-        string += f" {self.denomination}"
-        string += " Unknown years" if self.years is None else f' [{self.yearsList()}]'
-        string += " ..."
-        string += f" {self.metal.title()}"
-        string += f" [fineness: {self.fineness}]"
-        string += f" (weight: {'Unknown weight' if not isinstance(self.precious_metal_weight,weights.Weight) else f'{self.precious_metal_weight.as_troy_ounces()} toz'})"
-        return string
-        """
-        # return f"[{'Unknown years' if self.years is None else self.yearsList()}] {self.denomination} ({'Unknown' if self.country is None else self.country.title()}) ... {self.metal.title()}[fineness:{self.fineness}](weight:{'Unknown weight' if not isinstance(self.precious_metal_weight,weights.Weight) else f'{self.precious_metal_weight.as_troy_ounces()} toz'})"
