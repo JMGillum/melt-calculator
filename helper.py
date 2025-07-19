@@ -19,7 +19,8 @@ def print_reverse_build():
     values_reverse_build += [f"{tab}"+"}"]
     denominations_reverse_build += [f"{tab}"+"}"]
 
-    for item in [coins_reverse_build,values_reverse_build,denominations_reverse_build]:
+#    for item in [coins_reverse_build,values_reverse_build,denominations_reverse_build]:
+    for item in [coins_reverse_build]:
         for line in item:
             print(line)
         print()
