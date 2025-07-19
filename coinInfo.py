@@ -1,3 +1,95 @@
+"""
+   Author: Josh Gillum              .
+   Date: 18 July 2025              ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    This file contains the actual data about all the coins used in the program.
+    The typical structure used is:
+        <Country> - Ex: Germany
+            <Denomination> - Ex: Mark
+                <Face value> - Ex: 10
+                    <Set of years> - 1871-1915
+
+    This structure allows for changes within the composition of a coin to be
+    reflected. In order to add any new coins, each element of the structure
+    must exist. First off is to add the actual coin data, with the aptly named
+    CoinData class. See coinData.py for more information on the different data
+    that can be stored.
+
+    An example of the structure will follow. This is useful if you wish to add
+    any new coins or modify existing ones.
+
+    1. An entry must to the coins dictionary within the Coins class must be
+    made. Below represents the 5 dollar Canadian Silver Maple Leaf coin,
+    minted from 1988 to 2025 (current-year as of writing).
+
+
+        "canada_dollar_5": Node(
+            CoinData(
+                nickname="Silver Maple Leaf Bullion",
+                years=list(range(1988, 2026)),
+                weight=31.11,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.SILVER,
+                country="Canada",
+                face_value=5,
+                denomination="Dollars",
+            )
+        ),
+
+    * The key needs to be some unique name that describes the coin. This value 
+    is never displayed, so do not worry if it is a bit long or drawn out. 
+    * The CoinData object must be the data variable of a Node object. See
+    tree/node.py for more information on the Node class.
+    * The CoinData object stores the actual information about the coin, once
+    again, see coinData.py for information on the fields.
+
+    2. An entry to the values dictionary in the Coins class must be added.
+    This entry represents all of the coins of this face value, so all 5 
+    dollar Canadian coins. If there are multiple coins of this face value, 
+    place all of their keys inside the list. Using the above coin, the entry
+    would be:
+
+        "canada_dollar_5": NamedList("5", ["canada_dollar_5"]),
+
+    * The NamedList class is simply a list with a name. The name gets returned
+    whenever the list is cast to a string.
+
+    3. An entry to the denominations dictionary in the Coins class must then
+    be added. This entry represents all Canadian coins of the Dollar
+    denomination. The modern Canadian monetary system also uses cents (ex:
+    1 cent, 5 cent, 10 cent, etc.), which would have to be its own entry in
+    this dictionary. Continuing with the example, the entry would be:
+
+        "canada_dollar": NamedList("Dollars", ["canada_dollar_5"]),
+
+    * Inside the list would be all face values of the Canadian dollar.
+
+    4. Finally, an entry to the countries dictionary in the Coins class must
+    be added. This represents all coins of the country (it could also be an
+    issuing authority...). Below is the example entry:
+
+
+        "canada": NamedList("Canada", ["canada_dollar"]),
+
+    * The list stores all denominations for this country, so if coins 
+    of the Canadian cent denomination were also defined, the Canadian cent
+    denomination would have to be included in the list.
+
+    ** Note that the NamedList object stores the keys for the objects of the
+    lower tier that they represent. So, the "canada_dollar" denomination entry
+    stores the keys of all Canadian dollar face_values, as defined in the
+    values dictionary.
+
+    ** See purchases.py if you would like to add your personal collection.
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.tree import Tree
 from tree.node import Node
@@ -589,6 +681,7 @@ class Coins:
         "united_states": NamedList("United States", ["cents", "dollar"]),
     }
 
+    # Enables or disables printing of the coins value
     def togglePrice(show_price=True):
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
@@ -596,6 +689,7 @@ class Coins:
                 coin = coin.data
             coin.togglePrice(show_price)
 
+    # Calculates the value of all defined coin objects, using the provided precious metal values
     def price(silver_price, gold_price):
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
@@ -606,12 +700,14 @@ class Coins:
             if coin.metal == Metals.GOLD:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * gold_price
 
+    # Removes associated purchases from all defined coins
     def removePurchases():
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
             if isinstance(coin, Node):
                 coin.nodes = []
 
+    # Links all purchases in purchases.py to their associated coins
     def linkPurchases(keep_old_purchases=False):
         if not keep_old_purchases:
             Coins.removePurchases()
@@ -623,40 +719,8 @@ class Coins:
             except KeyError:
                 print(f"{purchase} is not a valid key")
 
-    def buildCountry(country, first_time=True):
-        """country is name, first_time will apply metals and country"""
-        current_denominations = []
-        for denomination in Coins.countries[country]:
-            current_values = []
-            for value in Coins.denominations[denomination]:
-                current_coins = []
-                for coin in Coins.values[value]:
-                    temp = Coins.coins[coin]
-                    if isinstance(temp, Node):
-                        current_coins.append(temp)
-                    else:
-                        current_coins.append(Node(data=temp))
-                # Sorts the coins by first year available
-                current_coins = sorted(current_coins, key=lambda x: x.data.years[0])
-                if isinstance(Coins.values[value], NamedList):
-                    current_values.append(
-                        Tree(name=str(Coins.values[value]), nodes=current_coins)
-                    )
-                else:
-                    current_values.append(Tree(name=value, nodes=current_coins))
-            if isinstance(Coins.denominations[denomination], NamedList):
-                current_denominations.append(
-                    Tree(
-                        name=str(Coins.denominations[denomination]),
-                        nodes=current_values,
-                    )
-                )
-            else:
-                current_denominations.append(
-                    Tree(name=denomination, nodes=current_values)
-                )
-        return Tree(name=str(Coins.countries[country]), nodes=current_denominations)
 
+    # Creates a tree from any number/combination of key values.
     def buildTree(coin_ids, debug=False):
         results = Tree(name="Results", nodes=[])
         needed_countries = {}
