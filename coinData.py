@@ -2,9 +2,18 @@ import weights
 from datetime import datetime
 import metals
 
+
 class Purchase:
     """Models a coin purchase with information about the price paid, quantity, date of purchase, mint date, and mint mark"""
-    def __init__(self,price=None,quantity=None,purchase_date=None,mint_date=None,mint_mark=None):
+
+    def __init__(
+        self,
+        price=None,
+        quantity=None,
+        purchase_date=None,
+        mint_date=None,
+        mint_mark=None,
+    ):
         try:
             self.price = float(price)
         except ValueError:
@@ -23,21 +32,21 @@ class Purchase:
     def __str__(self):
         string = ""
         if self.purchase_date is not None:
-            if isinstance(self.purchase_date,datetime):
+            if isinstance(self.purchase_date, datetime):
                 string += f"({self.purchase_date.strftime('%m/%d/%y')})"
-            elif isinstance(self.purchase_date,str) and not (self.purchase_date == ""):
+            elif isinstance(self.purchase_date, str) and not (self.purchase_date == ""):
                 string += f"({self.purchase_date})"
-        if self.mint_date is not None and not(self.mint_date == ""):
+        if self.mint_date is not None and not (self.mint_date == ""):
             string += f" {self.mint_date}"
-            if self.mint_mark is not None and not(self.mint_mark == ""):
+            if self.mint_mark is not None and not (self.mint_mark == ""):
                 string += f"{self.mint_mark}"
         if self.price is not None:
             string += f" - ${self.price:.2f}"
         if self.quantity is not None:
-            if self.quantity> 1:
+            if self.quantity > 1:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
-                    string += f" (${self.price*self.quantity})"
+                    string += f" (${self.price * self.quantity})"
         return string
 
 
@@ -59,9 +68,9 @@ class CoinData:
         face_value=None,
         denomination=None,
         nickname=None,
-        value = None,
-        retention = None,
-        show_value = True
+        value=None,
+        retention=None,
+        show_value=True,
     ):
         if isinstance(weight, float) or isinstance(weight, int):
             self.weight = weights.Weight(weight, weights.Units.GRAMS)
@@ -86,16 +95,17 @@ class CoinData:
                 weights.Units.TROY_OUNCES,
             )
         self.value = value
-        if retention is None: # Percentage of melt value that coin is typically bought at
+        if (
+            retention is None
+        ):  # Percentage of melt value that coin is typically bought at
             self.default_retention = True
             self.retention = 1.00
         else:
             self.default_retention = False
-            self.retention = retention 
+            self.retention = retention
 
-    def togglePrice(self,show_price:bool):
+    def togglePrice(self, show_price: bool):
         self.show_value = show_price
-
 
     def getCoinString(self):
         """Returns a format string for use with a CoinData object. Depends on settings and information about the coin"""
@@ -110,8 +120,6 @@ class CoinData:
             else:
                 string += CoinData.coin_string_value
         return string
-
-
 
     def yearsList(self):
         if self.years is not None:
@@ -154,7 +162,6 @@ class CoinData:
             elif self.metal == metals.Metals.SILVER:
                 return "Silver"
         return "Unknown metal"
-    
 
     def asAString(self, format: str):
         """Very simple attempt at a format string for information
@@ -178,10 +185,14 @@ class CoinData:
         string = string.replace("%d", str(self.denomination))
         string = string.replace("%F", str(self.face_value))
         string = string.replace(
-                "%v", "Unknown value" if self.value is None else f"{round(self.value,2):.2f}"
+            "%v",
+            "Unknown value" if self.value is None else f"{round(self.value, 2):.2f}",
         )
         string = string.replace(
-                "%V", "Unknown value" if (self.value is None) else f"{round(self.value*self.retention,2):.2f}"
+            "%V",
+            "Unknown value"
+            if (self.value is None)
+            else f"{round(self.value * self.retention, 2):.2f}",
         )
         string = string.replace(
             "%y", "Unknown years" if self.years is None else self.yearsList()

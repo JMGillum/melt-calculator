@@ -11,6 +11,7 @@ class Units(Enum):
 
 class Weight:
     """Represents a weight and provides conversion functions. Can store weights as grams, ounces, or troy ounces, and can report them in either of the 3."""
+
     def __init__(self, weight: float | int, units: Units):
         if isinstance(weight, int):
             weight = float(weight)

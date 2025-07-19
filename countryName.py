@@ -1,5 +1,6 @@
 class CountryName:
     """Class for representing a country along with its alternative names."""
+
     def __init__(self, name: str, other_names: str | list[str] | None = None):
         """Name is primary name, other names is a list of alternative names. Ex: name=France, other_names=[French,Francais]"""
         self.name = name
