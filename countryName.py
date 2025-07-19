@@ -55,7 +55,7 @@ class CountryName:
         if all_names and self.other_names is not None:
             print(" AKA - ")
             for name in self.other_names:
-                print(f"{name}, ")
+                print(f"  {name}, ")
 
     def __str__(self):
         return self.name
