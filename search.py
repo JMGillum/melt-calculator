@@ -1,6 +1,25 @@
+"""
+   Author: Josh Gillum              .
+   Date: 18 July 2025              ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    This file contains functions related to searching for coins. The notable
+    function is parseSearchString(), which takes a string and parses it into
+    the constituent arguments (country, denomination, face value, year). These
+    are then used in the Coins class (in coinInfo.py) to find corresponding
+    coins.
+
+    There are also functions for finding information about a country (namely,
+    its name), as well as determining if a name belongs to a country.
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 import re
 from countryName import CountryName
-import data
 
 
 minimum_year = 1800
@@ -23,47 +42,19 @@ def countryNames():
     return [france, mexico, united_states, germany, italy, canada]
 
 
-def countryInfo(name, return_name=True, return_build=True, countries=None):
-    """Returns information about a country, if it exists.
-    Name is the name of the country
-    return_name is boolean for whether the proper/main name of the country will be returned
-    return_build is boolean for whether the build function of the country will be returned
-    countries is a list of (countryName,buildFunction) tuples to search through. If not provided,
-    the ones specified in data.countries will be used."""
-    if return_name or return_build:
-        if countries is None:
-            countries = countryNames()
-            if not isinstance(countries, list):
-                countries = [countries]
-            for item in countries:
-                item_name = item
-                if isinstance(item, tuple):
-                    item_name = item[0]
-                else:
-                    item = (item, None)
-                answer = item_name.lookup(name)
-                if answer is not None:  # Determines what to return
-                    if return_name and return_build:
-                        return item
-                    if return_name and not return_build:
-                        return item_name
-                    if not return_name and return_build:
-                        return item[1]
-                    else:
-                        return None
+def validCountry(name, countries=None):
+    """Determines if the string is a valid country name. Returns country's
+    proper/main name on success, and None on failure."""
+    if countries is None:
+        countries = countryNames()
+    if not isinstance(countries, list):
+        countries = [countries]
+    for item in countries:
+        answer = item.lookup(name)
+        if answer:
+            return answer
     return None
 
-
-def validCountry(text, countries=None):
-    """Determines if the string is a valid country name. Returns country's
-    proper/main name on success, and None on failure. Wrapper for Search.countryInfo()"""
-    return countryInfo(text, return_build=False, countries=countries)
-
-
-def lookupCountryBuild(name, countries=None):
-    """Finds the coin build function of a country, if the country is valid.
-    Returns a tuple of (countryName,buildFunction) on success, None on fail."""
-    return countryInfo(name, return_name=False, countries=countries)
 
 
 def parseSearchString(text: str, debug: bool = False):
@@ -99,15 +90,16 @@ def parseSearchString(text: str, debug: bool = False):
     if len(words) >= 2:
         for word in words:
             temp = validCountry(word)  # checks if word is a valid country name
+            print(temp)
             if temp is not None:
-                country = temp.name
+                country = temp
                 words.remove(word)
                 break
         denomination = words[0]
     elif len(words) > 0:
         temp = validCountry(words[0])
         if temp:
-            country = temp.name
+            country = temp
         else:
             denomination = words[0]
 

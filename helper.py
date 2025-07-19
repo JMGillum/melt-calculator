@@ -1,3 +1,27 @@
+"""
+   Author: Josh Gillum              .
+   Date: 18 July 2025              ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    This script is designed to be used to make adding or updating CoinData
+    objects within the Coins class. See CoinInfo.py for information on the
+    class. The script will print out the entire coins_reverse_build dictionary,
+    as well as the silver_coins and gold_coins lists. They will simply have to
+    be copied and pasted into Coins class in coinInfo.py. Make sure to delete
+    the old versions of these variables as well.
+
+    In order to work, the CoinData objects must contain the metal type (either
+    Metals.SILVER or Metals.GOLD). The entries within Coins.values,
+    Coins.denominations, and Coins.countries must also be correct. There needs
+    to be a way for the script to go from a country all the way down to the coin
+    object.
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinInfo import Coins
 from metals import Metals
 from tree.node import Node

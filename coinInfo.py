@@ -80,6 +80,11 @@
     of the Canadian cent denomination were also defined, the Canadian cent
     denomination would have to be included in the list.
 
+    * The coins_reverse_build dictionary must also be updated. Each entry
+    is of the form <coin_id>:(face_value_id, denomination_id, country_id).
+    Where each id is the corresponding key in each of the dictionaries. See
+    helper.py for information on how to update this.
+
     ** Note that the NamedList object stores the keys for the objects of the
     lower tier that they represent. So, the "canada_dollar" denomination entry
     stores the keys of all Canadian dollar face_values, as defined in the
