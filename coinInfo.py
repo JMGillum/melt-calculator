@@ -41,6 +41,7 @@ class Coins:
             weight=31.11,
             fineness=0.9999,
             precious_metal_weight=weights.Weight(1,weights.Units.TROY_OUNCES),
+            metal=Metals.SILVER,
             country="Canada",
             face_value=5,
             denomination="Dollars"
