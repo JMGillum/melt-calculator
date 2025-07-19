@@ -12,6 +12,11 @@ from coinInfo import Coins
 
 import sys
 
+COUNTRY=0
+DENOMINATION=1
+YEAR=2
+FACE_VALUE=3
+
 
 
 
@@ -72,57 +77,64 @@ if not args["hide_price"]:
 else:
     Coins.togglePrice(False)
 
-if args["country"] or args["denomination"] or args["face_value"] or args["year"]:
+arguments = (args["country"],args["denomination"],args["year"],args["face_value"])
+
+if args["search_string"] or args["search_file"]:
+    if args["search_string"]:
+       arguments = search.parseSearchString(args["search_string"],debug=args["verbose"])
+if arguments[COUNTRY] or arguments[DENOMINATION] or arguments[YEAR] or arguments[FACE_VALUE]:
     fail = False
     year = None
     face_value = None
     # Attempts to convert year and face_value to numeric data type (int or float(only for face_value))
     try:
-        if args["year"] is not None:
-            year = int(args["year"])
+        if arguments[YEAR]:
+            year = int(arguments[YEAR])
+            arguments = (arguments[COUNTRY],arguments[DENOMINATION],year,arguments[FACE_VALUE])
             if args["verbose"]:
                 print(f"Year was successfully converted to {year}")
         else:
             if args["verbose"]:
                 print("Year was not provided. Ignoring...")
     except ValueError:
-        print(f"The specified year ({args['year']}) is not valid. It must be an integer")
+        print(f"The specified year ({arguments[YEAR]}) is not valid. It must be an integer")
         fail = True
     try:
-        if args["face_value"] is not None and isinstance(args["face_value"],str):
-            index = args["face_value"].find(".")
+        if arguments[FACE_VALUE] and isinstance(arguments[FACE_VALUE],str):
+            index = arguments[FACE_VALUE].find(".")
             if index > 0:
                 is_float = False
-                for i in range(index+1,len(args["face_value"])):
-                    if not (args["face_value"][i] == '0'):
-                        face_value = float(args["face_value"])
+                for i in range(index+1,len(arguments[FACE_VALUE])):
+                    if not (arguments[FACE_VALUE][i] == '0'):
+                        face_value = float(arguments[FACE_VALUE])
                         is_float = True
                         break
                 if not is_float:
-                    face_value = int(args["face_value"][:index])
+                    face_value = int(arguments[FACE_VALUE][:index])
             else:
-                face_value = int(args["face_value"])
+                face_value = int(arguments[FACE_VALUE])
+            arguments = (arguments[COUNTRY],arguments[DENOMINATION],arguments[YEAR],face_value)
             if args["verbose"]:
-                print(f"face value was successfully converted to {args['face_value']}")
+                print(f"face value was successfully converted to {face_value}")
         else:
             if args["verbose"]:
                 print("face_value was not provided. Ignoring...")
     except ValueError:
-        print(f"The specified face_value ({args['face_value']}) is not valid. It must be a number")
+        print(f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number")
         fail = True
 
     if not fail: # The year and face_value could be converted to numeric types if applicable
         if args["verbose"]:
             print("The year and/or face_value arguments were successfully converted.")
-        results = Coins.search(country=args["country"],denomination=args["denomination"],year=year,face_value=face_value,debug=args["verbose"])
+        results = Coins.search(country=arguments[COUNTRY],denomination=arguments[DENOMINATION],year=arguments[YEAR],face_value=arguments[FACE_VALUE],debug=args["verbose"])
         if results is None:
-            print(f"No results found for {args['country']} {year} {args['denomination']} {face_value}")
+            print(f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}")
         else: # Search found some results
             # Sorts results into their types and stores them in their respective lists
-            text_year = f'{year} ' if year else ""
-            text_country = f'{args["country"]} ' if args["country"] else ""
-            text_face_value = f'{face_value} ' if args["face_value"] else ""
-            text_denomination = args["denomination"] if args["denomination"] else ""
+            text_year = f'{arguments[YEAR]} ' if arguments[YEAR] else ""
+            text_country = f'{arguments[COUNTRY]} ' if arguments[COUNTRY] else ""
+            text_face_value = f'{arguments[FACE_VALUE]} ' if arguments[FACE_VALUE] else ""
+            text_denomination = f'{arguments[DENOMINATION]}' if arguments[DENOMINATION] else ""
             results.set_name(f"Results for \'{text_year}{text_country}{text_face_value}{text_denomination}\'".strip())
             results.cascading_set_fancy(True)
             for line in results.print():

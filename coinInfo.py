@@ -425,7 +425,7 @@ class Coins:
     
     def search(country=None,denomination=None,face_value=None,year=None,debug=False):
         found_denominations = list(Coins.denominations.keys())
-        if country is not None:
+        if country:
             try:
                 found_denominations = Coins.countries[country.lower()]
             except KeyError:
@@ -437,7 +437,7 @@ class Coins:
                 print(f"  {item}")
 
         found_values = []
-        if denomination is not None:
+        if denomination:
             matches = [x for x in found_denominations if Coins.denominations[x].name.lower() == denomination.lower()]
             if matches:
                 try:
@@ -457,7 +457,7 @@ class Coins:
                 print(f"  {item}")
 
         found_coins = []
-        if face_value is not None:
+        if face_value:
             matches = [x for x in found_values if (Coins.values[x].name == face_value or str(Coins.values[x].name).lower() == str(face_value).lower())]
             if matches:
                 try: 
@@ -479,7 +479,7 @@ class Coins:
 
 
         results = []
-        if year is not None:
+        if year:
             matches = [x for x in found_coins if year in (Coins.coins[x].years if isinstance(Coins.coins[x],CoinData) else Coins.coins[x].data.years)]
             if matches:
                 try:
