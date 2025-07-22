@@ -115,7 +115,7 @@ class CoinData:
             retention is None
         ):  # Percentage of melt value that coin is typically bought at
             self.default_retention = True
-            self.retention = 1.00
+            self.retention = 0.97 # Default retention of 97% of metl value
         else:
             self.default_retention = False
             self.retention = retention

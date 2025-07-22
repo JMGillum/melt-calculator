@@ -308,6 +308,7 @@ class Coins:
                 country="France",
                 face_value=100,
                 denomination="Franc",
+                retention=0.70,
             )
         ),
         "franc_100_2": Node(
