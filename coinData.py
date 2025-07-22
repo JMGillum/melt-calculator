@@ -18,6 +18,8 @@ import weights
 from datetime import datetime
 import metals
 
+import config
+
 
 class Purchase:
     """Models a coin purchase with information about the price paid, quantity, date of purchase, mint date, and mint mark"""
@@ -115,7 +117,7 @@ class CoinData:
             retention is None
         ):  # Percentage of melt value that coin is typically bought at
             self.default_retention = True
-            self.retention = 0.97 # Default retention of 97% of metl value
+            self.retention = config.default_retention # Default retention of 97% of melt value
         else:
             self.default_retention = False
             self.retention = retention

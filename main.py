@@ -45,6 +45,7 @@ import argparse
 import data as d
 import search
 from coinInfo import Coins
+import config
 
 import sys # Used to check if stdin is not from a terminal (piping input)
 
@@ -53,6 +54,7 @@ COUNTRY = 0
 DENOMINATION = 1
 YEAR = 2
 FACE_VALUE = 3
+
 
 
 # Initializes all of the available command line arguments
@@ -316,7 +318,7 @@ if arguments_list:
                     results.set_name(
                         f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
                     )
-                    results.cascading_set_fancy(True)
+                    results.cascading_set_fancy(config.tree_fancy_characters)
                     for line in results.print():
                         print(line)
 
@@ -327,6 +329,6 @@ else:  # Simply prints out all of the coins.
     data = Coins.buildTree(countries, debug=args["verbose"])
 
     data.set_name("Precious Metals")
-    data.cascading_set_fancy(True)
+    data.cascading_set_fancy(config.tree_fancy_characters)
     for line in data.print():
         print(line)
