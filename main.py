@@ -98,7 +98,6 @@ def setupParser():
         metavar="PRICE",
         help="Use to supply the gold price for melt value calculations.",
     )
-    """
     parser.add_argument(
         "-o",
         "--owned",
@@ -111,7 +110,6 @@ def setupParser():
         action="store_true",
         help="Show only the coins that are not in the personal collection. Does nothing when used with the --owned flag.",
     )
-    """
     parser.add_argument(
         "-p",
         "--hide_price",
@@ -298,6 +296,8 @@ if arguments_list:
                     year=arguments[YEAR],
                     face_value=arguments[FACE_VALUE],
                     debug=args["verbose"],
+                    show_only_owned = args["owned"], 
+                    show_only_not_owned = args["not_owned"]
                 )
                 if results is None:
                     print(
@@ -326,9 +326,11 @@ if arguments_list:
 else:  # Simply prints out all of the coins.
     # Builds Country objects for each country defined in data.countries
     countries = list(Coins.countries.keys())
-    data = Coins.buildTree(countries, debug=args["verbose"])
+    data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"])
 
     data.set_name("Precious Metals")
     data.cascading_set_fancy(config.tree_fancy_characters)
     for line in data.print():
         print(line)
+
+

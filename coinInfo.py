@@ -1,7 +1,7 @@
 """
    Author: Josh Gillum              .
    Date: 21 July 2025              ":"         __ __
-                                  __|___       \ V /
+   Code Start: Line 98            __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
@@ -613,6 +613,11 @@ class Coins:
         "mark_10",
     ]
 
+    # Updated in Coins.linkPurchases() to include keys to coins that have
+    # purchases or don't
+    owned = set()
+    not_owned = set()
+
     values = {
         # Canada
         "canada_dollar_5": NamedList("5", ["canada_dollar_5"]),
@@ -708,6 +713,8 @@ class Coins:
 
     # Removes associated purchases from all defined coins
     def removePurchases():
+        Coins.owned = []
+        Coins.not_owned = []
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
             if isinstance(coin, Node):
@@ -722,12 +729,20 @@ class Coins:
                 coin = Coins.coins[purchase]
                 if isinstance(coin, Node):
                     coin.nodes += purchases[purchase]
+                    Coins.owned.add(purchase)
             except KeyError:
                 print(f"{purchase} is not a valid key")
+        Coins.owned = set(Coins.owned)
+        Coins.not_owned = set(Coins.coins.keys())
+        Coins.not_owned = Coins.not_owned - Coins.owned
 
 
     # Creates a tree from any number/combination of key values.
-    def buildTree(coin_ids, debug=False):
+    def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False):
+        # Disables these flags if they are both set to true. They are mutually exclusive
+        if show_only_owned and show_only_not_owned:
+            show_only_owned = False
+            show_only_not_owned = False
         results = Tree(name="Results", nodes=[])
         needed_countries = {}
         needed_denominations = {}
@@ -736,12 +751,14 @@ class Coins:
             try:
                 information = Coins.coins_reverse_build[coin_id]
                 try:
-                    value_found = needed_values[information[0]]
-                    needed_values[information[0]] = value_found + [coin_id]
+                    if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
+                        value_found = needed_values[information[0]]
+                        needed_values[information[0]] = value_found + [coin_id]
                 except (
                     KeyError
                 ):  # coin_id's value is not a valid key in needed_values yet
-                    needed_values[information[0]] = [coin_id]
+                    if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
+                        needed_values[information[0]] = [coin_id]
 
                 try:
                     denominations_found = needed_denominations[information[1]]
@@ -840,7 +857,7 @@ class Coins:
         return results
 
     def search(
-        country=None, denomination=None, face_value=None, year=None, debug=False
+        country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False
     ):
         found_denominations = list(Coins.denominations.keys())
         if country:
@@ -933,4 +950,4 @@ class Coins:
             for item in results:
                 print(f"  {item}")
 
-        return Coins.buildTree(results, debug)
+        return Coins.buildTree(results, debug, show_only_owned, show_only_not_owned)
