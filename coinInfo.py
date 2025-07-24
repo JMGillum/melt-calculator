@@ -724,8 +724,8 @@ class Coins:
 
     # Removes associated purchases from all defined coins
     def removePurchases():
-        Coins.owned = []
-        Coins.not_owned = []
+        Coins.owned = set()
+        Coins.not_owned = set()
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
             if isinstance(coin, Node):
@@ -733,6 +733,10 @@ class Coins:
 
     # Links all purchases in purchases.py to their associated coins
     def linkPurchases(keep_old_purchases=False):
+        if not Coins.owned:
+            Coins.owned = set()
+        if not Coins.not_owned:
+            Coins.not_owned = set()
         if not keep_old_purchases:
             Coins.removePurchases()
         for purchase in purchases:
