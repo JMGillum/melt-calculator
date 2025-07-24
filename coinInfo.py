@@ -104,9 +104,18 @@ import weights
 
 
 class NamedList:
-    def __init__(self, name, items):
+    def __init__(self, name, items, sorting_name=None):
         self.name = name
         self.items = items
+        self.sorting_name = sorting_name
+
+    def name_sorting(self):
+        if self.sorting_name:
+            return self.sorting_name
+        elif self.name:
+            return self.name
+        else:
+            return ""
 
     def __str__(self):
         if self.name:
@@ -638,10 +647,11 @@ class Coins:
         # Mexico
         "peso_1": NamedList("1", ["peso_1"]),
         # United States
-        "dime": NamedList("Dimes", ["barber_dime", "mercury_dime", "roosevelt_dime"]),
+        "dime": NamedList("Dimes", ["barber_dime", "mercury_dime", "roosevelt_dime"],"10"),
         "quarter": NamedList(
             "Quarters",
             ["barber_quarter", "standing_liberty_quarter", "washington_quarter"],
+            "25",
         ),
         "half": NamedList(
             "Halves",
@@ -651,8 +661,9 @@ class Coins:
                 "kennedy_half_1",
                 "kennedy_half_2",
             ],
+            "50",
         ),
-        "dollar": NamedList("Dollars", ["morgan_dollar", "peace_dollar"]),
+        "dollar": NamedList("Dollars", ["morgan_dollar", "peace_dollar"],"1"),
     }
 
     denominations = {
@@ -739,6 +750,7 @@ class Coins:
 
     # Creates a tree from any number/combination of key values.
     def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False):
+        coin_ids = list(set(coin_ids)) # Should remove duplicates, if present
         # Disables these flags if they are both set to true. They are mutually exclusive
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
@@ -747,18 +759,21 @@ class Coins:
         needed_countries = {}
         needed_denominations = {}
         needed_values = {}
+        needed_coins = []
         for coin_id in coin_ids:
             try:
                 information = Coins.coins_reverse_build[coin_id]
                 try:
+                    if (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
+                        needed_coins.append(coin_id)
                     if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
                         value_found = needed_values[information[0]]
                         needed_values[information[0]] = value_found + [coin_id]
-                    else:
-                        coin_ids.remove(coin_id)
                 except (
                     KeyError
                 ):  # coin_id's value is not a valid key in needed_values yet
+                    if (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
+                        needed_coins.append(coin_id)
                     if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
                         needed_values[information[0]] = [coin_id]
 
@@ -801,11 +816,16 @@ class Coins:
                 print(f"Denominations: {needed_denominations}")
                 print(f"Countries: {needed_countries}")
                 print()
+
+        if not show_only_owned and not show_only_not_owned:
+            needed_coins = coin_ids
+        else:
+            needed_coins = list(set(needed_coins))
         
         i = 0
         while i < len(needed_values):
             value = list(needed_values.keys())[i]
-            x = [x for x in Coins.values[value] if x in coin_ids]
+            x = [x for x in Coins.values[value] if x in needed_coins]
             if not x:
                 needed_values.pop(value)
                 i-=1
@@ -831,12 +851,13 @@ class Coins:
 
         if debug:
             print("Pruned tree to:")
-            print(f"Coin_ids: {coin_ids}")
+            print(f"Needed Coins: {needed_coins}")
             print(f"Values: {needed_values}")
             print(f"Denominations: {needed_denominations}")
             print(f"Countries: {needed_countries}")
             print()
 
+        # Actually builds tree with given information
         current_countries = []
         for country in needed_countries:
             current_denominations = []
@@ -847,7 +868,7 @@ class Coins:
                         if value in needed_values:
                             current_coins = []
                             for coin in Coins.values[value]:
-                                if coin in coin_ids:
+                                if coin in needed_coins:
                                     temp = Coins.coins[coin]
                                     if isinstance(temp, Node):
                                         current_coins.append(temp)
@@ -858,38 +879,37 @@ class Coins:
                                 current_coins, key=lambda x: x.data.years[0]
                             )
                             if isinstance(Coins.values[value], NamedList):
-                                current_values.append(
-                                    Tree(
-                                        name=str(Coins.values[value]),
-                                        nodes=current_coins,
-                                    )
-                                )
-                            else:
-                                current_values.append(
-                                    Tree(name=value, nodes=current_coins)
-                                )
-                    if isinstance(Coins.denominations[denomination], NamedList):
-                        current_denominations.append(
-                            Tree(
-                                name=str(Coins.denominations[denomination]),
-                                nodes=current_values,
+                                value = Coins.values[value]
+                            # Appends a tuple of the tree and the name to be used for sorting (should be int)
+                            current_values.append(
+                                (Tree(name=str(value), nodes=current_coins),int(value.name_sorting()))
                             )
+                    # Sorts the list of trees by sorting names
+                    current_values = sorted(current_values,key = lambda x: x[1])
+                    # Then converts the list back to a list of trees
+                    current_values = [x[0] for x in current_values]
+                    # Appends denomination tree
+                    if isinstance(Coins.denominations[denomination], NamedList):
+                        denomination = Coins.denominations[denomination]
+                    current_denominations.append(
+                        Tree(
+                            name=str(denomination),
+                            nodes=current_values,
                         )
-                    else:
-                        current_denominations.append(
-                            Tree(name=denomination, nodes=current_values)
-                        )
-
-            if isinstance(Coins.countries[country], NamedList):
-                current_countries.append(
-                    Tree(
-                        name=str(Coins.countries[country]), nodes=current_denominations
                     )
+
+            # Sorts the denominations by name
+            current_denominations = sorted(current_denominations, key = lambda x: str(x))
+            # Appends country tree
+            if isinstance(Coins.countries[country], NamedList):
+                country = Coins.countries[country]
+            current_countries.append(
+                Tree(
+                    name=str(country), nodes=current_denominations
                 )
-            else:
-                current_countries.append(
-                    Tree(name=country, nodes=current_denominations)
-                )
+            )
+        # Sorts the countries by name
+        current_countries = sorted(current_countries, key=lambda x: str(x))
         results = Tree(name="Results", nodes=current_countries)
         return results
 
