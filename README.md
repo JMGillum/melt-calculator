@@ -1,7 +1,7 @@
 See https://git-scm.com/book/en/v2/Git-Tools-Submodules for information on submodules
 
 
-* Add the ability to show only coins that do or don't have an associated personal collection
+* ~~Add the ability to show only coins that do or don't have an associated personal collection~~
 * Improve instructions and documentation
 * Add more coin data, namely finishing Canada, Germany, and Mexico.
 * ~~Adding a config file that can store configurations like the tree's fanciness~~
