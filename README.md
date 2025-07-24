@@ -11,6 +11,6 @@ See https://git-scm.com/book/en/v2/Git-Tools-Submodules for information on submo
 * Dynamic price updating (update price from some api if it is stale)
 * Option to combine multiple searches into a single result tree
 * Summary statistics when there are multiple Purchase objects for the same coin
-* Ability to print a report of personal collection with extra summary statistics such as +/- of melt value
+* ~~Ability to print a report of personal collection with extra summary statistics such as +/- of melt value~~
 * Update country names to include more forms
 * Handle plurals of denominations better
