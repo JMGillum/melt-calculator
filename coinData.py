@@ -235,5 +235,8 @@ class CoinData:
         string = string.replace("%n", "" if self.nickname is None else self.nickname)
         return string
 
+    def print(self,format_string):
+        return self.asAString(format_string)
+
     def __str__(self):
         return self.asAString(self.getCoinString())
