@@ -754,6 +754,8 @@ class Coins:
                     if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
                         value_found = needed_values[information[0]]
                         needed_values[information[0]] = value_found + [coin_id]
+                    else:
+                        coin_ids.remove(coin_id)
                 except (
                     KeyError
                 ):  # coin_id's value is not a valid key in needed_values yet
@@ -799,6 +801,41 @@ class Coins:
                 print(f"Denominations: {needed_denominations}")
                 print(f"Countries: {needed_countries}")
                 print()
+        
+        i = 0
+        while i < len(needed_values):
+            value = list(needed_values.keys())[i]
+            x = [x for x in Coins.values[value] if x in coin_ids]
+            if not x:
+                needed_values.pop(value)
+                i-=1
+            i+=1
+
+        i = 0
+        while i < len(needed_denominations):
+            denomination = list(needed_denominations.keys())[i]
+            x = [x for x in Coins.denominations[denomination] if x in needed_values]
+            if not x:
+                needed_denominations.pop(denomination)
+                i-=1
+            i+=1
+
+        i = 0
+        while i < len(needed_countries):
+            country = list(needed_countries.keys())[i]
+            x = [x for x in Coins.countries[country] if x in needed_denominations]
+            if not x:
+                needed_countries.pop(country)
+                i-=1
+            i+=1
+
+        if debug:
+            print("Pruned tree to:")
+            print(f"Coin_ids: {coin_ids}")
+            print(f"Values: {needed_values}")
+            print(f"Denominations: {needed_denominations}")
+            print(f"Countries: {needed_countries}")
+            print()
 
         current_countries = []
         for country in needed_countries:
