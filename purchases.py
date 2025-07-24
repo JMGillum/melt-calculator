@@ -84,7 +84,7 @@ purchases = {
         Purchase(price=6.43, purchase_date=datetime(2025, 7, 12), quantity=4)
     ],
     "washington_quarter": [
-        Purchase(price=2.56, purchase_date=datetime(2025, 7, 12), quantity=28)
+        Purchase(price=6.43, purchase_date=datetime(2025, 7, 12), quantity=28)
     ],
     "walking_liberty_half": [
         Purchase(price=12.86, purchase_date=datetime(2025, 7, 12), quantity=9)
