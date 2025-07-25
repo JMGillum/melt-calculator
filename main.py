@@ -193,30 +193,30 @@ try:
         d.silver_spot_price = round(float(args["silver"]), 2)
 except ValueError:
     print(
-        f"Silver price provided is invalid type. Using value (${d.silver_spot_price:.2f}) defined in data.py instead."
+        f"Silver price provided is invalid type. Using value ({config.currency_symbol}{d.silver_spot_price:.2f}) defined in data.py instead."
     )
 try:
     if args["gold"] is not None:
         d.gold_spot_price = round(float(args["gold"]), 2)
 except ValueError:
     print(
-        f"Gold price provided is invalid type. Using value (${d.gold_spot_price:.2f}) defined in data.py instead."
+        f"Gold price provided is invalid type. Using value ({config.currency_symbol}{d.gold_spot_price:.2f}) defined in data.py instead."
     )
 try:
     if args["platinum"] is not None:
         d.platinum_spot_price = round(float(args["platinum"]), 2)
 except ValueError:
     print(
-        f"Platinum price provided is invalid type. Using value (${d.platinum_spot_price:.2f}) defined in data.py instead."
+        f"Platinum price provided is invalid type. Using value ({config.currency_symbol}{d.platinum_spot_price:.2f}) defined in data.py instead."
     )
 
 
 # Prints out the precious metal prices and calculates the coins' worth
 if not args["hide_price"]:
     price()
-    print(f"Silver Spot: ${d.silver_spot_price:.2f}")
-    print(f"Gold Spot: ${d.gold_spot_price:.2f}")
-    print(f"Platinum Spot: ${d.platinum_spot_price:.2f}")
+    print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
+    print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
+    print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
 else:
     Coins.togglePrice(False) # Disables printing of the value of coins
 

@@ -59,12 +59,12 @@ class Purchase:
             if self.mint_mark is not None and not (self.mint_mark == ""):
                 string += f"{self.mint_mark}"
         if self.price is not None:
-            string += f" - ${self.price:.2f}"
+            string += f" - {config.currency_symbol}{self.price:.2f}"
         if self.quantity is not None:
             if self.quantity > 1:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
-                    string += f" (${self.price * self.quantity})"
+                    string += f" ({config.currency_symbol}{self.price * self.quantity})"
         return string
 
 
@@ -72,8 +72,8 @@ class CoinData:
     # Templates for printing information about one of the member coins
     coin_string = "[%y] ... %a %m (%w @ %p%)"
     coin_string_name = "%n [%y] ... %a %m (%w @ %p%)"
-    coin_string_value = " - [Melt: $%v Sell: $%V]"
-    coin_string_value_default_retention = " - [Melt: $%v Sell: $(%V)]"
+    coin_string_value = f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}%V]"
+    coin_string_value_default_retention = f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}(%V)]"
 
     def __init__(
         self,

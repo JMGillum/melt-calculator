@@ -20,10 +20,9 @@
 
 import re
 from countryName import CountryName
+from config import minimum_year, current_year
 
 
-minimum_year = 1800
-current_year = 2025
 
 
 def countryNames():

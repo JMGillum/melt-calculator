@@ -17,6 +17,16 @@
         codes that are not included in the basic ASCII mapping, and thus may
         not be supported by your system. Change the value to False to disable
         these characters and revert to basic characters.
+    ->  currency_symbol: The symbol that will be displayed to the left of 
+        prices. Default value is '$'.
+    ->  current_year: This is the current year. This is used for coins that
+        are still in production. Also used to mark the upper bound for values
+        that can be interpreted as a year. Numbers larger than this are
+        interpreted as face values.
+    ->  minimum_year: This is the smallest number that can be interpreted as
+        a year. This number should be as large as possible while still
+        representing the entire data set. Numbers smaller than this will be
+        interpreted as face values of coins.
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
@@ -28,8 +38,7 @@ default_retention = 0.97
 # to improve visuals. Default is True if not set.
 tree_fancy_characters = True
 
-currency_symbol = "$".strip()
+currency_symbol = "$"
 
-tab = "  "
-
-current_year = 2025
+current_year = 2025 # Current year
+minimum_year = 1800 # Earliest number that will be considered a year and not a face value
