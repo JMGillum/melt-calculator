@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 18 July 2025              ":"         __ __
+   Date: 24 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -38,8 +38,10 @@ def countryNames():
     germany = CountryName("Germany", ["Deutschland", "German"])
     italy = CountryName("Italy", ["Italian", "Italia"])
     canada = CountryName("Canada", ["Canadian"])
+    great_britain = CountryName("Great Britain",["Britain","British","Brit","England","English"])
+    south_africa = CountryName("South Africa",["South African"])
 
-    return [france, mexico, united_states, germany, italy, canada]
+    return [france, mexico, united_states, germany, italy, canada, great_britain, south_africa]
 
 
 def validCountry(name, countries=None):
