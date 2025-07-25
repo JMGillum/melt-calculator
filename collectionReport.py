@@ -1,3 +1,20 @@
+"""
+   Author: Josh Gillum              .
+   Date: 24 July 2025              ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    This script prints out a report of the personal collection of coins. It 
+    utilizes Coins.owned in coins/coins.py. See purchases.py for information on
+    how to add and update purchases. This script is still a work in progress.
+    
+    Use the script by calling it as main from the command line
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coins.coins import Coins
 import data
 from coinData import Purchase

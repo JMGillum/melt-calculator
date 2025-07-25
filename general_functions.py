@@ -1,4 +1,19 @@
+"""
+   Author: Josh Gillum              .
+   Date: 24 July 2025              ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    This file holds miscellaneous functions that can be used in a multitude
+    of different locations.
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from config import show_color
+
 def printColored(text,color,custom_color=""):
     if not show_color:
         return text
