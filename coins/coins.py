@@ -106,6 +106,8 @@ import weights
 from general_functions import printColored
 
 from coins.namedList import NamedList
+from coins.taggedList import TaggedList
+from coins.tags import Tags
 
 import coins.canada as canada
 import coins.france as france
@@ -256,12 +258,15 @@ class Coins:
 
 
     # Creates a tree from any number/combination of key values.
-    def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False):
+    def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False):
         coin_ids = list(set(coin_ids)) # Should remove duplicates, if present
         # Disables these flags if they are both set to true. They are mutually exclusive
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
             show_only_not_owned = False
+        if show_only_bullion and show_only_not_bullion:
+            show_only_bullion = False
+            show_only_not_bullion = False
         results = Tree(name="Results", nodes=[])
         needed_countries = {}
         needed_denominations = {}
@@ -270,7 +275,26 @@ class Coins:
         for coin_id in coin_ids:
             try:
                 information = Coins.coins_reverse_build[coin_id]
-                try:
+                try: 
+                    # If requested, checks if the coin is bullion
+                    if show_only_bullion or show_only_not_bullion:
+                        denom = information[1]
+                        try:
+                            denom = Coins.denominations[denom] # Gets the Named/TaggedList for the denomination
+                            if isinstance(denom,TaggedList): # Checks if it has the BULLION tag
+                                test = Tags.BULLION in denom.tags
+                            else:
+                                test = False
+                            if show_only_bullion:
+                                if not test: # If only bullion should be showed and this is not, skip
+                                    continue
+                            else:
+                                if test: # If bullion should be hidden and this is bullion, skip
+                                    continue
+
+                        except KeyError:
+                            continue
+
                     if (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
                         needed_coins.append(coin_id)
                     if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
@@ -421,7 +445,7 @@ class Coins:
         return results
 
     def search(
-        country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False
+        country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False
     ):
         found_denominations = list(Coins.denominations.keys())
         if country:
@@ -519,4 +543,4 @@ class Coins:
             for item in results:
                 print(f"  {item}")
 
-        return Coins.buildTree(results, debug, show_only_owned, show_only_not_owned)
+        return Coins.buildTree(results, debug, show_only_owned, show_only_not_owned, show_only_bullion, show_only_not_bullion)

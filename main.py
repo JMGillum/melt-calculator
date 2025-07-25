@@ -232,7 +232,9 @@ if arguments_list:
                     face_value=arguments[FACE_VALUE],
                     debug=args["verbose"],
                     show_only_owned = args["owned"], 
-                    show_only_not_owned = args["not_owned"]
+                    show_only_not_owned = args["not_owned"],
+                    show_only_bullion = args["only_bullion"],
+                    show_only_not_bullion = args["hide_bullion"],
                 )
                 if results is None:
                     print(
@@ -261,7 +263,7 @@ if arguments_list:
 else:  # Simply prints out all of the coins.
     # Builds Country objects for each country defined in data.countries
     countries = list(Coins.countries.keys())
-    data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"])
+    data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"], show_only_bullion=args["only_bullion"], show_only_not_bullion=args["hide_bullion"])
 
     data.set_name("Precious Metals")
     data.cascading_set_fancy(config.tree_fancy_characters)
