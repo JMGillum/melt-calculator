@@ -101,6 +101,7 @@ from tree.node import Node
 from metals import Metals
 from purchases import purchases
 from config import currency_symbol,current_year
+import config
 from search import validCountry
 import weights
 from general_functions import printColored
@@ -438,7 +439,7 @@ class Coins:
                                 value = Coins.values[value]
                             # Appends a tuple of the tree and the name to be used for sorting (should be int)
                             current_values.append(
-                                (Tree(name=printColored(str(value),"y"), nodes=current_coins),int(value.name_sorting()))
+                                (Tree(name=printColored(str(value),config.value_color), nodes=current_coins),int(value.name_sorting()))
                             )
                     # Sorts the list of trees by sorting names
                     current_values = sorted(current_values,key = lambda x: x[1])
@@ -449,7 +450,7 @@ class Coins:
                         denomination = Coins.denominations[denomination]
                     current_denominations.append(
                         Tree(
-                            name=printColored(str(denomination),"p"),
+                            name=printColored(str(denomination),config.denomination_color),
                             nodes=current_values,
                         )
                     )
@@ -461,7 +462,7 @@ class Coins:
                 country = Coins.countries[country]
             current_countries.append(
                 Tree(
-                    name=printColored(str(country),"b"), nodes=current_denominations
+                    name=printColored(str(country),config.country_color), nodes=current_denominations
                 )
             )
         # Sorts the countries by name
