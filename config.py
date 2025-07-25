@@ -46,3 +46,6 @@ current_year = 2025 # Current year
 minimum_year = 1800 # Earliest number that will be considered a year and not a face value
 
 show_color = True
+country_color = "b"
+denomination_color = "p"
+value_color = "y"
