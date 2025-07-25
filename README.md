@@ -21,4 +21,4 @@ Done:
 * Support for platinum and palladium
 * Reworked bullion and how it is presented
 * Completed Canadian and German standard Issue
-* Completed Canadian and British bullion
+* Completed Canadian, British, and South African bullion

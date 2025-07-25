@@ -1107,6 +1107,73 @@ class Coins:
                 denomination="Peso",
             )
         ),
+        # South Africa
+        # South Africa - Krugerrand
+        "krugerrand_silver": Node(
+            CoinData(
+                nickname="Silver",
+                years=list(range(2017, current_year+1)),
+                weight=31.11,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.SILVER,
+                country="South Africa",
+                face_value=1,
+                denomination="Ounce",
+            )
+        ),
+        "krugerrand_gold_1": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1967, current_year+1)),
+                weight=33.93,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="South Africa",
+                face_value=1,
+                denomination="Ounce",
+            )
+        ),
+        "krugerrand_gold_1_2": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1980, current_year+1)),
+                weight=16.965,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(0.5, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="South Africa",
+                face_value=0.5,
+                denomination="Ounce",
+            )
+        ),
+        "krugerrand_gold_1_4": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1970, current_year+1)),
+                weight=8.4825,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(0.25, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="South Africa",
+                face_value=0.25,
+                denomination="Ounce",
+            )
+        ),
+        "krugerrand_gold_1_10": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1980, current_year+1)),
+                weight=3.393,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(0.1, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="South Africa",
+                face_value=0.1,
+                denomination="Ounce",
+            )
+        ),
         # United States
         "barber_dime": Node(
             CoinData(
@@ -1344,6 +1411,11 @@ class Coins:
         "britannia_platinum_100_pound": ("britannia_1","britannia","great_britain"),
         "centesimi_20": ("centesimi_20","centesimi","italy"),
         "peso_1": ("peso_1","peso","mexico"),
+        "krugerrand_silver": ("krugerrand_1","krugerrand","south_africa"),
+        "krugerrand_gold_1": ("krugerrand_1","krugerrand","south_africa"),
+        "krugerrand_gold_1_2": ("krugerrand_1_2","krugerrand","south_africa"),
+        "krugerrand_gold_1_4": ("krugerrand_1_4","krugerrand","south_africa"),
+        "krugerrand_gold_1_10": ("krugerrand_1_10","krugerrand","south_africa"),
         "barber_dime": ("dime","cents","united_states"),
         "mercury_dime": ("dime","cents","united_states"),
         "roosevelt_dime": ("dime","cents","united_states"),
@@ -1404,6 +1476,7 @@ class Coins:
         "britannia_silver_2_pound",
         "centesimi_20",
         "peso_1",
+        "krugerrand_silver",
         "barber_dime",
         "mercury_dime",
         "roosevelt_dime",
@@ -1446,6 +1519,10 @@ class Coins:
         "britannia_gold_50_pound",
         "britannia_gold_100_pound_old",
         "britannia_gold_100_pound",
+        "krugerrand_gold_1",
+        "krugerrand_gold_1_2",
+        "krugerrand_gold_1_4",
+        "krugerrand_gold_1_10",
     ]
 
     # Indicates which coins are made of platinum.
@@ -1511,14 +1588,20 @@ class Coins:
         "mark_20": NamedList("20", ["mark_20"]),
         # Great Britain
         # Great Britain - Britannia
-        "britannia_1_10": NamedList("1/10 Oz Britannia",["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"4"),
-        "britannia_1_4": NamedList("1/4 Oz Britannia",["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"3"),
-        "britannia_1_2": NamedList("1/2 Oz Britannia",["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"2"),
-        "britannia_1": NamedList("1 Oz Britannia",["britannia_silver_2_pound","britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"1"),
+        "britannia_1_10": NamedList("1/10 Oz Britannia",["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"1"),
+        "britannia_1_4": NamedList("1/4 Oz Britannia",["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"2"),
+        "britannia_1_2": NamedList("1/2 Oz Britannia",["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"3"),
+        "britannia_1": NamedList("1 Oz Britannia",["britannia_silver_2_pound","britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"4"),
         # Italy
         "centesimi_20": NamedList("20", ["centesimi_20"]),
         # Mexico
         "peso_1": NamedList("1", ["peso_1"]),
+        # South Africa
+        # South Africa - Krugerrand
+        "krugerrand_1_10": NamedList("1/10 oz Krugerrand",["krugerrand_gold_1_10"],"1"),
+        "krugerrand_1_4": NamedList("1/4 oz Krugerrand",["krugerrand_gold_1_4"],"2"),
+        "krugerrand_1_2": NamedList("1/2 oz Krugerrand",["krugerrand_gold_1_2"],"3"),
+        "krugerrand_1": NamedList("1 oz Krugerrand",["krugerrand_silver","krugerrand_gold_1"],"4"),
         # United States
         "dime": NamedList("Dimes", ["barber_dime", "mercury_dime", "roosevelt_dime"],"10"),
         "quarter": NamedList(
@@ -1568,6 +1651,8 @@ class Coins:
         "centesimi": NamedList("Centesimi", ["centesimi_20"]),
         # Mexico
         "peso": NamedList("Peso", ["peso_1"]),
+        # South Africa
+        "krugerrand": NamedList("Krugerrand",["krugerrand_1","krugerrand_1_2","krugerrand_1_4","krugerrand_1_10"]),
         # United States
         "cents": NamedList("Cents", ["dime", "quarter", "half"]),
         "dollar": NamedList("Dollars", ["dollar"]),
@@ -1580,6 +1665,7 @@ class Coins:
         "great_britain": NamedList("Great Britain",["britannia"]),
         "italy": NamedList("Italy", ["centesimi"]),
         "mexico": NamedList("Mexico", ["peso"]),
+        "south_africa": NamedList("South Africa",["krugerrand"]),
         "united_states": NamedList("United States", ["cents", "dollar"]),
     }
 
