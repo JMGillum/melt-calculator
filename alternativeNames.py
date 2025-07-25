@@ -33,6 +33,7 @@ class AlternativeNames:
 
     def lookup(self, text: str, case_sensitive=False):
         """Determines if the provided string is one of the associated names. Returns the official/primary name if it is. Returns None if it isn't"""
+        text = str(text)
         if case_sensitive:
             if text == self.name:
                 return self.name

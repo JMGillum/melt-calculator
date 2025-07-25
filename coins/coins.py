@@ -477,11 +477,11 @@ class Coins:
                 elif test.lower() == denomination.lower():
                     matches.append(x)
             if matches:
-                try:
-                    for match in matches:
+                for match in matches:
+                    try:
                         found_values += Coins.denominations[match]
-                except KeyError:
-                    return None
+                    except KeyError:
+                        continue
             else:
                 return None
         else:
@@ -495,6 +495,21 @@ class Coins:
 
         found_coins = []
         if face_value:
+            for x in found_values:
+                test = Coins.values[x].name
+                if isinstance(test,AlternativeNames):
+                    if(debug):
+                        print(f"{test} is of the AlternativeNames type")
+                    temp = test.lookup(face_value)
+                    if temp:
+                        matches.append(x)
+                else:
+                    if(debug):
+                        print(f"{test} is not of the AlternativeNames type, it is {type(test)}")
+                        print(f"  Desired face_value {face_value} is {type(test)}")
+                    if str(test).lower() == str(face_value).lower():
+                        matches.append(x)
+            """
             matches = [
                 x
                 for x in found_values
@@ -503,12 +518,13 @@ class Coins:
                     or str(Coins.values[x].name).lower() == str(face_value).lower()
                 )
             ]
+            """
             if matches:
-                try:
-                    for match in matches:
+                for match in matches:
+                    try:
                         found_coins = Coins.values[match]
-                except KeyError:
-                    return None
+                    except KeyError:
+                        continue
             else:
                 return None
         else:
@@ -533,11 +549,11 @@ class Coins:
                 )
             ]
             if matches:
-                try:
-                    for match in matches:
+                for match in matches:
+                    try:
                         results += [match]
-                except KeyError:
-                    return None
+                    except KeyError:
+                        continue
             else:
                 return None
         else:
