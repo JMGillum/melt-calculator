@@ -32,9 +32,10 @@ import coins.germany as germany
 import coins.great_britain as great_britain
 import coins.italy as italy
 import coins.mexico as mexico
+import coins.russia as russia
 import coins.south_africa as south_africa
-import coins.united_states as united_states
 import coins.switzerland as switzerland
+import coins.united_states as united_states
 
 tab = "    "
 
@@ -108,5 +109,5 @@ def print_metals(country):
 
 
 if __name__ == "__main__":
-    print_reverse_build(mexico,"mexico")
-    print_metals(mexico)
+    print_reverse_build(russia,"russia")
+    print_metals(russia)

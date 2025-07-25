@@ -27,20 +27,21 @@ from config import minimum_year, current_year
 
 def countryNames():
     """Will return a list of AlternativeName objects"""
+    canada = AlternativeNames("Canada", ["Canadian"])
     france = AlternativeNames("France", ["French"])
     mexico = AlternativeNames("Mexico", ["Mexican"])
-    united_states = AlternativeNames(
-        "United States",
-        ["US", "USA", "United States of America", "America", "American"],
-    )
     germany = AlternativeNames("Germany", ["Deutschland", "German"])
     italy = AlternativeNames("Italy", ["Italian", "Italia"])
-    canada = AlternativeNames("Canada", ["Canadian"])
     great_britain = AlternativeNames("Great Britain",["Great British","Britain","British","England","English"])
+    russia = AlternativeNames("Russia",["Russian"])
     south_africa = AlternativeNames("South Africa",["South African","Africa","African","S Africa","S. Africa","S African", "S. African"])
     switzerland = AlternativeNames("Switzerland",["Swiss","Helvetia","Helvetica"])
+    united_states = AlternativeNames(
+            "United States",
+        ["US", "USA", "United States of America", "America", "American"],
+    )
 
-    return [france, mexico, united_states, germany, italy, canada, great_britain, south_africa, switzerland]
+    return [france, mexico, united_states, germany, italy, canada, great_britain, south_africa, switzerland,russia]
 
 
 def validCountry(name, countries=None):
