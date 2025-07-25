@@ -10,3 +10,4 @@ Completed:
 * Filtering by bullion is possible
 * refactored setup and project structure
 * Renamed CountryName to AlternativeNames and applied across denomination names
+* Able to search for bullion by "face_value" (decimal of ounce ex: 1/4 oz would be 0.25 face value)
