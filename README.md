@@ -23,3 +23,4 @@ Done:
 * Completed Canadian and German standard Issue
 * Completed Canadian, British, and South African bullion
 * Fixed bug in search by country that caused it to not work for multi word country names
+* Color support
