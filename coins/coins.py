@@ -495,18 +495,15 @@ class Coins:
 
         found_coins = []
         if face_value:
+            matches = []
             for x in found_values:
                 test = Coins.values[x].name
                 if isinstance(test,AlternativeNames):
-                    if(debug):
-                        print(f"{test} is of the AlternativeNames type")
                     temp = test.lookup(face_value)
                     if temp:
+                        print(temp)
                         matches.append(x)
                 else:
-                    if(debug):
-                        print(f"{test} is not of the AlternativeNames type, it is {type(test)}")
-                        print(f"  Desired face_value {face_value} is {type(test)}")
                     if str(test).lower() == str(face_value).lower():
                         matches.append(x)
             """
@@ -519,10 +516,14 @@ class Coins:
                 )
             ]
             """
+            if debug:
+                print("Pruned values found:")
+                for item in matches:
+                    print(f"  {item}")
             if matches:
                 for match in matches:
                     try:
-                        found_coins = Coins.values[match]
+                        found_coins += Coins.values[match]
                     except KeyError:
                         continue
             else:
