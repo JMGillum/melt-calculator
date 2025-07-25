@@ -306,19 +306,6 @@ class Coins:
                 denomination="Sovereign",
             )
         ),
-        "maple_silver_5_dollar": Node(
-            CoinData(
-                nickname="Silver",
-                years=list(range(1988, current_year+1)),
-                weight=31.11,
-                fineness=0.9999,
-                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
-                metal=Metals.SILVER,
-                country="Canada",
-                face_value=5,
-                denomination="Dollars",
-            )
-        ),
         "canada_dollar_5_1": Node(
             CoinData(
                 years=list(range(1912,1915)),
@@ -339,6 +326,98 @@ class Coins:
                 country="Canada",
                 face_value=10,
                 denomination="Dollars",
+            )
+        ),
+        # Canada - Maple
+        "maple_silver_5_dollar": Node(
+            CoinData(
+                nickname="Silver",
+                years=list(range(1988, current_year+1)),
+                weight=31.11,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.SILVER,
+                country="Canada",
+                face_value=5,
+                denomination="Dollars",
+            )
+        ),
+        "maple_gold_50_dollar": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1979, current_year+1)),
+                weight=31.11,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=50,
+                denomination="Dollars",
+            )
+        ),
+        "maple_gold_20_dollar": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1986, current_year+1)),
+                weight=15.555,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(0.5, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=20,
+                denomination="Dollars",
+            )
+        ),
+        "maple_gold_10_dollar": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1982, current_year+1)),
+                weight=7.7775,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(0.25, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=10,
+                denomination="Dollars",
+            )
+        ),
+        "maple_gold_5_dollar": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1982, current_year+1)),
+                weight=3.111,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(0.1, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=5,
+                denomination="Dollars",
+            )
+        ),
+        "maple_gold_1_dollar": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(1993, current_year+1)),
+                weight=1.5555,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(0.05, weights.Units.TROY_OUNCES),
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=1,
+                denomination="Dollars",
+            )
+        ),
+        "maple_gold_1_2_dollar": Node(
+            CoinData(
+                nickname="Gold",
+                years=list(range(2024, current_year+1)),
+                weight=1.00,
+                fineness=0.9999,
+                precious_metal_weight=weights.Weight(1, weights.Units.GRAMS),
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=50,
+                denomination="Cents",
             )
         ),
         # France
@@ -1111,6 +1190,12 @@ class Coins:
         "canada_dollar_5_1": ("canada_dollar_5","canada_dollar","canada"),
         "canada_dollar_10": ("canada_dollar_10","canada_dollar","canada"),
         "maple_silver_5_dollar": ("maple_1","maple","canada"),
+        "maple_gold_50_dollar": ("maple_1","maple","canada"),
+        "maple_gold_20_dollar": ("maple_1_2","maple","canada"),
+        "maple_gold_10_dollar": ("maple_1_4","maple","canada"),
+        "maple_gold_5_dollar": ("maple_1_10","maple","canada"),
+        "maple_gold_1_dollar": ("maple_1_20","maple","canada"),
+        "maple_gold_1_2_dollar": ("maple_1_gram","maple","canada"),
         "centimes_20": ("centimes_20","centimes","france"),
         "centimes_50_1": ("centimes_50","centimes","france"),
         "centimes_50_2": ("centimes_50","centimes","france"),
@@ -1240,6 +1325,12 @@ class Coins:
         "canada_sovereign_1",
         "canada_dollar_5_1",
         "canada_dollar_10",
+        "maple_gold_50_dollar",
+        "maple_gold_20_dollar",
+        "maple_gold_10_dollar",
+        "maple_gold_5_dollar",
+        "maple_gold_1_dollar",
+        "maple_gold_1_2_dollar",
         "franc_5_3",
         "franc_10_2",
         "franc_20_1",
@@ -1249,22 +1340,22 @@ class Coins:
         "mark_5_2",
         "mark_10",
         "mark_20",
-        "britannia_gold_100_pound_old",
-        "britannia_gold_100_pound",
-        "britannia_gold_50_pound_old",
-        "britannia_gold_50_pound",
-        "britannia_gold_25_pound_old",
-        "britannia_gold_25_pound",
         "britannia_gold_10_pound_old",
         "britannia_gold_10_pound",
+        "britannia_gold_25_pound_old",
+        "britannia_gold_25_pound",
+        "britannia_gold_50_pound_old",
+        "britannia_gold_50_pound",
+        "britannia_gold_100_pound_old",
+        "britannia_gold_100_pound",
     ]
 
     # Indicates which coins are made of platinum.
     platinum_coins = [
-        "britannia_platinum_100_pound",
-        "britannia_platinum_50_pound",
-        "britannia_platinum_25_pound",
         "britannia_platinum_10_pound",
+        "britannia_platinum_25_pound",
+        "britannia_platinum_50_pound",
+        "britannia_platinum_100_pound",
     ]
 
     # Updated in Coins.linkPurchases() to include keys to coins that have
@@ -1284,7 +1375,12 @@ class Coins:
         "canada_dollar_5": NamedList("5", ["canada_dollar_5_1"]),
         "canada_dollar_10": NamedList("10", ["canada_dollar_10"]),
         # Canada - Maple
-        "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar"],"1"),
+        "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar","maple_gold_50_dollar"],"6"),
+        "maple_1_2": NamedList("1/2 Oz Maple",["maple_gold_20_dollar"],"5"),
+        "maple_1_4": NamedList("1/4 Oz Maple",["maple_gold_10_dollar"],"4"),
+        "maple_1_10": NamedList("1/10 Oz Maple",["maple_gold_5_dollar"],"3"),
+        "maple_1_20": NamedList("1/20 Oz Maple",["maple_gold_1_dollar"],"2"),
+        "maple_1_gram": NamedList("1 Gram Maple",["maple_gold_1_2_dollar"],"1"),
         # France
         "centimes_20": NamedList("20", ["centimes_20"]),
         "centimes_50": NamedList("50", ["centimes_50_1", "centimes_50_2"]),
@@ -1306,10 +1402,10 @@ class Coins:
         "mark_20": NamedList("20", ["mark_20"]),
         # Great Britain
         # Great Britain - Britannia
-        "britannia_1_10": NamedList("1/10 Oz Britannia",["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"1"),
-        "britannia_1_4": NamedList("1/4 Oz Britannia",["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"2"),
-        "britannia_1_2": NamedList("1/2 Oz Britannia",["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"3"),
-        "britannia_1": NamedList("1 Oz Britannia",["britannia_silver_2_pound","britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"4"),
+        "britannia_1_10": NamedList("1/10 Oz Britannia",["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"4"),
+        "britannia_1_4": NamedList("1/4 Oz Britannia",["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"3"),
+        "britannia_1_2": NamedList("1/2 Oz Britannia",["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"2"),
+        "britannia_1": NamedList("1 Oz Britannia",["britannia_silver_2_pound","britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"1"),
         # Italy
         "centesimi_20": NamedList("20", ["centesimi_20"]),
         # Mexico
@@ -1339,7 +1435,7 @@ class Coins:
         "canada_cent": NamedList("Cents", ["canada_nickel","canada_dime","canada_cents_20","canada_quarter","canada_half"]),
         "canada_sovereign": NamedList("Sovereigns",["canada_sovereign_1"]),
         "canada_dollar": NamedList("Dollars", ["canada_dollar_1","canada_dollar_5","canada_dollar_10"]),
-        "maple": NamedList("Maple",["maple_1"]),
+        "maple": NamedList("Maple",["maple_1","maple_1_2","maple_1_4","maple_1_10","maple_1_20","maple_1_gram"]),
         # France
         "centimes": NamedList("Centimes", ["centimes_20", "centimes_50"]),
         "franc": NamedList(
