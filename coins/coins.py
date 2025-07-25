@@ -103,6 +103,7 @@ from purchases import purchases
 from config import currency_symbol,current_year
 from search import validCountry
 import weights
+from general_functions import printColored
 
 from coins.namedList import NamedList
 
@@ -177,24 +178,6 @@ class Coins:
             if coin.metal == Metals.PALLADIUM:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * palladium_price
 
-    def print_colored(text,color,custom_color=""):
-        test = color.lower().strip()
-        default = "\033[39;49m"
-        red = "\033[38:5:1m"
-        blue = "\033[38:5:4m"
-        green = "\033[38:5:2m"
-        color_string = ""
-        if custom_color:
-            color_string = custom_color
-        else:
-            match test:
-                case "r":
-                    color_string = red
-                case "b":
-                    color_string = blue
-                case "g":
-                    color_string = green
-        return f"{color_string}{text}{default}"
 
 
     def print_statistics(total:float,count:int,value:float):
@@ -205,8 +188,8 @@ class Coins:
         average = round(total/count,2)
         gain_loss = round(total_value-total,2)
         average_gain_loss = round(value-average,2)
-        gain_loss_string = Coins.print_colored(f"+{currency_symbol}{gain_loss:.2f}","g") if gain_loss > 0 else Coins.print_colored(f"(-{currency_symbol}{-gain_loss:.2f})","r")
-        average_gain_loss_string = Coins.print_colored(f"+{currency_symbol}{average_gain_loss:.2f}","g") if average_gain_loss > 0 else Coins.print_colored(f"(-{currency_symbol}{-average_gain_loss:.2f})","r")
+        gain_loss_string = printColored(f"+{currency_symbol}{gain_loss:.2f}","g") if gain_loss > 0 else printColored(f"(-{currency_symbol}{-gain_loss:.2f})","r")
+        average_gain_loss_string = printColored(f"+{currency_symbol}{average_gain_loss:.2f}","g") if average_gain_loss > 0 else printColored(f"(-{currency_symbol}{-average_gain_loss:.2f})","r")
         return_string = ""
         return_string += f"Sum: {currency_symbol}{total:.2f} ~ Avg: {currency_symbol}{average:.2f}"
         return_string += f" ~ Value: {currency_symbol}{total_value:.2f}  ({currency_symbol}{value:.2f} * {count})"
