@@ -140,6 +140,172 @@ class NamedList:
 class Coins:
     coins = {
         # Canada
+        "canada_nickel_1": Node(
+            CoinData(
+                years=list(range(1858,1911)),
+                weight=1.1620,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=5,
+                denomination="Cents",
+            )
+        ),
+        "canada_nickel_2": Node(
+            CoinData(
+                years=list(range(1910,1920)),
+                weight=1.1664,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=5,
+                denomination="Cents",
+            )
+        ),
+        "canada_nickel_3": Node(
+            CoinData(
+                years=list(range(1920,1968)),
+                weight=1.1664,
+                fineness=0.80,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=5,
+                denomination="Cents",
+            )
+        ),
+        "canada_dime_1": Node(
+            CoinData(
+                years=list(range(1858,1911)),
+                weight=2.3240,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=10,
+                denomination="Cents",
+            )
+        ),
+        "canada_dime_2": Node(
+            CoinData(
+                years=list(range(1910,1920)),
+                weight=2.3328,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=10,
+                denomination="Cents",
+            )
+        ),
+        "canada_dime_3": Node(
+            CoinData(
+                years=list(range(1920,1968)),
+                weight=2.3328,
+                fineness=0.8,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=10,
+                denomination="Cents",
+            )
+        ),
+        "canada_cents_20": Node(
+            CoinData(
+                years=list(range(1858,1911)),
+                weight=4.648,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=20,
+                denomination="Cents",
+            )
+        ),
+        "canada_quarter_1": Node(
+            CoinData(
+                years=list(range(1858,1911)),
+                weight=5.81,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=25,
+                denomination="Cents",
+            )
+        ),
+        "canada_quarter_2": Node(
+            CoinData(
+                years=list(range(1910,1920)),
+                weight=5.8319,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=25,
+                denomination="Cents",
+            )
+        ),
+        "canada_quarter_3": Node(
+            CoinData(
+                years=list(range(1920,1968)),
+                weight=5.8319,
+                fineness=0.8,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=25,
+                denomination="Cents",
+            )
+        ),
+        "canada_half_1": Node(
+            CoinData(
+                years=list(range(1858,1911)),
+                weight=11.62,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=50,
+                denomination="Cents",
+            )
+        ),
+        "canada_half_2": Node(
+            CoinData(
+                years=list(range(1910,1920)),
+                weight=11.6638,
+                fineness=0.925,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=50,
+                denomination="Cents",
+            )
+        ),
+        "canada_half_3": Node(
+            CoinData(
+                years=list(range(1920,1968)),
+                weight=11.6638,
+                fineness=0.80,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=50,
+                denomination="Cents",
+            )
+        ),
+        "canada_dollar_1": Node(
+            CoinData(
+                years=list(range(1920,1968)),
+                weight=23.3276,
+                fineness=0.8,
+                metal = Metals.SILVER,
+                country="Canada",
+                face_value=1,
+                denomination="Dollars",
+            )
+        ),
+        "canada_sovereign_1": Node(
+            CoinData(
+                years=list(range(1908,1920)),
+                weight=7.9881,
+                fineness=0.917,
+                precious_metal_weight=weights.Weight(0.2354,weights.Units.TROY_OUNCES),
+                metal = Metals.GOLD,
+                country="Canada",
+                face_value=1,
+                denomination="Sovereign",
+            )
+        ),
         "canada_dollar_5": Node(
             CoinData(
                 nickname="Silver Maple Leaf Bullion",
@@ -150,6 +316,28 @@ class Coins:
                 metal=Metals.SILVER,
                 country="Canada",
                 face_value=5,
+                denomination="Dollars",
+            )
+        ),
+        "canada_dollar_5_1": Node(
+            CoinData(
+                years=list(range(1912,1915)),
+                weight=8.3591,
+                fineness=0.9,
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=5,
+                denomination="Dollars",
+            )
+        ),
+        "canada_dollar_10": Node(
+            CoinData(
+                years=list(range(1912,1915)),
+                weight=16.7181,
+                fineness=0.9,
+                metal=Metals.GOLD,
+                country="Canada",
+                face_value=10,
                 denomination="Dollars",
             )
         ),
@@ -540,46 +728,75 @@ class Coins:
 
     # Used to build the tree from just a coin object
     coins_reverse_build = {
-        "canada_dollar_5": ("canada_dollar_5", "canada_dollar", "canada"),
-        "centimes_20": ("centimes_20", "centimes", "france"),
-        "centimes_50_1": ("centimes_50", "centimes", "france"),
-        "centimes_50_2": ("centimes_50", "centimes", "france"),
-        "franc_1_1": ("franc_1", "franc", "france"),
-        "franc_1_2": ("franc_1", "franc", "france"),
-        "franc_2": ("franc_2", "franc", "france"),
-        "franc_5_1": ("franc_5", "franc", "france"),
-        "franc_5_2": ("franc_5", "franc", "france"),
-        "franc_5_3": ("franc_5", "franc", "france"),
-        "franc_10_1": ("franc_10", "franc", "france"),
-        "franc_10_2": ("franc_10", "franc", "france"),
-        "franc_20_1": ("franc_20", "franc", "france"),
-        "franc_20_2": ("franc_20", "franc", "france"),
-        "franc_50": ("franc_50", "franc", "france"),
-        "franc_100_1": ("franc_100", "franc", "france"),
-        "franc_100_2": ("franc_100", "franc", "france"),
-        "franc_100_3": ("franc_100", "franc", "france"),
-        "mark_10": ("mark_10", "mark", "germany"),
-        "centesimi_20": ("centesimi_20", "centesimi", "italy"),
-        "peso_1": ("peso_1", "peso", "mexico"),
-        "barber_dime": ("dime", "cents", "united_states"),
-        "mercury_dime": ("dime", "cents", "united_states"),
-        "roosevelt_dime": ("dime", "cents", "united_states"),
-        "barber_quarter": ("quarter", "cents", "united_states"),
-        "standing_liberty_quarter": ("quarter", "cents", "united_states"),
-        "washington_quarter": ("quarter", "cents", "united_states"),
-        "walking_liberty_half": ("half", "cents", "united_states"),
-        "benjamin_half": ("half", "cents", "united_states"),
-        "kennedy_half_1": ("half", "cents", "united_states"),
-        "kennedy_half_2": ("half", "cents", "united_states"),
-        "morgan_dollar": ("dollar", "dollar", "united_states"),
-        "peace_dollar": ("dollar", "dollar", "united_states"),
+        "canada_nickel_1": ("canada_nickel","canada_cent","canada"),
+        "canada_nickel_2": ("canada_nickel","canada_cent","canada"),
+        "canada_nickel_3": ("canada_nickel","canada_cent","canada"),
+        "canada_dime_1": ("canada_dime","canada_cent","canada"),
+        "canada_dime_2": ("canada_dime","canada_cent","canada"),
+        "canada_dime_3": ("canada_dime","canada_cent","canada"),
+        "canada_cents_20": ("canada_cents_20","canada_cent","canada"),
+        "canada_quarter_1": ("canada_quarter","canada_cent","canada"),
+        "canada_quarter_2": ("canada_quarter","canada_cent","canada"),
+        "canada_quarter_3": ("canada_quarter","canada_cent","canada"),
+        "canada_half_1": ("canada_half","canada_cent","canada"),
+        "canada_half_2": ("canada_half","canada_cent","canada"),
+        "canada_half_3": ("canada_half","canada_cent","canada"),
+        "canada_sovereign_1": ("canada_sovereign_1","canada_sovereign","canada"),
+        "canada_dollar_1": ("canada_dollar_1","canada_dollar","canada"),
+        "canada_dollar_5": ("canada_dollar_5","canada_dollar","canada"),
+        "canada_dollar_5_1": ("canada_dollar_5","canada_dollar","canada"),
+        "canada_dollar_10": ("canada_dollar_10","canada_dollar","canada"),
+        "centimes_20": ("centimes_20","centimes","france"),
+        "centimes_50_1": ("centimes_50","centimes","france"),
+        "centimes_50_2": ("centimes_50","centimes","france"),
+        "franc_1_1": ("franc_1","franc","france"),
+        "franc_1_2": ("franc_1","franc","france"),
+        "franc_2": ("franc_2","franc","france"),
+        "franc_5_1": ("franc_5","franc","france"),
+        "franc_5_2": ("franc_5","franc","france"),
+        "franc_5_3": ("franc_5","franc","france"),
+        "franc_10_1": ("franc_10","franc","france"),
+        "franc_10_2": ("franc_10","franc","france"),
+        "franc_20_1": ("franc_20","franc","france"),
+        "franc_20_2": ("franc_20","franc","france"),
+        "franc_50": ("franc_50","franc","france"),
+        "franc_100_1": ("franc_100","franc","france"),
+        "franc_100_2": ("franc_100","franc","france"),
+        "franc_100_3": ("franc_100","franc","france"),
+        "mark_10": ("mark_10","mark","germany"),
+        "centesimi_20": ("centesimi_20","centesimi","italy"),
+        "peso_1": ("peso_1","peso","mexico"),
+        "barber_dime": ("dime","cents","united_states"),
+        "mercury_dime": ("dime","cents","united_states"),
+        "roosevelt_dime": ("dime","cents","united_states"),
+        "barber_quarter": ("quarter","cents","united_states"),
+        "standing_liberty_quarter": ("quarter","cents","united_states"),
+        "washington_quarter": ("quarter","cents","united_states"),
+        "walking_liberty_half": ("half","cents","united_states"),
+        "benjamin_half": ("half","cents","united_states"),
+        "kennedy_half_1": ("half","cents","united_states"),
+        "kennedy_half_2": ("half","cents","united_states"),
+        "morgan_dollar": ("dollar","dollar","united_states"),
+        "peace_dollar": ("dollar","dollar","united_states"),
     }
 
-    # Indicates which coins are made of silver
+    # Indicates which coins are silver
     silver_coins = [
-        # Canada
+        "canada_nickel_1",
+        "canada_nickel_2",
+        "canada_nickel_3",
+        "canada_dime_1",
+        "canada_dime_2",
+        "canada_dime_3",
+        "canada_cents_20",
+        "canada_quarter_1",
+        "canada_quarter_2",
+        "canada_quarter_3",
+        "canada_half_1",
+        "canada_half_2",
+        "canada_half_3",
+        "canada_dollar_1",
         "canada_dollar_5",
-        # France
         "centimes_20",
         "centimes_50_1",
         "centimes_50_2",
@@ -591,11 +808,8 @@ class Coins:
         "franc_10_1",
         "franc_20_2",
         "franc_100_1",
-        # Italy
         "centesimi_20",
-        # Mexico
         "peso_1",
-        # United States
         "barber_dime",
         "mercury_dime",
         "roosevelt_dime",
@@ -610,16 +824,17 @@ class Coins:
         "peace_dollar",
     ]
 
-    # Indicates which coins are made of gold
+    # Indicates which coins are gold
     gold_coins = [
-        # France
+        "canada_sovereign_1",
+        "canada_dollar_5_1",
+        "canada_dollar_10",
         "franc_5_3",
         "franc_10_2",
         "franc_20_1",
         "franc_50",
         "franc_100_2",
         "franc_100_3",
-        # Germany
         "mark_10",
     ]
 
@@ -630,7 +845,15 @@ class Coins:
 
     values = {
         # Canada
-        "canada_dollar_5": NamedList("5", ["canada_dollar_5"]),
+        "canada_nickel": NamedList("Nickels",["canada_nickel_1","canada_nickel_2","canada_nickel_3"],"5"),
+        "canada_dime": NamedList("Dimes",["canada_dime_1","canada_dime_2","canada_dime_3"],"10"),
+        "canada_cents_20": NamedList("20",["canada_cents_20"]),
+        "canada_quarter": NamedList("Quarters",["canada_quarter_1","canada_quarter_2","canada_quarter_3"],"25"),
+        "canada_half": NamedList("Halves",["canada_half_1","canada_half_2","canada_half_3"],"50"),
+        "canada_sovereign_1": NamedList("1",["canada_sovereign_1"]),
+        "canada_dollar_1": NamedList("1", ["canada_dollar_1"]),
+        "canada_dollar_5": NamedList("5", ["canada_dollar_5","canada_dollar_5_1"]),
+        "canada_dollar_10": NamedList("10", ["canada_dollar_10"]),
         # France
         "centimes_20": NamedList("20", ["centimes_20"]),
         "centimes_50": NamedList("50", ["centimes_50_1", "centimes_50_2"]),
@@ -669,7 +892,9 @@ class Coins:
 
     denominations = {
         # Canada
-        "canada_dollar": NamedList("Dollars", ["canada_dollar_5"]),
+        "canada_cent": NamedList("Cents", ["canada_nickel","canada_dime","canada_cents_20","canada_quarter","canada_half"]),
+        "canada_sovereign": NamedList("Sovereigns",["canada_sovereign_1"]),
+        "canada_dollar": NamedList("Dollars", ["canada_dollar_1","canada_dollar_5","canada_dollar_10"]),
         # France
         "centimes": NamedList("Centimes", ["centimes_20", "centimes_50"]),
         "franc": NamedList(
@@ -696,7 +921,7 @@ class Coins:
     }
 
     countries = {
-        "canada": NamedList("Canada", ["canada_dollar"]),
+        "canada": NamedList("Canada", ["canada_cent","canada_sovereign","canada_dollar"]),
         "france": NamedList("France", ["centimes", "franc"]),
         "germany": NamedList("Germany", ["mark"]),
         "italy": NamedList("Italy", ["centesimi"]),
@@ -777,7 +1002,6 @@ class Coins:
                         del coin.nodes[i]
                         i-=1
                     i+=1
-                print(coin.data.value)
                 coin.nodes.append(Coins.print_statistics(total,count,coin.data.value*coin.data.retention))
 
         except KeyError:
