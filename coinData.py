@@ -113,6 +113,8 @@ class CoinData:
                 weights.Units.TROY_OUNCES,
             )
         self.value = value
+        if not self.value:
+            self.value = 0.00
         if (
             retention is None
         ):  # Percentage of melt value that coin is typically bought at

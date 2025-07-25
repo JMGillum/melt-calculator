@@ -27,3 +27,7 @@ default_retention = 0.97
 # This dictates whether the tree uses less-supported characters in order
 # to improve visuals. Default is True if not set.
 tree_fancy_characters = True
+
+currency_symbol = "$".strip()
+
+tab = "  "

@@ -166,11 +166,6 @@ args = vars(parser.parse_args())
 if args["verbose"]:
     print(f"arguments: {args}")
 
-# Links all the defined purchases to their respective coins
-if not args["hide_collection"]:
-    Coins.linkPurchases(
-        True
-    )  # Links purchases to all of the coinData objects stored in coinInfo.Coins
 
 
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
@@ -198,6 +193,12 @@ if not args["hide_price"]:
 else:
     Coins.togglePrice(False) # Disables printing of the value of coins
 
+
+# Links all the defined purchases to their respective coins
+if not args["hide_collection"]:
+    Coins.linkPurchases(
+        True
+    )  # Links purchases to all of the coinData objects stored in coinInfo.Coins
 
 # Determines if the user provided any search criteria, either by
 # Exact command line flags, a search string, or a search file

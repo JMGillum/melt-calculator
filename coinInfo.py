@@ -95,11 +95,12 @@
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
 
-from coinData import CoinData
+from coinData import CoinData,Purchase
 from tree.tree import Tree
 from tree.node import Node
 from metals import Metals
 from purchases import purchases
+from config import currency_symbol,tab
 import weights
 
 
@@ -722,6 +723,71 @@ class Coins:
             if coin.metal == Metals.GOLD:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * gold_price
 
+    def print_colored(text,color,custom_color=""):
+        test = color.lower().strip()
+        default = "\033[39;49m"
+        red = "\033[38:5:1m"
+        blue = "\033[38:5:4m"
+        green = "\033[38:5:2m"
+        color_string = ""
+        if custom_color:
+            color_string = custom_color
+        else:
+            match test:
+                case "r":
+                    color_string = red
+                case "b":
+                    color_string = blue
+                case "g":
+                    color_string = green
+        return f"{color_string}{text}{default}"
+
+
+    def print_statistics(total:float,count:int,value:float):
+        total = round(total,2)
+        count = int(count)
+        value = round(value,2)
+        total_value = round(value*count,2)
+        average = round(total/count,2)
+        gain_loss = round(total_value-total,2)
+        average_gain_loss = round(value-average,2)
+        gain_loss_string = Coins.print_colored(f"+{currency_symbol}{gain_loss:.2f}","g") if gain_loss > 0 else Coins.print_colored(f"(-{currency_symbol}{-gain_loss:.2f})","r")
+        average_gain_loss_string = Coins.print_colored(f"+{currency_symbol}{average_gain_loss:.2f}","g") if average_gain_loss > 0 else Coins.print_colored(f"(-{currency_symbol}{-average_gain_loss:.2f})","r")
+        return_string = ""
+        return_string += f"Sum: {currency_symbol}{total:.2f} ~ Avg: {currency_symbol}{average:.2f}"
+        return_string += f" ~ Value: {currency_symbol}{total_value:.2f}  ({currency_symbol}{value:.2f} * {count})"
+        return_string += f" ~ G/L: {gain_loss_string} ~ Avg G/L: {average_gain_loss_string}"
+        return return_string
+
+
+    # Adds the summary node to a coin object
+    def __summarizePurchase(coin_id):
+        try:
+            coin = Coins.coins[coin_id]
+            if isinstance(coin,Node):
+                i = 0
+                total = 0.0
+                count = 0
+                while i < len(coin.nodes):
+                    node = coin.nodes[i]
+                    if isinstance(node,Purchase):
+                        total += node.price * node.quantity
+                        count += node.quantity
+                    elif isinstance(node,str):
+                        del coin.nodes[i]
+                        i-=1
+                    i+=1
+                print(coin.data.value)
+                coin.nodes.append(Coins.print_statistics(total,count,coin.data.value*coin.data.retention))
+
+        except KeyError:
+            pass
+        return None
+    
+    def __summarizePurchases():
+        for coin in Coins.owned:
+            Coins.__summarizePurchase(coin)
+
     # Removes associated purchases from all defined coins
     def removePurchases():
         Coins.owned = set()
@@ -750,6 +816,7 @@ class Coins:
         Coins.owned = set(Coins.owned)
         Coins.not_owned = set(Coins.coins.keys())
         Coins.not_owned = Coins.not_owned - Coins.owned
+        Coins.__summarizePurchases()
 
 
     # Creates a tree from any number/combination of key values.
