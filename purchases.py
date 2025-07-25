@@ -12,7 +12,7 @@
 
     purchases is a dictionary, and the keys represent the coin that the 
     purchase is for. The key here needs to exactly match the key in the Coins
-    class. See coinInfo.py for more information. The value associated with the
+    class. See coins/coins.py for more information. The value associated with the
     key must be a list of Purchase objects. See coinData.py for more information
     about Purchase objects.
 

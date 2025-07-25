@@ -1,4 +1,4 @@
-from coinInfo import Coins
+from coins.coins import Coins
 import data
 from coinData import Purchase
 

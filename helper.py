@@ -10,7 +10,7 @@
     objects within the Coins class. See CoinInfo.py for information on the
     class. The script will print out the entire coins_reverse_build dictionary,
     as well as the silver_coins and gold_coins lists. They will simply have to
-    be copied and pasted into Coins class in coinInfo.py. Make sure to delete
+    be copied and pasted into Coins class in coins/coins.py. Make sure to delete
     the old versions of these variables as well.
 
     In order to work, the CoinData objects must contain the metal type (either
@@ -22,7 +22,7 @@
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
 
-from coinInfo import Coins
+from coins.coins import Coins
 from metals import Metals
 from tree.node import Node
 

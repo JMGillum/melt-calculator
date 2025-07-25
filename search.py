@@ -9,7 +9,7 @@
     This file contains functions related to searching for coins. The notable
     function is parseSearchString(), which takes a string and parses it into
     the constituent arguments (country, denomination, face value, year). These
-    are then used in the Coins class (in coinInfo.py) to find corresponding
+    are then used in the Coins class (in coins/coins.py) to find corresponding
     coins.
 
     There are also functions for finding information about a country (namely,

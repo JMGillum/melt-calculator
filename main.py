@@ -30,7 +30,7 @@
     * Checkout purchases.py to add your own personal collection. This lets
     you quickly see what your purchases of a single coin are, and how they
     compare to its intrinsic value.
-    * Checkout coinInfo.py to add other coins to the program if you aren't
+    * Checkout coins/coins.py to add other coins to the program if you aren't
     happy with the selection.
 
     Finally, make sure to read README.md or README.txt for more information
@@ -45,7 +45,7 @@ __version__ = ".".join(__version_info__)
 import argparse
 import data as d
 import search
-from coinInfo import Coins
+from coins.coins import Coins
 import config
 
 import sys # Used to check if stdin is not from a terminal (piping input)
@@ -225,7 +225,7 @@ else:
 if not args["hide_collection"]:
     Coins.linkPurchases(
         True
-    )  # Links purchases to all of the coinData objects stored in coinInfo.Coins
+    )  # Links purchases to all of the coinData objects stored in coins/coins.Coins
 
 # Determines if the user provided any search criteria, either by
 # Exact command line flags, a search string, or a search file
