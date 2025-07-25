@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 21 July 2025              ":"         __ __
+   Date: 24 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -23,6 +23,7 @@
         -s <silver_price> this allows you to supply the silver price to be
             used when calculating value
         -g <gold_price> same as with silver price, but for gold.
+        -p <platinum_price> same as above, but for platinum.
 
     * Checkout the data.py to change the default gold and silver prices that are
     used when you don't manually supply one.
@@ -111,7 +112,7 @@ def setupParser():
         help="Show only the coins that are not in the personal collection. Does nothing when used with the --owned flag.",
     )
     parser.add_argument(
-        "-p",
+        "-P",
         "--hide_price",
         action="store_true",
         help="Use to disable printing of the melt value of the coins.",
@@ -121,6 +122,12 @@ def setupParser():
         "--silver",
         metavar="PRICE",
         help="Use to supply the silver price for melt value calculations.",
+    )
+    parser.add_argument(
+        "-p",
+        "--platinum",
+        metavar="PRICE",
+        help="Use to supply the platinum price for melt value calculations.",
     )
     parser.add_argument(
         "-S",
@@ -147,9 +154,10 @@ def setupParser():
 
 
 # Calculates the value of every defined coin.
-def price(silver_price=None, gold_price=None):
+def price(silver_price=None, gold_price=None, platinum_price=None):
     silver = d.silver_spot_price
     gold = d.gold_spot_price
+    platinum = d.platinum_spot_price
     if silver_price is not None and (
         isinstance(silver_price, int) or isinstance(silver_price, float)
     ):
@@ -158,7 +166,9 @@ def price(silver_price=None, gold_price=None):
         isinstance(gold_price, int) or isinstance(gold_price, float)
     ):
         gold = gold_price
-    Coins.price(silver, gold)
+    if platinum_price is not None and (isinstance(platinum_price,int) or isinstance(platinum_price,float)):
+        platinum = platinum_price
+    Coins.price(silver, gold, platinum)
 
 
 parser = setupParser()
@@ -183,6 +193,13 @@ except ValueError:
     print(
         f"Gold price provided is invalid type. Using value (${d.gold_spot_price:.2f}) defined in data.py instead."
     )
+try:
+    if args["platinum"] is not None:
+        d.platinum_spot_price = round(float(args["platinum"]), 2)
+except ValueError:
+    print(
+        f"Platinum price provided is invalid type. Using value (${d.platinum_spot_price:.2f}) defined in data.py instead."
+    )
 
 
 # Prints out the precious metal prices and calculates the coins' worth
@@ -190,6 +207,7 @@ if not args["hide_price"]:
     price()
     print(f"Silver Spot: ${d.silver_spot_price:.2f}")
     print(f"Gold Spot: ${d.gold_spot_price:.2f}")
+    print(f"Platinum Spot: ${d.platinum_spot_price:.2f}")
 else:
     Coins.togglePrice(False) # Disables printing of the value of coins
 

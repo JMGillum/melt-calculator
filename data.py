@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 18 July 2025              ":"         __ __
+   Date: 24 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -19,3 +19,4 @@
 
 silver_spot_price = 36.00
 gold_spot_price = 3350.00
+platinum_spot_price = 1404.00

@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 21 July 2025              ":"         __ __
+   Date: 24 July 2025              ":"         __ __
    Code Start: Line 98            __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -700,6 +700,59 @@ class Coins:
                 denomination="Mark",
             )
         ),
+        # Great Britain
+        "britannia_platinum_100_pound": Node(
+            CoinData(
+                nickname="Platinum",
+                years=list(range(2018,2026)),
+                weight=31.11,
+                fineness=0.9995,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.PLATINUM,
+                country="Great Britain",
+                face_value=100,
+                denomination="Pounds",
+            )
+        ),
+        "britannia_platinum_50_pound": Node(
+            CoinData(
+                nickname="Platinum",
+                years=list(range(2018,2026)),
+                weight=15.552,
+                fineness=0.9995,
+                precious_metal_weight=weights.Weight(0.5, weights.Units.TROY_OUNCES),
+                metal=Metals.PLATINUM,
+                country="Great Britain",
+                face_value=50,
+                denomination="Pounds",
+            )
+        ),
+        "britannia_platinum_25_pound": Node(
+            CoinData(
+                nickname="Platinum",
+                years=list(range(2018,2026)),
+                weight=7.776,
+                fineness=0.9995,
+                precious_metal_weight=weights.Weight(0.25, weights.Units.TROY_OUNCES),
+                metal=Metals.PLATINUM,
+                country="Great Britain",
+                face_value=25,
+                denomination="Pounds",
+            )
+        ),
+        "britannia_platinum_10_pound": Node(
+            CoinData(
+                nickname="Platinum",
+                years=list(range(2018,2026)),
+                weight=3.11,
+                fineness=0.9995,
+                precious_metal_weight=weights.Weight(0.1, weights.Units.TROY_OUNCES),
+                metal=Metals.PLATINUM,
+                country="Great Britain",
+                face_value=10,
+                denomination="Pounds",
+            )
+        ),
         # Italy
         "centesimi_20": Node(
             CoinData(
@@ -934,6 +987,10 @@ class Coins:
         "mark_5_4": ("mark_5","mark","germany"),
         "mark_10": ("mark_10","mark","germany"),
         "mark_20": ("mark_20","mark","germany"),
+        "britannia_platinum_100_pound": ("britannia_1_10","britannia","great_britain"),
+        "britannia_platinum_50_pound": ("britannia_1_4","britannia","great_britain"),
+        "britannia_platinum_25_pound": ("britannia_1_2","britannia","great_britain"),
+        "britannia_platinum_10_pound": ("britannia_1","britannia","great_britain"),
         "centesimi_20": ("centesimi_20","centesimi","italy"),
         "peso_1": ("peso_1","peso","mexico"),
         "barber_dime": ("dime","cents","united_states"),
@@ -1022,6 +1079,14 @@ class Coins:
         "mark_20",
     ]
 
+    # Indicates which coins are made of platinum.
+    platinum_coins = [
+        "britannia_platinum_100_pound",
+        "britannia_platinum_50_pound",
+        "britannia_platinum_25_pound",
+        "britannia_platinum_10_pound",
+    ]
+
     # Updated in Coins.linkPurchases() to include keys to coins that have
     # purchases or don't
     owned = set()
@@ -1057,6 +1122,12 @@ class Coins:
         "mark_5": NamedList("5",["mark_5_1","mark_5_2","mark_5_3","mark_5_4"]),
         "mark_10": NamedList("10", ["mark_10"]),
         "mark_20": NamedList("20", ["mark_20"]),
+        # Great Britain
+        # Britannia
+        "britannia_1": NamedList("1/10 Oz Britannia",["britannia_platinum_10_pound"],"1"),
+        "britannia_1_2": NamedList("1/4 Oz Britannia",["britannia_platinum_25_pound"],"2"),
+        "britannia_1_4": NamedList("1/2 Oz Britannia",["britannia_platinum_50_pound"],"3"),
+        "britannia_1_10": NamedList("1 Oz Britannia",["britannia_platinum_100_pound"],"4"),
         # Italy
         "centesimi_20": NamedList("20", ["centesimi_20"]),
         # Mexico
@@ -1103,6 +1174,8 @@ class Coins:
         # Germany
         "pfennig": NamedList("Pfennig",["pfennig_20","pfennig_50"]),
         "mark": NamedList("Mark", ["mark_1","mark_2","mark_3","mark_5","mark_10","mark_20"]),
+        # Great Britain
+        "britannia": NamedList("Britannia",["britannia_1_10","britannia_1_4","britannia_1_2","britannia_1"]),
         # Italy
         "centesimi": NamedList("Centesimi", ["centesimi_20"]),
         # Mexico
@@ -1116,6 +1189,7 @@ class Coins:
         "canada": NamedList("Canada", ["canada_cent","canada_sovereign","canada_dollar"]),
         "france": NamedList("France", ["centimes", "franc"]),
         "germany": NamedList("Germany", ["pfennig","mark"]),
+        "great_britain": NamedList("Great Britain",["britannia"]),
         "italy": NamedList("Italy", ["centesimi"]),
         "mexico": NamedList("Mexico", ["peso"]),
         "united_states": NamedList("United States", ["cents", "dollar"]),
@@ -1130,7 +1204,7 @@ class Coins:
             coin.togglePrice(show_price)
 
     # Calculates the value of all defined coin objects, using the provided precious metal values
-    def price(silver_price, gold_price):
+    def price(silver_price, gold_price, platinum_price):
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
             if isinstance(coin, Node):
@@ -1139,6 +1213,8 @@ class Coins:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * silver_price
             if coin.metal == Metals.GOLD:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * gold_price
+            if coin.metal == Metals.PLATINUM:
+                coin.value = coin.precious_metal_weight.as_troy_ounces() * platinum_price
 
     def print_colored(text,color,custom_color=""):
         test = color.lower().strip()

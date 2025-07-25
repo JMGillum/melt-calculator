@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 18 July 2025              ":"         __ __
+   Date: 24 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -60,6 +60,7 @@ def print_reverse_build():
 def print_metals():
     silver_coins = [f"{tab}silver_coins = ["]
     gold_coins = [f"{tab}gold_coins = ["]
+    platinum_coins = [f"{tab}platinum_coins = ["]
     for country in Coins.countries:
         for denomination in Coins.countries[country]:
             for value in Coins.denominations[denomination]:
@@ -71,12 +72,21 @@ def print_metals():
                         silver_coins.append(f'{tab}{tab}"{coin}",')
                     if test.metal == Metals.GOLD:
                         gold_coins.append(f'{tab}{tab}"{coin}",')
+                    if test.metal == Metals.PLATINUM:
+                        platinum_coins.append(f'{tab}{tab}"{coin}",')
     silver_coins.append(f"{tab}]")
     gold_coins.append(f"{tab}]")
+    platinum_coins.append(f"{tab}]")
+    print(f"{tab}# Indicates which coins are made of silver.")
     for line in silver_coins:
         print(line)
     print()
+    print(f"{tab}# Indicates which coins are made of gold.")
     for line in gold_coins:
+        print(line)
+    print()
+    print(f"{tab}# Indicates which coins are made of platinum.")
+    for line in platinum_coins:
         print(line)
     print()
 
