@@ -6,3 +6,7 @@ Invoke the script by callling it from the command line. Either:
 
 pass `--help` as a command line argument to get a list of supported arguments.
 
+Completed:
+* Filtering by bullion is possible
+* refactored setup and project structure
+* Renamed CountryName to AlternativeNames and applied across denomination names
