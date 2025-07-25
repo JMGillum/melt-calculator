@@ -81,10 +81,10 @@ coins = {
 values = {
     # South Africa
     # South Africa - Krugerrand
-    "krugerrand_1_10": NamedList("1/10 oz Krugerrand",["krugerrand_gold_1_10"],"1"),
-    "krugerrand_1_4": NamedList("1/4 oz Krugerrand",["krugerrand_gold_1_4"],"2"),
-    "krugerrand_1_2": NamedList("1/2 oz Krugerrand",["krugerrand_gold_1_2"],"3"),
-    "krugerrand_1": NamedList("1 oz Krugerrand",["krugerrand_silver","krugerrand_gold_1"],"4"),
+    "krugerrand_1_10": NamedList(AN("1/10 oz Krugerrand",["1/10","0.1"]),["krugerrand_gold_1_10"],"1"),
+    "krugerrand_1_4": NamedList(AN("1/4 oz Krugerrand",["1/4","0.25"]),["krugerrand_gold_1_4"],"2"),
+    "krugerrand_1_2": NamedList(AN("1/2 oz Krugerrand",["1/2","0.5"]),["krugerrand_gold_1_2"],"3"),
+    "krugerrand_1": NamedList(AN("1 oz Krugerrand",["1"]),["krugerrand_silver","krugerrand_gold_1"],"4"),
 }
 
 denominations = {

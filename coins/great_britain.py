@@ -223,10 +223,10 @@ coins = {
 values = {
     # Great Britain
     # Great Britain - Britannia
-    "britannia_1_10": NamedList("1/10 Oz Britannia",["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"1"),
-    "britannia_1_4": NamedList("1/4 Oz Britannia",["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"2"),
-    "britannia_1_2": NamedList("1/2 Oz Britannia",["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"3"),
-    "britannia_1": NamedList("1 Oz Britannia",["britannia_silver_2_pound","britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"4"),
+    "britannia_1_10": NamedList(AN("1/10 Oz Britannia",["1/10","0.1"]),["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"1"),
+    "britannia_1_4": NamedList(AN("1/4 Oz Britannia",["1/4","0.25"]),["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"2"),
+    "britannia_1_2": NamedList(AN("1/2 Oz Britannia",["1/2","0.5"]),["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"3"),
+    "britannia_1": NamedList(AN("1 Oz Britannia",["1"]),["britannia_silver_2_pound","britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"4"),
 }
 
 denominations = {

@@ -163,14 +163,14 @@ coins = {
 
 values = {
     # United States
-    "dime": NamedList("Dimes", ["barber_dime", "mercury_dime", "roosevelt_dime"],"10"),
+    "dime": NamedList(AN("Dime",["Dimes","10"]), ["barber_dime", "mercury_dime", "roosevelt_dime"],"10"),
     "quarter": NamedList(
-        "Quarters",
+        AN("Quarter",["Quarters","25"]),
         ["barber_quarter", "standing_liberty_quarter", "washington_quarter"],
         "25",
     ),
     "half": NamedList(
-        "Halves",
+        AN("Half",["Halves","50"]),
         [
             "walking_liberty_half",
             "benjamin_half",
@@ -179,7 +179,7 @@ values = {
         ],
         "50",
     ),
-    "dollar": NamedList("Dollars", ["morgan_dollar", "peace_dollar"],"1"),
+    "dollar": NamedList(AN("Dollar",["Dollars","1"]), ["morgan_dollar", "peace_dollar"],"1"),
 }
 
 denominations = {

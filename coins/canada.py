@@ -385,22 +385,22 @@ coins = {
 
 values = {
     # Canada
-    "canada_nickel": NamedList("Nickels",["canada_nickel_1","canada_nickel_2","canada_nickel_3"],"5"),
-    "canada_dime": NamedList("Dimes",["canada_dime_1","canada_dime_2","canada_dime_3"],"10"),
+    "canada_nickel": NamedList(AN("Nickel",["Nickels","5"]),["canada_nickel_1","canada_nickel_2","canada_nickel_3"],"5"),
+    "canada_dime": NamedList(AN("Dime",["Dime","10"]),["canada_dime_1","canada_dime_2","canada_dime_3"],"10"),
     "canada_cents_20": NamedList("20",["canada_cents_20"]),
-    "canada_quarter": NamedList("Quarters",["canada_quarter_1","canada_quarter_2","canada_quarter_3"],"25"),
-    "canada_half": NamedList("Halves",["canada_half_1","canada_half_2","canada_half_3"],"50"),
+    "canada_quarter": NamedList(AN("Quarter",["Quarters","25"]),["canada_quarter_1","canada_quarter_2","canada_quarter_3"],"25"),
+    "canada_half": NamedList(AN("Half",["Halves","50"]),["canada_half_1","canada_half_2","canada_half_3"],"50"),
     "canada_sovereign_1": NamedList("1",["canada_sovereign_1"]),
     "canada_dollar_1": NamedList("1", ["canada_dollar_1"]),
     "canada_dollar_5": NamedList("5", ["canada_dollar_5_1"]),
     "canada_dollar_10": NamedList("10", ["canada_dollar_10"]),
     # Canada - Maple
-    "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar","maple_gold_50_dollar","maple_platinum_50_dollar_old","maple_platinum_50_dollar","maple_palladium_50_dollar"],"6"),
-    "maple_1_2": NamedList("1/2 Oz Maple",["maple_gold_20_dollar","maple_platinum_20_dollar"],"5"),
-    "maple_1_4": NamedList("1/4 Oz Maple",["maple_gold_10_dollar","maple_platinum_10_dollar"],"4"),
-    "maple_1_10": NamedList("1/10 Oz Maple",["maple_gold_5_dollar","maple_platinum_5_dollar"],"3"),
-    "maple_1_20": NamedList("1/20 Oz Maple",["maple_gold_1_dollar","maple_platinum_1_dollar"],"2"),
-    "maple_1_gram": NamedList("1 Gram Maple",["maple_gold_1_2_dollar"],"1"),
+    "maple_1": NamedList(AN("1 Oz Maple",["1"]),["maple_silver_5_dollar","maple_gold_50_dollar","maple_platinum_50_dollar_old","maple_platinum_50_dollar","maple_palladium_50_dollar"],"6"),
+    "maple_1_2": NamedList(AN("1/2 Oz Maple",["1/2","0.5"]),["maple_gold_20_dollar","maple_platinum_20_dollar"],"5"),
+    "maple_1_4": NamedList(AN("1/4 Oz Maple",["1/4","0.25"]),["maple_gold_10_dollar","maple_platinum_10_dollar"],"4"),
+    "maple_1_10": NamedList(AN("1/10 Oz Maple",["1/10","0.1"]),["maple_gold_5_dollar","maple_platinum_5_dollar"],"3"),
+    "maple_1_20": NamedList(AN("1/20 Oz Maple",["1/20","0.05"]),["maple_gold_1_dollar","maple_platinum_1_dollar"],"2"),
+    "maple_1_gram": NamedList(AN("1 Gram Maple",["1"]),["maple_gold_1_2_dollar"],"1"),
 }
 
 denominations = {
