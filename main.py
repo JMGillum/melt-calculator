@@ -198,14 +198,21 @@ if arguments_list:
                         face_value = float(arguments[FACE_VALUE])
                     except ValueError:
                         index = arguments[FACE_VALUE].find("/")
+                        dash = arguments[FACE_VALUE].find("-")
                         if index > 0:
-                            numerator = arguments[FACE_VALUE][:index]
+                            if dash > 0:
+                                prefix = arguments[FACE_VALUE][:dash]
+                                numerator = arguments[FACE_VALUE][dash+1:index]
+                            else:
+                                prefix = 0
+                                numerator = arguments[FACE_VALUE][:index]
                             try:
                                 denominator = arguments[FACE_VALUE][index+1:]
                                 try:
                                     numerator = int(numerator)
                                     denominator = int(denominator)
-                                    face_value = round(numerator/denominator,2)
+                                    prefix = int(prefix)
+                                    face_value = round(prefix + numerator/denominator,2)
                                 except ValueError:
                                     fail_face_value = True
                             except IndexError:
