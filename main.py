@@ -209,6 +209,13 @@ except ValueError:
     print(
         f"Platinum price provided is invalid type. Using value ({config.currency_symbol}{d.platinum_spot_price:.2f}) defined in data.py instead."
     )
+try:
+    if args["palladium"] is not None:
+        d.palladium_spot_price = round(float(args["palladium"]), 2)
+except ValueError:
+    print(
+        f"Palladium price provided is invalid type. Using value ({config.currency_symbol}{d.palladium_spot_price:.2f}) defined in data.py instead."
+    )
 
 
 # Prints out the precious metal prices and calculates the coins' worth
@@ -217,6 +224,7 @@ if not args["hide_price"]:
     print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
     print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
     print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
+    print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
 else:
     Coins.togglePrice(False) # Disables printing of the value of coins
 
