@@ -475,7 +475,7 @@ class Coins:
                     if temp:
                         matches.append(x)
                 elif test.lower() == denomination.lower():
-                    matches.append(test.lower())
+                    matches.append(x)
             if matches:
                 try:
                     for match in matches:
