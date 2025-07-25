@@ -286,7 +286,7 @@ coins = {
             precious_metal_weight=weights.Weight(1, weights.Units.GRAMS),
             metal=Metals.GOLD,
             country="Canada",
-            face_value=50,
+            face_value=0.5,
             denomination="Cents",
         )
     ), 
