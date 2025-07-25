@@ -1,5 +1,7 @@
 This readme functions as documentation for the Coins class and associated data.
 
+# Adding/Updating Coins
+
 The Coins class is stored in coins.py, and serves as an access point for all the data on coins.
 Data for the coins is stored in separate files, one per country. These files should be named something unique
 that identifies the country, so they are typically named <country name>.py, with underscores instead of spaces. They should also be all lowecase.
@@ -43,6 +45,7 @@ This bullion denomination must be of the type TaggedList (see taggedList.py for 
     tags=Tags.BULLION
 see tags.py for information about the tags.
 This is necessary so the coin can be filtered as bullion.
+The CoinData object should have a precious_metal_weight value set to a weights.Weight object, so the weight is precise, as these coins are usually specified by weight.
 
 
 These three variables need to be manually updated whenever changes occur. The next few can be updated using the helper.py script. 
