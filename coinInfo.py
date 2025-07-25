@@ -306,7 +306,7 @@ class Coins:
                 denomination="Sovereign",
             )
         ),
-        "canada_dollar_5": Node(
+        "maple_silver_5_dollar": Node(
             CoinData(
                 nickname="Silver Maple Leaf Bullion",
                 years=list(range(1988, current_year+1)),
@@ -1108,9 +1108,9 @@ class Coins:
         "canada_half_3": ("canada_half","canada_cent","canada"),
         "canada_sovereign_1": ("canada_sovereign_1","canada_sovereign","canada"),
         "canada_dollar_1": ("canada_dollar_1","canada_dollar","canada"),
-        "canada_dollar_5": ("canada_dollar_5","canada_dollar","canada"),
         "canada_dollar_5_1": ("canada_dollar_5","canada_dollar","canada"),
         "canada_dollar_10": ("canada_dollar_10","canada_dollar","canada"),
+        "maple_silver_5_dollar": ("maple_1","maple","canada"),
         "centimes_20": ("centimes_20","centimes","france"),
         "centimes_50_1": ("centimes_50","centimes","france"),
         "centimes_50_2": ("centimes_50","centimes","france"),
@@ -1191,7 +1191,7 @@ class Coins:
         "canada_half_2",
         "canada_half_3",
         "canada_dollar_1",
-        "canada_dollar_5",
+        "maple_silver_5_dollar",
         "centimes_20",
         "centimes_50_1",
         "centimes_50_2",
@@ -1281,8 +1281,10 @@ class Coins:
         "canada_half": NamedList("Halves",["canada_half_1","canada_half_2","canada_half_3"],"50"),
         "canada_sovereign_1": NamedList("1",["canada_sovereign_1"]),
         "canada_dollar_1": NamedList("1", ["canada_dollar_1"]),
-        "canada_dollar_5": NamedList("5", ["canada_dollar_5","canada_dollar_5_1"]),
+        "canada_dollar_5": NamedList("5", ["canada_dollar_5_1"]),
         "canada_dollar_10": NamedList("10", ["canada_dollar_10"]),
+        # Canada - Maple
+        "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar"],"1"),
         # France
         "centimes_20": NamedList("20", ["centimes_20"]),
         "centimes_50": NamedList("50", ["centimes_50_1", "centimes_50_2"]),
@@ -1303,7 +1305,7 @@ class Coins:
         "mark_10": NamedList("10", ["mark_10"]),
         "mark_20": NamedList("20", ["mark_20"]),
         # Great Britain
-        # Britannia
+        # Great Britain - Britannia
         "britannia_1_10": NamedList("1/10 Oz Britannia",["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"1"),
         "britannia_1_4": NamedList("1/4 Oz Britannia",["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"2"),
         "britannia_1_2": NamedList("1/2 Oz Britannia",["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"3"),
@@ -1337,6 +1339,7 @@ class Coins:
         "canada_cent": NamedList("Cents", ["canada_nickel","canada_dime","canada_cents_20","canada_quarter","canada_half"]),
         "canada_sovereign": NamedList("Sovereigns",["canada_sovereign_1"]),
         "canada_dollar": NamedList("Dollars", ["canada_dollar_1","canada_dollar_5","canada_dollar_10"]),
+        "maple": NamedList("Maple",["maple_1"]),
         # France
         "centimes": NamedList("Centimes", ["centimes_20", "centimes_50"]),
         "franc": NamedList(
@@ -1366,7 +1369,7 @@ class Coins:
     }
 
     countries = {
-        "canada": NamedList("Canada", ["canada_cent","canada_sovereign","canada_dollar"]),
+        "canada": NamedList("Canada", ["canada_cent","canada_sovereign","canada_dollar","maple"]),
         "france": NamedList("France", ["centimes", "franc"]),
         "germany": NamedList("Germany", ["pfennig","mark"]),
         "great_britain": NamedList("Great Britain",["britannia"]),

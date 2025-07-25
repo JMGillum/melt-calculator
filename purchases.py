@@ -46,7 +46,7 @@ from datetime import datetime
 
 purchases = {
     # Canada
-    "canada_dollar_5": [
+    "maple_silver_5_dollar": [
         Purchase(price=33.9, purchase_date=datetime(2025, 4, 18)),
         Purchase(price=37.95, purchase_date=datetime(2025, 6, 24)),
         Purchase(price=38.2, purchase_date=datetime(2025, 7, 8)),
