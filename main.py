@@ -40,7 +40,7 @@
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
-__version_info__ = ("0", "3", "0")
+__version_info__ = ("0", "4", "0")
 __version__ = ".".join(__version_info__)
 import argparse
 import data as d
