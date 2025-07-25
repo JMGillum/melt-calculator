@@ -11,3 +11,4 @@ Completed:
 * refactored setup and project structure
 * Renamed CountryName to AlternativeNames and applied across denomination names
 * Able to search for bullion by "face_value" (decimal of ounce ex: 1/4 oz would be 0.25 face value)
+* Able to provide a division operation as a face value ex: 1/4 instead of 0.25

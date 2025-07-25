@@ -501,7 +501,6 @@ class Coins:
                 if isinstance(test,AlternativeNames):
                     temp = test.lookup(face_value)
                     if temp:
-                        print(temp)
                         matches.append(x)
                 else:
                     if str(test).lower() == str(face_value).lower():

@@ -166,7 +166,8 @@ if arguments_list:
             or arguments[YEAR]
             or arguments[FACE_VALUE]
         ):
-            fail = False
+            fail_year = False
+            fail_face_value = False
             year = None
             face_value = None
             # Attempts to convert year and face_value to numeric data type (int or float(only for face_value))
@@ -188,39 +189,38 @@ if arguments_list:
                 print(
                     f"The specified year ({arguments[YEAR]}) is not valid. It must be an integer"
                 )
-                fail = True
-            try:  # Converts the face_value from a string to either an int or float
-                if arguments[FACE_VALUE] and isinstance(arguments[FACE_VALUE], str):
-                    index = arguments[FACE_VALUE].find(".")
-                    if index > 0:
-                        is_float = False
-                        for i in range(index + 1, len(arguments[FACE_VALUE])):
-                            if not (arguments[FACE_VALUE][i] == "0"):
-                                face_value = float(arguments[FACE_VALUE])
-                                is_float = True
-                                break
-                        if not is_float:
-                            face_value = int(arguments[FACE_VALUE][:index])
-                    else:
-                        face_value = int(arguments[FACE_VALUE])
-                    arguments = (
-                        arguments[COUNTRY],
-                        arguments[DENOMINATION],
-                        arguments[YEAR],
-                        face_value,
-                    )
-                    if args["verbose"]:
-                        print(f"face value was successfully converted to {face_value}")
-                else:
-                    if args["verbose"]:
-                        print("face_value was not provided. Ignoring...")
-            except ValueError:
+                fail_year = True
+            if arguments[FACE_VALUE]:
+                try:  # Converts the face_value from a string to either an int or float
+                    face_value = int(arguments[FACE_VALUE])
+                except ValueError:
+                    try:
+                        face_value = float(arguments[FACE_VALUE])
+                    except ValueError:
+                        index = arguments[FACE_VALUE].find("/")
+                        if index > 0:
+                            numerator = arguments[FACE_VALUE][:index]
+                            try:
+                                denominator = arguments[FACE_VALUE][index+1:]
+                                try:
+                                    numerator = int(numerator)
+                                    denominator = int(denominator)
+                                    face_value = round(numerator/denominator,2)
+                                except ValueError:
+                                    fail_face_value = True
+                            except IndexError:
+                                fail_face_value = True
+                        else:
+                            fail_face_value = True
+            else:
+                if args["verbose"]:
+                    print("face_value was not provided. Ignoring...")
+            if fail_face_value:
                 print(
                     f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
                 )
-                fail = True
 
-            if not fail:  # The year and face_value could be converted to numeric types if applicable
+            if not fail_year and not fail_face_value:  # The year and face_value could be converted to numeric types if applicable
                 if args["verbose"]:
                     print(
                         "The year and/or face_value arguments were successfully converted."
