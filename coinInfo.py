@@ -1957,7 +1957,6 @@ class Coins:
         country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False
     ):
         found_denominations = list(Coins.denominations.keys())
-        print(country)
         country = validCountry(country)
         if country:
             country = country.replace(" ","_")
