@@ -154,7 +154,7 @@ class Coins:
         "germany": NamedList("Germany", ["pfennig","mark"]),
         "great_britain": NamedList("Great Britain",["britannia"]),
         "italy": NamedList("Italy", ["centesimi","lira"]),
-        "mexico": NamedList("Mexico", ["peso"]),
+        "mexico": NamedList("Mexico", ["mexico_real","mexico_escudo","mexico_centavo","mexico_peso"]),
         "south_africa": NamedList("South Africa",["krugerrand"]),
         "switzerland": NamedList("Switzerland",["swiss_franc"]),
         "united_states": NamedList("United States", ["cents", "dollar"]),
