@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 21 July 2025              ":"         __ __
+   Date: 24 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -181,6 +181,8 @@ class CoinData:
                 return "Gold"
             elif self.metal == metals.Metals.SILVER:
                 return "Silver"
+            elif self.metal == metals.Metals.PLATINUM:
+                return "Platinum"
         return "Unknown metal"
 
     def asAString(self, format: str):
