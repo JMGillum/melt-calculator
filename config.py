@@ -27,6 +27,8 @@
         a year. This number should be as large as possible while still
         representing the entire data set. Numbers smaller than this will be
         interpreted as face values of coins.
+    ->  show_color: This enables or disables color printing in the terminal.
+        Set to False if weird output is occuring. Default value is True
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
@@ -42,3 +44,5 @@ currency_symbol = "$"
 
 current_year = 2025 # Current year
 minimum_year = 1800 # Earliest number that will be considered a year and not a face value
+
+show_color = True
