@@ -118,12 +118,13 @@ import coins.italy as italy
 import coins.mexico as mexico
 import coins.south_africa as south_africa
 import coins.united_states as united_states
+import coins.switzerland as switzerland
 
 
 
 
 class Coins:
-    countries_list = [canada,france,germany,great_britain,italy,mexico,south_africa,united_states]
+    countries_list = [canada,france,germany,great_britain,italy,mexico,south_africa,switzerland,united_states]
 
     # Updated in Coins.linkPurchases() to include keys to coins that have purchases or don't
     owned = set()
@@ -155,6 +156,7 @@ class Coins:
         "italy": NamedList("Italy", ["centesimi","lira"]),
         "mexico": NamedList("Mexico", ["peso"]),
         "south_africa": NamedList("South Africa",["krugerrand"]),
+        "switzerland": NamedList("Switzerland",["swiss_franc"]),
         "united_states": NamedList("United States", ["cents", "dollar"]),
     }
 
@@ -353,6 +355,7 @@ class Coins:
             needed_coins = coin_ids
         else:
             needed_coins = list(set(needed_coins))
+
         
         i = 0
         while i < len(needed_values):

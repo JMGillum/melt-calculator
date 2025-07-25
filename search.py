@@ -38,8 +38,9 @@ def countryNames():
     canada = AlternativeNames("Canada", ["Canadian"])
     great_britain = AlternativeNames("Great Britain",["Great British","Britain","British","England","English"])
     south_africa = AlternativeNames("South Africa",["South African","Africa","African","S Africa","S. Africa","S African", "S. African"])
+    switzerland = AlternativeNames("Switzerland",["Swiss","Helvetia","Helvetica"])
 
-    return [france, mexico, united_states, germany, italy, canada, great_britain, south_africa]
+    return [france, mexico, united_states, germany, italy, canada, great_britain, south_africa, switzerland]
 
 
 def validCountry(name, countries=None):

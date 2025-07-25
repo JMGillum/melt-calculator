@@ -22,7 +22,6 @@
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
 
-from coins.coins import Coins
 from metals import Metals
 from tree.node import Node
 
@@ -35,6 +34,7 @@ import coins.italy as italy
 import coins.mexico as mexico
 import coins.south_africa as south_africa
 import coins.united_states as united_states
+import coins.switzerland as switzerland
 
 tab = "    "
 
@@ -108,5 +108,5 @@ def print_metals(country):
 
 
 if __name__ == "__main__":
-    print_reverse_build(italy,"italy")
-    print_metals(italy)
+    print_reverse_build(switzerland,"switzerland")
+    print_metals(switzerland)
