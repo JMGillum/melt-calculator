@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 24 July 2025              ":"         __ __
+   Date: 25 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -19,6 +19,16 @@ from datetime import datetime
 import metals
 
 import config
+class PurchaseStats():
+    def __init__(self,total=0.0,count=0,delta=0.0):
+        self.total = total
+        self.count = count
+        self.delta = delta
+    
+    def add(self,total,count,delta):
+        self.total += total
+        self.count += count
+        self.delta += delta
 
 
 class Purchase:

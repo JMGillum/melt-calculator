@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 24 July 2025              ":"         __ __
+   Date: 25 July 2025              ":"         __ __
    Code Start: Line 98            __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -95,7 +95,7 @@
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
 
-from coinData import CoinData,Purchase
+from coinData import CoinData,Purchase,PurchaseStats
 from tree.tree import Tree
 from tree.node import Node
 from metals import Metals
@@ -185,21 +185,29 @@ class Coins:
 
 
 
-    def print_statistics(total:float,count:int,value:float):
-        total = round(total,2)
-        count = int(count)
-        value = round(value,2)
-        total_value = round(value*count,2)
-        average = round(total/count,2)
-        gain_loss = round(total_value-total,2)
-        average_gain_loss = round(value-average,2)
-        gain_loss_string = printColored(f"+{currency_symbol}{gain_loss:.2f}","g") if gain_loss > 0 else printColored(f"(-{currency_symbol}{-gain_loss:.2f})","r")
-        average_gain_loss_string = printColored(f"+{currency_symbol}{average_gain_loss:.2f}","g") if average_gain_loss > 0 else printColored(f"(-{currency_symbol}{-average_gain_loss:.2f})","r")
-        return_string = ""
-        return_string += f"Sum: {currency_symbol}{total:.2f} ~ Avg: {currency_symbol}{average:.2f}"
-        return_string += f" ~ Value: {currency_symbol}{total_value:.2f}  ({currency_symbol}{value:.2f} * {count})"
-        return_string += f" ~ G/L: {gain_loss_string} ~ Avg G/L: {average_gain_loss_string}"
-        return return_string
+    def print_statistics(total:float=0.0,count:int=0,value:float=0.0,stats:PurchaseStats=None):
+        if stats and isinstance(stats,PurchaseStats):
+            total = round(stats.total,2)
+            count = int(stats.count)
+            if count > 0:
+                value = round((stats.total+stats.delta)/stats.count,2)
+        else:
+            total = round(total,2)
+            count = int(count)
+            value = round(value,2)
+        if count > 0:
+            total_value = round(value*count,2)
+            average = round(total/count,2)
+            gain_loss = round(total_value-total,2)
+            average_gain_loss = round(value-average,2)
+            gain_loss_string = printColored(f"+{currency_symbol}{gain_loss:.2f}","g") if gain_loss > 0 else printColored(f"(-{currency_symbol}{-gain_loss:.2f})","r")
+            average_gain_loss_string = printColored(f"+{currency_symbol}{average_gain_loss:.2f}","g") if average_gain_loss > 0 else printColored(f"(-{currency_symbol}{-average_gain_loss:.2f})","r")
+            return_string = ""
+            return_string += f"Sum: {currency_symbol}{total:.2f} ~ Avg: {currency_symbol}{average:.2f}"
+            return_string += f" ~ Value: {currency_symbol}{total_value:.2f}  ({currency_symbol}{value:.2f} * {count})"
+            return_string += f" ~ G/L: {gain_loss_string} ~ Avg G/L: {average_gain_loss_string}"
+            return return_string
+        return "N/A"
 
 
     # Adds the summary node to a coin object

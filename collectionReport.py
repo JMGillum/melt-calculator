@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 24 July 2025              ":"         __ __
+   Date: 25 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -17,7 +17,9 @@
 
 from coins.coins import Coins
 import data
-from coinData import Purchase
+from coinData import Purchase, PurchaseStats as Stats
+from metals import Metals
+import config
 
 tab = "    "
 currency_symbol="$"
@@ -26,36 +28,62 @@ currency_symbol="$"
 
 
 if __name__ == "__main__":
-    Coins.price(data.silver_spot_price,data.gold_spot_price)
+    # Prints out the tree of all owned coins
+    Coins.price(data.silver_spot_price,data.gold_spot_price,data.platinum_spot_price,data.palladium_spot_price)
     Coins.linkPurchases()
+    results = Coins.buildTree(Coins.countries.keys(),show_only_owned=True)
+    results.cascading_set_fancy(config.tree_fancy_characters)
+    for line in results.print():
+        print(line)
 
-    price_sum = 0.0
-    purchase_count = 0
-    price_delta = 0.0
-    for coin in Coins.owned:
+    # Calculates statistics
+    total = Stats()
+    silver = Stats()
+    gold = Stats()
+    platinum = Stats()
+    palladium = Stats()
+    other = Stats()
+    collection = Coins.owned
+    for coin in collection:
         coin = Coins.coins[coin]
-        print(coin.data.print("%c %F %d [%y]... %a %m [Melt: %v Value: (%V)]"))
-        temp_sum = 0.0
-        temp_count = 0.0
-        temp_delta = 0.0
-        value = coin.data.value*coin.data.retention
-        for node in coin.nodes:
-            if isinstance(node,Purchase):
-                print(f"  {node}")
-                price_sum += (node.price * node.quantity)
-                purchase_count += node.quantity
-                price_delta += ((value - node.price)*node.quantity)
-                temp_sum += (node.price * node.quantity)
-                temp_count += node.quantity
-                temp_delta += ((value - node.price)*node.quantity)
-        if temp_count > 0:
-            temp_total_value = value * temp_count
-            temp_average = temp_sum / temp_count
-            print(Coins.print_statistics(temp_sum,temp_count,value))
 
-        print()
+        if coin is not None:
+            value = coin.data.value*coin.data.retention
+            for node in coin.nodes:
+                if isinstance(node,Purchase):
+                    sum_delta = (node.price * node.quantity)
+                    count_delta = node.quantity
+                    delta_delta = ((value - node.price)*node.quantity)
 
-    if purchase_count > 0:
-        print("~~~Totals:~~~")
-        print(Coins.print_statistics(price_sum,purchase_count,(price_sum+price_delta)/purchase_count))
+                    total.add(sum_delta,count_delta,delta_delta)
+                    metal = None
+                    match coin.data.metal:
+                        case Metals.SILVER:
+                            metal = silver
+                        case Metals.GOLD:
+                            metal = gold
+                        case Metals.PLATINUM:
+                            metal = platinum
+                        case Metals.PALLADIUM:
+                            metal = palladium
+                        case _:
+                            metal = other
+                    if metal is not None:
+                        metal.add(sum_delta,count_delta,delta_delta)
+
+    if total.count > 0:
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("|                                   Totals:                                    |")
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+        print("Silver:\n  ",end="")
+        print(Coins.print_statistics(stats=silver))
+        print("Gold:\n  ",end="")
+        print(Coins.print_statistics(stats=gold))
+        print("Platinum:\n  ",end="")
+        print(Coins.print_statistics(stats=platinum))
+        print("Palladium:\n  ",end="")
+        print(Coins.print_statistics(stats=palladium))
+        print("Total:\n  ",end="")
+        print(Coins.print_statistics(stats=total))
+        print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         
