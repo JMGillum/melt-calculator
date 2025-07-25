@@ -1,3 +1,34 @@
+"""
+   Author: Josh Gillum              .
+   Date: 25 July 2025              ":"         __ __
+   Code: Line 32                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+ |->United States
+     |->Cent
+     |  |->Dime
+     |  |  |->barber_dime
+     |  |  |->mercury_dime
+     |  |  |->roosevelt_dime
+     |  |->Quarter
+     |  |  |->barber_quarter
+     |  |  |->standing_liberty_quarter
+     |  |  |->washington_quarter
+     |  |->Half
+     |      |->walking_liberty_half
+     |      |->benjamin_half
+     |      |->kennedy_half_1
+     |      |->kennedy_half_2
+     |->Dollar
+         |->Dollar
+             |->morgan_dollar
+             |->peace_dollar
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.node import Node
 from metals import Metals

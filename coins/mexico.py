@@ -1,3 +1,19 @@
+"""
+   Author: Josh Gillum              .
+   Date: 25 July 2025              ":"         __ __
+   Code: Line 17                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+ |->Mexico
+     |->Peso
+         |->1
+             |->peso_1
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.node import Node
 from metals import Metals

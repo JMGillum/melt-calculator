@@ -1,3 +1,45 @@
+"""
+   Author: Josh Gillum              .
+   Date: 25 July 2025              ":"         __ __
+   Code: Line 43                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+ |->France
+     |->Centime
+     |  |->20
+     |  |  |->centimes_20
+     |  |->50
+     |      |->centimes_50_1
+     |      |->centimes_50_2
+     |->Franc
+         |->1
+         |  |->franc_1_1
+         |  |->franc_1_2
+         |->2
+         |  |->franc_2
+         |->5
+         |  |->franc_5_1
+         |  |->franc_5_3
+         |  |->franc_5_2
+         |->10
+         |  |->franc_10_2
+         |  |->franc_10_1
+         |->20
+         |  |->franc_20_1
+         |  |->franc_20_2
+         |->50
+         |  |->franc_50
+         |->100
+             |->franc_100_2
+             |->franc_100_3
+             |->franc_100_1
+
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.node import Node
 from metals import Metals

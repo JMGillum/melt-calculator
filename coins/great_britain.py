@@ -1,3 +1,37 @@
+"""
+   Author: Josh Gillum              .
+   Date: 25 July 2025              ":"         __ __
+   Code: Line 35                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+ |->Great Britain
+     |->Britannia
+         |->1/10 Oz Britannia
+         |  |->britannia_gold_10_pound_old
+         |  |->britannia_silver_1_5_pound
+         |  |->britannia_gold_10_pound
+         |  |->britannia_platinum_10_pound
+         |->1/4 Oz Britannia
+         |  |->britannia_gold_25_pound_old
+         |  |->britannia_silver_1_2_pound
+         |  |->britannia_gold_25_pound
+         |  |->britannia_platinum_25_pound
+         |->1/2 Oz Britannia
+         |  |->britannia_gold_50_pound_old
+         |  |->britannia_silver_1_pound
+         |  |->britannia_gold_50_pound
+         |  |->britannia_platinum_50_pound
+         |->1 Oz Britannia
+             |->britannia_gold_100_pound_old
+             |->britannia_silver_2_pound
+             |->britannia_gold_100_pound
+             |->britannia_platinum_100_pound
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.node import Node
 from metals import Metals

@@ -1,3 +1,26 @@
+"""
+   Author: Josh Gillum              .
+   Date: 25 July 2025              ":"         __ __
+   Code: Line 24                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+ |->South Africa
+     |->Krugerrand
+         |->1/10 oz Krugerrand
+         |  |->krugerrand_gold_1_10
+         |->1/4 oz Krugerrand
+         |  |->krugerrand_gold_1_4
+         |->1/2 oz Krugerrand
+         |  |->krugerrand_gold_1_2
+         |->1 oz Krugerrand
+             |->krugerrand_gold_1
+             |->krugerrand_silver
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.node import Node
 from metals import Metals

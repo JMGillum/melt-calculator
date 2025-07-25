@@ -1,3 +1,39 @@
+"""
+   Author: Josh Gillum              .
+   Date: 25 July 2025              ":"         __ __
+   Code: Line 37                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+ |->Switzerland
+     |->Franc
+         |->1/2
+         |  |->swiss_franc_1_2_1
+         |  |->swiss_franc_1_2_2
+         |  |->swiss_franc_1_2_3
+         |->1
+         |  |->swiss_franc_1_1
+         |  |->swiss_franc_1_2
+         |  |->swiss_franc_1_3
+         |->2
+         |  |->swiss_franc_2_1
+         |  |->swiss_franc_2_2
+         |->5
+         |  |->swiss_franc_5_1
+         |  |->swiss_franc_5_2
+         |->10
+         |  |->swiss_franc_10
+         |->20
+         |  |->swiss_franc_20
+         |->100
+             |->swiss_franc_100_1
+             |->swiss_franc_100_2
+             |->swiss_franc_100_3
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.node import Node
 from metals import Metals

@@ -1,3 +1,67 @@
+"""
+   Author: Josh Gillum              .
+   Date: 25 July 2025              ":"         __ __
+   Code: Line 65                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+  |->Canada
+     |->Cent
+     |  |->Nickel
+     |  |  |->canada_nickel_1
+     |  |  |->canada_nickel_2
+     |  |  |->canada_nickel_3
+     |  |->Dime
+     |  |  |->canada_dime_1
+     |  |  |->canada_dime_2
+     |  |  |->canada_dime_3
+     |  |->20
+     |  |  |->canada_cents_20
+     |  |->Quarter
+     |  |  |->canada_quarter_1
+     |  |  |->canada_quarter_2
+     |  |  |->canada_quarter_3
+     |  |->Half
+     |      |->canada_half_1
+     |      |->canada_half_2
+     |      |->canada_half_3
+     |->Dollar
+     |  |->1
+     |  |  |->canada_dollar_1
+     |  |->5
+     |  |  |->canada_dollar_5_1
+     |  |->10
+     |      |->canada_dollar_10
+     |->Maple
+     |  |->1 Gram Maple
+     |  |  |->maple_gold_1_2_dollar
+     |  |->1/20 Oz Maple
+     |  |  |->maple_gold_1_dollar
+     |  |  |->maple_platinum_1_dollar
+     |  |->1/10 Oz Maple
+     |  |  |->maple_gold_5_dollar
+     |  |  |->maple_platinum_5_dollar
+     |  |->1/4 Oz Maple
+     |  |  |->maple_gold_10_dollar
+     |  |  |->maple_platinum_10_dollar
+     |  |->1/2 Oz Maple
+     |  |  |->maple_gold_20_dollar
+     |  |  |->maple_platinum_20_dollar
+     |  |->1 Oz Maple
+     |      |->maple_gold_50_dollar
+     |      |->maple_silver_5_dollar
+     |      |->maple_platinum_50_dollar_old
+     |      |->maple_palladium_50_dollar
+     |      |->maple_platinum_50_dollar
+     |->Sovereign
+         |->1
+             |->canada_sovereign_1
+
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
+
 from coinData import CoinData
 from tree.node import Node
 from metals import Metals
