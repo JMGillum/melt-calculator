@@ -19,26 +19,25 @@
 """
 
 import re
-from countryName import CountryName
+from alternativeNames import AlternativeNames
 from config import minimum_year, current_year
 
 
 
 
 def countryNames():
-    """Initialization function for country names. Optional with_functions parameter
-    will return a list of tuples of the form (CountryName,country coin build function)"""
-    france = CountryName("France", ["French"])
-    mexico = CountryName("Mexico", ["Mexican"])
-    united_states = CountryName(
+    """Will return a list of AlternativeName objects"""
+    france = AlternativeNames("France", ["French"])
+    mexico = AlternativeNames("Mexico", ["Mexican"])
+    united_states = AlternativeNames(
         "United States",
         ["US", "USA", "United States of America", "America", "American"],
     )
-    germany = CountryName("Germany", ["Deutschland", "German"])
-    italy = CountryName("Italy", ["Italian", "Italia"])
-    canada = CountryName("Canada", ["Canadian"])
-    great_britain = CountryName("Great Britain",["Great British","Britain","British","England","English"])
-    south_africa = CountryName("South Africa",["South African","Africa","African","S Africa","S. Africa","S African", "S. African"])
+    germany = AlternativeNames("Germany", ["Deutschland", "German"])
+    italy = AlternativeNames("Italy", ["Italian", "Italia"])
+    canada = AlternativeNames("Canada", ["Canadian"])
+    great_britain = AlternativeNames("Great Britain",["Great British","Britain","British","England","English"])
+    south_africa = AlternativeNames("South Africa",["South African","Africa","African","S Africa","S. Africa","S African", "S. African"])
 
     return [france, mexico, united_states, germany, italy, canada, great_britain, south_africa]
 

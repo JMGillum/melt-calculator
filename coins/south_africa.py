@@ -5,6 +5,7 @@ from config import current_year
 import weights
 from coins.namedList import NamedList
 from coins.taggedList import TaggedList
+from alternativeNames import AlternativeNames as AN
 from coins.tags import Tags
 
 coins = {
@@ -88,7 +89,7 @@ values = {
 
 denominations = {
     # South Africa
-    "krugerrand": TaggedList("Krugerrand",["krugerrand_1","krugerrand_1_2","krugerrand_1_4","krugerrand_1_10"],tags=Tags.BULLION),
+    "krugerrand": TaggedList(AN("Krugerrand","Krugerrands"),["krugerrand_1","krugerrand_1_2","krugerrand_1_4","krugerrand_1_10"],tags=Tags.BULLION),
 }
 
 coins_reverse_build = {

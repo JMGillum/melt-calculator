@@ -4,6 +4,7 @@ from metals import Metals
 from config import current_year
 import weights
 from coins.namedList import NamedList
+from alternativeNames import AlternativeNames as AN
 
 coins = {
     # Mexico
@@ -31,7 +32,7 @@ values = {
 
 denominations = {
     # Mexico
-    "peso": NamedList("Peso", ["peso_1"]),
+    "peso": NamedList(AN("Peso","Pesos"), ["peso_1"]),
 }
 
 coins_reverse_build = {

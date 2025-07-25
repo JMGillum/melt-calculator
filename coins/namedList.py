@@ -14,7 +14,7 @@ class NamedList:
 
     def __str__(self):
         if self.name:
-            return self.name
+            return str(self.name)
         else:
             return ""
 

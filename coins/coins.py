@@ -104,6 +104,7 @@ from config import currency_symbol,current_year
 from search import validCountry
 import weights
 from general_functions import printColored
+from alternativeNames import AlternativeNames
 
 from coins.namedList import NamedList
 from coins.taggedList import TaggedList
@@ -466,11 +467,15 @@ class Coins:
 
         found_values = []
         if denomination:
-            matches = [
-                x
-                for x in found_denominations
-                if Coins.denominations[x].name.lower() == denomination.lower()
-            ]
+            matches = []
+            for x in found_denominations:
+                test = Coins.denominations[x].name
+                if isinstance(test,AlternativeNames):
+                    temp = test.lookup(denomination)
+                    if temp:
+                        matches.append(x)
+                elif test.lower() == denomination.lower():
+                    matches.append(test.lower())
             if matches:
                 try:
                     for match in matches:

@@ -58,3 +58,9 @@ class AlternativeNames:
 
     def __str__(self):
         return self.name
+
+    def lower(self):
+        return self.__str__().lower()
+    
+    def upper(self):
+        return self.__str__().upper()

@@ -4,6 +4,7 @@ from metals import Metals
 from config import current_year
 import weights
 from coins.namedList import NamedList
+from alternativeNames import AlternativeNames as AN
 
 coins = {
     # United States
@@ -183,8 +184,8 @@ values = {
 
 denominations = {
     # United States
-    "cents": NamedList("Cents", ["dime", "quarter", "half"]),
-    "dollar": NamedList("Dollars", ["dollar"]),
+    "cents": NamedList(AN("Cent","Cents"), ["dime", "quarter", "half"]),
+    "dollar": NamedList(AN("Dollar","Dollars"), ["dollar"]),
 }
 
 # Used to build the tree from just a coin object

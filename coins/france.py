@@ -4,6 +4,7 @@ from metals import Metals
 from config import current_year
 import weights
 from coins.namedList import NamedList
+from alternativeNames import AlternativeNames as AN
 
 coins = {
     # France
@@ -213,9 +214,9 @@ values = {
 
 denominations = {
     # France
-    "centimes": NamedList("Centimes", ["centimes_20", "centimes_50"]),
+    "centimes": NamedList(AN("Centime","Centimes"), ["centimes_20", "centimes_50"]),
     "franc": NamedList(
-        "Franc",
+        AN("Franc","Francs"),
         [
             "franc_1",
             "franc_2",

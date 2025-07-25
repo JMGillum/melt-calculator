@@ -4,6 +4,7 @@ from metals import Metals
 from config import current_year
 import weights
 from coins.namedList import NamedList
+from alternativeNames import AlternativeNames as AN
 from coins.taggedList import TaggedList
 from coins.tags import Tags
 
@@ -230,7 +231,7 @@ values = {
 
 denominations = {
     # Great Britain
-    "britannia": TaggedList("Britannia",["britannia_1_10","britannia_1_4","britannia_1_2","britannia_1"],tags=Tags.BULLION),
+    "britannia": TaggedList(AN("Britannia","Britannias"),["britannia_1_10","britannia_1_4","britannia_1_2","britannia_1"],tags=Tags.BULLION),
 }
 
 coins_reverse_build = {

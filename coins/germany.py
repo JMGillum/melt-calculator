@@ -4,6 +4,7 @@ from metals import Metals
 from config import current_year
 import weights
 from coins.namedList import NamedList
+from alternativeNames import AlternativeNames as AN
 
 coins = {
     # Germany
@@ -191,8 +192,8 @@ values = {
 
 denominations = {
     # Germany
-    "pfennig": NamedList("Pfennig",["pfennig_20","pfennig_50"]),
-    "mark": NamedList("Mark", ["mark_1","mark_2","mark_3","mark_5","mark_10","mark_20"]),
+    "pfennig": NamedList(AN("Pfennig","Pfennigs"),["pfennig_20","pfennig_50"]),
+    "mark": NamedList(AN("Mark","Marks"), ["mark_1","mark_2","mark_3","mark_5","mark_10","mark_20"]),
 }
 
 coins_reverse_build = {

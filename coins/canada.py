@@ -3,6 +3,7 @@ from tree.node import Node
 from metals import Metals
 from config import current_year
 import weights
+from alternativeNames import AlternativeNames as AN
 from coins.namedList import NamedList
 from coins.taggedList import TaggedList
 from coins.tags import Tags
@@ -404,10 +405,10 @@ values = {
 
 denominations = {
     # Canada
-    "canada_cent": NamedList("Cents", ["canada_nickel","canada_dime","canada_cents_20","canada_quarter","canada_half"]),
-    "canada_sovereign": NamedList("Sovereigns",["canada_sovereign_1"]),
-    "canada_dollar": NamedList("Dollars", ["canada_dollar_1","canada_dollar_5","canada_dollar_10"]),
-    "maple": TaggedList("Maple",["maple_1","maple_1_2","maple_1_4","maple_1_10","maple_1_20","maple_1_gram"],tags=Tags.BULLION),
+    "canada_cent": NamedList(AN("Cent",["Cents"]), ["canada_nickel","canada_dime","canada_cents_20","canada_quarter","canada_half"]),
+    "canada_sovereign": NamedList(AN("Sovereign","Sovereigns"),["canada_sovereign_1"]),
+    "canada_dollar": NamedList(AN("Dollar","Dollars"), ["canada_dollar_1","canada_dollar_5","canada_dollar_10"]),
+    "maple": TaggedList(AN("Maple","Maples"),["maple_1","maple_1_2","maple_1_4","maple_1_10","maple_1_20","maple_1_gram"],tags=Tags.BULLION),
 }
 
 coins_reverse_build = {
