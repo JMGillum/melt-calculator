@@ -12,7 +12,7 @@ See https://git-scm.com/book/en/v2/Git-Tools-Submodules for information on submo
 * Option to combine multiple searches into a single result tree
 * ~~Summary statistics when there are multiple Purchase objects for the same coin~~
 * ~~Ability to print a report of personal collection with extra summary statistics such as +/- of melt value~~
-* Update country names to include more forms
+* ~~Update country names to include more forms~~
 * Handle plurals of denominations better
 
 Done:
@@ -22,3 +22,4 @@ Done:
 * Reworked bullion and how it is presented
 * Completed Canadian and German standard Issue
 * Completed Canadian, British, and South African bullion
+* Fixed bug in search by country that caused it to not work for multi word country names
