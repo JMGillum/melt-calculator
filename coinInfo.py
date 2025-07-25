@@ -308,7 +308,7 @@ class Coins:
         ),
         "maple_silver_5_dollar": Node(
             CoinData(
-                nickname="Silver Maple Leaf Bullion",
+                nickname="Silver",
                 years=list(range(1988, current_year+1)),
                 weight=31.11,
                 fineness=0.9999,
