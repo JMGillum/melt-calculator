@@ -20,3 +20,4 @@
 silver_spot_price = 36.00
 gold_spot_price = 3350.00
 platinum_spot_price = 1404.00
+palladium_spot_price = 1237.00

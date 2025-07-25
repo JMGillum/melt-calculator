@@ -112,7 +112,7 @@ def setupParser():
         help="Show only the coins that are not in the personal collection. Does nothing when used with the --owned flag.",
     )
     parser.add_argument(
-        "-P",
+        "-H",
         "--hide_price",
         action="store_true",
         help="Use to disable printing of the melt value of the coins.",
@@ -128,6 +128,12 @@ def setupParser():
         "--platinum",
         metavar="PRICE",
         help="Use to supply the platinum price for melt value calculations.",
+    )
+    parser.add_argument(
+        "-P",
+        "--palladium",
+        metavar="PRICE",
+        help="Use to supply the palladium price for melt value calculations.",
     )
     parser.add_argument(
         "-S",
@@ -154,10 +160,11 @@ def setupParser():
 
 
 # Calculates the value of every defined coin.
-def price(silver_price=None, gold_price=None, platinum_price=None):
+def price(silver_price=None, gold_price=None, platinum_price=None, palladium_price=None):
     silver = d.silver_spot_price
     gold = d.gold_spot_price
     platinum = d.platinum_spot_price
+    palladium = d.palladium_spot_price
     if silver_price is not None and (
         isinstance(silver_price, int) or isinstance(silver_price, float)
     ):
@@ -168,7 +175,9 @@ def price(silver_price=None, gold_price=None, platinum_price=None):
         gold = gold_price
     if platinum_price is not None and (isinstance(platinum_price,int) or isinstance(platinum_price,float)):
         platinum = platinum_price
-    Coins.price(silver, gold, platinum)
+    if palladium_price is not None and (isinstance(palladium_price,int) or isinstance(palladium_price,float)):
+        palladium = palladium_price
+    Coins.price(silver, gold, platinum,palladium)
 
 
 parser = setupParser()

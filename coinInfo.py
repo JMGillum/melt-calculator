@@ -498,6 +498,19 @@ class Coins:
                 denomination="Dollars",
             )
         ),
+        "maple_palladium_50_dollar": Node(
+            CoinData(
+                nickname="Palladium",
+                years=[2005,2006,2009]+list(range(2015,current_year+1)),
+                weight=31.11,
+                fineness=0.9995,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.PALLADIUM,
+                country="Canada",
+                face_value=50,
+                denomination="Dollars",
+            )
+        ),
         # France
         "centimes_20": Node(
             data=CoinData(
@@ -1271,6 +1284,7 @@ class Coins:
         "maple_gold_50_dollar": ("maple_1","maple","canada"),
         "maple_platinum_50_dollar_old": ("maple_1","maple","canada"),
         "maple_platinum_50_dollar": ("maple_1","maple","canada"),
+        "maple_palladium_50_dollar": ("maple_1","maple","canada"),
         "maple_gold_20_dollar": ("maple_1_2","maple","canada"),
         "maple_platinum_20_dollar": ("maple_1_2","maple","canada"),
         "maple_gold_10_dollar": ("maple_1_4","maple","canada"),
@@ -1448,6 +1462,11 @@ class Coins:
         "britannia_platinum_100_pound",
     ]
 
+    # Indicates which coins are made of palladium.
+    palladium_coins = [
+        "maple_palladium_50_dollar",
+    ]
+
     # Updated in Coins.linkPurchases() to include keys to coins that have
     # purchases or don't
     owned = set()
@@ -1465,7 +1484,7 @@ class Coins:
         "canada_dollar_5": NamedList("5", ["canada_dollar_5_1"]),
         "canada_dollar_10": NamedList("10", ["canada_dollar_10"]),
         # Canada - Maple
-        "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar","maple_gold_50_dollar","maple_platinum_50_dollar_old","maple_platinum_50_dollar"],"6"),
+        "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar","maple_gold_50_dollar","maple_platinum_50_dollar_old","maple_platinum_50_dollar","maple_palladium_50_dollar"],"6"),
         "maple_1_2": NamedList("1/2 Oz Maple",["maple_gold_20_dollar","maple_platinum_20_dollar"],"5"),
         "maple_1_4": NamedList("1/4 Oz Maple",["maple_gold_10_dollar","maple_platinum_10_dollar"],"4"),
         "maple_1_10": NamedList("1/10 Oz Maple",["maple_gold_5_dollar","maple_platinum_5_dollar"],"3"),
@@ -1573,7 +1592,7 @@ class Coins:
             coin.togglePrice(show_price)
 
     # Calculates the value of all defined coin objects, using the provided precious metal values
-    def price(silver_price, gold_price, platinum_price):
+    def price(silver_price, gold_price, platinum_price, palladium_price):
         for coin_id in list(Coins.coins.keys()):
             coin = Coins.coins[coin_id]
             if isinstance(coin, Node):
@@ -1584,6 +1603,8 @@ class Coins:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * gold_price
             if coin.metal == Metals.PLATINUM:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * platinum_price
+            if coin.metal == Metals.PALLADIUM:
+                coin.value = coin.precious_metal_weight.as_troy_ounces() * palladium_price
 
     def print_colored(text,color,custom_color=""):
         test = color.lower().strip()

@@ -183,6 +183,8 @@ class CoinData:
                 return "Silver"
             elif self.metal == metals.Metals.PLATINUM:
                 return "Platinum"
+            elif self.metal == metals.Metals.PALLADIUM:
+                return "Palladium"
         return "Unknown metal"
 
     def asAString(self, format: str):
