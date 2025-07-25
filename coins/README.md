@@ -38,6 +38,12 @@ denominations needs to be dictionary storing unique keys and values that represe
 
     Ex: "canada_cent": NamedList(AN("Cent",["Cents"]), ["canada_nickel","canada_dime","canada_cents_20","canada_quarter","canada_half"]),
 
+Bullion coins should be handled separately from regular issue coins, and should have their own denomination. For example, the 1 oz Canadian maple leaf is technically of the Dollar denomination, since it has a face value of $50, however it is better to treat it as part of a bullion denomination. In this case, it is part of the Maple denomination. The CoinData object for the coin should still say it is of the Dollar denomination however.
+This bullion denomination must be of the type TaggedList (see taggedList.py for more information) instead of NamedList. This functions the same as a NamedList, but has an optional tag variable at the end, which should be set like:
+    tags=Tags.BULLION
+see tags.py for information about the tags.
+This is necessary so the coin can be filtered as bullion.
+
 
 These three variables need to be manually updated whenever changes occur. The next few can be updated using the helper.py script. 
 
