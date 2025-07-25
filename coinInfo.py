@@ -701,6 +701,58 @@ class Coins:
             )
         ),
         # Great Britain
+        "britannia_silver_2_pound": Node(
+            CoinData(
+                nickname="Silver",
+                years=list(range(1997,current_year+1)),
+                weight=34.05,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.SILVER,
+                country="Great Britain",
+                face_value=2,
+                denomination="Pounds",
+            )
+        ),
+        "britannia_silver_1_pound": Node(
+            CoinData(
+                nickname="Silver",
+                years=list(range(1997,current_year+1)),
+                weight=17.025,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(0.5, weights.Units.TROY_OUNCES),
+                metal=Metals.SILVER,
+                country="Great Britain",
+                face_value=1,
+                denomination="Pounds",
+            )
+        ),
+        "britannia_silver_1_2_pound": Node(
+            CoinData(
+                nickname="Silver",
+                years=list(range(1997,current_year+1)),
+                weight=8.5125,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(0.25, weights.Units.TROY_OUNCES),
+                metal=Metals.SILVER,
+                country="Great Britain",
+                face_value=50,
+                denomination="Pence",
+            )
+        ),
+        "britannia_silver_1_5_pound": Node(
+            CoinData(
+                nickname="Silver",
+                years=list(range(1997,current_year+1)),
+                weight=3.405,
+                fineness=0.9167,
+                precious_metal_weight=weights.Weight(0.1, weights.Units.TROY_OUNCES),
+                metal=Metals.SILVER,
+                country="Great Britain",
+                face_value=20,
+                denomination="Pence",
+            )
+        ),
         "britannia_gold_100_pound_old": Node(
             CoinData(
                 nickname="Gold (old design)",
@@ -1091,18 +1143,22 @@ class Coins:
         "mark_5_4": ("mark_5","mark","germany"),
         "mark_10": ("mark_10","mark","germany"),
         "mark_20": ("mark_20","mark","germany"),
-        "britannia_gold_100_pound_old": ("britannia_1_10","britannia","great_britain"),
-        "britannia_gold_100_pound": ("britannia_1_10","britannia","great_britain"),
-        "britannia_platinum_100_pound": ("britannia_1_10","britannia","great_britain"),
-        "britannia_gold_50_pound_old": ("britannia_1_4","britannia","great_britain"),
-        "britannia_gold_50_pound": ("britannia_1_4","britannia","great_britain"),
-        "britannia_platinum_50_pound": ("britannia_1_4","britannia","great_britain"),
-        "britannia_gold_25_pound_old": ("britannia_1_2","britannia","great_britain"),
-        "britannia_gold_25_pound": ("britannia_1_2","britannia","great_britain"),
-        "britannia_platinum_25_pound": ("britannia_1_2","britannia","great_britain"),
-        "britannia_gold_10_pound_old": ("britannia_1","britannia","great_britain"),
-        "britannia_gold_10_pound": ("britannia_1","britannia","great_britain"),
-        "britannia_platinum_10_pound": ("britannia_1","britannia","great_britain"),
+        "britannia_silver_1_5_pound": ("britannia_1_10","britannia","great_britain"),
+        "britannia_gold_10_pound_old": ("britannia_1_10","britannia","great_britain"),
+        "britannia_gold_10_pound": ("britannia_1_10","britannia","great_britain"),
+        "britannia_platinum_10_pound": ("britannia_1_10","britannia","great_britain"),
+        "britannia_silver_1_2_pound": ("britannia_1_4","britannia","great_britain"),
+        "britannia_gold_25_pound_old": ("britannia_1_4","britannia","great_britain"),
+        "britannia_gold_25_pound": ("britannia_1_4","britannia","great_britain"),
+        "britannia_platinum_25_pound": ("britannia_1_4","britannia","great_britain"),
+        "britannia_silver_1_pound": ("britannia_1_2","britannia","great_britain"),
+        "britannia_gold_50_pound_old": ("britannia_1_2","britannia","great_britain"),
+        "britannia_gold_50_pound": ("britannia_1_2","britannia","great_britain"),
+        "britannia_platinum_50_pound": ("britannia_1_2","britannia","great_britain"),
+        "britannia_silver_2_pound": ("britannia_1","britannia","great_britain"),
+        "britannia_gold_100_pound_old": ("britannia_1","britannia","great_britain"),
+        "britannia_gold_100_pound": ("britannia_1","britannia","great_britain"),
+        "britannia_platinum_100_pound": ("britannia_1","britannia","great_britain"),
         "centesimi_20": ("centesimi_20","centesimi","italy"),
         "peso_1": ("peso_1","peso","mexico"),
         "barber_dime": ("dime","cents","united_states"),
@@ -1159,6 +1215,10 @@ class Coins:
         "mark_5_1",
         "mark_5_3",
         "mark_5_4",
+        "britannia_silver_1_5_pound",
+        "britannia_silver_1_2_pound",
+        "britannia_silver_1_pound",
+        "britannia_silver_2_pound",
         "centesimi_20",
         "peso_1",
         "barber_dime",
@@ -1244,10 +1304,10 @@ class Coins:
         "mark_20": NamedList("20", ["mark_20"]),
         # Great Britain
         # Britannia
-        "britannia_1": NamedList("1/10 Oz Britannia",["britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"1"),
-        "britannia_1_2": NamedList("1/4 Oz Britannia",["britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"2"),
-        "britannia_1_4": NamedList("1/2 Oz Britannia",["britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"3"),
-        "britannia_1_10": NamedList("1 Oz Britannia",["britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"4"),
+        "britannia_1_10": NamedList("1/10 Oz Britannia",["britannia_silver_1_5_pound","britannia_gold_10_pound_old","britannia_gold_10_pound","britannia_platinum_10_pound"],"1"),
+        "britannia_1_4": NamedList("1/4 Oz Britannia",["britannia_silver_1_2_pound","britannia_gold_25_pound_old","britannia_gold_25_pound","britannia_platinum_25_pound"],"2"),
+        "britannia_1_2": NamedList("1/2 Oz Britannia",["britannia_silver_1_pound","britannia_gold_50_pound_old","britannia_gold_50_pound","britannia_platinum_50_pound"],"3"),
+        "britannia_1": NamedList("1 Oz Britannia",["britannia_silver_2_pound","britannia_gold_100_pound_old","britannia_gold_100_pound","britannia_platinum_100_pound"],"4"),
         # Italy
         "centesimi_20": NamedList("20", ["centesimi_20"]),
         # Mexico
