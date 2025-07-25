@@ -159,7 +159,7 @@ class Coins:
         "russia": NamedList("Russia",["russia_kopek","russia_ruble"]),
         "south_africa": NamedList("South Africa",["krugerrand"]),
         "switzerland": NamedList("Switzerland",["swiss_franc"]),
-        "united_states": NamedList("United States", ["cents", "dollar"]),
+        "united_states": NamedList("United States", ["cents", "dollar","american_bullion"]),
     }
 
     # Enables or disables printing of the coins value

@@ -1,12 +1,30 @@
 """
    Author: Josh Gillum              .
    Date: 25 July 2025              ":"         __ __
-   Code: Line 32                  __|___       \ V /
+   Code: Line 50                  __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
  |->United States
+     |->Bullion
+     |  |->1/10 Oz Bullion
+     |  |  |->american_gold_eagle_dollar_5
+     |  |  |->american_platinum_eagle_dollar_10
+     |  |  |->american_gold_buffalo_dollar_5
+     |  |->1/4 Oz Bullion
+     |  |  |->american_gold_eagle_dollar_10
+     |  |  |->american_platinum_eagle_dollar_25
+     |  |  |->american_gold_buffalo_dollar_10
+     |  |->1/2 Oz Bullion
+     |  |  |->american_gold_eagle_dollar_25
+     |  |  |->american_platinum_eagle_dollar_50
+     |  |  |->american_gold_buffalo_dollar_25
+     |  |->1 Oz Bullion
+     |      |->american_gold_eagle_dollar_50
+     |      |->american_platinum_eagle_dollar_100
+     |      |->american_gold_buffalo_dollar_50
+     |      |->american_palladium_eagle_dollar_25
      |->Cent
      |  |->Dime
      |  |  |->barber_dime
@@ -190,6 +208,188 @@ coins = {
             denomination="Dollar",
         )
     ),
+    "american_silver_eagle": Node(
+        CoinData(
+            nickname="Silver Eagle",
+            years=list(range(1986,current_year+1)),
+            weight=31.11,
+            fineness=0.999,
+            precious_metal_weight=weights.Weight(1,weights.Units.TROY_OUNCES),
+            metal=Metals.SILVER,
+            country="United States",
+            face_value=1,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_eagle_dollar_5": Node(
+        CoinData(
+            nickname="Gold Eagle",
+            years=list(range(1986,current_year+1)),
+            weight=3.393,
+            fineness=0.9167,
+            precious_metal_weight=weights.Weight(0.1,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=5,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_eagle_dollar_10": Node(
+        CoinData(
+            nickname="Gold Eagle",
+            years=list(range(1986,current_year+1)),
+            weight=8.483,
+            fineness=0.9167,
+            precious_metal_weight=weights.Weight(0.25,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=10,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_eagle_dollar_25": Node(
+        CoinData(
+            nickname="Gold Eagle",
+            years=list(range(1986,current_year+1)),
+            weight=16.965,
+            fineness=0.9167,
+            precious_metal_weight=weights.Weight(0.5,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=25,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_eagle_dollar_50": Node(
+        CoinData(
+            nickname="Gold Eagle",
+            years=list(range(1986,current_year+1)),
+            weight=33.931,
+            fineness=0.9167,
+            precious_metal_weight=weights.Weight(1,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=50,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_buffalo_dollar_5": Node(
+        CoinData(
+            nickname="Gold Buffalo",
+            years=[2008],
+            weight=3.11,
+            fineness=0.9999,
+            precious_metal_weight=weights.Weight(0.1,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=5,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_buffalo_dollar_10": Node(
+        CoinData(
+            nickname="Gold Buffalo",
+            years=[2008],
+            weight=7.776,
+            fineness=0.9999,
+            precious_metal_weight=weights.Weight(0.25,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=10,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_buffalo_dollar_25": Node(
+        CoinData(
+            nickname="Gold Buffalo",
+            years=[2008],
+            weight=15.552,
+            fineness=0.9999,
+            precious_metal_weight=weights.Weight(0.5,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=25,
+            denomination="Dollar",
+        )
+    ),
+    "american_gold_buffalo_dollar_50": Node(
+        CoinData(
+            nickname="Gold Buffalo",
+            years=list(range(2006,current_year+1)),
+            weight=31.11,
+            fineness=0.9999,
+            precious_metal_weight=weights.Weight(1,weights.Units.TROY_OUNCES),
+            metal=Metals.GOLD,
+            country="United States",
+            face_value=50,
+            denomination="Dollar",
+        )
+    ),
+    "american_platinum_eagle_dollar_10": Node(
+        CoinData(
+            nickname="Platinum Eagle",
+            years=list(range(1997,2009)),
+            weight=3.11,
+            fineness=0.9995,
+            precious_metal_weight=weights.Weight(0.1,weights.Units.TROY_OUNCES),
+            metal=Metals.PLATINUM,
+            country="United States",
+            face_value=10,
+            denomination="Dollar",
+        )
+    ),
+    "american_platinum_eagle_dollar_25": Node(
+        CoinData(
+            nickname="Platinum Eagle",
+            years=list(range(1997,2009)),
+            weight=7.778,
+            fineness=0.9995,
+            precious_metal_weight=weights.Weight(0.25,weights.Units.TROY_OUNCES),
+            metal=Metals.PLATINUM,
+            country="United States",
+            face_value=25,
+            denomination="Dollar",
+        )
+    ),
+    "american_platinum_eagle_dollar_50": Node(
+        CoinData(
+            nickname="Platinum Eagle",
+            years=list(range(1997,2009)),
+            weight=15.56,
+            fineness=0.9995,
+            precious_metal_weight=weights.Weight(0.5,weights.Units.TROY_OUNCES),
+            metal=Metals.PLATINUM,
+            country="United States",
+            face_value=50,
+            denomination="Dollar",
+        )
+    ),
+    "american_platinum_eagle_dollar_100": Node(
+        CoinData(
+            nickname="Platinum Eagle",
+            years=list(range(1997,current_year+1)),
+            weight=31.12,
+            fineness=0.9995,
+            precious_metal_weight=weights.Weight(1,weights.Units.TROY_OUNCES),
+            metal=Metals.PLATINUM,
+            country="United States",
+            face_value=100,
+            denomination="Dollar",
+        )
+    ),
+    "american_palladium_eagle_dollar_25": Node(
+        CoinData(
+            nickname="Palladium Eagle",
+            years=list(range(2017,current_year+1)),
+            weight=31.12,
+            fineness=0.9995,
+            precious_metal_weight=weights.Weight(1,weights.Units.TROY_OUNCES),
+            metal=Metals.PALLADIUM,
+            country="United States",
+            face_value=25,
+            denomination="Dollar",
+        )
+    ),
 }
 
 values = {
@@ -211,12 +411,17 @@ values = {
         "50",
     ),
     "dollar": NamedList(AN("Dollar",["Dollars","1"]), ["morgan_dollar", "peace_dollar"],"1"),
+    "american_bullion_fractional_1_10": NamedList(AN("1/10 Oz Bullion",["1/10","0.1"]),["american_gold_eagle_dollar_5","american_gold_buffalo_dollar_5","american_platinum_eagle_dollar_10"],"0"),
+    "american_bullion_fractional_1_4": NamedList(AN("1/4 Oz Bullion",["1/4","0.25"]),["american_gold_eagle_dollar_10","american_gold_buffalo_dollar_10","american_platinum_eagle_dollar_25"],"1"),
+    "american_bullion_fractional_1_2": NamedList(AN("1/2 Oz Bullion",["1/2","0.5"]),["american_gold_eagle_dollar_25","american_gold_buffalo_dollar_25","american_platinum_eagle_dollar_50"],"2"),
+    "american_bullion_1": NamedList(AN("1 Oz Bullion",["1"]),["american_gold_eagle_dollar_50","american_gold_buffalo_dollar_50","american_platinum_eagle_dollar_100","american_palladium_eagle_dollar_25"],"3"),
 }
 
 denominations = {
     # United States
     "cents": NamedList(AN("Cent","Cents"), ["dime", "quarter", "half"]),
     "dollar": NamedList(AN("Dollar","Dollars"), ["dollar"]),
+    "american_bullion": NamedList(AN("Bullion","Eagles"),["american_bullion_fractional_1_10","american_bullion_fractional_1_4","american_bullion_fractional_1_2","american_bullion_1"]),
 }
 
 # Used to build the tree from just a coin object
@@ -233,6 +438,19 @@ coins_reverse_build = {
     "kennedy_half_2": ("half","cents","united_states"),
     "morgan_dollar": ("dollar","dollar","united_states"),
     "peace_dollar": ("dollar","dollar","united_states"),
+    "american_gold_eagle_dollar_5": ("american_bullion_fractional_1_10","american_bullion","united_states"),
+    "american_gold_buffalo_dollar_5": ("american_bullion_fractional_1_10","american_bullion","united_states"),
+    "american_platinum_eagle_dollar_10": ("american_bullion_fractional_1_10","american_bullion","united_states"),
+    "american_gold_eagle_dollar_10": ("american_bullion_fractional_1_4","american_bullion","united_states"),
+    "american_gold_buffalo_dollar_10": ("american_bullion_fractional_1_4","american_bullion","united_states"),
+    "american_platinum_eagle_dollar_25": ("american_bullion_fractional_1_4","american_bullion","united_states"),
+    "american_gold_eagle_dollar_25": ("american_bullion_fractional_1_2","american_bullion","united_states"),
+    "american_gold_buffalo_dollar_25": ("american_bullion_fractional_1_2","american_bullion","united_states"),
+    "american_platinum_eagle_dollar_50": ("american_bullion_fractional_1_2","american_bullion","united_states"),
+    "american_gold_eagle_dollar_50": ("american_bullion_1","american_bullion","united_states"),
+    "american_gold_buffalo_dollar_50": ("american_bullion_1","american_bullion","united_states"),
+    "american_platinum_eagle_dollar_100": ("american_bullion_1","american_bullion","united_states"),
+    "american_palladium_eagle_dollar_25": ("american_bullion_1","american_bullion","united_states"),
 }
 
 # Indicates which coins are made of silver.
@@ -251,8 +469,27 @@ silver_coins = [
     "peace_dollar",
 ]
 
-gold_coins = []
+# Indicates which coins are made of gold.
+gold_coins = [
+    "american_gold_eagle_dollar_5",
+    "american_gold_buffalo_dollar_5",
+    "american_gold_eagle_dollar_10",
+    "american_gold_buffalo_dollar_10",
+    "american_gold_eagle_dollar_25",
+    "american_gold_buffalo_dollar_25",
+    "american_gold_eagle_dollar_50",
+    "american_gold_buffalo_dollar_50",
+]
 
-platinum_coins = []
+# Indicates which coins are made of platinum.
+platinum_coins = [
+    "american_platinum_eagle_dollar_10",
+    "american_platinum_eagle_dollar_25",
+    "american_platinum_eagle_dollar_50",
+    "american_platinum_eagle_dollar_100",
+]
 
-palladium_coins = []
+# Indicates which coins are made of palladium.
+palladium_coins = [
+    "american_palladium_eagle_dollar_25",
+]

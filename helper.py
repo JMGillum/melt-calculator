@@ -109,5 +109,5 @@ def print_metals(country):
 
 
 if __name__ == "__main__":
-    print_reverse_build(russia,"russia")
-    print_metals(russia)
+    print_reverse_build(united_states,"united_states")
+    print_metals(united_states)
