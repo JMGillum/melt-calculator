@@ -30,7 +30,7 @@
         "canada_dollar_5": Node(
             CoinData(
                 nickname="Silver Maple Leaf Bullion",
-                years=list(range(1988, 2026)),
+                years=list(range(1988, current_year+1)),
                 weight=31.11,
                 fineness=0.9999,
                 precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
@@ -100,7 +100,7 @@ from tree.tree import Tree
 from tree.node import Node
 from metals import Metals
 from purchases import purchases
-from config import currency_symbol,tab
+from config import currency_symbol,current_year
 import weights
 
 
@@ -309,7 +309,7 @@ class Coins:
         "canada_dollar_5": Node(
             CoinData(
                 nickname="Silver Maple Leaf Bullion",
-                years=list(range(1988, 2026)),
+                years=list(range(1988, current_year+1)),
                 weight=31.11,
                 fineness=0.9999,
                 precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
@@ -704,7 +704,7 @@ class Coins:
         "britannia_platinum_100_pound": Node(
             CoinData(
                 nickname="Platinum",
-                years=list(range(2018,2026)),
+                years=list(range(2018,current_year+1)),
                 weight=31.11,
                 fineness=0.9995,
                 precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
@@ -717,7 +717,7 @@ class Coins:
         "britannia_platinum_50_pound": Node(
             CoinData(
                 nickname="Platinum",
-                years=list(range(2018,2026)),
+                years=list(range(2018,current_year+1)),
                 weight=15.552,
                 fineness=0.9995,
                 precious_metal_weight=weights.Weight(0.5, weights.Units.TROY_OUNCES),
@@ -730,7 +730,7 @@ class Coins:
         "britannia_platinum_25_pound": Node(
             CoinData(
                 nickname="Platinum",
-                years=list(range(2018,2026)),
+                years=list(range(2018,current_year+1)),
                 weight=7.776,
                 fineness=0.9995,
                 precious_metal_weight=weights.Weight(0.25, weights.Units.TROY_OUNCES),
@@ -743,7 +743,7 @@ class Coins:
         "britannia_platinum_10_pound": Node(
             CoinData(
                 nickname="Platinum",
-                years=list(range(2018,2026)),
+                years=list(range(2018,current_year+1)),
                 weight=3.11,
                 fineness=0.9995,
                 precious_metal_weight=weights.Weight(0.1, weights.Units.TROY_OUNCES),

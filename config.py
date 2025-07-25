@@ -31,3 +31,5 @@ tree_fancy_characters = True
 currency_symbol = "$".strip()
 
 tab = "  "
+
+current_year = 2025
