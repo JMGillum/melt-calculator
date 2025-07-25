@@ -26,29 +26,38 @@ from coins.coins import Coins
 from metals import Metals
 from tree.node import Node
 
+
+import coins.canada as canada
+import coins.france as france
+import coins.germany as germany
+import coins.great_britain as great_britain
+import coins.italy as italy
+import coins.mexico as mexico
+import coins.south_africa as south_africa
+import coins.united_states as united_states
+
 tab = "    "
 
 
-def print_reverse_build():
-    coins_reverse_build = [f"{tab}coins_reverse_build =" + " {"]
-    values_reverse_build = [f"{tab}values_reverse_build =" + " {"]
-    denominations_reverse_build = [f"{tab}denominations_reverse_build =" + " {"]
-    for country in Coins.countries:
-        for denomination in Coins.countries[country]:
-            denominations_reverse_build += [
-                f'{tab}{tab}"{denomination}": ("{country}"),'
+def print_reverse_build(country,country_name):
+    coins_reverse_build = ["coins_reverse_build =" + " {"]
+    values_reverse_build = ["values_reverse_build =" + " {"]
+    denominations_reverse_build = ["denominations_reverse_build =" + " {"]
+    for denomination in country.denominations:
+        denominations_reverse_build += [
+            f'{tab}"{denomination}": ("{country_name}"),'
+        ]
+        for value in country.denominations[denomination]:
+            values_reverse_build += [
+                f'{tab}"{value}": ("{denomination}","{country_name}"),'
             ]
-            for value in Coins.denominations[denomination]:
-                values_reverse_build += [
-                    f'{tab}{tab}"{value}": ("{denomination}","{country}"),'
+            for coin in country.values[value]:
+                coins_reverse_build += [
+                    f'{tab}"{coin}": ("{value}","{denomination}","{country_name}"),'
                 ]
-                for coin in Coins.values[value]:
-                    coins_reverse_build += [
-                        f'{tab}{tab}"{coin}": ("{value}","{denomination}","{country}"),'
-                    ]
-    coins_reverse_build += [f"{tab}" + "}"]
-    values_reverse_build += [f"{tab}" + "}"]
-    denominations_reverse_build += [f"{tab}" + "}"]
+    coins_reverse_build += ["}"]
+    values_reverse_build += ["}"]
+    denominations_reverse_build += ["}"]
 
     #    for item in [coins_reverse_build,values_reverse_build,denominations_reverse_build]:
     for item in [coins_reverse_build]:
@@ -57,48 +66,47 @@ def print_reverse_build():
         print()
 
 
-def print_metals():
-    silver_coins = [f"{tab}silver_coins = ["]
-    gold_coins = [f"{tab}gold_coins = ["]
-    platinum_coins = [f"{tab}platinum_coins = ["]
-    palladium_coins = [f"{tab}palladium_coins = ["]
-    for country in Coins.countries:
-        for denomination in Coins.countries[country]:
-            for value in Coins.denominations[denomination]:
-                for coin in Coins.values[value]:
-                    test = Coins.coins[coin]
-                    if isinstance(test, Node):
-                        test = test.data
-                    if test.metal == Metals.SILVER:
-                        silver_coins.append(f'{tab}{tab}"{coin}",')
-                    if test.metal == Metals.GOLD:
-                        gold_coins.append(f'{tab}{tab}"{coin}",')
-                    if test.metal == Metals.PLATINUM:
-                        platinum_coins.append(f'{tab}{tab}"{coin}",')
-                    if test.metal == Metals.PALLADIUM:
-                        palladium_coins.append(f'{tab}{tab}"{coin}",')
-    silver_coins.append(f"{tab}]")
-    gold_coins.append(f"{tab}]")
-    platinum_coins.append(f"{tab}]")
-    palladium_coins.append(f"{tab}]")
-    print(f"{tab}# Indicates which coins are made of silver.")
+def print_metals(country):
+    silver_coins = ["silver_coins = ["]
+    gold_coins = ["gold_coins = ["]
+    platinum_coins = ["platinum_coins = ["]
+    palladium_coins = ["palladium_coins = ["]
+    for denomination in country.denominations:
+        for value in country.denominations[denomination]:
+            for coin in country.values[value]:
+                test = country.coins[coin]
+                if isinstance(test, Node):
+                    test = test.data
+                if test.metal == Metals.SILVER:
+                    silver_coins.append(f'{tab}"{coin}",')
+                if test.metal == Metals.GOLD:
+                    gold_coins.append(f'{tab}"{coin}",')
+                if test.metal == Metals.PLATINUM:
+                    platinum_coins.append(f'{tab}"{coin}",')
+                if test.metal == Metals.PALLADIUM:
+                    palladium_coins.append(f'{tab}"{coin}",')
+    silver_coins.append("]")
+    gold_coins.append("]")
+    platinum_coins.append("]")
+    palladium_coins.append("]")
+    print("# Indicates which coins are made of silver.")
     for line in silver_coins:
         print(line)
     print()
-    print(f"{tab}# Indicates which coins are made of gold.")
+    print("# Indicates which coins are made of gold.")
     for line in gold_coins:
         print(line)
     print()
-    print(f"{tab}# Indicates which coins are made of platinum.")
+    print("# Indicates which coins are made of platinum.")
     for line in platinum_coins:
         print(line)
     print()
-    print(f"{tab}# Indicates which coins are made of palladium.")
+    print("# Indicates which coins are made of palladium.")
     for line in palladium_coins:
         print(line)
     print()
 
 
 if __name__ == "__main__":
-    print_reverse_build()
-    print_metals()
+    print_reverse_build(italy,"italy")
+    print_metals(italy)

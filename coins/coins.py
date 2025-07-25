@@ -152,7 +152,7 @@ class Coins:
         "france": NamedList("France", ["centimes", "franc"]),
         "germany": NamedList("Germany", ["pfennig","mark"]),
         "great_britain": NamedList("Great Britain",["britannia"]),
-        "italy": NamedList("Italy", ["centesimi"]),
+        "italy": NamedList("Italy", ["centesimi","lira"]),
         "mexico": NamedList("Mexico", ["peso"]),
         "south_africa": NamedList("South Africa",["krugerrand"]),
         "united_states": NamedList("United States", ["cents", "dollar"]),
