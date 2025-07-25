@@ -73,6 +73,18 @@ def setupParser():
         help="Use to disable printing of the melt value of the coins.",
     )
     parser.add_argument(
+        "-n",
+        "--no_coins",
+        action="store_true",
+        help="Disables printing of the actual coin objects. Will only print countries, denominations, and face values.",
+    )
+    parser.add_argument(
+        "-i",
+        "--only_coin_ids",
+        action="store_true",
+        help="Disables printing of actual coin objects, only printing their id's instead",
+    )
+    parser.add_argument(
         "-s",
         "--silver",
         metavar="PRICE",

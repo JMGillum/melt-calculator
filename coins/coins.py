@@ -269,7 +269,7 @@ class Coins:
 
 
     # Creates a tree from any number/combination of key values.
-    def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False):
+    def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False,hide_coins=False, only_coin_ids=False):
         coin_ids = list(set(coin_ids)) # Should remove duplicates, if present
         # Disables these flags if they are both set to true. They are mutually exclusive
         if show_only_owned and show_only_not_owned:
@@ -410,17 +410,28 @@ class Coins:
                     for value in Coins.denominations[denomination]:
                         if value in needed_values:
                             current_coins = []
-                            for coin in Coins.values[value]:
-                                if coin in needed_coins:
-                                    temp = Coins.coins[coin]
-                                    if isinstance(temp, Node):
-                                        current_coins.append(temp)
-                                    else:
-                                        current_coins.append(Node(data=temp))
-                            # Sorts the coins by first year available
-                            current_coins = sorted(
-                                current_coins, key=lambda x: x.data.years[0]
-                            )
+                            if not hide_coins:
+                                for coin in Coins.values[value]:
+                                    if coin in needed_coins:
+                                        temp = Coins.coins[coin]
+                                        if isinstance(temp, Node):
+                                            if only_coin_ids:
+                                                current_coins.append((temp,coin))
+                                            else:
+                                                current_coins.append(temp)
+                                        else:
+                                            if only_coin_ids:
+                                                current_coins.append((Node(data=temp),coin))
+                                            else:
+                                                current_coins.append(Node(data=temp))
+                                # Sorts the coins by first year available
+                                if only_coin_ids:
+                                    current_coins = sorted(current_coins, key = lambda x: x[0].data.years[0])
+                                    current_coins = [x[1] for x in current_coins]
+                                else:
+                                    current_coins = sorted(
+                                        current_coins, key=lambda x: x.data.years[0]
+                                    )
                             if isinstance(Coins.values[value], NamedList):
                                 value = Coins.values[value]
                             # Appends a tuple of the tree and the name to be used for sorting (should be int)
@@ -457,7 +468,7 @@ class Coins:
         return results
 
     def search(
-        country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False
+        country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False, hide_coins=False, only_coin_ids=False
     ):
         found_denominations = list(Coins.denominations.keys())
         if country:
@@ -575,4 +586,4 @@ class Coins:
             for item in results:
                 print(f"  {item}")
 
-        return Coins.buildTree(results, debug, show_only_owned, show_only_not_owned, show_only_bullion, show_only_not_bullion)
+        return Coins.buildTree(results, debug, show_only_owned, show_only_not_owned, show_only_bullion, show_only_not_bullion, hide_coins, only_coin_ids)
