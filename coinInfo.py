@@ -419,13 +419,26 @@ class Coins:
                 face_value=50,
                 denomination="Cents",
             )
-        ),
+        ), 
         "maple_platinum_50_dollar": Node(
             CoinData(
                 nickname="Platinum",
-                years=list(range(1988,2003)) + list(range(2009,current_year+1)),
+                years=list(range(2009,current_year+1)),
                 weight=31.11,
                 fineness=0.9999,
+                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
+                metal=Metals.PLATINUM,
+                country="Canada",
+                face_value=50,
+                denomination="Dollars",
+            )
+        ),
+        "maple_platinum_50_dollar_old": Node(
+            CoinData(
+                nickname="Platinum (old purity)",
+                years=list(range(1988,2003)),
+                weight=31.11,
+                fineness=0.9995,
                 precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
                 metal=Metals.PLATINUM,
                 country="Canada",
@@ -438,7 +451,7 @@ class Coins:
                 nickname="Platinum",
                 years=list(range(1988,2003)),
                 weight=15.555,
-                fineness=0.9999,
+                fineness=0.9995,
                 precious_metal_weight=weights.Weight(0.5, weights.Units.TROY_OUNCES),
                 metal=Metals.PLATINUM,
                 country="Canada",
@@ -451,7 +464,7 @@ class Coins:
                 nickname="Platinum",
                 years=list(range(1988,2003)),
                 weight=7.7775,
-                fineness=0.9999,
+                fineness=0.9995,
                 precious_metal_weight=weights.Weight(0.25, weights.Units.TROY_OUNCES),
                 metal=Metals.PLATINUM,
                 country="Canada",
@@ -464,7 +477,7 @@ class Coins:
                 nickname="Platinum",
                 years=list(range(1988,2003)),
                 weight=3.111,
-                fineness=0.9999,
+                fineness=0.9995,
                 precious_metal_weight=weights.Weight(0.1, weights.Units.TROY_OUNCES),
                 metal=Metals.PLATINUM,
                 country="Canada",
@@ -477,7 +490,7 @@ class Coins:
                 nickname="Platinum",
                 years=list(range(1993,2003)),
                 weight=1.5555,
-                fineness=0.9999,
+                fineness=0.9995,
                 precious_metal_weight=weights.Weight(0.05, weights.Units.TROY_OUNCES),
                 metal=Metals.PLATINUM,
                 country="Canada",
@@ -1256,6 +1269,7 @@ class Coins:
         "canada_dollar_10": ("canada_dollar_10","canada_dollar","canada"),
         "maple_silver_5_dollar": ("maple_1","maple","canada"),
         "maple_gold_50_dollar": ("maple_1","maple","canada"),
+        "maple_platinum_50_dollar_old": ("maple_1","maple","canada"),
         "maple_platinum_50_dollar": ("maple_1","maple","canada"),
         "maple_gold_20_dollar": ("maple_1_2","maple","canada"),
         "maple_platinum_20_dollar": ("maple_1_2","maple","canada"),
@@ -1422,6 +1436,7 @@ class Coins:
 
     # Indicates which coins are made of platinum.
     platinum_coins = [
+        "maple_platinum_50_dollar_old",
         "maple_platinum_50_dollar",
         "maple_platinum_20_dollar",
         "maple_platinum_10_dollar",
@@ -1450,7 +1465,7 @@ class Coins:
         "canada_dollar_5": NamedList("5", ["canada_dollar_5_1"]),
         "canada_dollar_10": NamedList("10", ["canada_dollar_10"]),
         # Canada - Maple
-        "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar","maple_gold_50_dollar","maple_platinum_50_dollar"],"6"),
+        "maple_1": NamedList("1 Oz Maple",["maple_silver_5_dollar","maple_gold_50_dollar","maple_platinum_50_dollar_old","maple_platinum_50_dollar"],"6"),
         "maple_1_2": NamedList("1/2 Oz Maple",["maple_gold_20_dollar","maple_platinum_20_dollar"],"5"),
         "maple_1_4": NamedList("1/4 Oz Maple",["maple_gold_10_dollar","maple_platinum_10_dollar"],"4"),
         "maple_1_10": NamedList("1/10 Oz Maple",["maple_gold_5_dollar","maple_platinum_5_dollar"],"3"),
