@@ -6,7 +6,7 @@ See https://git-scm.com/book/en/v2/Git-Tools-Submodules for information on submo
 * Add more coin data, namely finishing ~~Canada, Germany~~, and Mexico.
 * ~~Adding a config file that can store configurations like the tree's fanciness~~
 * Ensuring coins with fractional face values are supported
-* Support for coins of other precious metals, mainly platinum
+* ~~Support for coins of other precious metals, mainly platinum~~
 * Adding a view mode that prints the keys in Coins.coins (for your personal collection)
 * Dynamic price updating (update price from some api if it is stale)
 * Option to combine multiple searches into a single result tree
@@ -14,3 +14,11 @@ See https://git-scm.com/book/en/v2/Git-Tools-Submodules for information on submo
 * ~~Ability to print a report of personal collection with extra summary statistics such as +/- of melt value~~
 * Update country names to include more forms
 * Handle plurals of denominations better
+
+Done:
+* Show only coins in or out of personal collection
+* Collection report
+* Support for platinum and palladium
+* Reworked bullion and how it is presented
+* Completed Canadian and German standard Issue
+* Completed Canadian and British bullion
