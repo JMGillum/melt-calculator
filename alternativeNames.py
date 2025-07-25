@@ -1,14 +1,13 @@
 """
    Author: Josh Gillum              .
-   Date: 18 July 2025              ":"         __ __
+   Date: 24 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-    The CountryName class stores a proper/primary name of a country 
-    (technically doesn't have to be), as well as any associated alternative 
-    names. An example would be:
+    The AlternativeNames class stores a proper/primary name for any object, 
+    as well as any associated alternative names. An example would be:
         Proper name: United States of America
         Alternative names:  United States,
                             US,
@@ -16,13 +15,13 @@
                             etc.
 
     The class features a lookup, which checks if the provided text is one of 
-    the country's names, and provides the proper name if it is. This is useful
-    for checking input, and then printing out the proper name.
+    the object's associated names, and provides the proper name if it is. 
+    This is useful for checking input, and then printing out the proper name.
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
 
-class CountryName:
+class AlternativeNames:
     """Class for representing a country along with its alternative names."""
 
     def __init__(self, name: str, other_names: str | list[str] | None = None):
@@ -33,7 +32,7 @@ class CountryName:
         self.other_names = other_names
 
     def lookup(self, text: str, case_sensitive=False):
-        """Determines if the provided string is one of the country's associated names. Returns the country's official/primary name if it is. Returns None if it isn't"""
+        """Determines if the provided string is one of the associated names. Returns the official/primary name if it is. Returns None if it isn't"""
         if case_sensitive:
             if text == self.name:
                 return self.name
