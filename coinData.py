@@ -19,6 +19,7 @@ from datetime import datetime
 import metals
 
 import config
+from colors import printColored
 class PurchaseStats():
     def __init__(self,total=0.0,count=0,delta=0.0):
         self.total = total
@@ -75,7 +76,7 @@ class Purchase:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
                     string += f" ({config.currency_symbol}{self.price * self.quantity})"
-        return string
+        return printColored(string,config.purchase_color)
 
 
 class CoinData:

@@ -45,7 +45,13 @@ currency_symbol = "$"
 current_year = 2025 # Current year
 minimum_year = 1800 # Earliest number that will be considered a year and not a face value
 
+bullion_hint = " (Bullion)"
+
 show_color = True
-country_color = "b"
-denomination_color = "p"
-value_color = "y"
+country_color = "blue"
+denomination_color = "purple"
+bullion_color = "magenta"
+value_color = "yellow"
+gain_color = "green"
+loss_color = "red"
+purchase_color = "teal"

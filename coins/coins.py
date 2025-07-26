@@ -104,7 +104,7 @@ from config import currency_symbol,current_year
 import config
 from search import validCountry
 import weights
-from general_functions import printColored
+from colors import printColored
 from alternativeNames import AlternativeNames
 
 from coins.namedList import NamedList
@@ -203,8 +203,8 @@ class Coins:
             average = round(total/count,2)
             gain_loss = round(total_value-total,2)
             average_gain_loss = round(value-average,2)
-            gain_loss_string = printColored(f"+{currency_symbol}{gain_loss:.2f}","g") if gain_loss > 0 else printColored(f"(-{currency_symbol}{-gain_loss:.2f})","r")
-            average_gain_loss_string = printColored(f"+{currency_symbol}{average_gain_loss:.2f}","g") if average_gain_loss > 0 else printColored(f"(-{currency_symbol}{-average_gain_loss:.2f})","r")
+            gain_loss_string = printColored(f"+{currency_symbol}{gain_loss:.2f}",config.gain_color) if gain_loss > 0 else printColored(f"(-{currency_symbol}{-gain_loss:.2f})",config.loss_color)
+            average_gain_loss_string = printColored(f"+{currency_symbol}{average_gain_loss:.2f}",config.gain_color) if average_gain_loss > 0 else printColored(f"(-{currency_symbol}{-average_gain_loss:.2f})",config.loss_color)
             return_string = ""
             return_string += f"Sum: {currency_symbol}{total:.2f} ~ Avg: {currency_symbol}{average:.2f}"
             return_string += f" ~ Value: {currency_symbol}{total_value:.2f}  ({currency_symbol}{value:.2f} * {count})"
@@ -448,9 +448,14 @@ class Coins:
                     # Appends denomination tree
                     if isinstance(Coins.denominations[denomination], NamedList):
                         denomination = Coins.denominations[denomination]
+                    color = config.denomination_color
+                    hint = ""
+                    if isinstance(denomination,TaggedList) and Tags.BULLION in denomination.tags:
+                        color = config.bullion_color
+                        hint = config.bullion_hint
                     current_denominations.append(
                         Tree(
-                            name=printColored(str(denomination),config.denomination_color),
+                            name=printColored(str(denomination)+hint,color),
                             nodes=current_values,
                         )
                     )

@@ -54,6 +54,8 @@ from config import current_year
 import weights
 from coins.namedList import NamedList
 from alternativeNames import AlternativeNames as AN
+from coins.taggedList import TaggedList
+from coins.tags import Tags
 
 coins = {
     # United States
@@ -421,7 +423,7 @@ denominations = {
     # United States
     "cents": NamedList(AN("Cent","Cents"), ["dime", "quarter", "half"]),
     "dollar": NamedList(AN("Dollar","Dollars"), ["dollar"]),
-    "american_bullion": NamedList(AN("Bullion","Eagles"),["american_bullion_fractional_1_10","american_bullion_fractional_1_4","american_bullion_fractional_1_2","american_bullion_1"]),
+    "american_bullion": TaggedList(AN("Bullion","Eagles"),["american_bullion_fractional_1_10","american_bullion_fractional_1_4","american_bullion_fractional_1_2","american_bullion_1"],tags=Tags.BULLION),
 }
 
 # Used to build the tree from just a coin object
