@@ -119,6 +119,7 @@ import coins.mexico as mexico
 import coins.russia as russia
 import coins.serbia as serbia
 import coins.south_africa as south_africa
+import coins.suriname as suriname
 import coins.switzerland as switzerland
 import coins.united_states as united_states
 
@@ -126,7 +127,7 @@ import coins.united_states as united_states
 
 
 class Coins:
-    countries_list = [canada,france,germany,great_britain,italy,mexico,russia,serbia,south_africa,switzerland,united_states]
+    countries_list = [canada,france,germany,great_britain,italy,mexico,russia,serbia,south_africa,suriname,switzerland,united_states]
 
     # Updated in Coins.linkPurchases() to include keys to coins that have purchases or don't
     owned = set()
@@ -159,6 +160,7 @@ class Coins:
         "mexico": NamedList("Mexico", ["mexico_real","mexico_escudo","mexico_centavo","mexico_peso"]),
         "russia": NamedList("Russia",["russia_kopek","russia_ruble"]),
         "serbia": NamedList("Serbia",["serbia_para","serbia_dinar"]),
+        "suriname": NamedList("Suriname",["suriname_gulden"]),
         "south_africa": NamedList("South Africa",["krugerrand"]),
         "switzerland": NamedList("Switzerland",["swiss_franc"]),
         "united_states": NamedList("United States", ["cents", "dollar","american_bullion"]),

@@ -36,13 +36,14 @@ def countryNames():
     russia = AlternativeNames("Russia",["Russian"])
     serbia = AlternativeNames("Serbia",["Serbian"])
     south_africa = AlternativeNames("South Africa",["South African","Africa","African","S Africa","S. Africa","S African", "S. African"])
+    suriname = AlternativeNames("Suriname",["Dutch Guiana","Guiana"])
     switzerland = AlternativeNames("Switzerland",["Swiss","Helvetia","Helvetica"])
     united_states = AlternativeNames(
             "United States",
         ["US", "USA", "United States of America", "America", "American"],
     )
 
-    return [france, mexico, united_states, germany, italy, canada, great_britain, serbia, south_africa, switzerland,russia]
+    return [france, mexico, united_states, germany, italy, canada, great_britain, serbia, south_africa, suriname, switzerland,russia]
 
 
 def validCountry(name, countries=None):

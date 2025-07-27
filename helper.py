@@ -35,6 +35,7 @@ import coins.mexico as mexico
 import coins.russia as russia
 import coins.serbia as serbia
 import coins.south_africa as south_africa
+import coins.suriname as suriname
 import coins.switzerland as switzerland
 import coins.united_states as united_states
 
@@ -110,5 +111,5 @@ def print_metals(country):
 
 
 if __name__ == "__main__":
-    print_reverse_build(serbia,"serbia")
-    print_metals(serbia)
+    print_reverse_build(suriname,"suriname")
+    print_metals(suriname)
