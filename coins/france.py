@@ -52,7 +52,7 @@ coins = {
     # France
     "centimes_20": Node(
         data=CoinData(
-            years=list(range(1848, 1921)),
+            years=list(range(1849, 1852))+list(range(1853,1864))+[1867,1868,1869,1878,1889],
             weight=1,
             fineness=0.9,
             metal=Metals.SILVER,
@@ -63,7 +63,7 @@ coins = {
     ),
     "centimes_50_1": Node(
         data=CoinData(
-            years=list(range(1848, 1867)),
+            years=list(range(1849, 1867)),
             weight=2.5,
             fineness=0.9,
             metal=Metals.SILVER,
@@ -74,7 +74,7 @@ coins = {
     ),
     "centimes_50_2": Node(
         data=CoinData(
-            years=list(range(1866, 1921)),
+            years=[x for x in list(range(1866, 1921)) if x not in [1870,1896]],
             weight=2.5,
             fineness=0.835,
             metal=Metals.SILVER,
@@ -85,7 +85,7 @@ coins = {
     ),
     "franc_1_1": Node(
         CoinData(
-            years=list(range(1848, 1867)),
+            years=list(range(1849, 1865))+[1866],
             weight=5,
             fineness=0.9,
             metal=Metals.SILVER,
@@ -96,7 +96,7 @@ coins = {
     ),
     "franc_1_2": Node(
         CoinData(
-            years=list(range(1866, 1921)),
+            years=list(range(1866, 1896))+list(range(1898,1921)),
             weight=5,
             fineness=0.835,
             metal=Metals.SILVER,
@@ -107,7 +107,7 @@ coins = {
     ),
     "franc_2": Node(
         CoinData(
-            years=list(range(1848, 1921)),
+            years=[x for x in list(range(1849, 1921)) if x not in (list(range(1860,1866))+[1852,1896,1897])],
             weight=10,
             fineness=0.9,
             metal=Metals.SILVER,
@@ -118,7 +118,7 @@ coins = {
     ),
     "franc_5_1": Node(
         CoinData(
-            years=list(range(1848, 1921)),
+            years=[x for x in list(range(1848, 1879)) if x not in [1853,1860]],
             weight=25,
             fineness=0.9,
             metal=Metals.SILVER,
@@ -140,7 +140,7 @@ coins = {
     ),
     "franc_5_3": Node(
         CoinData(
-            years=list(range(1848, 1915)),
+            years=[x for x in list(range(1854, 1870)) if x not in [1861]],
             weight=1.6129,
             fineness=0.9,
             metal=Metals.GOLD,
@@ -162,7 +162,7 @@ coins = {
     ),
     "franc_10_2": Node(
         CoinData(
-            years=list(range(1848, 1915)),
+            years=[1850,1851] + list(range(1854, 1870)) + list(range(1895,1915)),
             weight=3.2258,
             fineness=0.90,
             metal=Metals.GOLD,
@@ -173,7 +173,7 @@ coins = {
     ),
     "franc_20_1": Node(
         data=CoinData(
-            years=[x for x in range(1906, 1915)],
+            years=[x for x in range(1848, 1915)],
             weight=6.4516,
             fineness=0.9,
             metal=Metals.GOLD,
@@ -196,7 +196,7 @@ coins = {
     ),
     "franc_50": Node(
         CoinData(
-            years=list(range(1848, 1915)),
+            years=[x for x in list(range(1855, 1870)) if x not in [1861]] + list(range(1878,1905)),
             weight=16.129,
             fineness=0.9,
             metal=Metals.GOLD,
@@ -219,7 +219,7 @@ coins = {
     ),
     "franc_100_2": Node(
         CoinData(
-            years=list(range(1848, 1915)),
+            years=list(range(1855, 1861)) + list(range(1878,1907)),
             weight=32.2581,
             fineness=0.9,
             metal=Metals.GOLD,
