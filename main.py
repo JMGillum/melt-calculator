@@ -83,13 +83,31 @@ def price(silver_price=None, gold_price=None, platinum_price=None, palladium_pri
     Coins.price(silver, gold, platinum,palladium)
 
 
+def connect_to_mariadb(db_config):
+    try:
+        password = db_config["password"]
+    except KeyError:
+        password = db_config["password"] = None
+    if password is None:
+        if not sys.stdin.isatty():
+            print("The program must be run from a terminal or password must be supplied in db_config")
+            sys.exit(1)
+        else:
+            db_config["password"] = getpass.getpass("Password for mariadb: ")
 
-if config.db_config["password"] is None:
-    if not sys.stdin.isatty():
-        print("The program must be run from a terminal or password must be supplied in db_config")
+    try: 
+        print("Connecting to MariaDB...")
+        conn = mariadb.connect(**db_config)
+        print("Connection successful!")
+
+        # 3. Create a Cursor Object
+        cursor = conn.cursor()
+    except mariadb.Error as e:
+        print(f"An error occurred: {e}")
         sys.exit(1)
-    else:
-        config.db_config["password"] = getpass.getpass("Password for mariadb: ")
+    return cursor
+
+connect_to_mariadb(config.db_config)
 
 
 parser = setupParser()
