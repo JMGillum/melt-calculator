@@ -55,3 +55,12 @@ value_color = "yellow"
 gain_color = "green"
 loss_color = "red"
 purchase_color = "teal"
+
+# 1. Database Connection Parameters
+db_config = {
+    'host': 'localhost',
+    'port': 3306,
+    'user': 'root',
+    'password': None,
+    'database': 'coin_data'
+}

@@ -47,6 +47,10 @@ import config
 
 import sys # Used to check if stdin is not from a terminal (piping input)
 from setup import setupParser
+import mariadb
+import sys
+import getpass
+
 
 # Enumeration used for argument tuples for searches
 COUNTRY = 0
@@ -77,6 +81,15 @@ def price(silver_price=None, gold_price=None, platinum_price=None, palladium_pri
     if palladium_price is not None and (isinstance(palladium_price,int) or isinstance(palladium_price,float)):
         palladium = palladium_price
     Coins.price(silver, gold, platinum,palladium)
+
+
+
+if config.db_config["password"] is None:
+    if not sys.stdin.isatty():
+        print("The program must be run from a terminal or password must be supplied in db_config")
+        sys.exit(1)
+    else:
+        config.db_config["password"] = getpass.getpass("Password for mariadb: ")
 
 
 parser = setupParser()
