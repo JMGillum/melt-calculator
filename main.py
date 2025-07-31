@@ -107,55 +107,6 @@ def connect_to_mariadb(db_config):
     return conn
 
 
-def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None):
-    base_query = """
-    select coins.coin_id,face_values.value_id,face_values.value,face_values.name,denominations.denomination_id,denominations.name,countries.country_id,countries.name from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id
-    """
-    found_first_specifier = False
-    country_query = ""
-    denomination_query = ""
-    value_name_query = ""
-    value_query = ""
-    queries = [(country_query,country,"countries"),(denomination_query,denomination,"denominations"),(value_name_query,face_value_name,"face_values")]
-    for i in range(len(queries)):
-        item = queries[i]
-        print(item[1])
-        if item[1] is not None:
-            queries[i] = (f"""
-            (
-                {item[2]}.name like ? or
-                {item[2]}.alternative_name_1 like ? or
-                {item[2]}.alternative_name_2 like ? or
-                {item[2]}.alternative_name_3 like ? or
-                {item[2]}.alternative_name_4 like ? or
-                {item[2]}.alternative_name_5 like ?
-            )
-            """,item[1])
-            if found_first_specifier:
-                queries[i]=(f"AND {queries[i][0]}",item[1])
-            found_first_specifier = True
-
-    # Adds specifier for actual value
-    queries.append((value_query,face_value,1))
-    queries[-1] = ("    face_values.value=?",queries[-1][1],queries[-1][2])
-    if found_first_specifier:
-        queries[-1] = (f"AND\n  {queries[-1][0].strip()}",queries[-1][1],queries[-1][2])
-    found_first_specifier = True
-
-    return_query = base_query
-    variables = []
-    if country is not None or denomination is not None or face_value is not None or year is not None:
-        return_query += " where "
-        for item in queries:
-            if item[0]:
-                return_query += item[0]
-                repetitions = 6
-                if len(item) == 3:
-                    repetitions = item[2]
-                for _ in range(repetitions):
-                    variables.append(item[1])
-
-    return (f"{return_query};",tuple(variables))
 
 
 
@@ -182,13 +133,19 @@ try: # Connects to database
     desired_country = "germany"
     find_country_id(cursor,f"{desired_country}")
 
-    query = search(country="canada",denomination="maple",face_value=20)
+    query = Coins.search(country="canada",denomination="maple",year="%2003%")
     print(query[0])
     cursor.execute(query[0],query[1])
 
+    """
     print("Fetched data:")
     for row in cursor:
-        print(f"ID: {row[0]}")
+        for column in row:
+            print(f"{column},",end="")
+        print()
+    """
+
+    print(Coins.buildCoins(list(cursor)))
 
     sys.exit(0)
 
