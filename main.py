@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 24 July 2025              ":"         __ __
+   Date: 31 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -128,24 +128,16 @@ try: # Connects to database
     conn = connect_to_mariadb(config.db_config)
     cursor = conn.cursor()
     
-    query_select_by_year = "SELECT * FROM coins WHERE years like ?"
-    cursor.execute(query_select_by_year,("%1906%",))
-    desired_country = "germany"
-    find_country_id(cursor,f"{desired_country}")
 
-    query = Coins.search(country="canada",denomination="maple",year="%2003%")
-    print(query[0])
+    query = Coins.search()
     cursor.execute(query[0],query[1])
 
-    """
-    print("Fetched data:")
-    for row in cursor:
-        for column in row:
-            print(f"{column},",end="")
-        print()
-    """
 
-    print(Coins.buildCoins(list(cursor)))
+    results = Coins.buildCoins(list(cursor))
+    results.cascading_set_fancy(config.tree_fancy_characters)
+
+    for line in results.print():
+        print(line)
 
     sys.exit(0)
 
