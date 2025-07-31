@@ -28,7 +28,7 @@ CREATE TABLE face_values (
   denomination_id varchar(255) NOT NULL,
   FOREIGN KEY (denomination_id) REFERENCES denominations(denomination_id) ON UPDATE CASCADE,
   value decimal(20,10) NOT NULL,
-  nickname varchar(255),
+  name varchar(255),
   alternative_name_1 varchar(255),
   alternative_name_2 varchar(255),
   alternative_name_3 varchar(255),
@@ -58,7 +58,7 @@ CREATE TABLE coins (
   FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   metal varchar(5) NOT NULL,
   FOREIGN KEY (metal) REFERENCES metals(metal_id) ON UPDATE CASCADE,
-  nickname varchar(255)
+  name varchar(255)
 );
 
 CREATE TABLE specific_coins (
@@ -129,21 +129,21 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) va
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("usa_bullion","usa","bullion","bullions");
 
 -- Values
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_cent_5","can_cent",5,"nickel","nickels");
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_cent_10","can_cent",10,"dime","dimes");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_cent_5","can_cent",5,"nickel","nickels");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_cent_10","can_cent",10,"dime","dimes");
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("can_cent_20","can_cent",20);
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_cent_25","can_cent",25,"quarter","quarters");
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_cent_50","can_cent",50,"half","halves");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_cent_25","can_cent",25,"quarter","quarters");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_cent_50","can_cent",50,"half","halves");
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("can_sovereign_1","can_sovereign",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("can_dollar_1","can_dollar",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("can_dollar_5","can_dollar",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("can_dollar_10","can_dollar",10);
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_maple_1_oz","can_maple",50,"1 oz maple","1");
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_maple_fractional_1_2_oz","can_maple",20,"1/2 oz maple","1/2");
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_maple_fractional_1_4_oz","can_maple",10,"1/4 oz maple","1/4");
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_maple_fractional_1_10_oz","can_maple",5,"1/10 oz maple","1/10");
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_maple_fractional_1_20_oz","can_maple",1,"1/20 oz maple","1/20");
-INSERT INTO face_values(value_id,denomination_id,value,nickname,alternative_name_1) VALUES("can_maple_1_gram","can_maple",0.5,"1 gram maple","1");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_maple_1_oz","can_maple",50,"1 oz maple","1");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_maple_fractional_1_2_oz","can_maple",20,"1/2 oz maple","1/2");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_maple_fractional_1_4_oz","can_maple",10,"1/4 oz maple","1/4");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_maple_fractional_1_10_oz","can_maple",5,"1/10 oz maple","1/10");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_maple_fractional_1_20_oz","can_maple",1,"1/20 oz maple","1/20");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_maple_1_gram","can_maple",0.5,"1 gram maple","1");
 
 -- Coins
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES('can_cent_5_1','can_cent_5',1.162,0.925,0.0346,'1858, 1859, 1860, 1861, 1862, 1863, 1864, 1865, 1866, 1867, 1868, 1869, 1870, 1871, 1872, 1873, 1874, 1875, 1876, 1877, 1878, 1879, 1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910','ag');
@@ -163,17 +163,17 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("can_dollar_5_1","can_dollar_5",8.3591,0.9,0.2419,"1912, 1913, 1914","au");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("can_dollar_10_1","can_dollar_10",16.7181,0.9,0.4837,"1912, 1913, 1914","au");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("can_sovereign_1_1","can_sovereign_1",7.9881,0.917,0.2354,"1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919","au");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_1_oz_1","can_maple_1_oz",31.11,0.9999,1.0,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","ag","silver");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_1_oz_2","can_maple_1_oz",31.11,0.9999,1.0,"1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_2_oz_1","can_maple_fractional_1_2_oz",15.555,0.9999,0.5,"1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_4_oz_1","can_maple_fractional_1_4_oz",7.7775,0.9999,0.25,"1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_10_oz_1","can_maple_fractional_1_10_oz",3.111,0.9999,0.1,"1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_20_oz_1","can_maple_fractional_1_20_oz",1.5555,0.9999,0.05,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_1_gram_1","can_maple_1_gram",1.0,0.9999,0.03215075,"2024, 2025","au","gold");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_1_oz_3","can_maple_1_oz",31.11,0.9999,1.0,"2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","pt","platinum");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_1_oz_4","can_maple_1_oz",31.11,0.9995,1.0,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_2_oz_2","can_maple_fractional_1_2_oz",15.555,0.9995,0.5,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_4_oz_2","can_maple_fractional_1_4_oz",7.7775,0.9995,0.25,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_10_oz_2","can_maple_fractional_1_10_oz",3.111,0.9995,0.1,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_fractional_1_20_oz_2","can_maple_fractional_1_20_oz",1.5555,0.9995,0.05,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
-INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("can_maple_1_oz_5","can_maple_1_oz",31.11,0.9995,1.0,"2005, 2006, 2009, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","pd","palladium");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_1_oz_1","can_maple_1_oz",31.11,0.9999,1.0,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","ag","silver");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_1_oz_2","can_maple_1_oz",31.11,0.9999,1.0,"1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_2_oz_1","can_maple_fractional_1_2_oz",15.555,0.9999,0.5,"1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_4_oz_1","can_maple_fractional_1_4_oz",7.7775,0.9999,0.25,"1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_10_oz_1","can_maple_fractional_1_10_oz",3.111,0.9999,0.1,"1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_20_oz_1","can_maple_fractional_1_20_oz",1.5555,0.9999,0.05,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_1_gram_1","can_maple_1_gram",1.0,0.9999,0.03215075,"2024, 2025","au","gold");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_1_oz_3","can_maple_1_oz",31.11,0.9999,1.0,"2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","pt","platinum");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_1_oz_4","can_maple_1_oz",31.11,0.9995,1.0,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_2_oz_2","can_maple_fractional_1_2_oz",15.555,0.9995,0.5,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_4_oz_2","can_maple_fractional_1_4_oz",7.7775,0.9995,0.25,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_10_oz_2","can_maple_fractional_1_10_oz",3.111,0.9995,0.1,"1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_fractional_1_20_oz_2","can_maple_fractional_1_20_oz",1.5555,0.9995,0.05,"1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002","pt","platinum (old purity)");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("can_maple_1_oz_5","can_maple_1_oz",31.11,0.9995,1.0,"2005, 2006, 2009, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","pd","palladium");
