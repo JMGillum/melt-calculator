@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 25 July 2025              ":"         __ __
+   Date: 31 July 2025              ":"         __ __
    Code Start: Line 98            __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -271,6 +271,7 @@ class Coins:
         Coins.__summarizePurchases()
 
 
+    """
     # Creates a tree from any number/combination of key values.
     def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False,hide_coins=False, only_coin_ids=False):
         coin_ids = list(set(coin_ids)) # Should remove duplicates, if present
@@ -474,7 +475,180 @@ class Coins:
         current_countries = sorted(current_countries, key=lambda x: str(x))
         results = Tree(name="Results", nodes=current_countries)
         return results
+    """
 
+
+    def buildTree(countries,denominations,values,coins,debug=False,hide_coins=False,only_coin_ids=False):
+        if debug:
+            for item in [(countries,"Countries"),(denominations,"Denominations"),(values,"Values"),(coins,"Coins")]:
+                print(item[1])
+                for key in item[0]:
+                    print(f"  {key}:{item[0][key]}")
+        # Actually builds tree with given information
+        current_countries = []
+        for country in countries:
+            country = countries[country]
+            current_denominations = []
+            for denomination in country[1]:
+                denomination = denominations[denomination]
+                current_values = []
+                for value in denomination[1]:
+                    value = values[value]
+                    current_coins = []
+                    if not hide_coins:
+                        for coin in value[1]:
+                            try:
+                                coin = coins[coin]
+                            except KeyError:
+                                continue
+                            if not coin:
+                                continue
+                            if only_coin_ids:
+                                current_coins.append((Node(data=coin[1]),coin[0]))
+                            else:
+                                current_coins.append(Node(data=coin[1]))
+                            # Sorts the coins by first year available
+                            if only_coin_ids:
+                                current_coins = sorted(current_coins, key = lambda x: x[0].data.years[0])
+                                current_coins = [x[1] for x in current_coins]
+                            else:
+                                current_coins = sorted(
+                                    current_coins, key=lambda x: x.data.years[0]
+                                )
+                    try: # converts name from decimal to integer if possible
+                        value = (int(value[0]),value[1],value[2])
+                    except ValueError:
+                        pass
+                    current_values.append((
+                        Tree(name=printColored(str(value[0]).title(),config.value_color), nodes=current_coins),value[2]))
+                    # Sorts the list of trees by sorting names
+                    current_values = sorted(current_values,key = lambda x: x[1])
+                # Then converts the list back to a list of trees
+                current_values = [x[0] for x in current_values]
+                # Appends denomination tree
+                current_denominations.append(
+                    Tree(
+                        name=printColored(str(denomination[0]).title(),config.denomination_color),
+                        nodes=current_values,
+                    )
+                )
+
+            # Sorts the denominations by name
+            current_denominations = sorted(current_denominations, key = lambda x: str(x))
+            # Appends country tree
+            current_countries.append(
+                Tree(
+                    name=printColored(str(country[0]).title(),config.country_color), nodes=current_denominations
+                )
+            )
+        # Sorts the countries by name
+        current_countries = sorted(current_countries, key=lambda x: str(x))
+        results = Tree(name="Results", nodes=current_countries)
+        return results
+
+
+    def buildCoins(entries,debug=False):
+        if not isinstance(entries,list):
+            entries = [entries]
+        coins = {}
+        values = {}
+        denominations = {}
+        countries = {}
+        for entry in entries:
+            coins[entry[0]]=(entry[0],CoinData(
+                    weight=entry[1],
+                    fineness=entry[2],
+                    precious_metal_weight=entry[3],
+                    years=entry[4],
+                    metal = entry[5],
+                    nickname = entry[6]
+                ))
+            try:
+                values[entry[7]]
+            except KeyError:
+                # Display name, child coins, sorting number
+                values[entry[7]] = (entry[9] if entry[9] else entry[8],[],entry[8])
+            if entry[0] not in values[entry[7]][1]:
+                values[entry[7]][1].append(entry[0])
+            try:
+                denominations[entry[10]]
+            except KeyError:
+                denominations[entry[10]] = (entry[11],[])
+            if entry[7] not in denominations[entry[10]][1]:
+                denominations[entry[10]][1].append(entry[7])
+            try:
+                countries[entry[12]]
+            except KeyError:
+                countries[entry[12]] = (entry[13],[])
+            if entry[10] not in countries[entry[12]][1]:
+                countries[entry[12]][1].append(entry[10])
+            
+
+        return Coins.buildTree(countries,denominations,values,coins,debug=debug)
+
+
+
+
+
+    def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None):
+        base_query = """
+        select coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name,denominations.denomination_id,denominations.name,countries.country_id,countries.name from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id
+        """
+        found_first_specifier = False
+        country_query = ""
+        denomination_query = ""
+        value_name_query = ""
+        value_query = ""
+        year_query = ""
+        queries = [(country_query,country,"countries"),(denomination_query,denomination,"denominations"),(value_name_query,face_value_name,"face_values")]
+        for i in range(len(queries)):
+            item = queries[i]
+            if item[1] is not None:
+                queries[i] = (f"""
+                (
+                    {item[2]}.name like ? or
+                    {item[2]}.alternative_name_1 like ? or
+                    {item[2]}.alternative_name_2 like ? or
+                    {item[2]}.alternative_name_3 like ? or
+                    {item[2]}.alternative_name_4 like ? or
+                    {item[2]}.alternative_name_5 like ?
+                )
+                """,item[1])
+                if found_first_specifier:
+                    queries[i]=(f"AND {queries[i][0]}",item[1])
+                found_first_specifier = True
+
+        # Adds specifier for actual value
+        if face_value:
+            queries.append((value_query,face_value,1))
+            queries[-1] = ("    face_values.value=?",queries[-1][1],queries[-1][2])
+            if found_first_specifier:
+                queries[-1] = (f"\nAND\n  {queries[-1][0].strip()}",queries[-1][1],queries[-1][2])
+            found_first_specifier = True
+
+        # Adds specifier for actual value
+        if year:
+            queries.append((year_query,year,1))
+            queries[-1] = ("    coins.years like ?",queries[-1][1],queries[-1][2])
+            if found_first_specifier:
+                queries[-1] = (f"\nAND\n  {queries[-1][0].strip()}",queries[-1][1],queries[-1][2])
+            found_first_specifier = True
+
+        return_query = base_query
+        variables = []
+        if country is not None or denomination is not None or face_value is not None or year is not None:
+            return_query += " where "
+            for item in queries:
+                if item[0]:
+                    return_query += item[0]
+                    repetitions = 6
+                    if len(item) == 3:
+                        repetitions = item[2]
+                    for _ in range(repetitions):
+                        variables.append(item[1])
+
+        return (f"{return_query};",tuple(variables))
+    """
     def search(
         country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False, hide_coins=False, only_coin_ids=False
     ):
@@ -535,16 +709,6 @@ class Coins:
                 else:
                     if str(test).lower() == str(face_value).lower():
                         matches.append(x)
-            """
-            matches = [
-                x
-                for x in found_values
-                if (
-                    Coins.values[x].name == face_value
-                    or str(Coins.values[x].name).lower() == str(face_value).lower()
-                )
-            ]
-            """
             if debug:
                 print("Pruned values found:")
                 for item in matches:
@@ -595,3 +759,4 @@ class Coins:
                 print(f"  {item}")
 
         return Coins.buildTree(results, debug, show_only_owned, show_only_not_owned, show_only_bullion, show_only_not_bullion, hide_coins, only_coin_ids)
+    """
