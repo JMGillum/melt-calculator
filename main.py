@@ -107,89 +107,64 @@ def connect_to_mariadb(db_config):
     return conn
 
 
+    
 
 
 
-def find_country_id(cursor,country_name):
-    query_find_country_id = """
-        select country_id from countries where 
-            name like ? or
-            alternative_name_1 like ? or
-            alternative_name_2 like ? or
-            alternative_name_3 like ? or
-            alternative_name_4 like ? or
-            alternative_name_5 like ?;
-    """
-    cursor.execute(query_find_country_id,(country_name,country_name,country_name,country_name,country_name,country_name))
+
+parser = setupParser()
+args = vars(parser.parse_args())
+if args["verbose"]:
+    print(f"arguments: {args}")
+
+
+
+# Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
+try:
+    if args["silver"] is not None:
+        d.silver_spot_price = round(float(args["silver"]), 2)
+except ValueError:
+    print(
+        f"Silver price provided is invalid type. Using value ({config.currency_symbol}{d.silver_spot_price:.2f}) defined in data.py instead."
+    )
+try:
+    if args["gold"] is not None:
+        d.gold_spot_price = round(float(args["gold"]), 2)
+except ValueError:
+    print(
+        f"Gold price provided is invalid type. Using value ({config.currency_symbol}{d.gold_spot_price:.2f}) defined in data.py instead."
+    )
+try:
+    if args["platinum"] is not None:
+        d.platinum_spot_price = round(float(args["platinum"]), 2)
+except ValueError:
+    print(
+        f"Platinum price provided is invalid type. Using value ({config.currency_symbol}{d.platinum_spot_price:.2f}) defined in data.py instead."
+    )
+try:
+    if args["palladium"] is not None:
+        d.palladium_spot_price = round(float(args["palladium"]), 2)
+except ValueError:
+    print(
+        f"Palladium price provided is invalid type. Using value ({config.currency_symbol}{d.palladium_spot_price:.2f}) defined in data.py instead."
+    )
+
+
+# Prints out the precious metal prices and calculates the coins' worth
+if not args["hide_price"]:
+    price()
+    print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
+    print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
+    print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
+    print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
+else:
+    Coins.togglePrice(False) # Disables printing of the value of coins
 
 conn = None
 cursor = None
 try: # Connects to database
     conn = connect_to_mariadb(config.db_config)
     cursor = conn.cursor()
-    
-
-    query = Coins.search()
-    cursor.execute(query[0],query[1])
-
-
-    results = Coins.buildCoins(list(cursor))
-    results.cascading_set_fancy(config.tree_fancy_characters)
-
-    for line in results.print():
-        print(line)
-
-    sys.exit(0)
-
-
-    parser = setupParser()
-    args = vars(parser.parse_args())
-    if args["verbose"]:
-        print(f"arguments: {args}")
-
-
-
-    # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
-    try:
-        if args["silver"] is not None:
-            d.silver_spot_price = round(float(args["silver"]), 2)
-    except ValueError:
-        print(
-            f"Silver price provided is invalid type. Using value ({config.currency_symbol}{d.silver_spot_price:.2f}) defined in data.py instead."
-        )
-    try:
-        if args["gold"] is not None:
-            d.gold_spot_price = round(float(args["gold"]), 2)
-    except ValueError:
-        print(
-            f"Gold price provided is invalid type. Using value ({config.currency_symbol}{d.gold_spot_price:.2f}) defined in data.py instead."
-        )
-    try:
-        if args["platinum"] is not None:
-            d.platinum_spot_price = round(float(args["platinum"]), 2)
-    except ValueError:
-        print(
-            f"Platinum price provided is invalid type. Using value ({config.currency_symbol}{d.platinum_spot_price:.2f}) defined in data.py instead."
-        )
-    try:
-        if args["palladium"] is not None:
-            d.palladium_spot_price = round(float(args["palladium"]), 2)
-    except ValueError:
-        print(
-            f"Palladium price provided is invalid type. Using value ({config.currency_symbol}{d.palladium_spot_price:.2f}) defined in data.py instead."
-        )
-
-
-    # Prints out the precious metal prices and calculates the coins' worth
-    if not args["hide_price"]:
-        price()
-        print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
-        print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
-        print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
-        print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
-    else:
-        Coins.togglePrice(False) # Disables printing of the value of coins
-
 
     # Links all the defined purchases to their respective coins
     if not args["hide_collection"]:
@@ -300,14 +275,18 @@ try: # Connects to database
                         denomination=arguments[DENOMINATION],
                         year=arguments[YEAR],
                         face_value=arguments[FACE_VALUE],
-                        debug=args["verbose"],
+                        )
+                    """
                         show_only_owned = args["owned"], 
                         show_only_not_owned = args["not_owned"],
                         show_only_bullion = args["only_bullion"],
                         show_only_not_bullion = args["hide_bullion"],
                         hide_coins=args["no_coins"],
                         only_coin_ids=args["only_coin_ids"],
-                    )
+                        )
+                        """
+                    cursor.execute(results[0],results[1])
+                    results = Coins.build(list(cursor),debug=args["verbose"])
                     if results is None:
                         print(
                             f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
@@ -333,6 +312,14 @@ try: # Connects to database
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
+        query = Coins.search()
+        cursor.execute(query[0],query[1])
+        results = Coins.build(list(cursor))
+        results.cascading_set_fancy(config.tree_fancy_characters)
+
+        for line in results.print():
+            print(line)
+        """
         # Builds Country objects for each country defined in data.countries
         countries = list(Coins.countries.keys())
         data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"], show_only_bullion=args["only_bullion"], show_only_not_bullion=args["hide_bullion"], hide_coins=args["no_coins"],only_coin_ids=args["only_coin_ids"])
@@ -341,7 +328,7 @@ try: # Connects to database
         data.cascading_set_fancy(config.tree_fancy_characters)
         for line in data.print():
             print(line)
-
+        """
 
 finally:
     # 4. Close Cursor and Connection
