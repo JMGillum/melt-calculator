@@ -517,8 +517,11 @@ class Coins:
                                 )
                     try: # converts name from decimal to integer if possible
                         value = (int(value[0]),value[1],value[2])
-                    except ValueError:
-                        pass
+                    except ValueError: # If name is string, append sorting number to end.
+                        try:
+                            value = (f"{value[0]} ({round(float(value[2]),2):.2f})",value[1],value[2])
+                        except ValueError:
+                            value = (f"{value[0]} ({value[2]})",value[1],value[2])
                     current_values.append((
                         Tree(name=printColored(str(value[0]).title(),config.value_color), nodes=current_coins),value[2]))
                     # Sorts the list of trees by sorting names
@@ -547,7 +550,7 @@ class Coins:
         return results
 
 
-    def buildCoins(entries,debug=False):
+    def build(entries,debug=False):
         if not isinstance(entries,list):
             entries = [entries]
         coins = {}
