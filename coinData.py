@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 25 July 2025              ":"         __ __
+   Date: 31 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -141,6 +141,8 @@ class CoinData:
         self.face_value = face_value
         self.denomination = denomination
         self.nickname = nickname
+        if isinstance(self.nickname,str):
+            self.nickname = self.nickname.title()
         if (
             precious_metal_weight is None
             and weight is not None
