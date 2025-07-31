@@ -101,213 +101,247 @@ def connect_to_mariadb(db_config):
         print("Connection successful!")
 
         # 3. Create a Cursor Object
-        cursor = conn.cursor()
     except mariadb.Error as e:
         print(f"An error occurred: {e}")
         sys.exit(1)
-    return cursor
+    return conn
 
-connect_to_mariadb(config.db_config)
+def find_country_id(cursor,country_name):
+    query_find_country_id = """
+        select country_id from countries where 
+            name like ? or
+            alternative_name_1 like ? or
+            alternative_name_2 like ? or
+            alternative_name_3 like ? or
+            alternative_name_4 like ? or
+            alternative_name_5 like ?;
+    """
+    cursor.execute(query_find_country_id,(country_name,country_name,country_name,country_name,country_name,country_name))
 
+conn = None
+cursor = None
+try: # Connects to database
+    conn = connect_to_mariadb(config.db_config)
+    cursor = conn.cursor()
+    
+    query_select_by_year = "SELECT * FROM coins WHERE years like ?"
+    cursor.execute(query_select_by_year,("%1906%",))
+    desired_country = "germany"
+    find_country_id(cursor,f"{desired_country}")
 
-parser = setupParser()
-args = vars(parser.parse_args())
-if args["verbose"]:
-    print(f"arguments: {args}")
+    print("Fetched data:")
+    for row in cursor:
+        print(f"ID: {row[0]}")
 
-
-
-# Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
-try:
-    if args["silver"] is not None:
-        d.silver_spot_price = round(float(args["silver"]), 2)
-except ValueError:
-    print(
-        f"Silver price provided is invalid type. Using value ({config.currency_symbol}{d.silver_spot_price:.2f}) defined in data.py instead."
-    )
-try:
-    if args["gold"] is not None:
-        d.gold_spot_price = round(float(args["gold"]), 2)
-except ValueError:
-    print(
-        f"Gold price provided is invalid type. Using value ({config.currency_symbol}{d.gold_spot_price:.2f}) defined in data.py instead."
-    )
-try:
-    if args["platinum"] is not None:
-        d.platinum_spot_price = round(float(args["platinum"]), 2)
-except ValueError:
-    print(
-        f"Platinum price provided is invalid type. Using value ({config.currency_symbol}{d.platinum_spot_price:.2f}) defined in data.py instead."
-    )
-try:
-    if args["palladium"] is not None:
-        d.palladium_spot_price = round(float(args["palladium"]), 2)
-except ValueError:
-    print(
-        f"Palladium price provided is invalid type. Using value ({config.currency_symbol}{d.palladium_spot_price:.2f}) defined in data.py instead."
-    )
+    sys.exit(0)
 
 
-# Prints out the precious metal prices and calculates the coins' worth
-if not args["hide_price"]:
-    price()
-    print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
-    print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
-    print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
-    print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
-else:
-    Coins.togglePrice(False) # Disables printing of the value of coins
+    parser = setupParser()
+    args = vars(parser.parse_args())
+    if args["verbose"]:
+        print(f"arguments: {args}")
 
 
-# Links all the defined purchases to their respective coins
-if not args["hide_collection"]:
-    Coins.linkPurchases(
-        True
-    )  # Links purchases to all of the coinData objects stored in coins/coins.Coins
 
-# Determines if the user provided any search criteria, either by
-# Exact command line flags, a search string, or a search file
-if args["country"] or args["denomination"] or args["year"] or args["face_value"]:
-    arguments_list = [
-        (args["country"], args["denomination"], args["year"], args["face_value"])
-    ]
-else:
-    arguments_list = []
-input_strings = []
-# If multiple searches are to be performed
-if not sys.stdin.isatty(): # Input is a piped in file
-    input_strings = sys.stdin
-elif args["search_file"]: # Search file was provided
-    with open(args["search_file"], "r") as f:
-        input_strings = f.readlines()
-if args["search_string"]:
-    input_strings.append(args["search_string"])
+    # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
+    try:
+        if args["silver"] is not None:
+            d.silver_spot_price = round(float(args["silver"]), 2)
+    except ValueError:
+        print(
+            f"Silver price provided is invalid type. Using value ({config.currency_symbol}{d.silver_spot_price:.2f}) defined in data.py instead."
+        )
+    try:
+        if args["gold"] is not None:
+            d.gold_spot_price = round(float(args["gold"]), 2)
+    except ValueError:
+        print(
+            f"Gold price provided is invalid type. Using value ({config.currency_symbol}{d.gold_spot_price:.2f}) defined in data.py instead."
+        )
+    try:
+        if args["platinum"] is not None:
+            d.platinum_spot_price = round(float(args["platinum"]), 2)
+    except ValueError:
+        print(
+            f"Platinum price provided is invalid type. Using value ({config.currency_symbol}{d.platinum_spot_price:.2f}) defined in data.py instead."
+        )
+    try:
+        if args["palladium"] is not None:
+            d.palladium_spot_price = round(float(args["palladium"]), 2)
+    except ValueError:
+        print(
+            f"Palladium price provided is invalid type. Using value ({config.currency_symbol}{d.palladium_spot_price:.2f}) defined in data.py instead."
+        )
 
-# Parses all of the search strings and gets 4 element tuples of arguments
-for item in input_strings:
-    arguments_list.append(search.parseSearchString(item, debug=args["verbose"]))
 
-# Goes through each set of arguments and searches
-if arguments_list:
-    for arguments in arguments_list:  # Loops through each search
-        # At least one argument is defined
-        if (
-            arguments[COUNTRY]
-            or arguments[DENOMINATION]
-            or arguments[YEAR]
-            or arguments[FACE_VALUE]
-        ):
-            fail_year = False
-            fail_face_value = False
-            year = None
-            face_value = None
-            # Attempts to convert year and face_value to numeric data type (int or float(only for face_value))
-            try:  # Converts the year from a string to an int
-                if arguments[YEAR]:
-                    year = int(arguments[YEAR])
-                    arguments = (
-                        arguments[COUNTRY],
-                        arguments[DENOMINATION],
-                        year,
-                        arguments[FACE_VALUE],
+    # Prints out the precious metal prices and calculates the coins' worth
+    if not args["hide_price"]:
+        price()
+        print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
+        print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
+        print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
+        print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
+    else:
+        Coins.togglePrice(False) # Disables printing of the value of coins
+
+
+    # Links all the defined purchases to their respective coins
+    if not args["hide_collection"]:
+        Coins.linkPurchases(
+            True
+        )  # Links purchases to all of the coinData objects stored in coins/coins.Coins
+
+    # Determines if the user provided any search criteria, either by
+    # Exact command line flags, a search string, or a search file
+    if args["country"] or args["denomination"] or args["year"] or args["face_value"]:
+        arguments_list = [
+            (args["country"], args["denomination"], args["year"], args["face_value"])
+        ]
+    else:
+        arguments_list = []
+    input_strings = []
+    # If multiple searches are to be performed
+    if not sys.stdin.isatty(): # Input is a piped in file
+        input_strings = sys.stdin
+    elif args["search_file"]: # Search file was provided
+        with open(args["search_file"], "r") as f:
+            input_strings = f.readlines()
+    if args["search_string"]:
+        input_strings.append(args["search_string"])
+
+    # Parses all of the search strings and gets 4 element tuples of arguments
+    for item in input_strings:
+        arguments_list.append(search.parseSearchString(item, debug=args["verbose"]))
+
+    # Goes through each set of arguments and searches
+    if arguments_list:
+        for arguments in arguments_list:  # Loops through each search
+            # At least one argument is defined
+            if (
+                arguments[COUNTRY]
+                or arguments[DENOMINATION]
+                or arguments[YEAR]
+                or arguments[FACE_VALUE]
+            ):
+                fail_year = False
+                fail_face_value = False
+                year = None
+                face_value = None
+                # Attempts to convert year and face_value to numeric data type (int or float(only for face_value))
+                try:  # Converts the year from a string to an int
+                    if arguments[YEAR]:
+                        year = int(arguments[YEAR])
+                        arguments = (
+                            arguments[COUNTRY],
+                            arguments[DENOMINATION],
+                            year,
+                            arguments[FACE_VALUE],
+                        )
+                        if args["verbose"]:
+                            print(f"Year was successfully converted to {year}")
+                    else:
+                        if args["verbose"]:
+                            print("Year was not provided. Ignoring...")
+                except ValueError:
+                    print(
+                        f"The specified year ({arguments[YEAR]}) is not valid. It must be an integer"
                     )
-                    if args["verbose"]:
-                        print(f"Year was successfully converted to {year}")
+                    fail_year = True
+                if arguments[FACE_VALUE]:
+                    try:  # Converts the face_value from a string to either an int or float
+                        face_value = int(arguments[FACE_VALUE])
+                    except ValueError:
+                        try:
+                            face_value = float(arguments[FACE_VALUE])
+                        except ValueError:
+                            index = arguments[FACE_VALUE].find("/")
+                            dash = arguments[FACE_VALUE].find("-")
+                            if index > 0:
+                                if dash > 0:
+                                    prefix = arguments[FACE_VALUE][:dash]
+                                    numerator = arguments[FACE_VALUE][dash+1:index]
+                                else:
+                                    prefix = 0
+                                    numerator = arguments[FACE_VALUE][:index]
+                                try:
+                                    denominator = arguments[FACE_VALUE][index+1:]
+                                    try:
+                                        numerator = int(numerator)
+                                        denominator = int(denominator)
+                                        prefix = int(prefix)
+                                        face_value = round(prefix + numerator/denominator,2)
+                                    except ValueError:
+                                        fail_face_value = True
+                                except IndexError:
+                                    fail_face_value = True
+                            else:
+                                fail_face_value = True
                 else:
                     if args["verbose"]:
-                        print("Year was not provided. Ignoring...")
-            except ValueError:
-                print(
-                    f"The specified year ({arguments[YEAR]}) is not valid. It must be an integer"
-                )
-                fail_year = True
-            if arguments[FACE_VALUE]:
-                try:  # Converts the face_value from a string to either an int or float
-                    face_value = int(arguments[FACE_VALUE])
-                except ValueError:
-                    try:
-                        face_value = float(arguments[FACE_VALUE])
-                    except ValueError:
-                        index = arguments[FACE_VALUE].find("/")
-                        dash = arguments[FACE_VALUE].find("-")
-                        if index > 0:
-                            if dash > 0:
-                                prefix = arguments[FACE_VALUE][:dash]
-                                numerator = arguments[FACE_VALUE][dash+1:index]
-                            else:
-                                prefix = 0
-                                numerator = arguments[FACE_VALUE][:index]
-                            try:
-                                denominator = arguments[FACE_VALUE][index+1:]
-                                try:
-                                    numerator = int(numerator)
-                                    denominator = int(denominator)
-                                    prefix = int(prefix)
-                                    face_value = round(prefix + numerator/denominator,2)
-                                except ValueError:
-                                    fail_face_value = True
-                            except IndexError:
-                                fail_face_value = True
-                        else:
-                            fail_face_value = True
-            else:
-                if args["verbose"]:
-                    print("face_value was not provided. Ignoring...")
-            if fail_face_value:
-                print(
-                    f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
-                )
-
-            if not fail_year and not fail_face_value:  # The year and face_value could be converted to numeric types if applicable
-                if args["verbose"]:
+                        print("face_value was not provided. Ignoring...")
+                if fail_face_value:
                     print(
-                        "The year and/or face_value arguments were successfully converted."
+                        f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
                     )
-                results = Coins.search(
-                    country=arguments[COUNTRY],
-                    denomination=arguments[DENOMINATION],
-                    year=arguments[YEAR],
-                    face_value=arguments[FACE_VALUE],
-                    debug=args["verbose"],
-                    show_only_owned = args["owned"], 
-                    show_only_not_owned = args["not_owned"],
-                    show_only_bullion = args["only_bullion"],
-                    show_only_not_bullion = args["hide_bullion"],
-                    hide_coins=args["no_coins"],
-                    only_coin_ids=args["only_coin_ids"],
-                )
-                if results is None:
-                    print(
-                        f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
-                    )
-                else:  # Search found some results
-                    # Sorts results into their types and stores them in their respective lists
-                    text_year = f"{arguments[YEAR]} " if arguments[YEAR] else ""
-                    text_country = (
-                        f"{arguments[COUNTRY]} " if arguments[COUNTRY] else ""
-                    )
-                    text_face_value = (
-                        f"{arguments[FACE_VALUE]} " if arguments[FACE_VALUE] else ""
-                    )
-                    text_denomination = (
-                        f"{arguments[DENOMINATION]}" if arguments[DENOMINATION] else ""
-                    )
-                    results.set_name(
-                        f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
-                    )
-                    results.cascading_set_fancy(config.tree_fancy_characters)
-                    for line in results.print():
-                        print(line)
 
-# Done when no search specifiers were provided.
-else:  # Simply prints out all of the coins.
-    # Builds Country objects for each country defined in data.countries
-    countries = list(Coins.countries.keys())
-    data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"], show_only_bullion=args["only_bullion"], show_only_not_bullion=args["hide_bullion"], hide_coins=args["no_coins"],only_coin_ids=args["only_coin_ids"])
+                if not fail_year and not fail_face_value:  # The year and face_value could be converted to numeric types if applicable
+                    if args["verbose"]:
+                        print(
+                            "The year and/or face_value arguments were successfully converted."
+                        )
+                    results = Coins.search(
+                        country=arguments[COUNTRY],
+                        denomination=arguments[DENOMINATION],
+                        year=arguments[YEAR],
+                        face_value=arguments[FACE_VALUE],
+                        debug=args["verbose"],
+                        show_only_owned = args["owned"], 
+                        show_only_not_owned = args["not_owned"],
+                        show_only_bullion = args["only_bullion"],
+                        show_only_not_bullion = args["hide_bullion"],
+                        hide_coins=args["no_coins"],
+                        only_coin_ids=args["only_coin_ids"],
+                    )
+                    if results is None:
+                        print(
+                            f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
+                        )
+                    else:  # Search found some results
+                        # Sorts results into their types and stores them in their respective lists
+                        text_year = f"{arguments[YEAR]} " if arguments[YEAR] else ""
+                        text_country = (
+                            f"{arguments[COUNTRY]} " if arguments[COUNTRY] else ""
+                        )
+                        text_face_value = (
+                            f"{arguments[FACE_VALUE]} " if arguments[FACE_VALUE] else ""
+                        )
+                        text_denomination = (
+                            f"{arguments[DENOMINATION]}" if arguments[DENOMINATION] else ""
+                        )
+                        results.set_name(
+                            f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
+                        )
+                        results.cascading_set_fancy(config.tree_fancy_characters)
+                        for line in results.print():
+                            print(line)
 
-    data.set_name("Precious Metals")
-    data.cascading_set_fancy(config.tree_fancy_characters)
-    for line in data.print():
-        print(line)
+    # Done when no search specifiers were provided.
+    else:  # Simply prints out all of the coins.
+        # Builds Country objects for each country defined in data.countries
+        countries = list(Coins.countries.keys())
+        data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"], show_only_bullion=args["only_bullion"], show_only_not_bullion=args["hide_bullion"], hide_coins=args["no_coins"],only_coin_ids=args["only_coin_ids"])
+
+        data.set_name("Precious Metals")
+        data.cascading_set_fancy(config.tree_fancy_characters)
+        for line in data.print():
+            print(line)
 
 
+finally:
+    # 4. Close Cursor and Connection
+    if cursor:
+        cursor.close()
+        print("Cursor closed.")
+    if conn:
+        conn.close()
+        print("Connection closed.")
