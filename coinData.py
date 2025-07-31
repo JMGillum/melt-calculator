@@ -101,14 +101,41 @@ class CoinData:
         retention=None,
         show_value=True,
     ):
+        try:
+            weight = float(weight)
+        except ValueError:
+            pass
         if isinstance(weight, float) or isinstance(weight, int):
             self.weight = weights.Weight(weight, weights.Units.GRAMS)
         else:
             self.weight = weight
         self.show_value = show_value
-        self.metal = metal
+        if metal is not None and isinstance(metal,str):
+            self.metal = metals.Metals.fromString(metal)
+        else:
+            self.metal = metal
+        try:
+            fineness = float(fineness)
+        except ValueError:
+            pass
         self.fineness = fineness
+        if precious_metal_weight is not None and not isinstance(precious_metal_weight,weights.Weight):
+            try:
+                precious_metal_weight = float(precious_metal_weight)
+            except ValueError:
+                pass
+            if isinstance(precious_metal_weight,float):
+                precious_metal_weight = weights.Weight(round(precious_metal_weight,4),weights.Units.TROY_OUNCES)
+
         self.precious_metal_weight = precious_metal_weight
+        if isinstance(years,str):
+            if years == years[1:]:
+                years = f"[{years}"
+            if years == ']':
+                years = years[:-1]
+            temp = years.split(',')
+            years = [int(x) for x in temp]
+
         self.years = years
         self.country = country
         self.face_value = face_value
@@ -188,6 +215,8 @@ class CoinData:
 
     def metalString(self):
         if self.metal is not None:
+            if isinstance(self.metal,str):
+                return self.metal.title()
             if self.metal == metals.Metals.GOLD:
                 return "Gold"
             elif self.metal == metals.Metals.SILVER:
