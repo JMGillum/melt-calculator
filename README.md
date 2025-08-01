@@ -21,10 +21,10 @@ Install python
 * Linux: `sudo apt install python3`
 * Windows: `python`
 
-Install mariadb: https://mariadb.com/get-started-with-mariadb/
-Create a user account (or use root)
-Modify db_config in config.py
-Log into database and execute db/setup.sql
+1. Install mariadb: https://mariadb.com/get-started-with-mariadb/
+2. Create a user account (or use root)
+3. Modify db_config in config.py
+4. Log into database and execute db/setup.sql
 
 # Usage
 
@@ -32,11 +32,6 @@ Invoke the script by callling it from the command line. Either:
 `python3 main.py` or `python main.py`
 
 pass `--help` as a command line argument to get a list of supported arguments.
-
-If you would like to add your own coin data, see README.md in the coins directory
-
-See purchases.py if you would like to add your own personal collection data
-    collectionReport.py can be run to provide a report on your collection.
 
 ## Customization
 
@@ -74,6 +69,7 @@ At least one of these must be provided for a search to actually filter anything.
 
 ## Mariadb Errors
 An error occurred: Unknown database 'coin_data'
- This means that mariadb is not running
-Try sudo systemctl status mariadb (should say 'active (running)')
+* The database has not been created. Try running the db/setup.sql script in mariadb
+If mariadb is not running: Try `sudo systemctl status mariadb` (should say 'active (running)')
+
 
