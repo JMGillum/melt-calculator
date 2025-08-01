@@ -100,19 +100,9 @@ from tree.tree import Tree
 from tree.node import Node
 from metals import Metals
 from purchases import purchases
-from config import currency_symbol,current_year
+from config import currency_symbol
 import config
-from search import validCountry
-import weights
 from colors import printColored
-from alternativeNames import AlternativeNames
-
-from coins.namedList import NamedList
-from coins.taggedList import TaggedList
-from coins.tags import Tags
-
-
-
 
 
 class Coins:

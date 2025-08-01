@@ -42,7 +42,7 @@
 """
 import data as d
 import search
-from coins.coins import Coins
+from coins import Coins
 import config
 
 import sys # Used to check if stdin is not from a terminal (piping input)
