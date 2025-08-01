@@ -277,16 +277,10 @@ try: # Connects to database
                         denomination=arguments[DENOMINATION],
                         year=arguments[YEAR],
                         face_value=arguments[FACE_VALUE],
-                        debug=args["verbose"]
-                        )
-                    """
+                        debug=args["verbose"],
                         show_only_owned = args["owned"], 
                         show_only_not_owned = args["not_owned"],
-                        show_only_bullion = args["only_bullion"],
-                        show_only_not_bullion = args["hide_bullion"],
-                        only_coin_ids=args["only_coin_ids"],
                         )
-                        """
                     cursor.execute(results[0],results[1])
                     results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
                     if results is None:
@@ -314,7 +308,7 @@ try: # Connects to database
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
-        query = Coins.search()
+        query = Coins.search(debug=args["verbose"],show_only_owned = args["owned"],show_only_not_owned = args["not_owned"])
         cursor.execute(query[0],query[1])
         results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
         results.cascading_set_fancy(config.tree_fancy_characters)

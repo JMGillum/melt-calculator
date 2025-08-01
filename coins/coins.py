@@ -199,15 +199,12 @@ class Coins:
 
 
 
-    def buildTree(countries,denominations,values,coins,purchases=None,debug=False,show_only_owned=False, show_only_not_owned=False,only_coin_ids=False):
+    def buildTree(countries,denominations,values,coins,purchases=None,debug=False,only_coin_ids=False):
         if debug:
             for item in [(countries,"Countries"),(denominations,"Denominations"),(values,"Values"),(coins,"Coins")]:
                 print(item[1])
                 for key in item[0]:
                     print(f"  {key}:{item[0][key]}")
-        if show_only_owned and show_only_not_owned:
-            show_only_owned = False
-            show_only_not_owned = False
         # Actually builds tree with given information
         current_countries = []
         for country in countries:
@@ -308,7 +305,7 @@ class Coins:
         Coins.not_owned = Coins.not_owned - Coins.owned
         Coins.__summarizePurchases()
 
-    def build(entries,prices=None,purchases=None,debug=False, show_only_bullion=False, show_only_not_bullion=False,show_only_owned=False, show_only_not_owned=False,hide_coins=False, only_coin_ids=False):
+    def build(entries,prices=None,purchases=None,debug=False, show_only_bullion=False, show_only_not_bullion=False,hide_coins=False, only_coin_ids=False):
         if not isinstance(entries,list):
             entries = [entries]
         if show_only_bullion and show_only_not_bullion:
@@ -360,16 +357,22 @@ class Coins:
                 countries[entry[12]][1].append(entry[10])
             
 
-        return Coins.buildTree(countries,denominations,values,coins,purchases=purchases,debug=debug,show_only_owned=show_only_owned, show_only_not_owned=show_only_not_owned,only_coin_ids=only_coin_ids)
+        return Coins.buildTree(countries,denominations,values,coins,purchases=purchases,debug=debug,only_coin_ids=only_coin_ids)
 
 
 
 
 
-    def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None,debug=False):
-        base_query = """
-        select coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name,denominations.denomination_id,denominations.name,countries.country_id,countries.name,tags.bullion from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id
-        """
+    def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None,debug=False,show_only_owned=False,show_only_not_owned=False):
+        if show_only_owned and show_only_not_owned:
+            show_only_owned = False
+            show_only_not_owned = False
+        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.name as denomination_name,countries.country_id,countries.name as country_name,tags.bullion"
+        base_query = "from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
+        if show_only_owned:
+            base_query = f"SELECT DISTINCT {select_columns} {base_query} right join purchases on purchases.coin_id = coins.coin_id"
+        else:
+            base_query = f"SELECT {select_columns} {base_query}"
         found_first_specifier = False
         country_query = ""
         denomination_query = ""
@@ -380,8 +383,7 @@ class Coins:
         for i in range(len(queries)):
             item = queries[i]
             if item[1] is not None:
-                queries[i] = (f"""
-                (
+                queries[i] = (f"""(
                     {item[2]}.name like ? or
                     {item[2]}.alternative_name_1 like ? or
                     {item[2]}.alternative_name_2 like ? or
@@ -422,13 +424,15 @@ class Coins:
                         repetitions = item[2]
                     for _ in range(repetitions):
                         variables.append(item[1])
+
+        return_query += ";"
         if debug:
             print("-----------------------------------")
             print(f"Query:\n{return_query}")
             print(f"Variables:\n{variables}")
             print("-----------------------------------")
 
-        return (f"{return_query};",tuple(variables))
+        return (return_query,tuple(variables))
     """
     def search(
         country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False, hide_coins=False, only_coin_ids=False
