@@ -428,7 +428,7 @@ class Coins:
                         variables.append(item[1])
 
         if show_only_not_owned:
-            return_query += ") as a where a.filter is null"
+            return_query += ") as filter_by_owned where filter_by_owned.filter is null"
         return_query += ";"
         if debug:
             print("-----------------------------------")
