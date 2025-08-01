@@ -68,8 +68,8 @@ At least one of these must be provided for a search to actually filter anything.
 * If that doesn't work, also try setting `tree_fancy_characters` to `False` in config.py
 
 ## Mariadb Errors
-An error occurred: Unknown database 'coin_data'
-* The database has not been created. Try running the db/setup.sql script in mariadb
-If mariadb is not running: Try `sudo systemctl status mariadb` (should say 'active (running)')
+* An error occurred: Unknown database 'coin_data'
+* * The database has not been created. Try running the db/setup.sql script in mariadb
+* If mariadb is not running: Try `sudo systemctl status mariadb` (should say 'active (running)')
 
 
