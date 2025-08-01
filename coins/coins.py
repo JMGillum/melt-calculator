@@ -583,6 +583,8 @@ class Coins:
                 ))
             if prices is not None:
                 Coins.price(prices[0],prices[1],prices[2],prices[3],coins[entry[0]][1])
+            else:
+                coins[entry[0]][1].togglePrice(False)
             try:
                 values[entry[7]]
             except KeyError:
