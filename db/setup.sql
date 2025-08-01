@@ -104,8 +104,8 @@ insert into countries(country_id,name,alternative_name_1) values("rus","russia",
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) values("zaf","south africa","south african","s africa","s. africa","s african","s. african");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("che","switzerland","swiss","helvetia","confoederatio helvetica");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("usa","united states of america","usa","us","united states","united states america");
-insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("sur","suriname","republic of suriname","republiek suriname");
-insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("srb","serbia","republic of serbia","republika srbija","srbija");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("sur","suriname","republic of suriname","republiek suriname","dutch guiana","guiana");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("srb","serbia","serbian","republic of serbia","republika srbija","srbija");
 
 -- Denominations
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("can_cent","can","cent","cents");
