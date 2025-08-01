@@ -99,7 +99,6 @@ from coinData import CoinData,Purchase,PurchaseStats
 from tree.tree import Tree
 from tree.node import Node
 from metals import Metals
-from purchases import purchases
 from config import currency_symbol
 import config
 from colors import printColored
@@ -107,13 +106,6 @@ from colors import printColored
 
 class Coins:
 
-    # Enables or disables printing of the coins value
-    def togglePrice(show_price=True):
-        for coin_id in list(Coins.coins.keys()):
-            coin = Coins.coins[coin_id]
-            if isinstance(coin, Node):
-                coin = coin.data
-            coin.togglePrice(show_price)
 
     # Calculates the value of all defined coin objects, using the provided precious metal values
     def price(silver_price, gold_price, platinum_price, palladium_price,coin):
@@ -172,21 +164,6 @@ class Coins:
             coin.nodes.append(Coins.print_statistics(total,count,coin.data.value*coin.data.retention))
 
         return None
-    
-    def __summarizePurchases():
-        for coin in Coins.owned:
-            Coins.__summarizePurchase(coin)
-
-    # Removes associated purchases from all defined coins
-    def removePurchases():
-        Coins.owned = set()
-        Coins.not_owned = set()
-        for coin_id in list(Coins.coins.keys()):
-            coin = Coins.coins[coin_id]
-            if isinstance(coin, Node):
-                coin.nodes = []
-
-
 
 
     def buildTree(countries,denominations,values,coins,purchases=None,debug=False,only_coin_ids=False):
@@ -279,21 +256,6 @@ class Coins:
         results = Tree(name="Results", nodes=current_countries)
         return results
 
-    def linkPurchases(keep_old_purchases=False):
-        if not keep_old_purchases:
-            Coins.removePurchases()
-        for purchase in purchases:
-            try:
-                coin = Coins.coins[purchase]
-                if isinstance(coin, Node):
-                    coin.nodes += purchases[purchase]
-                    Coins.owned.add(purchase)
-            except KeyError:
-                print(f"{purchase} is not a valid key")
-        Coins.owned = set(Coins.owned)
-        Coins.not_owned = set(Coins.coins.keys())
-        Coins.not_owned = Coins.not_owned - Coins.owned
-        Coins.__summarizePurchases()
 
     def build(entries,prices=None,purchases=None,debug=False, show_only_bullion=False, show_only_not_bullion=False,hide_coins=False, only_coin_ids=False):
         if not isinstance(entries,list):
@@ -350,9 +312,6 @@ class Coins:
         return Coins.buildTree(countries,denominations,values,coins,purchases=purchases,debug=debug,only_coin_ids=only_coin_ids)
 
 
-
-
-
     def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None,debug=False,show_only_owned=False,show_only_not_owned=False):
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
@@ -374,7 +333,7 @@ class Coins:
         queries = [(country_query,country,"countries"),(denomination_query,denomination,"denominations"),(value_name_query,face_value_name,"face_values")]
         for i in range(len(queries)):
             item = queries[i]
-            if item[1] is not None:
+            if item[1]:
                 queries[i] = (f"""(
                     {item[2]}.name like ? or
                     {item[2]}.alternative_name_1 like ? or
@@ -427,115 +386,4 @@ class Coins:
             print("-----------------------------------")
 
         return (return_query,tuple(variables))
-    """
-    def search(
-        country=None, denomination=None, face_value=None, year=None, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False, hide_coins=False, only_coin_ids=False
-    ):
-        found_denominations = list(Coins.denominations.keys())
-        if country:
-            country = validCountry(country)
-            if country:
-                country = country.replace(" ","_")
-                try:
-                    found_denominations = Coins.countries[country.lower()]
-                except KeyError:
-                    return None
-            else:
-                return None
 
-        if debug:
-            print("Denominations found:")
-            for item in found_denominations:
-                print(f"  {item}")
-
-        found_values = []
-        if denomination:
-            matches = []
-            for x in found_denominations:
-                test = Coins.denominations[x].name
-                if isinstance(test,AlternativeNames):
-                    temp = test.lookup(denomination)
-                    if temp:
-                        matches.append(x)
-                elif test.lower() == denomination.lower():
-                    matches.append(x)
-            if matches:
-                for match in matches:
-                    try:
-                        found_values += Coins.denominations[match]
-                    except KeyError:
-                        continue
-            else:
-                return None
-        else:
-            for denom in found_denominations:
-                found_values += Coins.denominations[denom]
-
-        if debug:
-            print("Values found:")
-            for item in found_values:
-                print(f"  {item}")
-
-        found_coins = []
-        if face_value:
-            matches = []
-            for x in found_values:
-                test = Coins.values[x].name
-                if isinstance(test,AlternativeNames):
-                    temp = test.lookup(face_value)
-                    if temp:
-                        matches.append(x)
-                else:
-                    if str(test).lower() == str(face_value).lower():
-                        matches.append(x)
-            if debug:
-                print("Pruned values found:")
-                for item in matches:
-                    print(f"  {item}")
-            if matches:
-                for match in matches:
-                    try:
-                        found_coins += Coins.values[match]
-                    except KeyError:
-                        continue
-            else:
-                return None
-        else:
-            for value in found_values:
-                found_coins += Coins.values[value]
-
-        if debug:
-            print("Coins found:")
-            for item in found_coins:
-                print(f"  {item}")
-
-        results = []
-        if year:
-            matches = [
-                x
-                for x in found_coins
-                if year
-                in (
-                    Coins.coins[x].years
-                    if isinstance(Coins.coins[x], CoinData)
-                    else Coins.coins[x].data.years
-                )
-            ]
-            if matches:
-                for match in matches:
-                    try:
-                        results += [match]
-                    except KeyError:
-                        continue
-            else:
-                return None
-        else:
-            results = found_coins
-
-        if debug:
-            print("Results:")
-            for item in results:
-                print(f"  {item}")
-
-        return Coins.buildTree(results, debug, show_only_owned, show_only_not_owned, show_only_bullion, show_only_not_bullion, hide_coins, only_coin_ids)
-    """
