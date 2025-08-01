@@ -41,14 +41,12 @@
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
 import data as d
-import search
 from coins import Coins
 import config
 
 import sys # Used to check if stdin is not from a terminal (piping input)
 from setup import setupParser
 import mariadb
-import sys
 import getpass
 
 
@@ -194,7 +192,8 @@ try: # Connects to database
 
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
-        arguments_list.append(search.parseSearchString(item, debug=args["verbose"]))
+        cursor.execute(Coins.countryNames())
+        arguments_list.append(Coins.parseSearchString(item,list(cursor), debug=args["verbose"]))
 
     # Goes through each set of arguments and searches
     if arguments_list:

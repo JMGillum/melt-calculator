@@ -99,9 +99,11 @@ from coinData import CoinData,Purchase,PurchaseStats
 from tree.tree import Tree
 from tree.node import Node
 from metals import Metals
-from config import currency_symbol
+from config import currency_symbol, current_year, minimum_year
 import config
 from colors import printColored
+
+import re
 
 
 class Coins:
@@ -387,3 +389,70 @@ class Coins:
 
         return (return_query,tuple(variables))
 
+    def countryNames():
+        return "SELECT name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5 from countries;"
+
+    def parseSearchString(text: str, countries, debug: bool = False):
+        """Parses a string to extract the country's name, year, denomination, and face value"""
+        numbers = re.findall("\d+", text)  # Regex finds all strings of digits
+        words = re.findall("[a-zA-Z]+", text)  # Same for words
+
+        year = ""
+        denomination = ""
+        country = ""
+        face_value = ""
+        # If more than two numbers, picks year and denomination
+        if len(numbers) >= 2:
+            if len(numbers[0]) != 4 and len(numbers[1]) == 4:
+                year = numbers[1]
+                face_value = numbers[0]
+            else:
+                year = numbers[0]
+                face_value = numbers[1]
+        elif len(numbers) == 1:  # Only one number found
+            if (
+                len(numbers[0]) == 4
+            ):  # Checks if number is 4 digits (a year), then checks if within provided range
+                temp = int(numbers[0])
+                if temp >= minimum_year and temp <= current_year:
+                    year = numbers[0]
+                else:  # If not, uses number as face value
+                    face_value = numbers[0]
+            else:
+                face_value = numbers[0]
+
+        # Sets the country name and denomination
+        if len(words) >= 2:
+            for word in words:
+                temp = ""
+                for item in countries:
+                    for name in item:
+                        if name and word.lower() == name.lower():
+                            temp = item[0]
+                if debug:
+                    print(f"Found country name: {temp if temp else 'None'}")
+                if temp is not None:
+                    country = temp
+                    words.remove(word)
+                    break
+            denomination = words[0]
+        elif len(words) > 0:
+            temp = None
+            for item in countries:
+                for name in item:
+                    if name and words[0].lower() == name.lower():
+                        temp = item[0]
+            if debug:
+                print(f"Found country name: {temp if temp else 'None'}")
+            if temp:
+                country = temp
+            else:
+                denomination = words[0]
+
+        if debug:
+            print(
+                f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value}"
+            )
+
+        # Sets values to None if they weren't found
+        return (country, denomination, year, face_value)
