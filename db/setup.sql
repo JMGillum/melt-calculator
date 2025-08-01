@@ -1,9 +1,21 @@
 CREATE DATABASE coin_data;
 USE coin_data;
 
+CREATE TABLE metals (
+  metal_id varchar(5) PRIMARY KEY,
+  name varchar(255) NOT NULL
+);
+
+CREATE TABLE tags (
+  tag_id varchar(255) PRIMARY KEY,
+  bullion boolean DEFAULT FALSE
+);
+
 CREATE TABLE countries (
   country_id varchar(255) PRIMARY KEY,
   name varchar(255) NOT NULL,
+  tags varchar(255),
+  FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   alternative_name_1 varchar(255),
   alternative_name_2 varchar(255),
   alternative_name_3 varchar(255),
@@ -16,6 +28,8 @@ CREATE TABLE denominations (
   country_id varchar(255) NOT NULL,
   FOREIGN KEY (country_id) REFERENCES countries(country_id) ON UPDATE CASCADE,
   name varchar(255) NOT NULL,
+  tags varchar(255),
+  FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   alternative_name_1 varchar(255),
   alternative_name_2 varchar(255),
   alternative_name_3 varchar(255),
@@ -29,21 +43,13 @@ CREATE TABLE face_values (
   FOREIGN KEY (denomination_id) REFERENCES denominations(denomination_id) ON UPDATE CASCADE,
   value decimal(20,10) NOT NULL,
   name varchar(255),
+  tags varchar(255),
+  FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   alternative_name_1 varchar(255),
   alternative_name_2 varchar(255),
   alternative_name_3 varchar(255),
   alternative_name_4 varchar(255),
   alternative_name_5 varchar(255)
-);
-
-CREATE TABLE metals (
-  metal_id varchar(5) PRIMARY KEY,
-  name varchar(255) NOT NULL
-);
-
-CREATE TABLE tags (
-  tag_id varchar(255) PRIMARY KEY,
-  bullion boolean
 );
 
 CREATE TABLE coins (
@@ -83,6 +89,9 @@ CREATE TABLE purchases (
 -- Metal types
 insert into metals(metal_id,name) values("au","gold"),("ag","silver"),("pd","palladium"),("pt","platinum"),("rh","rhodium"),("other","unknown");
 
+-- Tags
+INSERT INTO tags(tag_id,bullion) VALUES("bullion",TRUE);
+
 -- Countries
 insert into countries(country_id,name,alternative_name_1) values("can","canada","canadian");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("fra","france","french","francais","francaise");
@@ -99,7 +108,7 @@ insert into countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("can_cent","can","cent","cents");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("can_sovereign","can","sovereign","sovereigns");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("can_dollar","can","dollar","dollars");
-INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("can_maple","can","maple","maples");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,tags) values("can_maple","can","maple","maples","bullion");
 
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("fra_centime","fra","centime","centimes");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("fra_franc","fra","franc","francs");
@@ -107,7 +116,7 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) va
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("deu_pfennig","deu","pfennig","pfennigs");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("deu_mark","deu","mark","marks");
 
-INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("gbr_britannia","gbr","britannia","britannias");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,tags) values("gbr_britannia","gbr","britannia","britannias","bullion");
 
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) values("ita_centesimo","ita","centesimo","centesimi","centesimis");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) values("ita_lira","ita","lira","lire","liras");
@@ -120,13 +129,13 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) va
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("rus_kopek","rus","kopek","kopeks");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("rus_ruble","rus","ruble","rubles");
 
-INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("zaf_krugerrand","zaf","krugerrand","krugerrands");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,tags) values("zaf_krugerrand","zaf","krugerrand","krugerrands","bullion");
 
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("che_franc","che","franc","francs");
 
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("usa_cent","usa","cent","cents");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("usa_dollar","usa","dollar","dollars");
-INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("usa_bullion","usa","bullion","bullions");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,tags) values("usa_bullion","usa","bullion","bullions","bullion");
 
 -- Values
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_cent_5","can_cent",5,"nickel","nickels");
