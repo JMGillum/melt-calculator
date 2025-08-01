@@ -6,9 +6,9 @@
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-    The Weight class facilitates storage of weights, regardless of units. 
+    The Weight class facilitates storage of weights, regardless of units.
     Weights can be stored in any of the three systems that are meaningful to
-    coins: grams, avoirdupois (typical/standard) ounces, and troy ounces. 
+    coins: grams, avoirdupois (typical/standard) ounces, and troy ounces.
     Regardless of which system the weight was input in, it can be retrieved
     in any system, using the as_x() functions.
 

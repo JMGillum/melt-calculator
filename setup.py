@@ -1,6 +1,7 @@
 from __init__ import __version__
 import argparse
 
+
 # Initializes all of the available command line arguments
 def setupParser():
     parser = argparse.ArgumentParser(

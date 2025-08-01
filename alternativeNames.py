@@ -6,7 +6,7 @@
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-    The AlternativeNames class stores a proper/primary name for any object, 
+    The AlternativeNames class stores a proper/primary name for any object,
     as well as any associated alternative names. An example would be:
         Proper name: United States of America
         Alternative names:  United States,
@@ -14,12 +14,13 @@
                             USA,
                             etc.
 
-    The class features a lookup, which checks if the provided text is one of 
-    the object's associated names, and provides the proper name if it is. 
+    The class features a lookup, which checks if the provided text is one of
+    the object's associated names, and provides the proper name if it is.
     This is useful for checking input, and then printing out the proper name.
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
+
 
 class AlternativeNames:
     """Class for representing a country along with its alternative names."""
@@ -62,6 +63,6 @@ class AlternativeNames:
 
     def lower(self):
         return self.__str__().lower()
-    
+
     def upper(self):
         return self.__str__().upper()

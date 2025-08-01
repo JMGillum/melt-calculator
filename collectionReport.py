@@ -6,10 +6,10 @@
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-    This script prints out a report of the personal collection of coins. It 
+    This script prints out a report of the personal collection of coins. It
     utilizes Coins.owned in coins/coins.py. See purchases.py for information on
     how to add and update purchases. This script is still a work in progress.
-    
+
     Use the script by calling it as main from the command line
 
 -------------------------------------------------------------------------------
@@ -29,7 +29,6 @@ import config
 tab = "    "
 currency_symbol="$"
 """
-
 
 
 if __name__ == "__main__":
@@ -99,4 +98,4 @@ terminating...
         print("Total:\n  ",end="")
         print(Coins.print_statistics(stats=total))
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-    """ 
+    """

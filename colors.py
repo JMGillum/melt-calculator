@@ -14,7 +14,8 @@
 
 from config import show_color
 
-def printColored(text,fg_color="",bg_color="",custom_color=""):
+
+def printColored(text, fg_color="", bg_color="", custom_color=""):
     if not show_color:
         return text
     fg_prefix = "\033[38:5:"
@@ -35,7 +36,7 @@ def printColored(text,fg_color="",bg_color="",custom_color=""):
     if custom_color:
         color_string = custom_color
     else:
-        for item in [fg_color,bg_color]:
+        for item in [fg_color, bg_color]:
             test = item.lower().strip()
             match test:
                 case "red":
@@ -64,7 +65,18 @@ def printColored(text,fg_color="",bg_color="",custom_color=""):
                 colors += f"{bg_prefix}{color_string}{suffix}"
     return f"{colors}{text}{default}"
 
+
 if __name__ == "__main__":
-    colors = ["red","pink","blue","teal","green","yellow","bright_yellow","purple","magenta"]
+    colors = [
+        "red",
+        "pink",
+        "blue",
+        "teal",
+        "green",
+        "yellow",
+        "bright_yellow",
+        "purple",
+        "magenta",
+    ]
     for color in colors:
-        print(printColored(color,color))
+        print(printColored(color, color))

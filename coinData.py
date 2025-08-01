@@ -20,13 +20,15 @@ import metals
 
 import config
 from colors import printColored
-class PurchaseStats():
-    def __init__(self,total=0.0,count=0,delta=0.0):
+
+
+class PurchaseStats:
+    def __init__(self, total=0.0, count=0, delta=0.0):
         self.total = total
         self.count = count
         self.delta = delta
-    
-    def add(self,total,count,delta):
+
+    def add(self, total, count, delta):
         self.total += total
         self.count += count
         self.delta += delta
@@ -67,7 +69,7 @@ class Purchase:
                 try:
                     string += f"({self.purchase_date.strftime(config.date_format)})"
                 except AttributeError:
-                        pass
+                    pass
         if self.mint_date is not None and not (self.mint_date == ""):
             string += f" {self.mint_date}"
             if self.mint_mark is not None and not (self.mint_mark == ""):
@@ -79,15 +81,19 @@ class Purchase:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
                     string += f" ({config.currency_symbol}{self.price * self.quantity})"
-        return printColored(string,config.purchase_color)
+        return printColored(string, config.purchase_color)
 
 
 class CoinData:
     # Templates for printing information about one of the member coins
     coin_string = "[%y] ... %a %m (%w @ %p%)"
     coin_string_name = "%n [%y] ... %a %m (%w @ %p%)"
-    coin_string_value = f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}%V]"
-    coin_string_value_default_retention = f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}(%V)]"
+    coin_string_value = (
+        f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}%V]"
+    )
+    coin_string_value_default_retention = (
+        f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}(%V)]"
+    )
 
     def __init__(
         self,
@@ -113,7 +119,7 @@ class CoinData:
         else:
             self.weight = weight
         self.show_value = show_value
-        if metal is not None and isinstance(metal,str):
+        if metal is not None and isinstance(metal, str):
             self.metal = metals.Metals.fromString(metal)
         else:
             self.metal = metal
@@ -122,21 +128,25 @@ class CoinData:
         except ValueError:
             pass
         self.fineness = fineness
-        if precious_metal_weight is not None and not isinstance(precious_metal_weight,weights.Weight):
+        if precious_metal_weight is not None and not isinstance(
+            precious_metal_weight, weights.Weight
+        ):
             try:
                 precious_metal_weight = float(precious_metal_weight)
             except ValueError:
                 pass
-            if isinstance(precious_metal_weight,float):
-                precious_metal_weight = weights.Weight(round(precious_metal_weight,4),weights.Units.TROY_OUNCES)
+            if isinstance(precious_metal_weight, float):
+                precious_metal_weight = weights.Weight(
+                    round(precious_metal_weight, 4), weights.Units.TROY_OUNCES
+                )
 
         self.precious_metal_weight = precious_metal_weight
-        if isinstance(years,str):
+        if isinstance(years, str):
             if years == years[1:]:
                 years = f"[{years}"
-            if years == ']':
+            if years == "]":
                 years = years[:-1]
-            temp = years.split(',')
+            temp = years.split(",")
             years = [int(x) for x in temp]
 
         self.years = years
@@ -144,7 +154,7 @@ class CoinData:
         self.face_value = face_value
         self.denomination = denomination
         self.nickname = nickname
-        if isinstance(self.nickname,str):
+        if isinstance(self.nickname, str):
             self.nickname = self.nickname.title()
         if (
             precious_metal_weight is None
@@ -162,7 +172,9 @@ class CoinData:
             retention is None
         ):  # Percentage of melt value that coin is typically bought at
             self.default_retention = True
-            self.retention = config.default_retention # Default retention of 97% of melt value
+            self.retention = (
+                config.default_retention
+            )  # Default retention of 97% of melt value
         else:
             self.default_retention = False
             self.retention = retention
@@ -220,7 +232,7 @@ class CoinData:
 
     def metalString(self):
         if self.metal is not None:
-            if isinstance(self.metal,str):
+            if isinstance(self.metal, str):
                 return self.metal.title()
             if self.metal == metals.Metals.GOLD:
                 return "Gold"
@@ -286,7 +298,7 @@ class CoinData:
         string = string.replace("%n", "" if self.nickname is None else self.nickname)
         return string
 
-    def print(self,format_string):
+    def print(self, format_string):
         return self.asAString(format_string)
 
     def __str__(self):

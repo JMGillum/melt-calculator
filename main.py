@@ -12,7 +12,7 @@
 
     Searching for specific coins or groups of coins is also supported. Searches
     can be as specific as '1898 German 10 Mark', or simply '1866'. The first
-    would show the single coin (along with its associated country and 
+    would show the single coin (along with its associated country and
     denomination). The second search would simply return all coins that were
     minted in 1866.
 
@@ -40,11 +40,12 @@
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
+
 import data as d
 from coins import Coins
 import config
 
-import sys # Used to check if stdin is not from a terminal (piping input)
+import sys  # Used to check if stdin is not from a terminal (piping input)
 from setup import setupParser
 import mariadb
 import getpass
@@ -57,11 +58,10 @@ YEAR = 2
 FACE_VALUE = 3
 
 
-
-
-
 # Calculates the value of every defined coin.
-def price(silver_price=None, gold_price=None, platinum_price=None, palladium_price=None):
+def price(
+    silver_price=None, gold_price=None, platinum_price=None, palladium_price=None
+):
     silver = d.silver_spot_price
     gold = d.gold_spot_price
     platinum = d.platinum_spot_price
@@ -74,11 +74,15 @@ def price(silver_price=None, gold_price=None, platinum_price=None, palladium_pri
         isinstance(gold_price, int) or isinstance(gold_price, float)
     ):
         gold = gold_price
-    if platinum_price is not None and (isinstance(platinum_price,int) or isinstance(platinum_price,float)):
+    if platinum_price is not None and (
+        isinstance(platinum_price, int) or isinstance(platinum_price, float)
+    ):
         platinum = platinum_price
-    if palladium_price is not None and (isinstance(palladium_price,int) or isinstance(palladium_price,float)):
+    if palladium_price is not None and (
+        isinstance(palladium_price, int) or isinstance(palladium_price, float)
+    ):
         palladium = palladium_price
-    return(silver, gold, platinum,palladium)
+    return (silver, gold, platinum, palladium)
 
 
 def connect_to_mariadb(db_config):
@@ -88,12 +92,14 @@ def connect_to_mariadb(db_config):
         password = db_config["password"] = None
     if password is None:
         if not sys.stdin.isatty():
-            print("The program must be run from a terminal or password must be supplied in db_config")
+            print(
+                "The program must be run from a terminal or password must be supplied in db_config"
+            )
             sys.exit(1)
         else:
             db_config["password"] = getpass.getpass("Password for mariadb: ")
 
-    try: 
+    try:
         print("Connecting to MariaDB...")
         conn = mariadb.connect(**db_config)
         print("Connection successful!")
@@ -105,16 +111,10 @@ def connect_to_mariadb(db_config):
     return conn
 
 
-    
-
-
-
-
 parser = setupParser()
 args = vars(parser.parse_args())
 if args["verbose"]:
     print(f"arguments: {args}")
-
 
 
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
@@ -160,17 +160,16 @@ else:
 
 conn = None
 cursor = None
-try: # Connects to database
+try:  # Connects to database
     conn = connect_to_mariadb(config.db_config)
     cursor = conn.cursor()
 
     purchases = None
     if not args["hide_collection"]:
-        cursor.execute("select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id")
+        cursor.execute(
+            "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"
+        )
         purchases = list(cursor)
-
-
-
 
     # Determines if the user provided any search criteria, either by
     # Exact command line flags, a search string, or a search file
@@ -182,9 +181,9 @@ try: # Connects to database
         arguments_list = []
     input_strings = []
     # If multiple searches are to be performed
-    if not sys.stdin.isatty(): # Input is a piped in file
+    if not sys.stdin.isatty():  # Input is a piped in file
         input_strings = sys.stdin
-    elif args["search_file"]: # Search file was provided
+    elif args["search_file"]:  # Search file was provided
         with open(args["search_file"], "r") as f:
             input_strings = f.readlines()
     if args["search_string"]:
@@ -193,7 +192,9 @@ try: # Connects to database
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
         cursor.execute(Coins.countryNames())
-        arguments_list.append(Coins.parseSearchString(item,list(cursor), debug=args["verbose"]))
+        arguments_list.append(
+            Coins.parseSearchString(item, list(cursor), debug=args["verbose"])
+        )
 
     # Goes through each set of arguments and searches
     if arguments_list:
@@ -243,24 +244,26 @@ try: # Connects to database
                             if index > 0:
                                 if dash > 0:
                                     prefix = arguments[FACE_VALUE][:dash]
-                                    numerator = arguments[FACE_VALUE][dash+1:index]
+                                    numerator = arguments[FACE_VALUE][dash + 1 : index]
                                 else:
                                     prefix = 0
                                     numerator = arguments[FACE_VALUE][:index]
                                 try:
-                                    denominator = arguments[FACE_VALUE][index+1:]
+                                    denominator = arguments[FACE_VALUE][index + 1 :]
                                     try:
                                         numerator = int(numerator)
                                         denominator = int(denominator)
                                         prefix = int(prefix)
-                                        face_value = round(prefix + numerator/denominator,2)
+                                        face_value = round(
+                                            prefix + numerator / denominator, 2
+                                        )
                                     except ValueError:
                                         fail_face_value = True
                                 except IndexError:
                                     fail_face_value = True
                             else:
                                 fail_face_value = True
-                    
+
                 else:
                     if args["verbose"]:
                         print("face_value was not provided. Ignoring...")
@@ -275,9 +278,13 @@ try: # Connects to database
                         arguments[YEAR],
                         face_value,
                     )
-                    print(f"Face value was successfully converted to {arguments[FACE_VALUE]}")
+                    print(
+                        f"Face value was successfully converted to {arguments[FACE_VALUE]}"
+                    )
 
-                if not fail_year and not fail_face_value:  # The year and face_value could be converted to numeric types if applicable
+                if (
+                    not fail_year and not fail_face_value
+                ):  # The year and face_value could be converted to numeric types if applicable
                     if args["verbose"]:
                         print(
                             "The year and/or face_value arguments were successfully converted."
@@ -288,11 +295,20 @@ try: # Connects to database
                         year=arguments[YEAR],
                         face_value=arguments[FACE_VALUE],
                         debug=args["verbose"],
-                        show_only_owned = args["owned"], 
-                        show_only_not_owned = args["not_owned"],
-                        )
-                    cursor.execute(results[0],results[1])
-                    results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
+                        show_only_owned=args["owned"],
+                        show_only_not_owned=args["not_owned"],
+                    )
+                    cursor.execute(results[0], results[1])
+                    results = Coins.build(
+                        list(cursor),
+                        prices=prices,
+                        purchases=purchases,
+                        debug=args["verbose"],
+                        show_only_bullion=args["only_bullion"],
+                        show_only_not_bullion=args["hide_bullion"],
+                        only_coin_ids=args["only_coin_ids"],
+                        hide_coins=args["no_coins"],
+                    )
                     if results is None:
                         print(
                             f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
@@ -307,7 +323,9 @@ try: # Connects to database
                             f"{arguments[FACE_VALUE]} " if arguments[FACE_VALUE] else ""
                         )
                         text_denomination = (
-                            f"{arguments[DENOMINATION]}" if arguments[DENOMINATION] else ""
+                            f"{arguments[DENOMINATION]}"
+                            if arguments[DENOMINATION]
+                            else ""
                         )
                         results.set_name(
                             f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
@@ -319,9 +337,22 @@ try: # Connects to database
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
-        query = Coins.search(debug=args["verbose"],show_only_owned = args["owned"],show_only_not_owned = args["not_owned"])
-        cursor.execute(query[0],query[1])
-        results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
+        query = Coins.search(
+            debug=args["verbose"],
+            show_only_owned=args["owned"],
+            show_only_not_owned=args["not_owned"],
+        )
+        cursor.execute(query[0], query[1])
+        results = Coins.build(
+            list(cursor),
+            prices=prices,
+            purchases=purchases,
+            debug=args["verbose"],
+            show_only_bullion=args["only_bullion"],
+            show_only_not_bullion=args["hide_bullion"],
+            only_coin_ids=args["only_coin_ids"],
+            hide_coins=args["no_coins"],
+        )
         results.cascading_set_fancy(config.tree_fancy_characters)
 
         if not args["no_tree"]:

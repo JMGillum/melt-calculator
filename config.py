@@ -17,7 +17,7 @@
         codes that are not included in the basic ASCII mapping, and thus may
         not be supported by your system. Change the value to False to disable
         these characters and revert to basic characters.
-    ->  currency_symbol: The symbol that will be displayed to the left of 
+    ->  currency_symbol: The symbol that will be displayed to the left of
         prices. Default value is '$'.
     ->  current_year: This is the current year. This is used for coins that
         are still in production. Also used to mark the upper bound for values
@@ -37,6 +37,7 @@
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
+
 # Default price retention value for every coin that does not
 # have it explicitly set. Default is 97% (0.97)
 default_retention = 0.97
@@ -47,8 +48,10 @@ tree_fancy_characters = True
 
 currency_symbol = "$"
 
-current_year = 2025 # Current year
-minimum_year = 1800 # Earliest number that will be considered a year and not a face value
+current_year = 2025  # Current year
+minimum_year = (
+    1800  # Earliest number that will be considered a year and not a face value
+)
 date_format = "%m/%d/%y"
 
 bullion_hint = " (Bullion)"
@@ -64,9 +67,9 @@ purchase_color = "teal"
 
 # 1. Database Connection Parameters
 db_config = {
-    'host': 'localhost',
-    'port': 3306,
-    'user': 'root',
-    'password': None,
-    'database': 'coin_data'
+    "host": "localhost",
+    "port": 3306,
+    "user": "root",
+    "password": None,
+    "database": "coin_data",
 }
