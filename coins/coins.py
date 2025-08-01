@@ -172,11 +172,7 @@ class Coins:
             coin.togglePrice(show_price)
 
     # Calculates the value of all defined coin objects, using the provided precious metal values
-    def price(silver_price, gold_price, platinum_price, palladium_price):
-        for coin_id in list(Coins.coins.keys()):
-            coin = Coins.coins[coin_id]
-            if isinstance(coin, Node):
-                coin = coin.data
+    def price(silver_price, gold_price, platinum_price, palladium_price,coin):
             if coin.metal == Metals.SILVER:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * silver_price
             if coin.metal == Metals.GOLD:
@@ -185,6 +181,8 @@ class Coins:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * platinum_price
             if coin.metal == Metals.PALLADIUM:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * palladium_price
+            coin.togglePrice(True)
+            print(coin.value)
 
 
 
@@ -558,7 +556,7 @@ class Coins:
         return results
 
 
-    def build(entries,debug=False):
+    def build(entries,prices=None,debug=False):
         if not isinstance(entries,list):
             entries = [entries]
         coins = {}
@@ -574,6 +572,8 @@ class Coins:
                     metal = entry[5],
                     nickname = entry[6]
                 ))
+            if prices is not None:
+                Coins.price(prices[0],prices[1],prices[2],prices[3],coins[entry[0]][1])
             try:
                 values[entry[7]]
             except KeyError:

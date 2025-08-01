@@ -80,7 +80,7 @@ def price(silver_price=None, gold_price=None, platinum_price=None, palladium_pri
         platinum = platinum_price
     if palladium_price is not None and (isinstance(palladium_price,int) or isinstance(palladium_price,float)):
         palladium = palladium_price
-    Coins.price(silver, gold, platinum,palladium)
+    return(silver, gold, platinum,palladium)
 
 
 def connect_to_mariadb(db_config):
@@ -151,14 +151,14 @@ except ValueError:
 
 
 # Prints out the precious metal prices and calculates the coins' worth
+prices = price()
 if not args["hide_price"]:
-    price()
     print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
     print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
     print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
     print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
 else:
-    Coins.togglePrice(False) # Disables printing of the value of coins
+    prices = None
 
 conn = None
 cursor = None
@@ -286,7 +286,7 @@ try: # Connects to database
                         )
                         """
                     cursor.execute(results[0],results[1])
-                    results = Coins.build(list(cursor),debug=args["verbose"])
+                    results = Coins.build(list(cursor),prices=prices,debug=args["verbose"])
                     if results is None:
                         print(
                             f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
@@ -314,7 +314,7 @@ try: # Connects to database
     else:  # Simply prints out all of the coins.
         query = Coins.search()
         cursor.execute(query[0],query[1])
-        results = Coins.build(list(cursor))
+        results = Coins.build(list(cursor),prices=prices,debug=args["verbose"])
         results.cascading_set_fancy(config.tree_fancy_characters)
 
         for line in results.print():
