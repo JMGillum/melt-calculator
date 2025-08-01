@@ -531,9 +531,15 @@ class Coins:
                 # Then converts the list back to a list of trees
                 current_values = [x[0] for x in current_values]
                 # Appends denomination tree
+                name = str(denomination[0]).title()
+                color = config.denomination_color
+
+                if denomination[2]:
+                    name += config.bullion_hint
+                    color = config.bullion_color
                 current_denominations.append(
                     Tree(
-                        name=printColored(str(denomination[0]).title(),config.denomination_color),
+                        name=printColored(name,color),
                         nodes=current_values,
                     )
                 )
@@ -578,7 +584,8 @@ class Coins:
             try:
                 denominations[entry[10]]
             except KeyError:
-                denominations[entry[10]] = (entry[11],[])
+                # Display name, child values, bullion tag
+                denominations[entry[10]] = (entry[11],[],entry[14])
             if entry[7] not in denominations[entry[10]][1]:
                 denominations[entry[10]][1].append(entry[7])
             try:
@@ -597,7 +604,7 @@ class Coins:
 
     def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None):
         base_query = """
-        select coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name,denominations.denomination_id,denominations.name,countries.country_id,countries.name from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id
+        select coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name,denominations.denomination_id,denominations.name,countries.country_id,countries.name,tags.bullion from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id
         """
         found_first_specifier = False
         country_query = ""

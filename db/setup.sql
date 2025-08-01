@@ -10,11 +10,14 @@ CREATE TABLE tags (
   tag_id varchar(255) PRIMARY KEY,
   bullion boolean DEFAULT FALSE
 );
+-- Tags
+INSERT INTO tags(tag_id) VALUES("none");
+INSERT INTO tags(tag_id,bullion) VALUES("bullion",TRUE);
 
 CREATE TABLE countries (
   country_id varchar(255) PRIMARY KEY,
   name varchar(255) NOT NULL,
-  tags varchar(255),
+  tags varchar(255) default "none",
   FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   alternative_name_1 varchar(255),
   alternative_name_2 varchar(255),
@@ -28,7 +31,7 @@ CREATE TABLE denominations (
   country_id varchar(255) NOT NULL,
   FOREIGN KEY (country_id) REFERENCES countries(country_id) ON UPDATE CASCADE,
   name varchar(255) NOT NULL,
-  tags varchar(255),
+  tags varchar(255) DEFAULT "none",
   FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   alternative_name_1 varchar(255),
   alternative_name_2 varchar(255),
@@ -43,7 +46,7 @@ CREATE TABLE face_values (
   FOREIGN KEY (denomination_id) REFERENCES denominations(denomination_id) ON UPDATE CASCADE,
   value decimal(20,10) NOT NULL,
   name varchar(255),
-  tags varchar(255),
+  tags varchar(255) DEFAULT "none",
   FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   alternative_name_1 varchar(255),
   alternative_name_2 varchar(255),
@@ -60,7 +63,7 @@ CREATE TABLE coins (
   fineness decimal(11,10) NOT NULL,
   precious_metal_weight decimal(20,10),
   years varchar(1024) NOT NULL,
-  tags varchar(255),
+  tags varchar(255) DEFAULT "none",
   FOREIGN KEY (tags) REFERENCES tags(tag_id) ON UPDATE CASCADE,
   metal varchar(5) NOT NULL,
   FOREIGN KEY (metal) REFERENCES metals(metal_id) ON UPDATE CASCADE,
@@ -89,8 +92,6 @@ CREATE TABLE purchases (
 -- Metal types
 insert into metals(metal_id,name) values("au","gold"),("ag","silver"),("pd","palladium"),("pt","platinum"),("rh","rhodium"),("other","unknown");
 
--- Tags
-INSERT INTO tags(tag_id,bullion) VALUES("bullion",TRUE);
 
 -- Countries
 insert into countries(country_id,name,alternative_name_1) values("can","canada","canadian");
