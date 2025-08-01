@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 31 July 2025              ":"         __ __
+   Date: 1 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -19,6 +19,7 @@
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
 
+"""
 from coins.coins import Coins
 import data
 from coinData import Purchase, PurchaseStats as Stats
@@ -27,11 +28,19 @@ import config
 
 tab = "    "
 currency_symbol="$"
-
+"""
 
 
 
 if __name__ == "__main__":
+    print("""
+-------------------------------------------------------------------------------
+                            DEFUNCT - NON OPERATIONAL
+-------------------------------------------------------------------------------
+terminating...
+""")
+    exit(1)
+    """
     # Prints out the tree of all owned coins
     Coins.price(data.silver_spot_price,data.gold_spot_price,data.platinum_spot_price,data.palladium_spot_price)
     Coins.linkPurchases()
@@ -90,4 +99,4 @@ if __name__ == "__main__":
         print("Total:\n  ",end="")
         print(Coins.print_statistics(stats=total))
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        
+    """ 
