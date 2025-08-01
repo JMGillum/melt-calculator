@@ -111,57 +111,11 @@ from coins.namedList import NamedList
 from coins.taggedList import TaggedList
 from coins.tags import Tags
 
-import coins.canada as canada
-import coins.france as france
-import coins.germany as germany
-import coins.great_britain as great_britain
-import coins.italy as italy
-import coins.mexico as mexico
-import coins.russia as russia
-import coins.south_africa as south_africa
-import coins.switzerland as switzerland
-import coins.united_states as united_states
 
 
 
 
 class Coins:
-    countries_list = [canada,france,germany,great_britain,italy,mexico,russia,south_africa,switzerland,united_states]
-
-    # Updated in Coins.linkPurchases() to include keys to coins that have purchases or don't
-    owned = set()
-    not_owned = set()
-    coins = dict()
-    values = dict()
-    denominations = dict()
-    coins_reverse_build = dict()
-    silver_coins = []
-    gold_coins = []
-    platinum_coins = []
-    palladium_coins = []
-    # Appends values from each individual file to this master list
-    for item in countries_list:
-        coins |= item.coins
-        values |= item.values
-        denominations |= item.denominations
-        coins_reverse_build |= item.coins_reverse_build
-        silver_coins += item.silver_coins
-        gold_coins += item.gold_coins
-        platinum_coins += item.platinum_coins
-        palladium_coins += item.palladium_coins
-
-    countries = {
-        "canada": NamedList("Canada", ["canada_cent","canada_sovereign","canada_dollar","maple"]),
-        "france": NamedList("France", ["centimes", "franc"]),
-        "germany": NamedList("Germany", ["pfennig","mark"]),
-        "great_britain": NamedList("Great Britain",["britannia"]),
-        "italy": NamedList("Italy", ["centesimi","lira"]),
-        "mexico": NamedList("Mexico", ["mexico_real","mexico_escudo","mexico_centavo","mexico_peso"]),
-        "russia": NamedList("Russia",["russia_kopek","russia_ruble"]),
-        "south_africa": NamedList("South Africa",["krugerrand"]),
-        "switzerland": NamedList("Switzerland",["swiss_franc"]),
-        "united_states": NamedList("United States", ["cents", "dollar","american_bullion"]),
-    }
 
     # Enables or disables printing of the coins value
     def togglePrice(show_price=True):
@@ -268,214 +222,8 @@ class Coins:
         Coins.__summarizePurchases()
 
 
-    """
-    # Creates a tree from any number/combination of key values.
-    def buildTree(coin_ids, debug=False, show_only_owned=False, show_only_not_owned=False, show_only_bullion=False, show_only_not_bullion=False,hide_coins=False, only_coin_ids=False):
-        coin_ids = list(set(coin_ids)) # Should remove duplicates, if present
-        # Disables these flags if they are both set to true. They are mutually exclusive
-        if show_only_owned and show_only_not_owned:
-            show_only_owned = false
-            show_only_not_owned = false
-        if show_only_bullion and show_only_not_bullion:
-            show_only_bullion = false
-            show_only_not_bullion = false
-        results = Tree(name="Results", nodes=[])
-        needed_countries = {}
-        needed_denominations = {}
-        needed_values = {}
-        needed_coins = []
-        for coin_id in coin_ids:
-            try:
-                information = Coins.coins_reverse_build[coin_id]
-                try: 
-                    # If requested, checks if the coin is bullion
-                    if show_only_bullion or show_only_not_bullion:
-                        denom = information[1]
-                        try:
-                            denom = Coins.denominations[denom] # Gets the Named/TaggedList for the denomination
-                            if isinstance(denom,TaggedList): # Checks if it has the BULLION tag
-                                test = Tags.BULLION in denom.tags
-                            else:
-                                test = False
-                            if show_only_bullion:
-                                if not test: # If only bullion should be showed and this is not, skip
-                                    continue
-                            else:
-                                if test: # If bullion should be hidden and this is bullion, skip
-                                    continue
 
-                        except KeyError:
-                            continue
-
-                    if (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
-                        needed_coins.append(coin_id)
-                    if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
-                        value_found = needed_values[information[0]]
-                        needed_values[information[0]] = value_found + [coin_id]
-                except (
-                    KeyError
-                ):  # coin_id's value is not a valid key in needed_values yet
-                    if (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
-                        needed_coins.append(coin_id)
-                    if (not show_only_owned and not show_only_not_owned) or (show_only_owned and coin_id in Coins.owned) or (show_only_not_owned and coin_id in Coins.not_owned):
-                        needed_values[information[0]] = [coin_id]
-
-                try:
-                    denominations_found = needed_denominations[information[1]]
-                    if not [x for x in denominations_found if x == information[0]]:
-                        needed_denominations[information[1]] = denominations_found + [
-                            information[0]
-                        ]
-                except (
-                    KeyError
-                ):  # coin_id's value is not a valid key in needed_values yet
-                    needed_denominations[information[1]] = [information[0]]
-                try:
-                    countries_found = needed_countries[information[2]]
-                    if not [x for x in countries_found if x == information[1]]:
-                        needed_countries[information[2]] = countries_found + [
-                            information[1]
-                        ]
-                except KeyError:
-                    needed_countries[information[2]] = [information[1]]
-            except KeyError:  # coin_id is not a valid key in coins_reverse_build
-                try:
-                    information = Coins.values[coin_id]
-                    coin_ids += list(information)
-                except KeyError:
-                    try:
-                        information = Coins.denominations[coin_id]
-                        coin_ids += list(information)
-                    except KeyError:
-                        try:
-                            information = Coins.countries[coin_id]
-                            coin_ids += list(information)
-                        except KeyError:
-                            pass
-
-            if debug:
-                print(f"---{coin_id}---")
-                print(f"Values: {needed_values}")
-                print(f"Denominations: {needed_denominations}")
-                print(f"Countries: {needed_countries}")
-                print()
-
-        if not show_only_owned and not show_only_not_owned:
-            needed_coins = coin_ids
-        else:
-            needed_coins = list(set(needed_coins))
-
-        
-        i = 0
-        while i < len(needed_values):
-            value = list(needed_values.keys())[i]
-            x = [x for x in Coins.values[value] if x in needed_coins]
-            if not x:
-                needed_values.pop(value)
-                i-=1
-            i+=1
-
-        i = 0
-        while i < len(needed_denominations):
-            denomination = list(needed_denominations.keys())[i]
-            x = [x for x in Coins.denominations[denomination] if x in needed_values]
-            if not x:
-                needed_denominations.pop(denomination)
-                i-=1
-            i+=1
-
-        i = 0
-        while i < len(needed_countries):
-            country = list(needed_countries.keys())[i]
-            x = [x for x in Coins.countries[country] if x in needed_denominations]
-            if not x:
-                needed_countries.pop(country)
-                i-=1
-            i+=1
-
-        if debug:
-            print("Pruned tree to:")
-            print(f"Needed Coins: {needed_coins}")
-            print(f"Values: {needed_values}")
-            print(f"Denominations: {needed_denominations}")
-            print(f"Countries: {needed_countries}")
-            print()
-
-        # Actually builds tree with given information
-        current_countries = []
-        for country in needed_countries:
-            current_denominations = []
-            for denomination in Coins.countries[country]:
-                if denomination in needed_denominations:
-                    current_values = []
-                    for value in Coins.denominations[denomination]:
-                        if value in needed_values:
-                            current_coins = []
-                            if not hide_coins:
-                                for coin in Coins.values[value]:
-                                    if coin in needed_coins:
-                                        temp = Coins.coins[coin]
-                                        if isinstance(temp, Node):
-                                            if only_coin_ids:
-                                                current_coins.append((temp,coin))
-                                            else:
-                                                current_coins.append(temp)
-                                        else:
-                                            if only_coin_ids:
-                                                current_coins.append((Node(data=temp),coin))
-                                            else:
-                                                current_coins.append(Node(data=temp))
-                                # Sorts the coins by first year available
-                                if only_coin_ids:
-                                    current_coins = sorted(current_coins, key = lambda x: x[0].data.years[0])
-                                    current_coins = [x[1] for x in current_coins]
-                                else:
-                                    current_coins = sorted(
-                                        current_coins, key=lambda x: x.data.years[0]
-                                    )
-                            if isinstance(Coins.values[value], NamedList):
-                                value = Coins.values[value]
-                            # Appends a tuple of the tree and the name to be used for sorting (should be int)
-                            current_values.append(
-                                (Tree(name=printColored(str(value),config.value_color), nodes=current_coins),int(value.name_sorting()))
-                            )
-                    # Sorts the list of trees by sorting names
-                    current_values = sorted(current_values,key = lambda x: x[1])
-                    # Then converts the list back to a list of trees
-                    current_values = [x[0] for x in current_values]
-                    # Appends denomination tree
-                    if isinstance(Coins.denominations[denomination], NamedList):
-                        denomination = Coins.denominations[denomination]
-                    color = config.denomination_color
-                    hint = ""
-                    if isinstance(denomination,TaggedList) and Tags.BULLION in denomination.tags:
-                        color = config.bullion_color
-                        hint = config.bullion_hint
-                    current_denominations.append(
-                        Tree(
-                            name=printColored(str(denomination)+hint,color),
-                            nodes=current_values,
-                        )
-                    )
-
-            # Sorts the denominations by name
-            current_denominations = sorted(current_denominations, key = lambda x: str(x))
-            # Appends country tree
-            if isinstance(Coins.countries[country], NamedList):
-                country = Coins.countries[country]
-            current_countries.append(
-                Tree(
-                    name=printColored(str(country),config.country_color), nodes=current_denominations
-                )
-            )
-        # Sorts the countries by name
-        current_countries = sorted(current_countries, key=lambda x: str(x))
-        results = Tree(name="Results", nodes=current_countries)
-        return results
-    """
-
-
-    def buildTree(countries,denominations,values,coins,debug=False,show_only_owned=False, show_only_not_owned=False,hide_coins=False, only_coin_ids=False):
+    def buildTree(countries,denominations,values,coins,debug=False,show_only_owned=False, show_only_not_owned=False,only_coin_ids=False):
         if debug:
             for item in [(countries,"Countries"),(denominations,"Denominations"),(values,"Values"),(coins,"Coins")]:
                 print(item[1])
@@ -495,26 +243,25 @@ class Coins:
                 for value in denomination[1]:
                     value = values[value]
                     current_coins = []
-                    if not hide_coins:
-                        for coin in value[1]:
-                            try:
-                                coin = coins[coin]
-                            except KeyError:
-                                continue
-                            if not coin:
-                                continue
-                            if only_coin_ids:
-                                current_coins.append((Node(data=coin[1]),coin[0]))
-                            else:
-                                current_coins.append(Node(data=coin[1]))
-                            # Sorts the coins by first year available
-                            if only_coin_ids:
-                                current_coins = sorted(current_coins, key = lambda x: x[0].data.years[0])
-                                current_coins = [x[1] for x in current_coins]
-                            else:
-                                current_coins = sorted(
-                                    current_coins, key=lambda x: x.data.years[0]
-                                )
+                    for coin in value[1]:
+                        try:
+                            coin = coins[coin]
+                        except KeyError:
+                            continue
+                        if not coin[1]:
+                            continue
+                        if only_coin_ids:
+                            current_coins.append((Node(data=coin[1]),coin[0]))
+                        else:
+                            current_coins.append(Node(data=coin[1]))
+                        # Sorts the coins by first year available
+                    if only_coin_ids:
+                        current_coins = sorted(current_coins, key = lambda x: x[0].data.years[0])
+                        current_coins = [x[1] for x in current_coins]
+                    else:
+                        current_coins = sorted(
+                            current_coins, key=lambda x: x.data.years[0]
+                        )
                     try: # converts name from decimal to integer if possible
                         value = (float(value[0]),value[1],value[2])
                         if value[0] - int(value[0]) < 0.1:
@@ -558,7 +305,7 @@ class Coins:
         return results
 
 
-    def build(entries,prices=None,debug=False, show_only_bullion=False, show_only_not_bullion=False):
+    def build(entries,prices=None,debug=False, show_only_bullion=False, show_only_not_bullion=False,show_only_owned=False, show_only_not_owned=False,hide_coins=False, only_coin_ids=False):
         if not isinstance(entries,list):
             entries = [entries]
         if show_only_bullion and show_only_not_bullion:
@@ -573,18 +320,21 @@ class Coins:
                 continue
             if show_only_not_bullion and entry[14]:
                 continue
-            coins[entry[0]]=(entry[0],CoinData(
-                    weight=entry[1],
-                    fineness=entry[2],
-                    precious_metal_weight=entry[3],
-                    years=entry[4],
-                    metal = entry[5],
-                    nickname = entry[6]
-                ))
-            if prices is not None:
-                Coins.price(prices[0],prices[1],prices[2],prices[3],coins[entry[0]][1])
-            else:
-                coins[entry[0]][1].togglePrice(False)
+            coins[entry[0]] = (entry[0],None)
+            if not hide_coins:
+                coins[entry[0]]=(coins[entry[0]][0],CoinData(
+                        weight=entry[1],
+                        fineness=entry[2],
+                        precious_metal_weight=entry[3],
+                        years=entry[4],
+                        metal = entry[5],
+                        nickname = entry[6]
+                    ))
+            if coins[entry[0]][1] is not None:
+                if prices is not None:
+                    Coins.price(prices[0],prices[1],prices[2],prices[3],coins[entry[0]][1])
+                else:
+                    coins[entry[0]][1].togglePrice(False)
             try:
                 values[entry[7]]
             except KeyError:
@@ -607,7 +357,7 @@ class Coins:
                 countries[entry[12]][1].append(entry[10])
             
 
-        return Coins.buildTree(countries,denominations,values,coins,debug=debug)
+        return Coins.buildTree(countries,denominations,values,coins,debug=debug,show_only_owned=show_only_owned, show_only_not_owned=show_only_not_owned,only_coin_ids=only_coin_ids)
 
 
 
