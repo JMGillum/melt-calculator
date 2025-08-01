@@ -275,6 +275,7 @@ try: # Connects to database
                         denomination=arguments[DENOMINATION],
                         year=arguments[YEAR],
                         face_value=arguments[FACE_VALUE],
+                        debug=args["verbose"]
                         )
                     """
                         show_only_owned = args["owned"], 
@@ -286,7 +287,7 @@ try: # Connects to database
                         )
                         """
                     cursor.execute(results[0],results[1])
-                    results = Coins.build(list(cursor),prices=prices,debug=args["verbose"])
+                    results = Coins.build(list(cursor),prices=prices,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"])
                     if results is None:
                         print(
                             f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
@@ -314,7 +315,7 @@ try: # Connects to database
     else:  # Simply prints out all of the coins.
         query = Coins.search()
         cursor.execute(query[0],query[1])
-        results = Coins.build(list(cursor),prices=prices,debug=args["verbose"])
+        results = Coins.build(list(cursor),prices=prices,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"])
         results.cascading_set_fancy(config.tree_fancy_characters)
 
         for line in results.print():

@@ -182,7 +182,6 @@ class Coins:
             if coin.metal == Metals.PALLADIUM:
                 coin.value = coin.precious_metal_weight.as_troy_ounces() * palladium_price
             coin.togglePrice(True)
-            print(coin.value)
 
 
 
@@ -275,11 +274,11 @@ class Coins:
         coin_ids = list(set(coin_ids)) # Should remove duplicates, if present
         # Disables these flags if they are both set to true. They are mutually exclusive
         if show_only_owned and show_only_not_owned:
-            show_only_owned = False
-            show_only_not_owned = False
+            show_only_owned = false
+            show_only_not_owned = false
         if show_only_bullion and show_only_not_bullion:
-            show_only_bullion = False
-            show_only_not_bullion = False
+            show_only_bullion = false
+            show_only_not_bullion = false
         results = Tree(name="Results", nodes=[])
         needed_countries = {}
         needed_denominations = {}
@@ -476,12 +475,15 @@ class Coins:
     """
 
 
-    def buildTree(countries,denominations,values,coins,debug=False,hide_coins=False,only_coin_ids=False):
+    def buildTree(countries,denominations,values,coins,debug=False,show_only_owned=False, show_only_not_owned=False,hide_coins=False, only_coin_ids=False):
         if debug:
             for item in [(countries,"Countries"),(denominations,"Denominations"),(values,"Values"),(coins,"Coins")]:
                 print(item[1])
                 for key in item[0]:
                     print(f"  {key}:{item[0][key]}")
+        if show_only_owned and show_only_not_owned:
+            show_only_owned = False
+            show_only_not_owned = False
         # Actually builds tree with given information
         current_countries = []
         for country in countries:
@@ -556,14 +558,21 @@ class Coins:
         return results
 
 
-    def build(entries,prices=None,debug=False):
+    def build(entries,prices=None,debug=False, show_only_bullion=False, show_only_not_bullion=False):
         if not isinstance(entries,list):
             entries = [entries]
+        if show_only_bullion and show_only_not_bullion:
+            show_only_bullion = False
+            show_only_not_bullion = False
         coins = {}
         values = {}
         denominations = {}
         countries = {}
         for entry in entries:
+            if show_only_bullion and not entry[14]:
+                continue
+            if show_only_not_bullion and entry[14]:
+                continue
             coins[entry[0]]=(entry[0],CoinData(
                     weight=entry[1],
                     fineness=entry[2],
@@ -602,7 +611,7 @@ class Coins:
 
 
 
-    def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None):
+    def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None,debug=False):
         base_query = """
         select coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name,denominations.denomination_id,denominations.name,countries.country_id,countries.name,tags.bullion from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id
         """
@@ -640,7 +649,7 @@ class Coins:
 
         # Adds specifier for actual value
         if year:
-            queries.append((year_query,year,1))
+            queries.append((year_query,f"%{year}%",1))
             queries[-1] = ("    coins.years like ?",queries[-1][1],queries[-1][2])
             if found_first_specifier:
                 queries[-1] = (f"\nAND\n  {queries[-1][0].strip()}",queries[-1][1],queries[-1][2])
@@ -658,6 +667,11 @@ class Coins:
                         repetitions = item[2]
                     for _ in range(repetitions):
                         variables.append(item[1])
+        if debug:
+            print("-----------------------------------")
+            print(f"Query:\n{return_query}")
+            print(f"Variables:\n{variables}")
+            print("-----------------------------------")
 
         return (f"{return_query};",tuple(variables))
     """
