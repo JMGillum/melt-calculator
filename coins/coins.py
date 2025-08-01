@@ -165,26 +165,22 @@ class Coins:
 
 
     # Adds the summary node to a coin object
-    def __summarizePurchase(coin_id):
-        try:
-            coin = Coins.coins[coin_id]
-            if isinstance(coin,Node):
-                i = 0
-                total = 0.0
-                count = 0
-                while i < len(coin.nodes):
-                    node = coin.nodes[i]
-                    if isinstance(node,Purchase):
-                        total += node.price * node.quantity
-                        count += node.quantity
-                    elif isinstance(node,str):
-                        del coin.nodes[i]
-                        i-=1
-                    i+=1
-                coin.nodes.append(Coins.print_statistics(total,count,coin.data.value*coin.data.retention))
+    def __summarizePurchase(coin):
+        if isinstance(coin,Node):
+            i = 0
+            total = 0.0
+            count = 0
+            while i < len(coin.nodes):
+                node = coin.nodes[i]
+                if isinstance(node,Purchase):
+                    total += node.price * node.quantity
+                    count += node.quantity
+                elif isinstance(node,str):
+                    del coin.nodes[i]
+                    i-=1
+                i+=1
+            coin.nodes.append(Coins.print_statistics(total,count,coin.data.value*coin.data.retention))
 
-        except KeyError:
-            pass
         return None
     
     def __summarizePurchases():
@@ -245,6 +241,7 @@ class Coins:
                                         if debug:
                                             print(f"  {match}")
                                         current_coins[-1].nodes.append(Purchase(match[1],match[2],match[3],match[4],match[5]))
+                                    Coins.__summarizePurchase(current_coins[-1])
                         # Sorts the coins by first year available
                     if only_coin_ids:
                         current_coins = sorted(current_coins, key = lambda x: x[0].data.years[0])
