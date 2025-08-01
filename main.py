@@ -166,11 +166,6 @@ try: # Connects to database
     conn = connect_to_mariadb(config.db_config)
     cursor = conn.cursor()
 
-    # Links all the defined purchases to their respective coins
-    if not args["hide_collection"]:
-        Coins.linkPurchases(
-            True
-        )  # Links purchases to all of the coinData objects stored in coins/coins.Coins
 
     # Determines if the user provided any search criteria, either by
     # Exact command line flags, a search string, or a search file
