@@ -166,6 +166,13 @@ try: # Connects to database
     conn = connect_to_mariadb(config.db_config)
     cursor = conn.cursor()
 
+    purchases = None
+    if not args["hide_collection"]:
+        cursor.execute("select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id")
+        purchases = list(cursor)
+
+
+
 
     # Determines if the user provided any search criteria, either by
     # Exact command line flags, a search string, or a search file
@@ -281,7 +288,7 @@ try: # Connects to database
                         )
                         """
                     cursor.execute(results[0],results[1])
-                    results = Coins.build(list(cursor),prices=prices,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
+                    results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
                     if results is None:
                         print(
                             f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
@@ -309,7 +316,7 @@ try: # Connects to database
     else:  # Simply prints out all of the coins.
         query = Coins.search()
         cursor.execute(query[0],query[1])
-        results = Coins.build(list(cursor),prices=prices,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
+        results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
         results.cascading_set_fancy(config.tree_fancy_characters)
 
         for line in results.print():
