@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 24 July 2025              ":"         __ __
+   Date: 31 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -47,6 +47,10 @@ import config
 
 import sys # Used to check if stdin is not from a terminal (piping input)
 from setup import setupParser
+import mariadb
+import sys
+import getpass
+
 
 # Enumeration used for argument tuples for searches
 COUNTRY = 0
@@ -76,7 +80,36 @@ def price(silver_price=None, gold_price=None, platinum_price=None, palladium_pri
         platinum = platinum_price
     if palladium_price is not None and (isinstance(palladium_price,int) or isinstance(palladium_price,float)):
         palladium = palladium_price
-    Coins.price(silver, gold, platinum,palladium)
+    return(silver, gold, platinum,palladium)
+
+
+def connect_to_mariadb(db_config):
+    try:
+        password = db_config["password"]
+    except KeyError:
+        password = db_config["password"] = None
+    if password is None:
+        if not sys.stdin.isatty():
+            print("The program must be run from a terminal or password must be supplied in db_config")
+            sys.exit(1)
+        else:
+            db_config["password"] = getpass.getpass("Password for mariadb: ")
+
+    try: 
+        print("Connecting to MariaDB...")
+        conn = mariadb.connect(**db_config)
+        print("Connection successful!")
+
+        # 3. Create a Cursor Object
+    except mariadb.Error as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
+    return conn
+
+
+    
+
+
 
 
 parser = setupParser()
@@ -118,165 +151,199 @@ except ValueError:
 
 
 # Prints out the precious metal prices and calculates the coins' worth
+prices = price()
 if not args["hide_price"]:
-    price()
     print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
     print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
     print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
     print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
 else:
-    Coins.togglePrice(False) # Disables printing of the value of coins
+    prices = None
+
+conn = None
+cursor = None
+try: # Connects to database
+    conn = connect_to_mariadb(config.db_config)
+    cursor = conn.cursor()
+
+    purchases = None
+    if not args["hide_collection"]:
+        cursor.execute("select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id")
+        purchases = list(cursor)
 
 
-# Links all the defined purchases to their respective coins
-if not args["hide_collection"]:
-    Coins.linkPurchases(
-        True
-    )  # Links purchases to all of the coinData objects stored in coins/coins.Coins
 
-# Determines if the user provided any search criteria, either by
-# Exact command line flags, a search string, or a search file
-if args["country"] or args["denomination"] or args["year"] or args["face_value"]:
-    arguments_list = [
-        (args["country"], args["denomination"], args["year"], args["face_value"])
-    ]
-else:
-    arguments_list = []
-input_strings = []
-# If multiple searches are to be performed
-if not sys.stdin.isatty(): # Input is a piped in file
-    input_strings = sys.stdin
-elif args["search_file"]: # Search file was provided
-    with open(args["search_file"], "r") as f:
-        input_strings = f.readlines()
-if args["search_string"]:
-    input_strings.append(args["search_string"])
 
-# Parses all of the search strings and gets 4 element tuples of arguments
-for item in input_strings:
-    arguments_list.append(search.parseSearchString(item, debug=args["verbose"]))
+    # Determines if the user provided any search criteria, either by
+    # Exact command line flags, a search string, or a search file
+    if args["country"] or args["denomination"] or args["year"] or args["face_value"]:
+        arguments_list = [
+            (args["country"], args["denomination"], args["year"], args["face_value"])
+        ]
+    else:
+        arguments_list = []
+    input_strings = []
+    # If multiple searches are to be performed
+    if not sys.stdin.isatty(): # Input is a piped in file
+        input_strings = sys.stdin
+    elif args["search_file"]: # Search file was provided
+        with open(args["search_file"], "r") as f:
+            input_strings = f.readlines()
+    if args["search_string"]:
+        input_strings.append(args["search_string"])
 
-# Goes through each set of arguments and searches
-if arguments_list:
-    for arguments in arguments_list:  # Loops through each search
-        # At least one argument is defined
-        if (
-            arguments[COUNTRY]
-            or arguments[DENOMINATION]
-            or arguments[YEAR]
-            or arguments[FACE_VALUE]
-        ):
-            fail_year = False
-            fail_face_value = False
-            year = None
-            face_value = None
-            # Attempts to convert year and face_value to numeric data type (int or float(only for face_value))
-            try:  # Converts the year from a string to an int
-                if arguments[YEAR]:
-                    year = int(arguments[YEAR])
+    # Parses all of the search strings and gets 4 element tuples of arguments
+    for item in input_strings:
+        arguments_list.append(search.parseSearchString(item, debug=args["verbose"]))
+
+    # Goes through each set of arguments and searches
+    if arguments_list:
+        for arguments in arguments_list:  # Loops through each search
+            # At least one argument is defined
+            if (
+                arguments[COUNTRY]
+                or arguments[DENOMINATION]
+                or arguments[YEAR]
+                or arguments[FACE_VALUE]
+            ):
+                fail_year = False
+                fail_face_value = False
+                year = None
+                face_value = None
+                # Attempts to convert year and face_value to numeric data type (int or float(only for face_value))
+                try:  # Converts the year from a string to an int
+                    if arguments[YEAR]:
+                        year = int(arguments[YEAR])
+                        arguments = (
+                            arguments[COUNTRY],
+                            arguments[DENOMINATION],
+                            year,
+                            arguments[FACE_VALUE],
+                        )
+                        if args["verbose"]:
+                            print(f"Year was successfully converted to {year}")
+                    else:
+                        if args["verbose"]:
+                            print("Year was not provided. Ignoring...")
+                except ValueError:
+                    print(
+                        f"The specified year ({arguments[YEAR]}) is not valid. It must be an integer"
+                    )
+                    fail_year = True
+                if arguments[FACE_VALUE]:
+                    try:  # Converts the face_value from a string to either an int or float
+                        face_value = int(arguments[FACE_VALUE])
+                    except ValueError:
+                        try:
+                            face_value = float(arguments[FACE_VALUE])
+                        except ValueError:
+                            index = arguments[FACE_VALUE].find("/")
+                            dash = arguments[FACE_VALUE].find("-")
+                            if dash < 0:
+                                dash = arguments[FACE_VALUE].find(" ")
+                            if index > 0:
+                                if dash > 0:
+                                    prefix = arguments[FACE_VALUE][:dash]
+                                    numerator = arguments[FACE_VALUE][dash+1:index]
+                                else:
+                                    prefix = 0
+                                    numerator = arguments[FACE_VALUE][:index]
+                                try:
+                                    denominator = arguments[FACE_VALUE][index+1:]
+                                    try:
+                                        numerator = int(numerator)
+                                        denominator = int(denominator)
+                                        prefix = int(prefix)
+                                        face_value = round(prefix + numerator/denominator,2)
+                                    except ValueError:
+                                        fail_face_value = True
+                                except IndexError:
+                                    fail_face_value = True
+                            else:
+                                fail_face_value = True
+                    
+                else:
+                    if args["verbose"]:
+                        print("face_value was not provided. Ignoring...")
+                if fail_face_value:
+                    print(
+                        f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
+                    )
+                else:
                     arguments = (
                         arguments[COUNTRY],
                         arguments[DENOMINATION],
-                        year,
-                        arguments[FACE_VALUE],
+                        arguments[YEAR],
+                        face_value,
                     )
+                    print(f"Face value was successfully converted to {arguments[FACE_VALUE]}")
+
+                if not fail_year and not fail_face_value:  # The year and face_value could be converted to numeric types if applicable
                     if args["verbose"]:
-                        print(f"Year was successfully converted to {year}")
-                else:
-                    if args["verbose"]:
-                        print("Year was not provided. Ignoring...")
-            except ValueError:
-                print(
-                    f"The specified year ({arguments[YEAR]}) is not valid. It must be an integer"
-                )
-                fail_year = True
-            if arguments[FACE_VALUE]:
-                try:  # Converts the face_value from a string to either an int or float
-                    face_value = int(arguments[FACE_VALUE])
-                except ValueError:
-                    try:
-                        face_value = float(arguments[FACE_VALUE])
-                    except ValueError:
-                        index = arguments[FACE_VALUE].find("/")
-                        dash = arguments[FACE_VALUE].find("-")
-                        if index > 0:
-                            if dash > 0:
-                                prefix = arguments[FACE_VALUE][:dash]
-                                numerator = arguments[FACE_VALUE][dash+1:index]
-                            else:
-                                prefix = 0
-                                numerator = arguments[FACE_VALUE][:index]
-                            try:
-                                denominator = arguments[FACE_VALUE][index+1:]
-                                try:
-                                    numerator = int(numerator)
-                                    denominator = int(denominator)
-                                    prefix = int(prefix)
-                                    face_value = round(prefix + numerator/denominator,2)
-                                except ValueError:
-                                    fail_face_value = True
-                            except IndexError:
-                                fail_face_value = True
-                        else:
-                            fail_face_value = True
-            else:
-                if args["verbose"]:
-                    print("face_value was not provided. Ignoring...")
-            if fail_face_value:
-                print(
-                    f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
-                )
+                        print(
+                            "The year and/or face_value arguments were successfully converted."
+                        )
+                    results = Coins.search(
+                        country=arguments[COUNTRY],
+                        denomination=arguments[DENOMINATION],
+                        year=arguments[YEAR],
+                        face_value=arguments[FACE_VALUE],
+                        debug=args["verbose"],
+                        show_only_owned = args["owned"], 
+                        show_only_not_owned = args["not_owned"],
+                        )
+                    cursor.execute(results[0],results[1])
+                    results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
+                    if results is None:
+                        print(
+                            f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
+                        )
+                    else:  # Search found some results
+                        # Sorts results into their types and stores them in their respective lists
+                        text_year = f"{arguments[YEAR]} " if arguments[YEAR] else ""
+                        text_country = (
+                            f"{arguments[COUNTRY]} " if arguments[COUNTRY] else ""
+                        )
+                        text_face_value = (
+                            f"{arguments[FACE_VALUE]} " if arguments[FACE_VALUE] else ""
+                        )
+                        text_denomination = (
+                            f"{arguments[DENOMINATION]}" if arguments[DENOMINATION] else ""
+                        )
+                        results.set_name(
+                            f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
+                        )
+                        results.cascading_set_fancy(config.tree_fancy_characters)
+                        if not args["no_tree"]:
+                            for line in results.print():
+                                print(line)
 
-            if not fail_year and not fail_face_value:  # The year and face_value could be converted to numeric types if applicable
-                if args["verbose"]:
-                    print(
-                        "The year and/or face_value arguments were successfully converted."
-                    )
-                results = Coins.search(
-                    country=arguments[COUNTRY],
-                    denomination=arguments[DENOMINATION],
-                    year=arguments[YEAR],
-                    face_value=arguments[FACE_VALUE],
-                    debug=args["verbose"],
-                    show_only_owned = args["owned"], 
-                    show_only_not_owned = args["not_owned"],
-                    show_only_bullion = args["only_bullion"],
-                    show_only_not_bullion = args["hide_bullion"],
-                    hide_coins=args["no_coins"],
-                    only_coin_ids=args["only_coin_ids"],
-                )
-                if results is None:
-                    print(
-                        f"No results found for {arguments[COUNTRY]} {arguments[YEAR]} {arguments[DENOMINATION]} {arguments[FACE_VALUE]}"
-                    )
-                else:  # Search found some results
-                    # Sorts results into their types and stores them in their respective lists
-                    text_year = f"{arguments[YEAR]} " if arguments[YEAR] else ""
-                    text_country = (
-                        f"{arguments[COUNTRY]} " if arguments[COUNTRY] else ""
-                    )
-                    text_face_value = (
-                        f"{arguments[FACE_VALUE]} " if arguments[FACE_VALUE] else ""
-                    )
-                    text_denomination = (
-                        f"{arguments[DENOMINATION]}" if arguments[DENOMINATION] else ""
-                    )
-                    results.set_name(
-                        f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
-                    )
-                    results.cascading_set_fancy(config.tree_fancy_characters)
-                    for line in results.print():
-                        print(line)
+    # Done when no search specifiers were provided.
+    else:  # Simply prints out all of the coins.
+        query = Coins.search(debug=args["verbose"],show_only_owned = args["owned"],show_only_not_owned = args["not_owned"])
+        cursor.execute(query[0],query[1])
+        results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
+        results.cascading_set_fancy(config.tree_fancy_characters)
 
-# Done when no search specifiers were provided.
-else:  # Simply prints out all of the coins.
-    # Builds Country objects for each country defined in data.countries
-    countries = list(Coins.countries.keys())
-    data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"], show_only_bullion=args["only_bullion"], show_only_not_bullion=args["hide_bullion"], hide_coins=args["no_coins"],only_coin_ids=args["only_coin_ids"])
+        if not args["no_tree"]:
+            for line in results.print():
+                print(line)
+        """
+        # Builds Country objects for each country defined in data.countries
+        countries = list(Coins.countries.keys())
+        data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"], show_only_bullion=args["only_bullion"], show_only_not_bullion=args["hide_bullion"], hide_coins=args["no_coins"],only_coin_ids=args["only_coin_ids"])
 
-    data.set_name("Precious Metals")
-    data.cascading_set_fancy(config.tree_fancy_characters)
-    for line in data.print():
-        print(line)
+        data.set_name("Precious Metals")
+        data.cascading_set_fancy(config.tree_fancy_characters)
+        for line in data.print():
+            print(line)
+        """
 
-
+finally:
+    # 4. Close Cursor and Connection
+    if cursor:
+        cursor.close()
+        print("Cursor closed.")
+    if conn:
+        conn.close()
+        print("Connection closed.")

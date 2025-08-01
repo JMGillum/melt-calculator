@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 25 July 2025              ":"         __ __
+   Date: 31 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -19,6 +19,7 @@ from datetime import datetime
 import metals
 
 import config
+from colors import printColored
 class PurchaseStats():
     def __init__(self,total=0.0,count=0,delta=0.0):
         self.total = total
@@ -60,10 +61,13 @@ class Purchase:
     def __str__(self):
         string = ""
         if self.purchase_date is not None:
-            if isinstance(self.purchase_date, datetime):
-                string += f"({self.purchase_date.strftime('%m/%d/%y')})"
-            elif isinstance(self.purchase_date, str) and not (self.purchase_date == ""):
+            if isinstance(self.purchase_date, str) and not (self.purchase_date == ""):
                 string += f"({self.purchase_date})"
+            else:
+                try:
+                    string += f"({self.purchase_date.strftime(config.date_format)})"
+                except AttributeError:
+                        pass
         if self.mint_date is not None and not (self.mint_date == ""):
             string += f" {self.mint_date}"
             if self.mint_mark is not None and not (self.mint_mark == ""):
@@ -75,7 +79,7 @@ class Purchase:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
                     string += f" ({config.currency_symbol}{self.price * self.quantity})"
-        return string
+        return printColored(string,config.purchase_color)
 
 
 class CoinData:
@@ -100,19 +104,48 @@ class CoinData:
         retention=None,
         show_value=True,
     ):
+        try:
+            weight = float(weight)
+        except ValueError:
+            pass
         if isinstance(weight, float) or isinstance(weight, int):
             self.weight = weights.Weight(weight, weights.Units.GRAMS)
         else:
             self.weight = weight
         self.show_value = show_value
-        self.metal = metal
+        if metal is not None and isinstance(metal,str):
+            self.metal = metals.Metals.fromString(metal)
+        else:
+            self.metal = metal
+        try:
+            fineness = float(fineness)
+        except ValueError:
+            pass
         self.fineness = fineness
+        if precious_metal_weight is not None and not isinstance(precious_metal_weight,weights.Weight):
+            try:
+                precious_metal_weight = float(precious_metal_weight)
+            except ValueError:
+                pass
+            if isinstance(precious_metal_weight,float):
+                precious_metal_weight = weights.Weight(round(precious_metal_weight,4),weights.Units.TROY_OUNCES)
+
         self.precious_metal_weight = precious_metal_weight
+        if isinstance(years,str):
+            if years == years[1:]:
+                years = f"[{years}"
+            if years == ']':
+                years = years[:-1]
+            temp = years.split(',')
+            years = [int(x) for x in temp]
+
         self.years = years
         self.country = country
         self.face_value = face_value
         self.denomination = denomination
         self.nickname = nickname
+        if isinstance(self.nickname,str):
+            self.nickname = self.nickname.title()
         if (
             precious_metal_weight is None
             and weight is not None
@@ -187,6 +220,8 @@ class CoinData:
 
     def metalString(self):
         if self.metal is not None:
+            if isinstance(self.metal,str):
+                return self.metal.title()
             if self.metal == metals.Metals.GOLD:
                 return "Gold"
             elif self.metal == metals.Metals.SILVER:

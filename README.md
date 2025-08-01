@@ -66,3 +66,9 @@ At least one of these must be provided for a search to actually filter anything.
 
 * Try setting `show_color` to `False` in config.py
 * If that doesn't work, also try setting `tree_fancy_characters` to `False` in config.py
+
+## Mariadb Errors
+An error occurred: Unknown database 'coin_data'
+ This means that mariadb is not running
+Try sudo systemctl status mariadb (should say 'active (running)')
+

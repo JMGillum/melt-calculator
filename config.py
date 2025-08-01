@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 24 July 2025              ":"         __ __
+   Date: 25 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -44,5 +44,24 @@ currency_symbol = "$"
 
 current_year = 2025 # Current year
 minimum_year = 1800 # Earliest number that will be considered a year and not a face value
+date_format = "%m/%d/%y"
+
+bullion_hint = " (Bullion)"
 
 show_color = True
+country_color = "blue"
+denomination_color = "purple"
+bullion_color = "magenta"
+value_color = "yellow"
+gain_color = "green"
+loss_color = "red"
+purchase_color = "teal"
+
+# 1. Database Connection Parameters
+db_config = {
+    'host': 'localhost',
+    'port': 3306,
+    'user': 'root',
+    'password': None,
+    'database': 'coin_data'
+}
