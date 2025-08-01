@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 25 July 2025              ":"         __ __
+   Date: 31 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -11,6 +11,10 @@
     how to add and update purchases. This script is still a work in progress.
     
     Use the script by calling it as main from the command line
+
+-------------------------------------------------------------------------------
+                            DEFUNCT - NON OPERATIONAL
+-------------------------------------------------------------------------------
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
