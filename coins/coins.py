@@ -200,30 +200,10 @@ class Coins:
             if isinstance(coin, Node):
                 coin.nodes = []
 
-    # Links all purchases in purchases.py to their associated coins
-    def linkPurchases(keep_old_purchases=False):
-        if not Coins.owned:
-            Coins.owned = set()
-        if not Coins.not_owned:
-            Coins.not_owned = set()
-        if not keep_old_purchases:
-            Coins.removePurchases()
-        for purchase in purchases:
-            try:
-                coin = Coins.coins[purchase]
-                if isinstance(coin, Node):
-                    coin.nodes += purchases[purchase]
-                    Coins.owned.add(purchase)
-            except KeyError:
-                print(f"{purchase} is not a valid key")
-        Coins.owned = set(Coins.owned)
-        Coins.not_owned = set(Coins.coins.keys())
-        Coins.not_owned = Coins.not_owned - Coins.owned
-        Coins.__summarizePurchases()
 
 
 
-    def buildTree(countries,denominations,values,coins,debug=False,show_only_owned=False, show_only_not_owned=False,only_coin_ids=False):
+    def buildTree(countries,denominations,values,coins,purchases=None,debug=False,show_only_owned=False, show_only_not_owned=False,only_coin_ids=False):
         if debug:
             for item in [(countries,"Countries"),(denominations,"Denominations"),(values,"Values"),(coins,"Coins")]:
                 print(item[1])
@@ -253,7 +233,18 @@ class Coins:
                         if only_coin_ids:
                             current_coins.append((Node(data=coin[1]),coin[0]))
                         else:
+                            coin_id = coin[0]
+                            # Links purchases as child nodes of the coin
                             current_coins.append(Node(data=coin[1]))
+                            if purchases:
+                                matches = [x for x in purchases if x[0] == coin_id]
+                                if matches:
+                                    if debug: # Prints out matched purchases if debugging
+                                        print(f"Coin '{coin_id}' has purchases:")
+                                    for match in matches:
+                                        if debug:
+                                            print(f"  {match}")
+                                        current_coins[-1].nodes.append(Purchase(match[1],match[2],match[3],match[4],match[5]))
                         # Sorts the coins by first year available
                     if only_coin_ids:
                         current_coins = sorted(current_coins, key = lambda x: x[0].data.years[0])
@@ -304,8 +295,23 @@ class Coins:
         results = Tree(name="Results", nodes=current_countries)
         return results
 
+    def linkPurchases(keep_old_purchases=False):
+        if not keep_old_purchases:
+            Coins.removePurchases()
+        for purchase in purchases:
+            try:
+                coin = Coins.coins[purchase]
+                if isinstance(coin, Node):
+                    coin.nodes += purchases[purchase]
+                    Coins.owned.add(purchase)
+            except KeyError:
+                print(f"{purchase} is not a valid key")
+        Coins.owned = set(Coins.owned)
+        Coins.not_owned = set(Coins.coins.keys())
+        Coins.not_owned = Coins.not_owned - Coins.owned
+        Coins.__summarizePurchases()
 
-    def build(entries,prices=None,debug=False, show_only_bullion=False, show_only_not_bullion=False,show_only_owned=False, show_only_not_owned=False,hide_coins=False, only_coin_ids=False):
+    def build(entries,prices=None,purchases=None,debug=False, show_only_bullion=False, show_only_not_bullion=False,show_only_owned=False, show_only_not_owned=False,hide_coins=False, only_coin_ids=False):
         if not isinstance(entries,list):
             entries = [entries]
         if show_only_bullion and show_only_not_bullion:
@@ -357,7 +363,7 @@ class Coins:
                 countries[entry[12]][1].append(entry[10])
             
 
-        return Coins.buildTree(countries,denominations,values,coins,debug=debug,show_only_owned=show_only_owned, show_only_not_owned=show_only_not_owned,only_coin_ids=only_coin_ids)
+        return Coins.buildTree(countries,denominations,values,coins,purchases=purchases,debug=debug,show_only_owned=show_only_owned, show_only_not_owned=show_only_not_owned,only_coin_ids=only_coin_ids)
 
 
 
