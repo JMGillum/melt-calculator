@@ -239,6 +239,8 @@ try: # Connects to database
                         except ValueError:
                             index = arguments[FACE_VALUE].find("/")
                             dash = arguments[FACE_VALUE].find("-")
+                            if dash < 0:
+                                dash = arguments[FACE_VALUE].find(" ")
                             if index > 0:
                                 if dash > 0:
                                     prefix = arguments[FACE_VALUE][:dash]
