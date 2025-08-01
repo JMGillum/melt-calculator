@@ -74,8 +74,8 @@ def metalToString(metal):
 
 
 if __name__ == "__main__": 
-    country = france
-    iso_name = "fra"
+    country = south_africa
+    iso_name = "zaf"
 
     insert_values = []
     insert_coins = []
@@ -85,23 +85,30 @@ if __name__ == "__main__":
             alternative_names = ""
             name = ""
             value_item = country.values[value]
+            placeholder = ""
             if isinstance(value_item.name,AlternativeNames):
-                name = value_item.name.name
-                for i in range(min(len(value.name.other_names),5)):
-                    alternative_names += f",alternative_name_{i+1}"
+                placeholder += ",name"
+                for i in range(min(len(value_item.name.other_names),6)):
+                    if i == 0:
+                        name = f',"{value_item.name.other_names[i].lower()}"'
+                    else:
+                        placeholder += f",alternative_name_{i}"
+                        alternative_names += f",\"{value_item.name.other_names[i].lower()}\""
 
             denomination_id = f"{iso_name}_{item.name.lower()}"
             value_id = f"{denomination_id}_{value_item}"
             d_temp = ""
             
-            d_temp += f"INSERT INTO face_values(value_id,denomination_id,value{name}{alternative_names}) VALUES("
+            d_temp += f"INSERT INTO face_values(value_id,denomination_id,value{placeholder}) VALUES("
             d_temp += f'"{value_id}","{iso_name}_{item.name.lower()}"'
             d_temp += f',{value_item.name.lower()}'
+            if isinstance(value_item.name,AlternativeNames):
+                d_temp += f'{name}{alternative_names}'
             d_temp += ");"
             insert_values.append(d_temp)
             i = 0
             for coin in value_item:
-                i += 1;
+                i += 1
                 coin_item = country.coins[coin]
              
                 if isinstance(coin_item,Node):
@@ -111,7 +118,7 @@ if __name__ == "__main__":
 
                 c_temp = ""
                 if coin_item.nickname:
-                    c_temp += "INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,nickname) VALUES("
+                    c_temp += "INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("
                 else:
                     c_temp += "INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("
                 c_temp += f"\"{value_id}_{i}\",\"{value_id}\","
@@ -119,7 +126,7 @@ if __name__ == "__main__":
                 c_temp += f'"{str(coin_item.years)[1:-1]}","'
                 c_temp +=f"{metalToString(coin_item.metal)}\""
                 if coin_item.nickname:
-                    c_temp += f',{coin_item.nickname.lower()}'
+                    c_temp += f',"{coin_item.nickname.lower()}"'
                 c_temp += ");"
                 insert_coins.append(c_temp)
 
