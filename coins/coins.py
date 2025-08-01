@@ -371,6 +371,8 @@ class Coins:
         base_query = "from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
         if show_only_owned:
             base_query = f"SELECT DISTINCT {select_columns} {base_query} right join purchases on purchases.coin_id = coins.coin_id"
+        elif show_only_not_owned:
+            base_query = f"SELECT * from (SELECT DISTINCT {select_columns},purchases.coin_id as filter {base_query} left join purchases on coins.coin_id = purchases.coin_id "
         else:
             base_query = f"SELECT {select_columns} {base_query}"
         found_first_specifier = False
@@ -425,6 +427,8 @@ class Coins:
                     for _ in range(repetitions):
                         variables.append(item[1])
 
+        if show_only_not_owned:
+            return_query += ") as a where a.filter is null"
         return_query += ";"
         if debug:
             print("-----------------------------------")
