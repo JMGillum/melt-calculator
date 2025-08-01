@@ -74,8 +74,13 @@ def metalToString(metal):
 
 
 if __name__ == "__main__": 
+<<<<<<< Updated upstream
     country = south_africa
     iso_name = "zaf"
+=======
+    country = germany
+    iso_name = "deu"
+>>>>>>> Stashed changes
 
     insert_values = []
     insert_coins = []
