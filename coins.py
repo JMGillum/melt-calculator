@@ -1,96 +1,18 @@
 """
    Author: Josh Gillum              .
-   Date: 31 July 2025              ":"         __ __
-   Code Start: Line 98            __|___       \ V /
+   Date: 1 August 2025             ":"         __ __
+                                  __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-    This file contains the actual data about all the coins used in the program.
-    The typical structure used is:
-        <Country> - Ex: Germany
-            <Denomination> - Ex: Mark
-                <Face value> - Ex: 10
-                    <Set of years> - 1871-1915
+    This file stores the Coins class, which provides an interface for
+    interacting with the database that stores the coin information. 
 
-    This structure allows for changes within the composition of a coin to be
-    reflected. In order to add any new coins, each element of the structure
-    must exist. First off is to add the actual coin data, with the aptly named
-    CoinData class. See coinData.py for more information on the different data
-    that can be stored.
-
-    An example of the structure will follow. This is useful if you wish to add
-    any new coins or modify existing ones.
-
-    1. An entry must to the coins dictionary within the Coins class must be
-    made. Below represents the 5 dollar Canadian Silver Maple Leaf coin,
-    minted from 1988 to 2025 (current-year as of writing).
-
-
-        "canada_dollar_5": Node(
-            CoinData(
-                nickname="Silver Maple Leaf Bullion",
-                years=list(range(1988, current_year+1)),
-                weight=31.11,
-                fineness=0.9999,
-                precious_metal_weight=weights.Weight(1, weights.Units.TROY_OUNCES),
-                metal=Metals.SILVER,
-                country="Canada",
-                face_value=5,
-                denomination="Dollars",
-            )
-        ),
-
-    * The key needs to be some unique name that describes the coin. This value 
-    is never displayed, so do not worry if it is a bit long or drawn out. 
-    * The CoinData object must be the data variable of a Node object. See
-    tree/node.py for more information on the Node class.
-    * The CoinData object stores the actual information about the coin, once
-    again, see coinData.py for information on the fields.
-
-    2. An entry to the values dictionary in the Coins class must be added.
-    This entry represents all of the coins of this face value, so all 5 
-    dollar Canadian coins. If there are multiple coins of this face value, 
-    place all of their keys inside the list. Using the above coin, the entry
-    would be:
-
-        "canada_dollar_5": NamedList("5", ["canada_dollar_5"]),
-
-    * The NamedList class is simply a list with a name. The name gets returned
-    whenever the list is cast to a string.
-
-    3. An entry to the denominations dictionary in the Coins class must then
-    be added. This entry represents all Canadian coins of the Dollar
-    denomination. The modern Canadian monetary system also uses cents (ex:
-    1 cent, 5 cent, 10 cent, etc.), which would have to be its own entry in
-    this dictionary. Continuing with the example, the entry would be:
-
-        "canada_dollar": NamedList("Dollars", ["canada_dollar_5"]),
-
-    * Inside the list would be all face values of the Canadian dollar.
-
-    4. Finally, an entry to the countries dictionary in the Coins class must
-    be added. This represents all coins of the country (it could also be an
-    issuing authority...). Below is the example entry:
-
-
-        "canada": NamedList("Canada", ["canada_dollar"]),
-
-    * The list stores all denominations for this country, so if coins 
-    of the Canadian cent denomination were also defined, the Canadian cent
-    denomination would have to be included in the list.
-
-    * The coins_reverse_build dictionary must also be updated. Each entry
-    is of the form <coin_id>:(face_value_id, denomination_id, country_id).
-    Where each id is the corresponding key in each of the dictionaries. See
-    helper.py for information on how to update this.
-
-    ** Note that the NamedList object stores the keys for the objects of the
-    lower tier that they represent. So, the "canada_dollar" denomination entry
-    stores the keys of all Canadian dollar face_values, as defined in the
-    values dictionary.
-
-    ** See purchases.py if you would like to add your personal collection.
+    Future plans are to move all database specific functionality to a
+    separate class that can be modified if the database is switcher or updated.
+    This class will thus only contain functions for working with the data, not
+    for getting it from the database.
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
@@ -123,6 +45,7 @@ class Coins:
 
 
 
+    # Prints summary statistics for a group of purchases (really just a total,count and worth)
     def print_statistics(total:float=0.0,count:int=0,value:float=0.0,stats:PurchaseStats=None):
         if stats and isinstance(stats,PurchaseStats):
             total = round(stats.total,2)
@@ -168,6 +91,7 @@ class Coins:
         return None
 
 
+    # Returns a tree object for a collection of countries, their denominations, their values, and their coins
     def buildTree(countries,denominations,values,coins,purchases=None,debug=False,only_coin_ids=False):
         if debug:
             for item in [(countries,"Countries"),(denominations,"Denominations"),(values,"Values"),(coins,"Coins")]:
@@ -259,6 +183,7 @@ class Coins:
         return results
 
 
+    # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
     def build(entries,prices=None,purchases=None,debug=False, show_only_bullion=False, show_only_not_bullion=False,hide_coins=False, only_coin_ids=False):
         if not isinstance(entries,list):
             entries = [entries]
@@ -314,6 +239,7 @@ class Coins:
         return Coins.buildTree(countries,denominations,values,coins,purchases=purchases,debug=debug,only_coin_ids=only_coin_ids)
 
 
+    # Returns a search query for finding coins given some specifiers
     def search(country=None,denomination=None,face_value=None,face_value_name=None,year=None,debug=False,show_only_owned=False,show_only_not_owned=False):
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
@@ -392,6 +318,7 @@ class Coins:
     def countryNames():
         return "SELECT name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5 from countries;"
 
+    # Parses a string into the four specifiers (country, denomination, year, and face value)
     def parseSearchString(text: str, countries, debug: bool = False):
         """Parses a string to extract the country's name, year, denomination, and face value"""
         numbers = re.findall("\d+", text)  # Regex finds all strings of digits

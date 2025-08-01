@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 25 July 2025              ":"         __ __
+   Date: 1 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -27,6 +27,11 @@
         a year. This number should be as large as possible while still
         representing the entire data set. Numbers smaller than this will be
         interpreted as face values of coins.
+    ->  date_format: The format for displaying dates. Mainly used for purchases.
+        Must be a string. '%m' is replaced with the month, '%d' the day, and
+        '%y' the year.
+    ->  bullion_hint: This is text that is placed next to all bullion
+        denominations. Set to empty string to not print anything.
     ->  show_color: This enables or disables color printing in the terminal.
         Set to False if weird output is occuring. Default value is True
 

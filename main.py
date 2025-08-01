@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 31 July 2025              ":"         __ __
+   Date: 1 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -24,14 +24,14 @@
             used when calculating value
         -g <gold_price> same as with silver price, but for gold.
         -p <platinum_price> same as above, but for platinum.
+        -P <palladium_price> same as above, but for palladium.
 
-    * Checkout the data.py to change the default gold and silver prices that are
-    used when you don't manually supply one.
-    * Checkout purchases.py to add your own personal collection. This lets
-    you quickly see what your purchases of a single coin are, and how they
-    compare to its intrinsic value.
-    * Checkout coins/coins.py to add other coins to the program if you aren't
-    happy with the selection.
+    * Checkout data.py to change the default precious metal prices used
+    when one isn't supplied
+
+    * Custom coins are supported but no script is yet available for adding
+    them.
+    * Purchases are supported, but no script is yet available for adding them.
 
     Finally, make sure to read README.md or README.txt for more information
     about the program and how to use it to its fullest potential.
