@@ -21,6 +21,11 @@ Install python
 * Linux: `sudo apt install python3`
 * Windows: `python`
 
+Install mariadb: https://mariadb.com/get-started-with-mariadb/
+Create a user account (or use root)
+Modify db_config in config.py
+Log into database and execute db/setup.sql
+
 # Usage
 
 Invoke the script by callling it from the command line. Either:
