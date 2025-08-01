@@ -61,10 +61,13 @@ class Purchase:
     def __str__(self):
         string = ""
         if self.purchase_date is not None:
-            if isinstance(self.purchase_date, datetime):
-                string += f"({self.purchase_date.strftime('%m/%d/%y')})"
-            elif isinstance(self.purchase_date, str) and not (self.purchase_date == ""):
+            if isinstance(self.purchase_date, str) and not (self.purchase_date == ""):
                 string += f"({self.purchase_date})"
+            else:
+                try:
+                    string += f"({self.purchase_date.strftime(config.date_format)})"
+                except AttributeError:
+                        pass
         if self.mint_date is not None and not (self.mint_date == ""):
             string += f" {self.mint_date}"
             if self.mint_mark is not None and not (self.mint_mark == ""):
