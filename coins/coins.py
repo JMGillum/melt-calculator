@@ -516,7 +516,9 @@ class Coins:
                                     current_coins, key=lambda x: x.data.years[0]
                                 )
                     try: # converts name from decimal to integer if possible
-                        value = (int(value[0]),value[1],value[2])
+                        value = (float(value[0]),value[1],value[2])
+                        if value[0] - int(value[0]) < 0.1:
+                            value = (int(value[0]),value[1],value[2])
                     except ValueError: # If name is string, append sorting number to end.
                         try:
                             value = (f"{value[0]} ({round(float(value[2]),2):.2f})",value[1],value[2])
