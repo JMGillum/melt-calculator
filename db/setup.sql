@@ -105,6 +105,7 @@ insert into countries(country_id,name,alternative_name_1,alternative_name_2,alte
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("che","switzerland","swiss","helvetia","confoederatio helvetica");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("usa","united states of america","usa","us","united states","united states america");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("sur","suriname","republic of suriname","republiek suriname");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("srb","serbia","republic of serbia","republika srbija","srbija");
 
 -- Denominations
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("can_cent","can","cent","cents");
@@ -139,6 +140,8 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) va
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("usa_dollar","usa","dollar","dollars");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,tags) values("usa_bullion","usa","bullion","bullions","bullion");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("sur_gulden","sur","gulden","guldens");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("srb_para","srb","para","pare");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("srb_dinar","srb","dinar","dinara");
 
 -- Values
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("can_cent_5","can_cent",5,"nickel","nickels");
@@ -244,6 +247,12 @@ INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) 
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("zaf_krugerrand_fractional_1_4_oz","zaf_krugerrand",0.25,"1/4 oz krugerrand","1/4");
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("zaf_krugerrand_fractional_1_10_oz","zaf_krugerrand",0.1,"1/10 oz krugerrand","1/10");
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("sur_gulden_1","sur_gulden",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("srb_para_50","srb_para",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("srb_dinar_1","srb_dinar",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("srb_dinar_2","srb_dinar",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("srb_dinar_5","srb_dinar",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("srb_dinar_10","srb_dinar",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("srb_dinar_20","srb_dinar",20);
 
 -- Coins
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES('can_cent_5_1','can_cent_5',1.162,0.925,0.0346,'1858, 1859, 1860, 1861, 1862, 1863, 1864, 1865, 1866, 1867, 1868, 1869, 1870, 1871, 1872, 1873, 1874, 1875, 1876, 1877, 1878, 1879, 1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910','ag');
@@ -464,3 +473,9 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("zaf_krugerrand_fractional_1_4_oz_1","zaf_krugerrand_fractional_1_4_oz",8.4825,0.9167,0.25,"1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal,name) VALUES("zaf_krugerrand_fractional_1_10_oz_1","zaf_krugerrand_fractional_1_10_oz",3.393,0.9167,0.1,"1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025","au","gold");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("sur_gulden_1_1","sur_gulden_1",10.00,0.72,0.2315,"1962, 1966","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_para_50_1","srb_para_50",2.5,0.835,0.0671,"1875, 1879, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_1_1","srb_dinar_1",5,0.835,0.1342,"1875, 1879, 1897, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_2_1","srb_dinar_2",10,0.835,0.2682,"1875, 1879, 1897, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_5_1","srb_dinar_5",25,0.9,0.7233,"1879","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_10_1","srb_dinar_10",3.2258,0.9,0.0933,"1882","au");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_20_1","srb_dinar_20",6.4516,0.9,0.1866,"1879, 1882","au");
