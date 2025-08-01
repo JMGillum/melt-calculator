@@ -97,7 +97,7 @@ insert into metals(metal_id,name) values("au","gold"),("ag","silver"),("pd","pal
 insert into countries(country_id,name,alternative_name_1) values("can","canada","canadian");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("fra","france","french","francais","francaise");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("deu","germany","german","deutschland");
-insert into countries(country_id,name,alternative_name_1) values("gbr","great britain","british");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("gbr","great britain","britain","british");
 insert into countries(country_id,name,alternative_name_1) values("ita","italy","italian");
 insert into countries(country_id,name,alternative_name_1) values("mex","mexico","mexican");
 insert into countries(country_id,name,alternative_name_1) values("rus","russia","russian");
