@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 24 July 2025              ":"         __ __
+   Date: 31 July 2025              ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -74,13 +74,8 @@ def metalToString(metal):
 
 
 if __name__ == "__main__": 
-<<<<<<< Updated upstream
     country = south_africa
     iso_name = "zaf"
-=======
-    country = germany
-    iso_name = "deu"
->>>>>>> Stashed changes
 
     insert_values = []
     insert_coins = []
