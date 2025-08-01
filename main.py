@@ -259,6 +259,7 @@ try: # Connects to database
                                     fail_face_value = True
                             else:
                                 fail_face_value = True
+                    
                 else:
                     if args["verbose"]:
                         print("face_value was not provided. Ignoring...")
@@ -266,6 +267,14 @@ try: # Connects to database
                     print(
                         f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
                     )
+                else:
+                    arguments = (
+                        arguments[COUNTRY],
+                        arguments[DENOMINATION],
+                        arguments[YEAR],
+                        face_value,
+                    )
+                    print(f"Face value was successfully converted to {arguments[FACE_VALUE]}")
 
                 if not fail_year and not fail_face_value:  # The year and face_value could be converted to numeric types if applicable
                     if args["verbose"]:
@@ -303,8 +312,9 @@ try: # Connects to database
                             f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
                         )
                         results.cascading_set_fancy(config.tree_fancy_characters)
-                        for line in results.print():
-                            print(line)
+                        if not args["no_tree"]:
+                            for line in results.print():
+                                print(line)
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
@@ -313,8 +323,9 @@ try: # Connects to database
         results = Coins.build(list(cursor),prices=prices,purchases=purchases,debug=args["verbose"],show_only_bullion=args["only_bullion"],show_only_not_bullion=args["hide_bullion"],only_coin_ids=args["only_coin_ids"],hide_coins=args["no_coins"])
         results.cascading_set_fancy(config.tree_fancy_characters)
 
-        for line in results.print():
-            print(line)
+        if not args["no_tree"]:
+            for line in results.print():
+                print(line)
         """
         # Builds Country objects for each country defined in data.countries
         countries = list(Coins.countries.keys())
