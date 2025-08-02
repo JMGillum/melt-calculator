@@ -167,9 +167,7 @@ try:  # Connects to database
 
     purchases = None
     if not args["hide_collection"]:
-        cursor.execute(
-            "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"
-        )
+        cursor.execute(Queries.purchases())
         purchases = list(cursor)
 
     # Determines if the user provided any search criteria, either by
@@ -359,17 +357,6 @@ try:  # Connects to database
         if not args["no_tree"]:
             for line in results.print():
                 print(line)
-        """
-        # Builds Country objects for each country defined in data.countries
-        countries = list(Coins.countries.keys())
-        data = Coins.buildTree(countries, debug=args["verbose"], show_only_owned = args["owned"], show_only_not_owned = args["not_owned"], show_only_bullion=args["only_bullion"], show_only_not_bullion=args["hide_bullion"], hide_coins=args["no_coins"],only_coin_ids=args["only_coin_ids"])
-
-        data.set_name("Precious Metals")
-        data.cascading_set_fancy(config.tree_fancy_characters)
-        for line in data.print():
-            print(line)
-        """
-
 finally:
     # 4. Close Cursor and Connection
     if cursor:
