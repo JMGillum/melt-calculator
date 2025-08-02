@@ -1,10 +1,12 @@
 """
    Author: Josh Gillum              .
-   Date: 1 August 2025             ":"         __ __
+   Date: 2 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    MUST BE RUN FROM ROOT PROJECT DIRECTORY!!!
 
     This script makes it easier to add new coins to the database. It does not
     actually add the coins to the database, it simply prints out the sql
@@ -15,6 +17,22 @@
 """
 import mariadb
 import sys
+import pathlib
+from datetime import datetime
+
+log_file = pathlib.PurePath('addCoins.log')
+countries_file = pathlib.PurePath('setup_countries.sql')
+denominations_file = pathlib.PurePath('setup_denominations.sql')
+values_file = pathlib.PurePath('setup_values.sql')
+coins_file = pathlib.PurePath('setup_coins.sql')
+cwd = pathlib.Path.cwd()
+if not cwd.name == 'db':
+    cwd = cwd / 'db'
+log_file = cwd / log_file
+countries_file = cwd / countries_file
+denominations_file = cwd / denominations_file
+values_file = cwd / values_file
+coins_file = cwd / coins_file
 
 db_config = {
     "host": "localhost",
@@ -44,6 +62,12 @@ value_code = ""
 denomination_prefix = ""
 value_prefix = ""
 coin_prefix = ""
+
+def log(text,file=None):
+    if file is None:
+        file = log_file
+    with open(file,"a") as f:
+        f.write(f"{text}\n")
 
 
 
@@ -77,6 +101,7 @@ def addCountry(country_id):
     for i in range(len(alternative_names)):
         query_string += f',"{alternative_names[i]}"'
     query_string += ");"
+    log(query_string)
     added_countries.append(country_id)
     queries_countries.append(query_string)
 
@@ -115,6 +140,7 @@ def addDenomination(prefix,code):
     for i in range(len(alternative_names)):
         query_string += f',"{alternative_names[i]}"'
     query_string += ");"
+    log(query_string)
     added_denominations.append(f"{prefix}_{code}")
     queries_denominations.append(query_string)
 
@@ -151,6 +177,7 @@ def addValue(prefix,code):
             query_string += f',"{alternative_names[i]}"'
     query_string += f",{code}"
     query_string += ");"
+    log(query_string)
     added_values.append(f"{prefix}_{code}")
     queries_values.append(query_string)
 
@@ -178,12 +205,17 @@ def addCoin(prefix,code):
         fineness = input("Enter fineness (90% = 0.9):")
         try:
             gross_weight_usable = float(gross_weight)
-            fineness_usable = float(fineness) # Ensures that user enters numeric value
-            if fineness_usable > 1:
-                while fineness_usable > 10:
-                    fineness_usable = fineness_usable / 10
-                fineness_usable = float(fineness_usable/10)
-            precious_metal_weight = gross_weight_usable * fineness_usable * 0.03215075
+            fineness = float(fineness) # Ensures that user enters numeric value
+            if fineness > 100:
+                fineness = str(fineness).split(".")
+                fineness = "".join(fineness)
+                fineness = float(f"{fineness[:2]}.{fineness[2:]}")
+            if fineness > 1:
+                while fineness >= 10:
+                    fineness = fineness / 10
+                fineness = float(fineness/10)
+            fineness = round(fineness,4)
+            precious_metal_weight = gross_weight_usable * fineness * 0.03215075
             precious_metal_weight = round(precious_metal_weight,4)
             response = input(f"Is the calculated precious metal weight ({precious_metal_weight}) correct? (Press enter to continue. Enter it here (in troy ounces) to manually enter it.)")
             if response:
@@ -231,10 +263,12 @@ def addCoin(prefix,code):
         query_string += f',"{name}"'
     query_string += f',{gross_weight},{fineness},{precious_metal_weight},"{years}","{metal}"'
     query_string += ");"
+    log(query_string)
     added_coins.append(f"{prefix}_{code}")
     queries_coins.append(query_string)
 
 if __name__ == "__main__":
+    log(str(datetime.now()))
     conn = None
     cursor = None
     try:
@@ -321,3 +355,12 @@ if __name__ == "__main__":
             print(f"-----{item[1]}-----")
             for query in item[0]:
                 print(query)
+
+    response = input("Append SQL to file? (y/n): ").lower()
+    if response == 'y' or response == "yes":
+        for item in [(queries_countries,countries_file),(queries_denominations,denominations_file),(queries_values,values_file),(queries_coins,coins_file)]:
+            if item[0]:
+                for entry in item[0]:
+                    log(entry,item[1])
+                    log(f"Writing '{entry}'\n  to file ({item[1]})")
+
