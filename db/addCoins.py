@@ -249,57 +249,51 @@ if __name__ == "__main__":
 
             # --- Example: Select Data ---
             print("\nSelecting data...")
-            select_query = "SELECT coin_id FROM coins WHERE coin_id LIKE ?"
+            select_query = "SELECT value_id FROM face_values WHERE value_id = ?"
             cursor.execute(
-                select_query, (f"{coin_prefix}%",)
+                select_query, (f"{coin_prefix}",)
             )  # Note the comma for single parameter tuple
 
             print("Fetched data:")
             temp = list(cursor)
             coin_number = 1
-            if temp:
-                coin_number = int(temp[-1][0].split("_")[-1]) # Gets count value at end of coin_id
-                coin_number += 1
-            else: # No matches from database
-                # matches stores a list of the suffix for coin_id (number/id for face_value)
+            if temp or [x for x in added_values if coin_prefix == x]: # The value was found in the database or has been added
                 matches = [int(x.split("_")[-1]) for x in added_coins if coin_prefix in x]
                 if matches: # See if any added coins match
                     coin_number = max(matches) + 1
-                else: # No matches at all, add value
+                else:
+                    select_query = "SELECT coin_id FROM coins WHERE coin_id LIKE ?"
+                    cursor.execute(
+                        select_query, (f"{coin_prefix}%",)
+                    )  # Note the comma for single parameter tuple
+                    temp = list(cursor)
+                    if temp:
+                        coin_number = int(temp[-1][0].split("_")[-1]) # Gets count value at end of coin_id
+                        coin_number += 1
+            else: # No value match
+                print("No data found")
+                print("\nSelecting data...")
+                select_query = "SELECT denomination_id FROM denominations WHERE denomination_id = ?"
+                cursor.execute(
+                    select_query, (f"{value_prefix}",)
+                )  # Note the comma for single parameter tuple
+
+                print("Fetched data:")
+                temp = list(cursor)
+                if not temp and not [x for x in added_denominations if value_prefix == x]: # No denomination match
                     print("No data found")
                     print("\nSelecting data...")
-                    select_query = "SELECT value_id FROM face_values WHERE value_id LIKE ?"
+                    select_query = "SELECT country_id FROM countries WHERE country_id = ?"
                     cursor.execute(
-                        select_query, (f"{value_prefix}%",)
+                        select_query, (f"{denomination_prefix}",)
                     )  # Note the comma for single parameter tuple
 
                     print("Fetched data:")
                     temp = list(cursor)
-                    if not temp and not [x for x in added_values if value_prefix in x]: # No values match, so denomination needs to be added
-                        print("No data found")
-                        print("\nSelecting data...")
-                        select_query = "SELECT denomination_id FROM denominations WHERE denomination_id LIKE ?"
-                        cursor.execute(
-                            select_query, (f"{denomination_prefix}%",)
-                        )  # Note the comma for single parameter tuple
-
-                        print("Fetched data:")
-                        temp = list(cursor)
-                        if not temp and not [x for x in added_denominations if denomination_prefix in x]:
-                            print("No data found")
-                            print("\nSelecting data...")
-                            select_query = "SELECT country_id FROM countries WHERE country_id LIKE ?"
-                            cursor.execute(
-                                select_query, (f"{country_code}",)
-                            )  # Note the comma for single parameter tuple
-
-                            print("Fetched data:")
-                            temp = list(cursor)
-                            if not temp and country_code not in added_countries:
-                                addCountry(country_code)
-
-                        addDenomination(denomination_prefix,denomination_code)
-                    addValue(value_prefix,value_code)
+                    if not temp and not [x for x in added_countries if country_code == x]:
+                        addCountry(country_code)
+                    addDenomination(denomination_prefix,denomination_code)
+                addValue(value_prefix,value_code)
             addCoin(coin_prefix,coin_number)
 
 
