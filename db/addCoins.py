@@ -260,11 +260,12 @@ if __name__ == "__main__":
             if temp:
                 coin_number = int(temp[-1][0].split("_")[-1]) # Gets count value at end of coin_id
                 coin_number += 1
-            else:
+            else: # No matches from database
+                # matches stores a list of the suffix for coin_id (number/id for face_value)
                 matches = [int(x.split("_")[-1]) for x in added_coins if coin_prefix in x]
-                if matches:
+                if matches: # See if any added coins match
                     coin_number = max(matches) + 1
-                else:
+                else: # No matches at all, add value
                     print("No data found")
                     print("\nSelecting data...")
                     select_query = "SELECT value_id FROM face_values WHERE value_id LIKE ?"
@@ -274,7 +275,7 @@ if __name__ == "__main__":
 
                     print("Fetched data:")
                     temp = list(cursor)
-                    if not temp and not [x for x in added_values if value_prefix in x]:
+                    if not temp and not [x for x in added_values if value_prefix in x]: # No values match, so denomination needs to be added
                         print("No data found")
                         print("\nSelecting data...")
                         select_query = "SELECT denomination_id FROM denominations WHERE denomination_id LIKE ?"
