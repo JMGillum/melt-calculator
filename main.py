@@ -48,8 +48,7 @@ import config
 
 import sys  # Used to check if stdin is not from a terminal (piping input)
 from setup import setupParser
-import mariadb
-import getpass
+from db_interface import DB_Interface
 
 
 # Enumeration used for argument tuples for searches
@@ -85,31 +84,6 @@ def price(
         palladium = palladium_price
     return (silver, gold, platinum, palladium)
 
-
-def connect_to_mariadb(db_config):
-    try:
-        password = db_config["password"]
-    except KeyError:
-        password = db_config["password"] = None
-    if password is None:
-        if not sys.stdin.isatty():
-            print(
-                "The program must be run from a terminal or password must be supplied in db_config"
-            )
-            sys.exit(1)
-        else:
-            db_config["password"] = getpass.getpass("Password for mariadb: ")
-
-    try:
-        print("Connecting to MariaDB...")
-        conn = mariadb.connect(**db_config)
-        print("Connection successful!")
-
-        # 3. Create a Cursor Object
-    except mariadb.Error as e:
-        print(f"An error occurred: {e}")
-        sys.exit(1)
-    return conn
 
 
 parser = setupParser()
@@ -159,16 +133,13 @@ if not args["hide_price"]:
 else:
     prices = None
 
-conn = None
-cursor = None
 try:  # Connects to database
-    conn = connect_to_mariadb(config.db_config)
-    cursor = conn.cursor()
+    db = DB_Interface()
+    db.connect(config.db_config)
 
     purchases = None
     if not args["hide_collection"]:
-        cursor.execute(Queries.purchases())
-        purchases = list(cursor)
+        purchases = db.fetchPurchases()
 
     # Determines if the user provided any search criteria, either by
     # Exact command line flags, a search string, or a search file
@@ -190,9 +161,8 @@ try:  # Connects to database
 
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
-        cursor.execute(Queries.countryNames())
         arguments_list.append(
-            Coins.parseSearchString(item, list(cursor), debug=args["verbose"])
+            Coins.parseSearchString(item, db.fetchCountryNames(), debug=args["verbose"])
         )
 
     # Goes through each set of arguments and searches
@@ -288,7 +258,7 @@ try:  # Connects to database
                         print(
                             "The year and/or face_value arguments were successfully converted."
                         )
-                    results = Queries.search(
+                    results = db.fetchCoins(
                         country=arguments[COUNTRY],
                         denomination=arguments[DENOMINATION],
                         year=arguments[YEAR],
@@ -297,9 +267,8 @@ try:  # Connects to database
                         show_only_owned=args["owned"],
                         show_only_not_owned=args["not_owned"],
                     )
-                    cursor.execute(results[0], results[1])
                     results = Coins.build(
-                        list(cursor),
+                        results,
                         prices=prices,
                         purchases=purchases,
                         debug=args["verbose"],
@@ -336,14 +305,13 @@ try:  # Connects to database
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
-        query = Queries.search(
+        results = db.fetchCoins(
             debug=args["verbose"],
             show_only_owned=args["owned"],
             show_only_not_owned=args["not_owned"],
         )
-        cursor.execute(query[0], query[1])
         results = Coins.build(
-            list(cursor),
+            results,
             prices=prices,
             purchases=purchases,
             debug=args["verbose"],
@@ -359,9 +327,4 @@ try:  # Connects to database
                 print(line)
 finally:
     # 4. Close Cursor and Connection
-    if cursor:
-        cursor.close()
-        print("Cursor closed.")
-    if conn:
-        conn.close()
-        print("Connection closed.")
+    db.closeConnection()
