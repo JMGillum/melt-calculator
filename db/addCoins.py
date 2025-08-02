@@ -20,11 +20,14 @@ import sys
 import pathlib
 from datetime import datetime
 
+# Various files for output
 log_file = pathlib.PurePath('addCoins.log')
 countries_file = pathlib.PurePath('setup_countries.sql')
 denominations_file = pathlib.PurePath('setup_denominations.sql')
 values_file = pathlib.PurePath('setup_values.sql')
 coins_file = pathlib.PurePath('setup_coins.sql')
+
+# Ensures that files are in project_root/db directory
 cwd = pathlib.Path.cwd()
 if not cwd.name == 'db':
     cwd = cwd / 'db'
