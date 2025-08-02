@@ -1,0 +1,12 @@
+insert into countries(country_id,name,alternative_name_1) values("can","canada","canadian");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("fra","france","french","francais","francaise");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("deu","germany","german","deutschland");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("gbr","great britain","britain","british");
+insert into countries(country_id,name,alternative_name_1) values("ita","italy","italian");
+insert into countries(country_id,name,alternative_name_1) values("mex","mexico","mexican");
+insert into countries(country_id,name,alternative_name_1) values("rus","russia","russian");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) values("zaf","south africa","south african","s africa","s. africa","s african","s. african");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) values("che","switzerland","swiss","helvetia","confoederatio helvetica");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("usa","united states of america","usa","us","united states","united states america");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("sur","suriname","republic of suriname","republiek suriname","dutch guiana","guiana");
+insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("srb","serbia","serbian","republic of serbia","republika srbija","srbija");
