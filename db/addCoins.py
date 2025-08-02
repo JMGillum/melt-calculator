@@ -23,17 +23,28 @@ db_config = {
     "password": "test",
     "database": "coin_data",
 }
-defined_countries = []
+# Lists of query strings
+queries_countries = []
+queries_denominations = []
+queries_values = []
+queries_coins = []
+
+# List of ids for items added during this session
 added_countries = []
 added_denominations = []
 added_values = []
 added_coins = []
-country_code = input("ISO 3 Alpha country code=").lower()
-denomination_code = input("Denomination code=").lower()
-value_code = input("Value code=").lower()
-denomination_prefix = f"{country_code}"
-value_prefix = f"{denomination_prefix}_{denomination_code}"
-coin_prefix = f"{value_prefix}_{value_code}"
+
+# String appended to the prefix as the value of this level
+country_code = ""
+denomination_code = ""
+value_code = ""
+
+# prefix for id of level. Ex: coin_prefix is the denomination_id for the coin and prefix of the coin_id
+denomination_prefix = ""
+value_prefix = ""
+coin_prefix = ""
+
 
 
 def addCountry(country_id):
@@ -65,7 +76,8 @@ def addCountry(country_id):
     for i in range(len(alternative_names)):
         query_string += f',"{alternative_names[i]}"'
     query_string += ");"
-    added_countries.append(query_string)
+    added_countries.append(country_id)
+    queries_countries.append(query_string)
 
 
 def addDenomination(prefix,code):
@@ -98,7 +110,8 @@ def addDenomination(prefix,code):
     for i in range(len(alternative_names)):
         query_string += f',"{alternative_names[i]}"'
     query_string += ");"
-    added_denominations.append(query_string)
+    added_denominations.append(f"{prefix}_{code}")
+    queries_denominations.append(query_string)
 
 def addValue(prefix,code):
     print(f"Value id: {prefix}")
@@ -132,7 +145,8 @@ def addValue(prefix,code):
             query_string += f',"{alternative_names[i]}"'
     query_string += f",{code}"
     query_string += ");"
-    added_values.append(query_string)
+    added_values.append(f"{prefix}_{code}")
+    queries_values.append(query_string)
 
 def addCoin(prefix,code):
     print(f"Coin id: {prefix}_{code}")
@@ -210,85 +224,98 @@ def addCoin(prefix,code):
         query_string += f',"{name}"'
     query_string += f',{gross_weight},{fineness},{precious_metal_weight},"{years}","{metal}"'
     query_string += ");"
-    added_coins.append(query_string)
+    added_coins.append(f"{prefix}_{code}")
+    queries_coins.append(query_string)
 
-conn = None
-cursor = None
-try:
-    # 2. Establish a Connection
-    print("Connecting to MariaDB...")
-    conn = mariadb.connect(**db_config)
-    print("Connection successful!")
+if __name__ == "__main__":
+    conn = None
+    cursor = None
+    try:
+        # 2. Establish a Connection
+        print("Connecting to MariaDB...")
+        conn = mariadb.connect(**db_config)
+        print("Connection successful!")
 
-    # 3. Create a Cursor Object
-    cursor = conn.cursor()
+        # 3. Create a Cursor Object
+        cursor = conn.cursor()
+        while not input("Press enter to add a new coin. Enter any other value to finish and print queries.:"):
+            country_code = input("ISO 3 Alpha country code=").lower()
+            denomination_code = input("Denomination code=").lower()
+            value_code = input("Value code=").lower()
+            denomination_prefix = f"{country_code}"
+            value_prefix = f"{denomination_prefix}_{denomination_code}"
+            coin_prefix = f"{value_prefix}_{value_code}"
 
 
-    # --- Example: Select Data ---
-    print("\nSelecting data...")
-    select_query = "SELECT coin_id FROM coins WHERE coin_id LIKE ?"
-    cursor.execute(
-        select_query, (f"{coin_prefix}%",)
-    )  # Note the comma for single parameter tuple
-
-    print("Fetched data:")
-    temp = list(cursor)
-    coin_number = 1
-    if temp:
-        coin_number = int(temp[-1][0].split("_")[-1]) # Gets count value at end of coin_id
-        coin_number += 1
-    else:
-        print("No data found")
-        print("\nSelecting data...")
-        select_query = "SELECT value_id FROM face_values WHERE value_id LIKE ?"
-        cursor.execute(
-            select_query, (f"{value_prefix}%",)
-        )  # Note the comma for single parameter tuple
-
-        print("Fetched data:")
-        temp = list(cursor)
-        if not temp:
-            print("No data found")
+            # --- Example: Select Data ---
             print("\nSelecting data...")
-            select_query = "SELECT denomination_id FROM denominations WHERE denomination_id LIKE ?"
+            select_query = "SELECT coin_id FROM coins WHERE coin_id LIKE ?"
             cursor.execute(
-                select_query, (f"{denomination_prefix}%",)
+                select_query, (f"{coin_prefix}%",)
             )  # Note the comma for single parameter tuple
 
             print("Fetched data:")
             temp = list(cursor)
-            if not temp:
-                print("No data found")
-                print("\nSelecting data...")
-                select_query = "SELECT country_id FROM countries WHERE country_id LIKE ?"
-                cursor.execute(
-                    select_query, (f"{country_code}",)
-                )  # Note the comma for single parameter tuple
+            coin_number = 1
+            if temp:
+                coin_number = int(temp[-1][0].split("_")[-1]) # Gets count value at end of coin_id
+                coin_number += 1
+            else:
+                matches = [int(x.split("_")[-1]) for x in added_coins if coin_prefix in x]
+                if matches:
+                    coin_number = max(matches) + 1
+                else:
+                    print("No data found")
+                    print("\nSelecting data...")
+                    select_query = "SELECT value_id FROM face_values WHERE value_id LIKE ?"
+                    cursor.execute(
+                        select_query, (f"{value_prefix}%",)
+                    )  # Note the comma for single parameter tuple
 
-                print("Fetched data:")
-                temp = list(cursor)
-                if not temp:
-                    addCountry(country_code)
+                    print("Fetched data:")
+                    temp = list(cursor)
+                    if not temp and not [x for x in added_values if value_prefix in x]:
+                        print("No data found")
+                        print("\nSelecting data...")
+                        select_query = "SELECT denomination_id FROM denominations WHERE denomination_id LIKE ?"
+                        cursor.execute(
+                            select_query, (f"{denomination_prefix}%",)
+                        )  # Note the comma for single parameter tuple
 
-            addDenomination(denomination_prefix,denomination_code)
-        addValue(value_prefix,value_code)
-    addCoin(coin_prefix,coin_number)
+                        print("Fetched data:")
+                        temp = list(cursor)
+                        if not temp and not [x for x in added_denominations if denomination_prefix in x]:
+                            print("No data found")
+                            print("\nSelecting data...")
+                            select_query = "SELECT country_id FROM countries WHERE country_id LIKE ?"
+                            cursor.execute(
+                                select_query, (f"{country_code}",)
+                            )  # Note the comma for single parameter tuple
+
+                            print("Fetched data:")
+                            temp = list(cursor)
+                            if not temp and country_code not in added_countries:
+                                addCountry(country_code)
+
+                        addDenomination(denomination_prefix,denomination_code)
+                    addValue(value_prefix,value_code)
+            addCoin(coin_prefix,coin_number)
 
 
-except mariadb.Error as e:
-    print(f"An error occurred: {e}")
-    sys.exit(1)
-finally:
-    # 4. Close Cursor and Connection
-    if cursor:
-        cursor.close()
-        print("Cursor closed.")
-    if conn:
-        conn.close()
-        print("Connection closed.")
+    except mariadb.Error as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
+    finally:
+        # 4. Close Cursor and Connection
+        if cursor:
+            cursor.close()
+            print("Cursor closed.")
+        if conn:
+            conn.close()
+            print("Connection closed.")
 
-for item in [(added_countries,"Countries"),(added_denominations,"Denominations"),(added_values,"Values"),(added_coins,"Coins")]:
-    if item[0]:
-        print(f"-----{item[1]}-----")
-        for query in item[0]:
-            print(query)
+    for item in [(queries_countries,"Countries"),(queries_denominations,"Denominations"),(queries_values,"Values"),(queries_coins,"Coins")]:
+        if item[0]:
+            print(f"-----{item[1]}-----")
+            for query in item[0]:
+                print(query)
