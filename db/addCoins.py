@@ -228,34 +228,44 @@ def addCoin(prefix,code):
         except ValueError:
             print("All values must be numeric.")
             continue
-    metal = input("Enter periodic symbol for metal (sil=ag,gol=au,plat=pt,pala=pd,rho=rh):")
+    valid_metal = False
+    while not valid_metal:
+        metal = input("Enter periodic symbol for metal (sil=ag,gol=au,plat=pt,pala=pd,rho=rh):").lower()
+        valid_metal = [x for x in ["ag","au","pt","pd","rh"] if metal == x]
     years = ""
     while True:
         years = input("Enter years (comma separated)(shorthand x-y is acceptable):")
-        years_list = years.split(",")
-        years = ""
-        for item in years_list:
-            try:
-                int(item)
-                years += f"{item}, "
-            except ValueError:
-                if "-" in item:
-                    temp = item.find("-")
-                    beginning = item[:temp]
-                    end = item[temp+1:]
-                    try:
-                        beginning = int(beginning)
-                        end = int(end)
-                        for i in range(beginning,end+1):
-                            years += f"{i}, "
-                    except ValueError: # Two numbers were not actually numbers
-                        print("All values must be numbers")
+        if years:
+            years_list = years.split(",")
+            years = ""
+            fail = False
+            for item in years_list:
+                if fail:
+                    break
+                try:
+                    int(item)
+                    years += f"{item}, "
+                except ValueError:
+                    if "-" in item:
+                        temp = item.find("-")
+                        beginning = item[:temp]
+                        end = item[temp+1:]
+                        try:
+                            beginning = int(beginning)
+                            end = int(end)
+                            for i in range(beginning,end+1):
+                                years += f"{i}, "
+                        except ValueError: # Two numbers were not actually numbers
+                            print("All values must be numbers")
+                            fail = True
+                            continue
+                    else:
+                        print("Values must be individual years or of the form x-y (ex: 1898-1900)")
+                        fail = True
                         continue
-                else:
-                    print("Values must be individual years or of the form x-y (ex: 1898-1900)")
-                    continue
-        years = years[:-2] # Chops off trailing comma and space
-        break
+            if not fail:
+                years = years[:-2] # Chops off trailing comma and space
+                break
 
     query_string = "INSERT INTO coins(coin_id,face_value_id" 
     if name:
