@@ -1,3 +1,4 @@
+#!/bin/bash
 > setup.sql
 cat setup_db.sql >> setup.sql
 cat setup_countries.sql >> setup.sql
