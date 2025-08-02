@@ -1,5 +1,9 @@
 # WEEKLY RELEASES EVERY FRIDAY
 
+Since latest release:
+* Split setup.sql into multiple files and wrote bash script for combining them into a single file
+* Created addCoins.py, which can be used to add new coins
+
 ## Melt Calculator
 
 The melt calculator is a valuable resources for investing in or collecting coins made of precious metals. It provides an easy to use interface for searching for coins. Each coin has an associated melt/intrinsic value equal to:
