@@ -48,6 +48,7 @@ coin_prefix = ""
 
 
 def addCountry(country_id):
+    country_id = country_id.lower()
     name = input(f"Country name for ({country_id}): ").lower()
     while True:
         alternative_names = []
@@ -81,8 +82,12 @@ def addCountry(country_id):
 
 
 def addDenomination(prefix,code):
-    print(f"Denomination id: {prefix}")
-    name = input(f"Denomination name for ({prefix}_{code}): ").lower()
+    prefix = prefix.lower()
+    code = code.lower()
+    name = code
+    response = input(f"Default name for ({prefix}_{code}) is {name}. Press enter to continue or enter new name here: ").lower()
+    if response:
+        name = response
     while True:
         alternative_names = []
         if not name:
@@ -114,7 +119,8 @@ def addDenomination(prefix,code):
     queries_denominations.append(query_string)
 
 def addValue(prefix,code):
-    print(f"Value id: {prefix}")
+    prefix = prefix.lower()
+    code = code
     while True:
         name = input(f"Value name for ({prefix}_{code}) (enter empty string to skip): ").lower()
         alternative_names = []
@@ -149,7 +155,8 @@ def addValue(prefix,code):
     queries_values.append(query_string)
 
 def addCoin(prefix,code):
-    print(f"Coin id: {prefix}_{code}")
+    prefix = prefix.lower()
+    code = code
     name = input(f"Coin name for ({prefix}_{code}) (enter empty string to skip): ").lower()
     while True:
         if name:
@@ -270,7 +277,7 @@ if __name__ == "__main__":
                     if temp:
                         coin_number = int(temp[-1][0].split("_")[-1]) # Gets count value at end of coin_id
                         coin_number += 1
-            else: # No value match
+            else: # No value found
                 print("No data found")
                 print("\nSelecting data...")
                 select_query = "SELECT denomination_id FROM denominations WHERE denomination_id = ?"
@@ -280,7 +287,7 @@ if __name__ == "__main__":
 
                 print("Fetched data:")
                 temp = list(cursor)
-                if not temp and not [x for x in added_denominations if value_prefix == x]: # No denomination match
+                if not temp and not [x for x in added_denominations if value_prefix == x]: # No denomination in database or added
                     print("No data found")
                     print("\nSelecting data...")
                     select_query = "SELECT country_id FROM countries WHERE country_id = ?"
@@ -290,7 +297,7 @@ if __name__ == "__main__":
 
                     print("Fetched data:")
                     temp = list(cursor)
-                    if not temp and not [x for x in added_countries if country_code == x]:
+                    if not temp and not [x for x in added_countries if country_code == x]: # no country in database or added
                         addCountry(country_code)
                     addDenomination(denomination_prefix,denomination_code)
                 addValue(value_prefix,value_code)
