@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 1 August 2025             ":"         __ __
+   Date: 2 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -43,6 +43,7 @@
 
 import data as d
 from coins import Coins
+from queries import Queries
 import config
 
 import sys  # Used to check if stdin is not from a terminal (piping input)
@@ -191,7 +192,7 @@ try:  # Connects to database
 
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
-        cursor.execute(Coins.countryNames())
+        cursor.execute(Queries.countryNames())
         arguments_list.append(
             Coins.parseSearchString(item, list(cursor), debug=args["verbose"])
         )
@@ -289,7 +290,7 @@ try:  # Connects to database
                         print(
                             "The year and/or face_value arguments were successfully converted."
                         )
-                    results = Coins.search(
+                    results = Queries.search(
                         country=arguments[COUNTRY],
                         denomination=arguments[DENOMINATION],
                         year=arguments[YEAR],
@@ -337,7 +338,7 @@ try:  # Connects to database
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
-        query = Coins.search(
+        query = Queries.search(
             debug=args["verbose"],
             show_only_owned=args["owned"],
             show_only_not_owned=args["not_owned"],

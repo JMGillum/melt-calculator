@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 1 August 2025             ":"         __ __
+   Date: 2 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -318,116 +318,12 @@ class Coins:
             only_coin_ids=only_coin_ids,
         )
 
-    # Returns a search query for finding coins given some specifiers
-    def search(
-        country=None,
-        denomination=None,
-        face_value=None,
-        face_value_name=None,
-        year=None,
-        debug=False,
-        show_only_owned=False,
-        show_only_not_owned=False,
-    ):
-        if show_only_owned and show_only_not_owned:
-            show_only_owned = False
-            show_only_not_owned = False
-        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.name as denomination_name,countries.country_id,countries.name as country_name,tags.bullion"
-        base_query = "from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
-        if show_only_owned:
-            base_query = f"SELECT DISTINCT {select_columns} {base_query} right join purchases on purchases.coin_id = coins.coin_id"
-        elif show_only_not_owned:
-            base_query = f"SELECT * from (SELECT DISTINCT {select_columns},purchases.coin_id as filter {base_query} left join purchases on coins.coin_id = purchases.coin_id "
-        else:
-            base_query = f"SELECT {select_columns} {base_query}"
-        found_first_specifier = False
-        country_query = ""
-        denomination_query = ""
-        value_name_query = ""
-        value_query = ""
-        year_query = ""
-        queries = [
-            (country_query, country, "countries"),
-            (denomination_query, denomination, "denominations"),
-            (value_name_query, face_value_name, "face_values"),
-        ]
-        for i in range(len(queries)):
-            item = queries[i]
-            if item[1]:
-                queries[i] = (
-                    f"""(
-                    {item[2]}.name like ? or
-                    {item[2]}.alternative_name_1 like ? or
-                    {item[2]}.alternative_name_2 like ? or
-                    {item[2]}.alternative_name_3 like ? or
-                    {item[2]}.alternative_name_4 like ? or
-                    {item[2]}.alternative_name_5 like ?
-                )
-                """,
-                    item[1],
-                )
-                if found_first_specifier:
-                    queries[i] = (f"AND {queries[i][0]}", item[1])
-                found_first_specifier = True
-
-        # Adds specifier for actual value
-        if face_value:
-            queries.append((value_query, face_value, 1))
-            queries[-1] = ("    face_values.value=?", queries[-1][1], queries[-1][2])
-            if found_first_specifier:
-                queries[-1] = (
-                    f"\nAND\n  {queries[-1][0].strip()}",
-                    queries[-1][1],
-                    queries[-1][2],
-                )
-            found_first_specifier = True
-
-        # Adds specifier for actual value
-        if year:
-            queries.append((year_query, f"%{year}%", 1))
-            queries[-1] = ("    coins.years like ?", queries[-1][1], queries[-1][2])
-            if found_first_specifier:
-                queries[-1] = (
-                    f"\nAND\n  {queries[-1][0].strip()}",
-                    queries[-1][1],
-                    queries[-1][2],
-                )
-            found_first_specifier = True
-
-        return_query = base_query
-        variables = []
-        if (
-            country is not None
-            or denomination is not None
-            or face_value is not None
-            or year is not None
-        ):
-            return_query += " where "
-            for item in queries:
-                if item[0]:
-                    return_query += item[0]
-                    repetitions = 6
-                    if len(item) == 3:
-                        repetitions = item[2]
-                    for _ in range(repetitions):
-                        variables.append(item[1])
-
-        if show_only_not_owned:
-            return_query += ") as filter_by_owned where filter_by_owned.filter is null"
-        return_query += ";"
-        if debug:
-            print("-----------------------------------")
-            print(f"Query:\n{return_query}")
-            print(f"Variables:\n{variables}")
-            print("-----------------------------------")
-
-        return (return_query, tuple(variables))
-
-    def countryNames():
-        return "SELECT name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5 from countries;"
 
     # Parses a string into the four specifiers (country, denomination, year, and face value)
-    def parseSearchString(text: str, countries, debug: bool = False):
+    # countries should be a list of tuples or lists. Each item of countries represents a 
+    # country. The first value in the item is the proper name and each subsequent value
+    # is an alternative name
+    def parseSearchString(text: str, countries: list[list[str]] | list[tuple[str]], debug: bool = False):
         """Parses a string to extract the country's name, year, denomination, and face value"""
         numbers = re.findall("\d+", text)  # Regex finds all strings of digits
         words = re.findall("[a-zA-Z]+", text)  # Same for words
