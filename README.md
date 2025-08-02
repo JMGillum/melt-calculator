@@ -3,6 +3,7 @@
 Since latest release:
 * Split setup.sql into multiple files and wrote bash script for combining them into a single file
 * Created addCoins.py, which can be used to add new coins
+* Added Queries and DB_Interface for abstraction of interacting with the database.
 
 ## Melt Calculator
 
