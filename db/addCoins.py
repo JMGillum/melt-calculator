@@ -1,3 +1,18 @@
+"""
+   Author: Josh Gillum              .
+   Date: 1 August 2025             ":"         __ __
+                                  __|___       \ V /
+                                .'      '.      | |
+                                |  O       \____/  |
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+
+    This script makes it easier to add new coins to the database. It does not
+    actually add the coins to the database, it simply prints out the sql
+    queries that would do so. It will prompt for the needed country, 
+    denomination, and value if necessary.
+
+^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+"""
 import mariadb
 import sys
 
