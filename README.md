@@ -63,6 +63,7 @@ The file `config.py` contains several variables that can be changed to further c
   * denomination (ex: cent,franc)
   * face value (ex: 20, 100)
   * year (ex: 1866, 1903)
+* SQL wild cards '%' and '_' represent 0 or more characters and 0 or 1 characters respectively. They can be used in searches for countries and denominations when used with the specific flags (--country and --denomination. Does not currently work for search strings)
 
 At least one of these must be provided for a search to actually filter anything. Some example searches:
 
