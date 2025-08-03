@@ -15,16 +15,21 @@
 
 class Queries:
     # Returns a search query for finding coins given some specifiers
-    def search(
-        country=None,
-        denomination=None,
-        face_value=None,
-        face_value_name=None,
-        year=None,
-        debug=False,
-        show_only_owned=False,
-        show_only_not_owned=False,
-    ):
+    def __unpack(dictionary,key,default_value=None):
+        try:
+            return dictionary[key]
+        except KeyError:
+            return default_value
+    def search(**kwargs):
+        country = Queries.__unpack(kwargs,"country")
+        denomination = Queries.__unpack(kwargs,"denomination")
+        face_value = Queries.__unpack(kwargs,"face_value")
+        face_value_name = Queries.__unpack(kwargs,"face_value_name")
+        year = Queries.__unpack(kwargs,"year")
+        debug = Queries.__unpack(kwargs,"debug")
+        show_only_owned = Queries.__unpack(kwargs,"show_only_owned")
+        show_only_not_owned = Queries.__unpack(kwargs,"show_only_not_owned")
+
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
             show_only_not_owned = False

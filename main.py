@@ -259,15 +259,16 @@ try:  # Connects to database
                         print(
                             "The year and/or face_value arguments were successfully converted."
                         )
-                    results = db.fetchCoins(
-                        country=arguments[COUNTRY],
-                        denomination=arguments[DENOMINATION],
-                        year=arguments[YEAR],
-                        face_value=arguments[FACE_VALUE],
-                        debug=args["verbose"],
-                        show_only_owned=args["owned"],
-                        show_only_not_owned=args["not_owned"],
-                    )
+                    search_arguments = {
+                        "country":arguments[COUNTRY],
+                        "denomination":arguments[DENOMINATION],
+                        "year":arguments[YEAR],
+                        "face_value":arguments[FACE_VALUE],
+                        "debug":args["verbose"],
+                        "show_only_owned":args["owned"],
+                        "show_only_not_owned":args["not_owned"],
+                    }
+                    results = db.fetchCoins(search_arguments)
                     results = Coins.build(
                         results,
                         prices=prices,
@@ -306,11 +307,12 @@ try:  # Connects to database
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
-        results = db.fetchCoins(
-            debug=args["verbose"],
-            show_only_owned=args["owned"],
-            show_only_not_owned=args["not_owned"],
-        )
+        search_arguments = {
+            "debug":args["verbose"],
+            "show_only_owned":args["owned"],
+            "show_only_not_owned":args["not_owned"],
+        }
+        results = db.fetchCoins(search_arguments)
         results = Coins.build(
             results,
             prices=prices,
