@@ -41,7 +41,7 @@ class DB_Interface:
                 )
                 sys.exit(1)
             else:
-                db_config["password"] = getpass.getpass("Password for mariadb: ")
+                db_config["password"] = getpass.getpass(f"Password for mariadb database({db_config['database']}): ")
 
         try:
             # Creates the connection
