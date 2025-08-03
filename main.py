@@ -91,6 +91,9 @@ args = vars(parser.parse_args())
 if args["verbose"]:
     print(f"arguments: {args}")
 
+if args["database"]:
+    config.db_config["database"] = args["database"]
+
 
 # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
 try:

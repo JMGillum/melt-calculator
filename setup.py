@@ -130,4 +130,10 @@ def setupParser():
         metavar="YEAR",
         help="Year of coin to return results for. Ex: 1898",
     )
+    parser.add_argument(
+        "-D",
+        "--database",
+        metavar="DB",
+        help="Name of the database to connect to.",
+    )
     return parser
