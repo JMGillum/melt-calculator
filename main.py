@@ -135,7 +135,7 @@ else:
     prices = None
 
 try:  # Connects to database
-    db = DB_Interface()
+    db = DB_Interface(debug=args["verbose"])
     db.connect(config.db_config)
 
     purchases = None
