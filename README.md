@@ -7,6 +7,7 @@ Since latest release:
 * Added the following countries:
   * Haiti
   * Latvia
+  * Luxembourg
 
 ## Melt Calculator
 
