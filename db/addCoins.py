@@ -292,10 +292,14 @@ if __name__ == "__main__":
 
         # 3. Create a Cursor Object
         cursor = conn.cursor()
-        while not input("Press enter to add a new coin. Enter any other value to finish and print queries.:"):
-            country_code = input("ISO 3 Alpha country code=").lower()
-            denomination_code = input("Denomination code=").lower()
-            value_code = input("Value code=").lower()
+        skip = 0
+        while True:
+            if skip <= 1:
+                country_code = input("ISO 3 Alpha country code=").lower()
+            if skip <= 2:
+                denomination_code = input("Denomination code=").lower()
+            if skip <= 3:
+                value_code = input("Value code=").lower()
             denomination_prefix = f"{country_code}"
             value_prefix = f"{denomination_prefix}_{denomination_code}"
             coin_prefix = f"{value_prefix}_{value_code}"
@@ -349,6 +353,17 @@ if __name__ == "__main__":
                     addDenomination(denomination_prefix,denomination_code)
                 addValue(value_prefix,value_code)
             addCoin(coin_prefix,coin_number)
+            response = input("Enter character to start editing at the following 'c'-country 'd'-denomination 'v'-value 'q' to quit. Any other key to edit coin:").lower()
+            if response == 'q' or response == "quit":
+                break
+            elif response == 'c' or response == "country":
+                skip = 1
+            elif response == 'd' or response == "denomination":
+                skip = 2
+            elif response == 'v' or response == "value":
+                skip = 3
+            else:
+                skip = 4
 
 
     except mariadb.Error as e:
