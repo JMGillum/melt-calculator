@@ -12,3 +12,4 @@ insert into countries(country_id,name,alternative_name_1,alternative_name_2,alte
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("srb","serbia","serbian","republic of serbia","republika srbija","srbija");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("lva","latvia","latvian","republic of latvia","latvijas","latvejas");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("hti","haiti","haitian","republic of haiti","ayiti","repiblik d ayiti");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("lux","luxembourg","letzeburg","grand duchy of luxembourg");

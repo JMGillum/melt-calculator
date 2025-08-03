@@ -229,3 +229,9 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("hti_centime_20_1","hti_centime_20",5,0.835,0.1342,"1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("hti_centime_50_1","hti_centime_50",12.5,0.835,0.3356,"1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("hti_gourde_1_1","hti_gourde_1",25,0.9,0.7234,"1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lux_franc_5_1","lux_franc_5",8,0.625,0.1608,"1929","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lux_franc_10_1","lux_franc_10",13.3,0.75,0.3207,"1929","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lux_franc_20_1","lux_franc_20",8.5,0.835,0.2282,"1946","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lux_franc_50_1","lux_franc_50",12.5,0.835,0.3356,"1946","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lux_franc_100_1","lux_franc_100",25,0.835,0.6711,"1946","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lux_franc_100_2","lux_franc_100",18,0.835,0.4832,"1963","ag");

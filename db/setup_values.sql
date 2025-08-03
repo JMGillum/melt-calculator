@@ -114,3 +114,8 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_centime_10",
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_centime_20","hti_centime",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_centime_50","hti_centime",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_gourde_1","hti_gourde",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_5","lux_franc",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_10","lux_franc",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_20","lux_franc",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_50","lux_franc",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_100","lux_franc",100);
