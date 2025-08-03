@@ -29,8 +29,6 @@
     * Checkout data.py to change the default precious metal prices used
     when one isn't supplied
 
-    * Custom coins are supported but no script is yet available for adding
-    them.
     * Purchases are supported, but no script is yet available for adding them.
 
     Finally, make sure to read README.md or README.txt for more information

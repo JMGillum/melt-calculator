@@ -9,10 +9,11 @@
     This file stores the Coins class, which provides an interface for
     interacting with the database that stores the coin information.
 
-    Future plans are to move all database specific functionality to a
-    separate class that can be modified if the database is switcher or updated.
-    This class will thus only contain functions for working with the data, not
-    for getting it from the database.
+    Thie class has no functions for actually getting data. It simply turns 
+    data from the database into CoinData objects and builds a tree to represent
+    them. 
+
+    See db_interface.py and queries.py for database specific functions.
 
 ^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 """
@@ -29,6 +30,7 @@ import re
 
 
 class Coins:
+    """Container class for various functions related to displaying coins."""
     # Calculates the value of all defined coin objects, using the provided precious metal values
     def price(silver_price, gold_price, platinum_price, palladium_price, coin):
         if coin.metal == Metals.SILVER:
