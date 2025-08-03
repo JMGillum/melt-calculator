@@ -21,11 +21,12 @@ import pathlib
 from datetime import datetime
 
 # Various files for output
+environment_prefix = "test_"
 log_file = pathlib.PurePath('addCoins.log')
-countries_file = pathlib.PurePath('setup_countries.sql')
-denominations_file = pathlib.PurePath('setup_denominations.sql')
-values_file = pathlib.PurePath('setup_values.sql')
-coins_file = pathlib.PurePath('setup_coins.sql')
+countries_file = pathlib.PurePath(f'{environment_prefix}setup_countries.sql')
+denominations_file = pathlib.PurePath(f'{environment_prefix}setup_denominations.sql')
+values_file = pathlib.PurePath(f'{environment_prefix}setup_values.sql')
+coins_file = pathlib.PurePath(f'{environment_prefix}setup_coins.sql')
 
 # Ensures that files are in project_root/db directory
 cwd = pathlib.Path.cwd()
