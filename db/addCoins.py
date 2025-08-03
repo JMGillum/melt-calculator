@@ -256,7 +256,11 @@ def addCoin(prefix,code):
                             beginning = int(beginning)
                             end = int(end)
                             if end < 100:
-                                end += math.floor(beginning / 100) * 100
+                                century = math.floor(beginning / 100) * 100
+                                start_year = beginning % 100
+                                if end < start_year:
+                                    century += 100
+                                end += century
                             for i in range(beginning,end+1):
                                 years += f"{i}, "
                         except ValueError: # Two numbers were not actually numbers
