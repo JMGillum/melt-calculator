@@ -10,3 +10,4 @@ insert into countries(country_id,name,alternative_name_1,alternative_name_2,alte
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("usa","united states of america","usa","us","united states","united states america");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("sur","suriname","republic of suriname","republiek suriname","dutch guiana","guiana");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) values("srb","serbia","serbian","republic of serbia","republika srbija","srbija");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("lva","latvia","latvian","republic of latvia","latvijas","latvejas");

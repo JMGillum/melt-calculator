@@ -222,3 +222,6 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_5_1","srb_dinar_5",25,0.9,0.7233,"1879","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_10_1","srb_dinar_10",3.2258,0.9,0.0933,"1882","au");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("srb_dinar_20_1","srb_dinar_20",6.4516,0.9,0.1866,"1879, 1882","au");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lva_lats_1_1","lva_lats_1",5,0.835,0.1342,"1924","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lva_lats_2_1","lva_lats_2",10,0.835,0.2685,"1925, 1926","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lva_lats_5_1","lva_lats_5",25,0.835,0.6711,"1929, 1930, 1931, 1932","ag");

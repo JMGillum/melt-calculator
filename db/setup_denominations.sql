@@ -32,3 +32,4 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,tag
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("sur_gulden","sur","gulden","guldens");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("srb_para","srb","para","pare");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("srb_dinar","srb","dinar","dinara");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("lva_lats","lva","lats","lati");
