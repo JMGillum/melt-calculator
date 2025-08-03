@@ -110,3 +110,7 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("srb_dinar_20","s
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lva_lats_1","lva_lats",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lva_lats_2","lva_lats",2);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lva_lats_5","lva_lats",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_centime_10","hti_centime",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_centime_20","hti_centime",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_centime_50","hti_centime",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hti_gourde_1","hti_gourde",1);

@@ -33,3 +33,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) va
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("srb_para","srb","para","pare");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) values("srb_dinar","srb","dinar","dinara");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("lva_lats","lva","lats","lati");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hti_centime","hti","centime","centimes");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hti_gourde","hti","gourde","gourdes");
