@@ -4,6 +4,8 @@ Since latest release:
 * Split setup.sql into multiple files and wrote bash script for combining them into a single file
 * Created addCoins.py, which can be used to add new coins
 * Added Queries and DB_Interface for abstraction of interacting with the database.
+* Added the following countries:
+  * Latvia
 
 ## Melt Calculator
 
@@ -55,10 +57,10 @@ The file `config.py` contains several variables that can be changed to further c
 
 * Most denominations have a defined singular and plural form. Thus, a search for "cent" and "cents" should yield the same results. In the case that the coin is not found, try using the plural if you used singular, or singular if you used plural.
 * Searches can be very broad or very specific. There are four categories for a search:
-* * country (ex: canada,germany)
-* * denomination (ex: cent,franc)
-* * face value (ex: 20, 100)
-* * year (ex: 1866, 1903)
+  * country (ex: canada,germany)
+  * denomination (ex: cent,franc)
+  * face value (ex: 20, 100)
+  * year (ex: 1866, 1903)
 
 At least one of these must be provided for a search to actually filter anything. Some example searches:
 
