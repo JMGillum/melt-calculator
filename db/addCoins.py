@@ -19,6 +19,7 @@ import mariadb
 import sys
 import pathlib
 from datetime import datetime
+import math
 
 # Various files for output
 environment_prefix = "test_"
@@ -254,6 +255,8 @@ def addCoin(prefix,code):
                         try:
                             beginning = int(beginning)
                             end = int(end)
+                            if end < 100:
+                                end += math.floor(beginning / 100) * 100
                             for i in range(beginning,end+1):
                                 years += f"{i}, "
                         except ValueError: # Two numbers were not actually numbers
