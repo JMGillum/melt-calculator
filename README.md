@@ -5,6 +5,7 @@ Since latest release:
 * Created addCoins.py, which can be used to add new coins
 * Added Queries and DB_Interface for abstraction of interacting with the database.
 * Rewrote collectionReport.py to work with database system
+* Wrote function/script for updating metal prices in database
 * Added the following countries:
   * Haiti
   * Latvia
