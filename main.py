@@ -87,18 +87,16 @@ def updatePrices(prices,args,db=None):
 
 
 if __name__ == "__main__":
-    just_fix_windows_console()
+    just_fix_windows_console() # Enables ANSI code support on windows or strips them if necessary
+    # Command line arguments
     parser = setupParser()
     args = vars(parser.parse_args())
     if args["verbose"]:
         print(f"arguments: {args}")
 
+    # The database was specified in the command line
     if args["database"]:
         config.db_config["database"] = args["database"]
-
-
-
-
 
     try:  # Connects to database
         db = DB_Interface(debug=args["verbose"])
@@ -108,6 +106,8 @@ if __name__ == "__main__":
         if not args["hide_collection"]:
             purchases = db.fetchPurchases()
 
+        # Fetches prices for the metals, as well as their names.
+        # Updates prices if they were specified in the command line
         prices = {}
         if not args["hide_price"]:
             entries = db.fetchMetals()
