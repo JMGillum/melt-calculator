@@ -1,4 +1,3 @@
-#!/bin/python3
 #   Author: Josh Gillum              .
 #   Date: 4 August 2025             ":"         __ __
 #                                  __|___       \ V /
