@@ -43,11 +43,20 @@ class Coins:
             coin.value = coin.precious_metal_weight.as_troy_ounces() * palladium_price
         coin.togglePrice(True)
 
+    def __gainOrLossString(value):
+        if value > 0:
+            return printColored(f"+{currency_symbol}{value:.2f}", config.gain_color)
+        elif value < 0:
+            return printColored(f"(-{currency_symbol}{-value:.2f})", config.loss_color)
+        else:
+            return f"{value}"
+
     # Prints summary statistics for a group of purchases (really just a total,count and worth)
     def print_statistics(
         total: float = 0.0,
         count: int = 0,
         value: float = 0.0,
+        other_value: float = 0.0,
         stats: PurchaseStats = None,
     ):
         if stats and isinstance(stats, PurchaseStats):
@@ -55,36 +64,30 @@ class Coins:
             count = int(stats.count)
             if count > 0:
                 value = round((stats.total + stats.delta) / stats.count, 2)
+            if count > 0:
+                other_value = round((stats.total + stats.delta2) / stats.count, 2)
         else:
             total = round(total, 2)
             count = int(count)
             value = round(value, 2)
+            other_value = round(other_value,2)
         if count > 0:
             total_value = round(value * count, 2)
+            other_total_value = round(other_value * count, 2)
             average = round(total / count, 2)
             gain_loss = round(total_value - total, 2)
+            other_gain_loss = round(other_total_value - total, 2)
             average_gain_loss = round(value - average, 2)
-            gain_loss_string = (
-                printColored(f"+{currency_symbol}{gain_loss:.2f}", config.gain_color)
-                if gain_loss > 0
-                else printColored(
-                    f"(-{currency_symbol}{-gain_loss:.2f})", config.loss_color
-                )
-            )
-            average_gain_loss_string = (
-                printColored(
-                    f"+{currency_symbol}{average_gain_loss:.2f}", config.gain_color
-                )
-                if average_gain_loss > 0
-                else printColored(
-                    f"(-{currency_symbol}{-average_gain_loss:.2f})", config.loss_color
-                )
-            )
+            other_average_gain_loss = round(other_value - average, 2)
+            gain_loss_string = Coins.__gainOrLossString(gain_loss)
+            average_gain_loss_string = Coins.__gainOrLossString(average_gain_loss)
+            other_gain_loss_string = Coins.__gainOrLossString(other_gain_loss)
+            other_average_gain_loss_string = Coins.__gainOrLossString(other_average_gain_loss)
             return_string = ""
-            return_string += f"Sum: {currency_symbol}{total:.2f} ~ Avg: {currency_symbol}{average:.2f}"
-            return_string += f" ~ Value: {currency_symbol}{total_value:.2f}  ({currency_symbol}{value:.2f} * {count})"
+            return_string += f"[Count:{count}] [Sum:{currency_symbol}{total:.2f}] [Avg:{currency_symbol}{average:.2f}]"
+            return_string += f" [Value:{currency_symbol}{total_value:.2f}/{currency_symbol}{other_total_value:.2f}]"
             return_string += (
-                f" ~ G/L: {gain_loss_string} ~ Avg G/L: {average_gain_loss_string}"
+                f" [G/L:{gain_loss_string}/{other_gain_loss_string}] [Avg G/L:{average_gain_loss_string}/{other_average_gain_loss_string}]"
             )
             return return_string
         return "N/A"
@@ -167,13 +170,7 @@ class Coins:
                                         if debug:
                                             print(f"  {match}")
                                         current_coins[-1].nodes.append(
-                                            Purchase(
-                                                match[1],
-                                                match[2],
-                                                match[3],
-                                                match[4],
-                                                match[5],
-                                            )
+                                                Purchase(*match[1:6])
                                         )
                                     Coins.__summarizePurchase(current_coins[-1])
                         # Sorts the coins by first year available

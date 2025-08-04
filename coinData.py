@@ -23,15 +23,33 @@ from colors import printColored
 
 
 class PurchaseStats:
-    def __init__(self, total=0.0, count=0, delta=0.0):
+    def __init__(self, total=0.0, count=0, delta=0.0, delta2=0.0):
         self.total = total
         self.count = count
         self.delta = delta
+        self.delta2 = delta2
 
-    def add(self, total, count, delta):
+    def add(self, total, count, delta, delta2 = None):
         self.total += total
         self.count += count
         self.delta += delta
+        if delta2 is not None:
+            self.delta2 = delta2
+
+    def addPurchase(self,purchase,unit_value,unit_value_2):
+        total = purchase.price * purchase.quantity
+        count = purchase.quantity
+        delta = (unit_value*count) - total
+        delta2 = (unit_value_2*count) - total
+        self.add(total,count,delta,delta2)
+
+    def __add__(self,o):
+        total = self.total + o.total
+        count = self.count + o.count
+        delta = self.delta + o.delta
+        delta2 = self.delta2 + o.delta2
+        return PurchaseStats(total,count,delta,delta2)
+        
 
 
 class Purchase:
@@ -82,6 +100,7 @@ class Purchase:
                 if self.price is not None and self.price >= 0:
                     string += f" ({config.currency_symbol}{self.price * self.quantity})"
         return printColored(string, config.purchase_color)
+    
 
 
 class CoinData:
