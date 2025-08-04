@@ -32,12 +32,16 @@ if __name__ == "__main__":
                         updates.append((metal_id,price,price_date))
                 break
         if updates:
-            print("Updates: ")
-            results = updateMetalPrices(db,*updates)
-            for i in range(len(updates)):
-                item = updates[i]
-                result = results[i]
-                print(f"{item} was updated {'successfully' if result else 'unsuccessfully'}")
+            confirmation = input("Push updates to database? (y/n): ").lower()
+            if confirmation == 'y' or confirmation == "yes":
+                print("Updates: ")
+                results = updateMetalPrices(db,*updates)
+                for i in range(len(updates)):
+                    item = updates[i]
+                    result = results[i]
+                    print(f"{item} was updated {'successfully' if result else 'unsuccessfully'}")
+            else:
+                print("Aborting...")
             
         else:
             print("No updates")
