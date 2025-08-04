@@ -32,6 +32,8 @@ Install python
 * Linux: `sudo apt install python3`
 * Windows: `python`
 
+    Note that you must install the mariadb and colorama packages. Colorama requires version >= 4.6, so you might have to update python if your version is older
+
 Install mariadb
 1. Install mariadb: https://mariadb.com/get-started-with-mariadb/
 2. Create a user account (or use root)

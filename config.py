@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 1 August 2025             ":"         __ __
+#   Date: 4 August 2025             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -55,6 +55,7 @@ date_format = "%m/%d/%y"
 bullion_hint = " (Bullion)"
 
 show_color = True
+colors_8_bit = True
 country_color = "blue"
 denomination_color = "purple"
 bullion_color = "magenta"
