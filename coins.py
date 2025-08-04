@@ -111,7 +111,7 @@ class Coins:
                 i += 1
             coin.nodes.append(
                 Coins.print_statistics(
-                    total, count, coin.data.value * coin.data.retention
+                    total, count, coin.data.value, coin.data.value * coin.data.retention
                 )
             )
 
