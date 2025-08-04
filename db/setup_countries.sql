@@ -13,3 +13,4 @@ insert into countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("lva","latvia","latvian","republic of latvia","latvijas","latvejas");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("hti","haiti","haitian","republic of haiti","ayiti","repiblik d ayiti");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("lux","luxembourg","letzeburg","grand duchy of luxembourg");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("cub","cuba","cuban","republic of cuba","republica de cuba");

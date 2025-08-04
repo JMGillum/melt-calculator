@@ -119,3 +119,14 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_10","l
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_20","lux_franc",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_50","lux_franc",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lux_franc_100","lux_franc",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_peso_1","cub_peso",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_peso_2","cub_peso",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_peso_4","cub_peso",4);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_peso_5","cub_peso",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_peso_10","cub_peso",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_peso_20","cub_peso",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_centavo_10","cub_centavo",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_centavo_20","cub_centavo",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_centavo_25","cub_centavo",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_centavo_40","cub_centavo",40);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cub_centavo_50","cub_centavo",50);
