@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 2 August 2025             ":"         __ __
+   Date: 3 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -31,17 +31,22 @@ import re
 
 class Coins:
     """Container class for various functions related to displaying coins."""
+    def __unpack(dictionary,key,default_value=None):
+        try:
+            return dictionary[key]
+        except KeyError:
+            return default_value
+
     # Calculates the value of all defined coin objects, using the provided precious metal values
-    def price(silver_price, gold_price, platinum_price, palladium_price, coin):
-        if coin.metal == Metals.SILVER:
-            coin.value = coin.precious_metal_weight.as_troy_ounces() * silver_price
-        if coin.metal == Metals.GOLD:
-            coin.value = coin.precious_metal_weight.as_troy_ounces() * gold_price
-        if coin.metal == Metals.PLATINUM:
-            coin.value = coin.precious_metal_weight.as_troy_ounces() * platinum_price
-        if coin.metal == Metals.PALLADIUM:
-            coin.value = coin.precious_metal_weight.as_troy_ounces() * palladium_price
-        coin.togglePrice(True)
+    def price(coin, **prices):
+        for key in prices:
+            Coins.__unpack(prices,key)
+        try:
+            spot = prices[coin.metal][1]
+            coin.value = coin.precious_metal_weight.as_troy_ounces() * spot
+            coin.togglePrice(True)
+        except KeyError:
+            coin.value = -1
 
     def __gainOrLossString(value):
         if value > 0:
@@ -280,10 +285,8 @@ class Coins:
                     ),
                 )
             if coins[entry[0]][1] is not None:
-                if prices is not None:
-                    Coins.price(
-                        prices[0], prices[1], prices[2], prices[3], coins[entry[0]][1]
-                    )
+                if prices:
+                    Coins.price(coins[entry[0]][1],**prices)
                 else:
                     coins[entry[0]][1].togglePrice(False)
             try:

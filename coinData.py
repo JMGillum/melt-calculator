@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 31 July 2025              ":"         __ __
+   Date: 3 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -138,10 +138,13 @@ class CoinData:
         else:
             self.weight = weight
         self.show_value = show_value
+        """
         if metal is not None and isinstance(metal, str):
             self.metal = metals.Metals.fromString(metal)
         else:
             self.metal = metal
+        """
+        self.metal = metal
         try:
             fineness = float(fineness)
         except ValueError:
@@ -253,13 +256,13 @@ class CoinData:
         if self.metal is not None:
             if isinstance(self.metal, str):
                 return self.metal.title()
-            if self.metal == metals.Metals.GOLD:
+            if self.metal == "au":
                 return "Gold"
-            elif self.metal == metals.Metals.SILVER:
+            elif self.metal == "ag":
                 return "Silver"
-            elif self.metal == metals.Metals.PLATINUM:
+            elif self.metal == "pt":
                 return "Platinum"
-            elif self.metal == metals.Metals.PALLADIUM:
+            elif self.metal == "pd":
                 return "Palladium"
         return "Unknown metal"
 

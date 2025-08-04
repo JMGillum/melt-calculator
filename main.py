@@ -1,7 +1,7 @@
 #!/bin/python3
 """
    Author: Josh Gillum              .
-   Date: 2 August 2025             ":"         __ __
+   Date: 3 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -61,10 +61,6 @@ FACE_VALUE = 3
 def price(
     silver_price=None, gold_price=None, platinum_price=None, palladium_price=None
 ):
-    silver = d.silver_spot_price
-    gold = d.gold_spot_price
-    platinum = d.platinum_spot_price
-    palladium = d.palladium_spot_price
     if silver_price is not None and (
         isinstance(silver_price, int) or isinstance(silver_price, float)
     ):
@@ -83,6 +79,23 @@ def price(
         palladium = palladium_price
     return (silver, gold, platinum, palladium)
 
+def updatePrices(prices):
+    # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
+    for key in prices:
+        if not key == "other":
+            name,price,date = prices[key]
+            try:
+                try:
+                    if args[name] is not None:
+                        prices[key] = (name,round(float(args[name]), 2),date)
+                except KeyError:
+                    print(f"Error updating price for key: {key}")
+
+            except ValueError:
+                print(
+                    f"{name.title()} price provided is invalid type. Using value from database ({config.currency_symbol}{price})..."
+                )
+
 
 
 parser = setupParser()
@@ -94,46 +107,8 @@ if args["database"]:
     config.db_config["database"] = args["database"]
 
 
-# Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
-try:
-    if args["silver"] is not None:
-        d.silver_spot_price = round(float(args["silver"]), 2)
-except ValueError:
-    print(
-        f"Silver price provided is invalid type. Using value ({config.currency_symbol}{d.silver_spot_price:.2f}) defined in data.py instead."
-    )
-try:
-    if args["gold"] is not None:
-        d.gold_spot_price = round(float(args["gold"]), 2)
-except ValueError:
-    print(
-        f"Gold price provided is invalid type. Using value ({config.currency_symbol}{d.gold_spot_price:.2f}) defined in data.py instead."
-    )
-try:
-    if args["platinum"] is not None:
-        d.platinum_spot_price = round(float(args["platinum"]), 2)
-except ValueError:
-    print(
-        f"Platinum price provided is invalid type. Using value ({config.currency_symbol}{d.platinum_spot_price:.2f}) defined in data.py instead."
-    )
-try:
-    if args["palladium"] is not None:
-        d.palladium_spot_price = round(float(args["palladium"]), 2)
-except ValueError:
-    print(
-        f"Palladium price provided is invalid type. Using value ({config.currency_symbol}{d.palladium_spot_price:.2f}) defined in data.py instead."
-    )
 
 
-# Prints out the precious metal prices and calculates the coins' worth
-prices = price()
-if not args["hide_price"]:
-    print(f"Silver Spot: {config.currency_symbol}{d.silver_spot_price:.2f}")
-    print(f"Gold Spot: {config.currency_symbol}{d.gold_spot_price:.2f}")
-    print(f"Platinum Spot: {config.currency_symbol}{d.platinum_spot_price:.2f}")
-    print(f"Palladium Spot: {config.currency_symbol}{d.palladium_spot_price:.2f}")
-else:
-    prices = None
 
 try:  # Connects to database
     db = DB_Interface(debug=args["verbose"])
@@ -142,6 +117,18 @@ try:  # Connects to database
     purchases = None
     if not args["hide_collection"]:
         purchases = db.fetchPurchases()
+
+    prices = {}
+    if not args["hide_price"]:
+        entries = db.fetchMetals()
+        for entry in entries:
+            key,name,price,date = entry 
+            if not key == "other":
+                prices[key] = (name,float(price),date)
+        updatePrices(prices)
+        for key in prices:
+            name,price,date = prices[key]
+            print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
 
     # Determines if the user provided any search criteria, either by
     # Exact command line flags, a search string, or a search file

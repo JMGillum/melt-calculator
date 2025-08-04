@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 2 August 2025             ":"         __ __
+   Date: 3 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -87,6 +87,9 @@ class DB_Interface:
     def fetchCountryNames(self):
         """Gets all of the names of every country"""
         return self.fetch(Queries.countryNames())
+
+    def fetchMetals(self):
+        return self.fetch(Queries.metals())
 
     def fetchCoins(self,search_arguments):
         """search_arguments should be a dictionary for **kwargs of Queries.search()"""

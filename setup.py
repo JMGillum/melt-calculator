@@ -56,6 +56,12 @@ def setupParser():
         help="Use to supply the gold price for melt value calculations.",
     )
     parser.add_argument(
+        "-r",
+        "--rhodium",
+        metavar="PRICE",
+        help="Use to supply the rhodium price for melt value calculations.",
+    )
+    parser.add_argument(
         "-o",
         "--owned",
         action="store_true",
