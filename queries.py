@@ -130,5 +130,9 @@ class Queries:
     def metals():
         return "SELECT metal_id,name,price,price_date from metals;"
 
+    def updateMetalPrice(metal_id,price,date):
+        query = "UPDATE metals set price=?,price_date=? where metal_id=?"
+        return (query,(price,date,metal_id))
+
     def purchases():
         return "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"

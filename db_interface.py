@@ -80,6 +80,23 @@ class DB_Interface:
                 sys.exit(1)
             return list(self.cursor)
 
+    def update(self,*args):
+        try:
+            self.cursor.execute(*args)
+            self.conn.commit()  # Commit the transaction for DML
+            if self.debug:
+                print(f"Inserted {self.cursor.rowcount} rows.")
+                print(f"Last inserted ID: {self.cursor.lastrowid}")
+            return True
+        except mariadb.IntegrityError as e:
+            print(f"Error updating data: {e}")
+            self.conn.rollback()
+            return False
+        except mariadb.Error as e:
+            print(f"Error inserting data: {e}")
+            self.conn.rollback()
+            return False
+
     def fetchPurchases(self):
         """Gets all of the defined searches"""
         return self.fetch(Queries.purchases())
@@ -95,3 +112,7 @@ class DB_Interface:
         """search_arguments should be a dictionary for **kwargs of Queries.search()"""
         results = Queries.search(**search_arguments)
         return self.fetch(results[0],results[1])
+
+    def updateMetalPrice(self,args):
+        results = Queries.updateMetalPrice(*args)
+        return self.update(*results)
