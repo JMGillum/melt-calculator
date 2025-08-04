@@ -5,7 +5,7 @@ from datetime import datetime
 def updateMetalPrices(db:DB_Interface,*prices):
     results = []
     for price in prices:
-        results.append(db.updateMetalPrice(price))
+        results.append((price,db.updateMetalPrice(price)))
     return results
 
 
@@ -36,9 +36,7 @@ if __name__ == "__main__":
             if confirmation == 'y' or confirmation == "yes":
                 print("Updates: ")
                 results = updateMetalPrices(db,*updates)
-                for i in range(len(updates)):
-                    item = updates[i]
-                    result = results[i]
+                for item,result in results:
                     print(f"{item} was updated {'successfully' if result else 'unsuccessfully'}")
             else:
                 print("Aborting...")
