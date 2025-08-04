@@ -1,6 +1,6 @@
 """
    Author: Josh Gillum              .
-   Date: 1 August 2025             ":"         __ __
+   Date: 2 August 2025             ":"         __ __
                                   __|___       \ V /
                                 .'      '.      | |
                                 |  O       \____/  |
@@ -20,9 +20,8 @@ from db_interface import DB_Interface
 from queries import Queries
 from coins import Coins
 import config
-from metals import Metals
 from coinData import Purchase,CoinData, PurchaseStats as Stats
-from data import silver_spot_price,gold_spot_price,platinum_spot_price,palladium_spot_price
+from data import metals
 
 
 if __name__ == "__main__":
@@ -30,16 +29,22 @@ if __name__ == "__main__":
     gold = Stats()
     platinum = Stats()
     palladium = Stats()
+    rhodium = Stats()
     other = Stats()
+    metals = [("ag",silver),("au",gold),("pt",platinum),("pd",palladium),("rh",rhodium),("other",other)]
     entries = []
     coins = []
     purchases = {}
+    prices = {}
+    prices_entries = {}
     try:
         db = DB_Interface()
         db.connect(config.db_config)
 
         coins = db.fetchCoins({"show_only_owned":True})
         entries = db.fetchPurchases()
+        prices_entries = db.fetchMetals()
+        
     finally:
         db.closeConnection()
         
@@ -64,19 +69,22 @@ if __name__ == "__main__":
             purchases[entry[0]] = (item,purchases[entry[0]][1])
         except KeyError:
             continue
+
+    for entry in prices_entries:
+        key,name,price,date = entry
+        if key == "other":
+            price = 0
+        if price < 0:
+            print(f"WARNING: PRICE FOR [{key}]({name.title()}) HAS NOT BEEN SET. PLEASE UPDATE DATABASE BEFORE CONTINUING...")
+            exit(1)
+        prices[key] = (name,float(price),date)
     for key in purchases.keys():
         entry = purchases[key]
-        Coins.price(silver_spot_price,gold_spot_price,platinum_spot_price,palladium_spot_price,entry[0])
+        Coins.price(entry[0],**prices)
         runner = other
-        match entry[0].metal:
-            case Metals.SILVER:
-                runner = silver
-            case Metals.GOLD:
-                runner = gold
-            case Metals.PLATINUM:
-                runner = platinum
-            case Metals.PALLADIUM:
-                runner = palladium
+        for key,metal in metals:
+            if entry[0].metal == key:
+                runner = metal
 
         temp = Stats()
         print(f"+-{entry[0]}")
@@ -87,19 +95,17 @@ if __name__ == "__main__":
         print(f"+-{Coins.print_statistics(stats=temp)}")
         print()
 
-    total = silver + gold + platinum + palladium
+    total = other
+    for _,metal in metals:
+        total += metal
+    
     if total.count > 0:
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print("|                                   Totals:                                    |")
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        print("Silver:\n  ",end="")
-        print(Coins.print_statistics(stats=silver))
-        print("Gold:\n  ",end="")
-        print(Coins.print_statistics(stats=gold))
-        print("Platinum:\n  ",end="")
-        print(Coins.print_statistics(stats=platinum))
-        print("Palladium:\n  ",end="")
-        print(Coins.print_statistics(stats=palladium))
+        for key,metal in metals:
+            print(f"{prices[key][0].title()}:\n  ",end="")
+            print(Coins.print_statistics(stats=metal))
         print("Total:\n  ",end="")
         print(Coins.print_statistics(stats=total))
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")

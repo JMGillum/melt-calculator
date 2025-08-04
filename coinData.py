@@ -16,8 +16,7 @@
 
 import weights
 from datetime import datetime
-import metals
-
+import data
 import config
 from colors import printColored
 
@@ -138,12 +137,6 @@ class CoinData:
         else:
             self.weight = weight
         self.show_value = show_value
-        """
-        if metal is not None and isinstance(metal, str):
-            self.metal = metals.Metals.fromString(metal)
-        else:
-            self.metal = metal
-        """
         self.metal = metal
         try:
             fineness = float(fineness)
@@ -254,16 +247,10 @@ class CoinData:
 
     def metalString(self):
         if self.metal is not None:
-            if isinstance(self.metal, str):
-                return self.metal.title()
-            if self.metal == "au":
-                return "Gold"
-            elif self.metal == "ag":
-                return "Silver"
-            elif self.metal == "pt":
-                return "Platinum"
-            elif self.metal == "pd":
-                return "Palladium"
+            try:
+                return data.metals[self.metal][0].title()
+            except KeyError:
+                pass
         return "Unknown metal"
 
     def asAString(self, format: str):

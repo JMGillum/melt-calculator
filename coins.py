@@ -21,7 +21,6 @@
 from coinData import CoinData, Purchase, PurchaseStats
 from tree.tree import Tree
 from tree.node import Node
-from metals import Metals
 from config import currency_symbol, current_year, minimum_year
 import config
 from colors import printColored

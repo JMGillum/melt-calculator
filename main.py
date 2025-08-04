@@ -57,27 +57,6 @@ YEAR = 2
 FACE_VALUE = 3
 
 
-# Calculates the value of every defined coin.
-def price(
-    silver_price=None, gold_price=None, platinum_price=None, palladium_price=None
-):
-    if silver_price is not None and (
-        isinstance(silver_price, int) or isinstance(silver_price, float)
-    ):
-        silver = silver_price
-    if gold_price is not None and (
-        isinstance(gold_price, int) or isinstance(gold_price, float)
-    ):
-        gold = gold_price
-    if platinum_price is not None and (
-        isinstance(platinum_price, int) or isinstance(platinum_price, float)
-    ):
-        platinum = platinum_price
-    if palladium_price is not None and (
-        isinstance(palladium_price, int) or isinstance(palladium_price, float)
-    ):
-        palladium = palladium_price
-    return (silver, gold, platinum, palladium)
 
 def updatePrices(prices):
     # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
@@ -126,6 +105,7 @@ try:  # Connects to database
             if not key == "other":
                 prices[key] = (name,float(price),date)
         updatePrices(prices)
+        d.metals = prices
         for key in prices:
             name,price,date = prices[key]
             print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
