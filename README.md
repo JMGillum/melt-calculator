@@ -6,6 +6,7 @@ Since latest release:
 * Added Queries and DB_Interface for abstraction of interacting with the database.
 * Rewrote collectionReport.py to work with database system
 * Wrote function/script for updating metal prices in database
+* Made color support portable. 3-bit colors work on windows, or they can be turned off.
 * Added the following countries:
   * Haiti
   * Latvia
