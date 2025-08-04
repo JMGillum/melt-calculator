@@ -77,8 +77,8 @@ def log(text,file=None):
 
 
 
-def addCountry(country_id):
-    country_id = country_id.lower()
+def addCountry(information):
+    country_id = information["country_code"].lower()
     name = input(f"Country name for ({country_id}): ").lower()
     while True:
         alternative_names = []
@@ -112,9 +112,9 @@ def addCountry(country_id):
     queries_countries.append(query_string)
 
 
-def addDenomination(prefix,code):
-    prefix = prefix.lower()
-    code = code.lower()
+def addDenomination(information):
+    prefix = information["denomination_prefix"].lower()
+    code = information["denomination_code"].lower()
     name = code
     response = input(f"Default name for ({prefix}_{code}) is {name}. Press enter to continue or enter new name here: ").lower()
     if response:
@@ -150,9 +150,9 @@ def addDenomination(prefix,code):
     added_denominations.append(f"{prefix}_{code}")
     queries_denominations.append(query_string)
 
-def addValue(prefix,code):
-    prefix = prefix.lower()
-    code = code
+def addValue(information):
+    prefix = information["value_prefix"].lower()
+    code = information["value_code"]
     while True:
         name = input(f"Value name for ({prefix}_{code}) (enter empty string to skip): ").lower()
         alternative_names = []
@@ -187,103 +187,132 @@ def addValue(prefix,code):
     added_values.append(f"{prefix}_{code}")
     queries_values.append(query_string)
 
-def addCoin(prefix,code):
-    prefix = prefix.lower()
-    code = code
-    name = input(f"Coin name for ({prefix}_{code}) (enter empty string to skip): ").lower()
-    while True:
-        if name:
-            print(f"\n---Coin name: {name}---")
-            response = input("Press enter to continue. Enter name here to re-enter name: ")
-        else:
-            name = ""
-            response = False
-        if response:
-            name = response
-            continue
-        else:
-            break
-    gross_weight = ""
-    fineness = ""
-    precious_metal_weight = ""
-    while True:
-        gross_weight = input("Enter gross weight (in grams):")
-        fineness = input("Enter fineness (90% = 0.9):")
-        try:
-            gross_weight_usable = float(gross_weight)
-            fineness = float(fineness) # Ensures that user enters numeric value
-            if fineness > 100:
-                fineness = str(fineness).split(".")
-                fineness = "".join(fineness)
-                fineness = float(f"{fineness[:2]}.{fineness[2:]}")
-            if fineness > 1:
-                while fineness >= 10:
-                    fineness = fineness / 10
-                fineness = float(fineness/10)
-            fineness = round(fineness,4)
-            precious_metal_weight = gross_weight_usable * fineness * 0.03215075
-            precious_metal_weight = round(precious_metal_weight,4)
-            response = input(f"Is the calculated precious metal weight ({precious_metal_weight}) correct? (Press enter to continue. Enter it here (in troy ounces) to manually enter it.)")
+def addCoin(information):
+    prefix = information['coin_prefix'].lower()
+    code = information["coin_number"]
+    if information["nickname"] is None:
+        name = input(f"Coin name for ({prefix}_{code}) (enter empty string to skip): ").lower()
+        while True:
+            if name:
+                print(f"\n---Coin name: {name}---")
+                response = input("Press enter to continue. Enter name here to re-enter name: ")
+            else:
+                name = ""
+                response = False
             if response:
-                precious_metal_weight = response
-                float(precious_metal_weight)
-            break
-        except ValueError:
-            print("All values must be numeric.")
-            continue
-    valid_metal = False
-    while not valid_metal:
-        metal = input("Enter periodic symbol for metal (sil=ag,gol=au,plat=pt,pala=pd,rho=rh):").lower()
-        valid_metal = [x for x in ["ag","au","pt","pd","rh"] if metal == x]
-    years = ""
-    while True:
-        years = input("Enter years (comma separated)(shorthand x-y is acceptable):")
-        if years:
-            years_list = years.split(",")
-            years = ""
-            fail = False
-            for item in years_list:
-                if fail:
-                    break
-                try:
-                    int(item)
-                    years += f"{item}, "
-                except ValueError:
-                    if "-" in item:
-                        temp = item.find("-")
-                        beginning = item[:temp]
-                        end = item[temp+1:]
-                        try:
-                            beginning = int(beginning)
-                            end = int(end)
-                            if end < 100:
-                                century = math.floor(beginning / 100) * 100
-                                start_year = beginning % 100
-                                if end < start_year:
-                                    century += 100
-                                end += century
-                            for i in range(beginning,end+1):
-                                years += f"{i}, "
-                        except ValueError: # Two numbers were not actually numbers
-                            print("All values must be numbers")
+                name = response
+                continue
+            else:
+                information["nickname"] = name
+                break
+    gross_weight = information["gross_weight"]
+    fineness = information["fineness"]
+    precious_metal_weight = information["precious_metal_weight"]
+    gross_weight_usable = 0.0
+    # Updates gross weight if requested
+    if not information["gross_weight"]:
+        while True:
+            gross_weight = input("Enter gross weight (in grams):")
+            try:
+                gross_weight_usable = float(gross_weight)
+                information["gross_weight"] = gross_weight
+                information["precious_metal_weight"] = None
+                break
+            except ValueError:
+                print("Gross weight must be numeric.")
+                continue
+    # Updates fineness if requested
+    if not information["fineness"]:
+        while True:
+            try:
+                fineness = input("Enter fineness (90% = 0.9):")
+                fineness = float(fineness) # Ensures that user enters numeric value
+                if fineness > 100:
+                    fineness = str(fineness).split(".")
+                    fineness = "".join(fineness)
+                    fineness = float(f"{fineness[:2]}.{fineness[2:]}")
+                if fineness > 1:
+                    while fineness >= 10:
+                        fineness = fineness / 10
+                    fineness = float(fineness/10)
+                fineness = round(fineness,4)
+                information["fineness"] = fineness
+                information["precious_metal_weight"] = None
+                break
+            except ValueError:
+                print("Fineness must be numeric.")
+                continue
+    # Updates precious metal weight if requested (updating gross weight or fineness will request it)
+    if not information["precious_metal_weight"]:
+        precious_metal_weight = gross_weight_usable * fineness * 0.03215075
+        precious_metal_weight = round(precious_metal_weight,4)
+        response = input(f"Is the calculated precious metal weight ({precious_metal_weight}) correct? (Press enter to continue. Enter it here (in troy ounces) to manually enter it.)")
+        if response: # User wanted to change. Continually loop until they are satisfied
+            while True:
+                response(f"Is {precious_metal_weight} correct? (Press enter to continue. Enter it here (in troy ounces) to modify): ")
+                if response:
+                    precious_metal_weight = response
+                    precious_metal_weight = float(precious_metal_weight)
+                    continue
+                break
+        information["precious_metal_weight"] =  precious_metal_weight
+    if not information["metal"]:
+        valid_metal = False
+        while not valid_metal:
+            metal = input("Enter periodic symbol for metal (sil=ag,gol=au,plat=pt,pala=pd,rho=rh):").lower()
+            valid_metal = [x for x in ["ag","au","pt","pd","rh"] if metal == x]
+        information["metal"] = metal
+    if not information["years"]:
+        years = ""
+        while True:
+            years = input("Enter years (comma separated)(shorthand x-y is acceptable):")
+            if years:
+                years_list = years.split(",")
+                years = ""
+                fail = False
+                for item in years_list:
+                    if fail:
+                        break
+                    try:
+                        int(item)
+                        years += f"{item}, "
+                    except ValueError:
+                        if "-" in item:
+                            temp = item.find("-")
+                            beginning = item[:temp]
+                            end = item[temp+1:]
+                            try:
+                                beginning = int(beginning)
+                                end = int(end)
+                                if end < 100:
+                                    century = math.floor(beginning / 100) * 100
+                                    start_year = beginning % 100
+                                    if end < start_year:
+                                        century += 100
+                                    end += century
+                                for i in range(beginning,end+1):
+                                    years += f"{i}, "
+                            except ValueError: # Two numbers were not actually numbers
+                                print("All values must be numbers")
+                                fail = True
+                                continue
+                        else:
+                            print("Values must be individual years or of the form x-y (ex: 1898-1900)")
                             fail = True
                             continue
-                    else:
-                        print("Values must be individual years or of the form x-y (ex: 1898-1900)")
-                        fail = True
-                        continue
-            if not fail:
-                years = years[:-2] # Chops off trailing comma and space
-                break
+                if not fail:
+                    years = years[:-2] # Chops off trailing comma and space
+                    information["years"] = years
+                    break
 
     query_string = "INSERT INTO coins(coin_id,face_value_id" 
-    if name:
+    if information["nickname"]:
         query_string += ",name"
     query_string += ",gross_weight,fineness,precious_metal_weight,years,metal"
     query_string += f') VALUES("{prefix}_{code}","{prefix}"'
-    if name:
-        query_string += f',"{name}"'
-    query_string += f',{gross_weight},{fineness},{precious_metal_weight},"{years}","{metal}"'
+    if information["nickname"]:
+        query_string += f',"{information["nickname"]}"'
+    query_string += f',{information["gross_weight"]},{information["fineness"]},{information["precious_metal_weight"]},"{information["years"]}","{information["metal"]}"'
     query_string += ");"
     log(query_string)
     added_coins.append(f"{prefix}_{code}")
@@ -302,77 +331,110 @@ if __name__ == "__main__":
         # 3. Create a Cursor Object
         cursor = conn.cursor()
         skip = 0
+        information = {
+                "country_code":None,
+                "denomination_code":None,
+                "value_code":None,
+                "coin_number":1,
+                "denomination_prefix":None,
+                "value_prefix":None,
+                "coin_prefix":None,
+                "nickname":None,
+                "gross_weight":None,
+                "fineness":None,
+                "precious_metal_weight":None,
+                "metal":None,
+                "years":None,
+                }
         while True:
-            if skip <= 1:
-                country_code = input("ISO 3 Alpha country code=").lower()
-            if skip <= 2:
-                denomination_code = input("Denomination code=").lower()
-            if skip <= 3:
-                value_code = input("Value code=").lower()
-            denomination_prefix = f"{country_code}"
-            value_prefix = f"{denomination_prefix}_{denomination_code}"
-            coin_prefix = f"{value_prefix}_{value_code}"
+            if not information["country_code"]:
+                information.update(country_code=input("ISO 3 Alpha country code=").lower())
+            if not information["denomination_code"]:
+                information.update(denomination_code=input("Denomination code=").lower())
+            if not information["value_code"]:
+                information.update(value_code=input("Value code=").lower())
+            information["denomination_prefix"] = f"{information['country_code']}"
+            information["value_prefix"] = f"{information['denomination_prefix']}_{information['denomination_code']}"
+            information["coin_prefix"] = f"{information['value_prefix']}_{information['value_code']}"
+            information["coin_number"] = 1
 
 
             # --- Example: Select Data ---
             print("\nSelecting data...")
             select_query = "SELECT value_id FROM face_values WHERE value_id = ?"
             cursor.execute(
-                select_query, (f"{coin_prefix}",)
+                select_query, (f"{information['coin_prefix']}",)
             )  # Note the comma for single parameter tuple
 
             print("Fetched data:")
             temp = list(cursor)
-            coin_number = 1
-            if temp or [x for x in added_values if coin_prefix == x]: # The value was found in the database or has been added
-                matches = [int(x.split("_")[-1]) for x in added_coins if coin_prefix in x]
+            if temp or [x for x in added_values if information["coin_prefix"] == x]: # The value was found in the database or has been added
+                matches = [int(x.split("_")[-1]) for x in added_coins if information["coin_prefix"] in x]
                 if matches: # See if any added coins match
-                    coin_number = max(matches) + 1
+                    information['coin_number'] = max(matches) + 1
                 else:
                     select_query = "SELECT coin_id FROM coins WHERE coin_id LIKE ?"
                     cursor.execute(
-                        select_query, (f"{coin_prefix}%",)
+                        select_query, (f"{information['coin_prefix']}%",)
                     )  # Note the comma for single parameter tuple
                     temp = list(cursor)
                     if temp:
-                        coin_number = int(temp[-1][0].split("_")[-1]) # Gets count value at end of coin_id
-                        coin_number += 1
+                        information['coin_number'] = int(temp[-1][0].split("_")[-1]) + 1# Gets count value at end of coin_id
             else: # No value found
                 print("No data found")
                 print("\nSelecting data...")
                 select_query = "SELECT denomination_id FROM denominations WHERE denomination_id = ?"
                 cursor.execute(
-                    select_query, (f"{value_prefix}",)
+                    select_query, (f"{information['value_prefix']}",)
                 )  # Note the comma for single parameter tuple
 
                 print("Fetched data:")
                 temp = list(cursor)
-                if not temp and not [x for x in added_denominations if value_prefix == x]: # No denomination in database or added
+                if not temp and not [x for x in added_denominations if information["value_prefix"] == x]: # No denomination in database or added
                     print("No data found")
                     print("\nSelecting data...")
                     select_query = "SELECT country_id FROM countries WHERE country_id = ?"
                     cursor.execute(
-                        select_query, (f"{denomination_prefix}",)
+                        select_query, (f"{information['denomination_prefix']}",)
                     )  # Note the comma for single parameter tuple
 
                     print("Fetched data:")
                     temp = list(cursor)
-                    if not temp and not [x for x in added_countries if country_code == x]: # no country in database or added
-                        addCountry(country_code)
-                    addDenomination(denomination_prefix,denomination_code)
-                addValue(value_prefix,value_code)
-            addCoin(coin_prefix,coin_number)
-            response = input("Enter character to start editing at the following 'c'-country 'd'-denomination 'v'-value 'q' to quit. Any other key to edit coin:").lower()
-            if response == 'q' or response == "quit":
+                    if not temp and not [x for x in added_countries if information["country_code"] == x]: # no country in database or added
+                        addCountry(information)
+                    addDenomination(information)
+                addValue(information)
+            addCoin(information)
+            print("Enter a string of characters for what to edit: 'c'-country 'd'-denomination 'v'-value (empty string to continue).")
+            print("'n'-coin name 'g'-gross weight 'f'-fineness 'p'-precious metal weight 'm'-metal type 'y'-years")
+            response = input(": ")
+            if not response:
                 break
-            elif response == 'c' or response == "country":
-                skip = 1
-            elif response == 'd' or response == "denomination":
-                skip = 2
-            elif response == 'v' or response == "value":
-                skip = 3
             else:
-                skip = 4
+                if 'c' in response:
+                    information["country_code"] = None   
+                    response += "dvngfpmy"
+                if 'd' in response:
+                    information["denomination_code"] = None
+                    response += "vngfpmy"
+                if 'v' in response:
+                    information["value_code"] = None
+                    response += "ngfpmy"
+                if 'n' in response:
+                    information["nickname"] = None
+                if 'g' in response:
+                    information["gross_weight"] = None
+                if 'f' in response:
+                    information["fineness"] = None
+                if 'p' in response:
+                    information["precious_metal_weight"] = None
+                if 'm' in response:
+                    information["metal"] = None
+                if 'y' in response:
+                    information["years"] = None
+                if 'a' in response:
+                    for key in information:
+                        information[key] = None
 
 
     except mariadb.Error as e:
