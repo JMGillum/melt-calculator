@@ -248,3 +248,7 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cub_centavo_25_1","cub_centavo_25",6.25,0.9,0.1808,"1953","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cub_centavo_40_1","cub_centavo_40",10,0.9,0.2894,"1915, 1916, 1917, 1918, 1919, 1920, 1952","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cub_centavo_50_1","cub_centavo_50",12.5,0.9,0.3617,"50","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cuw_gulden_fractional_1_10_1","cuw_gulden_fractional_1_10",1.4,0.64,0.0288,"1901, 1944, 1947, 1948","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cuw_gulden_fractional_1_4_1","cuw_gulden_fractional_1_4",3.58,0.64,0.0736,"1900, 1944, 1947","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cuw_gulden_1_1","cuw_gulden_1",10,0.72,0.2315,"1944","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cuw_gulden_fractional_2_1_2_1","cuw_gulden_fractional_2_1_2",25,0.72,0.5787,"1944","ag");

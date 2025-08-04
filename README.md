@@ -9,6 +9,7 @@ Since latest release:
 * Made color support portable. 3-bit colors work on windows, or they can be turned off.
 * Added the following countries:
   * Cuba
+  * Curacao
   * Haiti
   * Latvia
   * Luxembourg
