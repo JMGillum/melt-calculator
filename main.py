@@ -1,3 +1,4 @@
+#!/bin/python3
 """
    Author: Josh Gillum              .
    Date: 2 August 2025             ":"         __ __
