@@ -1,3 +1,4 @@
+#!/bin/python3
 #   Author: Josh Gillum              .
 #   Date: 4 August 2025             ":"         __ __
 #                                  __|___       \ V /
@@ -47,6 +48,7 @@ import sys  # Used to check if stdin is not from a terminal (piping input)
 from setup import setupParser
 from db_interface import DB_Interface
 from updateMetalPrices import updateMetalPrices
+from colorama import just_fix_windows_console
 
 
 # Enumeration used for argument tuples for searches
@@ -85,6 +87,7 @@ def updatePrices(prices,args,db=None):
 
 
 if __name__ == "__main__":
+    just_fix_windows_console()
     parser = setupParser()
     args = vars(parser.parse_args())
     if args["verbose"]:
