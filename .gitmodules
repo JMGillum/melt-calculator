@@ -1,3 +1,3 @@
 [submodule "tree"]
 	path = tree
-	url = git@github.com:JMGillum/python-tree.git
+	url = https://github.com/JMGillum/python-tree.git

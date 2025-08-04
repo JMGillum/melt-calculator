@@ -36,7 +36,11 @@ Install mariadb
 1. Install mariadb: https://mariadb.com/get-started-with-mariadb/
 2. Create a user account (or use root)
 3. Modify db_config in config.py
-4. Log into database and execute db/setup.sql
+4. Run your flavor of db/merge (sh or bat)
+5. Log into database and execute db/setup.sql (`\. ABSOLUTE_PATH_TO/db/setup.sql`)
+Windows:
+* Run `Commnd Prompt (MariaDB ...)` from start menu
+* Run `mariadb -u root -p from this command prompt`
 
 # Usage
 
