@@ -1,22 +1,20 @@
-"""
-   Author: Josh Gillum              .
-   Date: 3 August 2025             ":"         __ __
-                                  __|___       \ V /
-                                .'      '.      | |
-                                |  O       \____/  |
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-
-    This file stores the Coins class, which provides an interface for
-    interacting with the database that stores the coin information.
-
-    Thie class has no functions for actually getting data. It simply turns 
-    data from the database into CoinData objects and builds a tree to represent
-    them. 
-
-    See db_interface.py and queries.py for database specific functions.
-
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-"""
+#   Author: Josh Gillum              .
+#   Date: 3 August 2025             ":"         __ __
+#                                  __|___       \ V /
+#                                .'      '.      | |
+#                                |  O       \____/  |
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+#
+#    This file stores the Coins class, which provides an interface for
+#    interacting with the database that stores the coin information.
+#
+#    Thie class has no functions for actually getting data. It simply turns 
+#    data from the database into CoinData objects and builds a tree to represent
+#    them. 
+#
+#    See db_interface.py and queries.py for database specific functions.
+#
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 from coinData import CoinData, Purchase, PurchaseStats
 from tree.tree import Tree

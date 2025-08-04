@@ -1,18 +1,16 @@
-"""
-   Author: Josh Gillum              .
-   Date: 3 August 2025             ":"         __ __
-                                  __|___       \ V /
-                                .'      '.      | |
-                                |  O       \____/  |
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-
-    This file stores the Purchase and CoinData classes. The purchase class
-    represents a purchase or acquisition of a coin (could be multiple of the
-    same coin). CoinData stores information about a coin, and offers a way to
-    print the information in a custom format.
-
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-"""
+#   Author: Josh Gillum              .
+#   Date: 3 August 2025             ":"         __ __
+#                                  __|___       \ V /
+#                                .'      '.      | |
+#                                |  O       \____/  |
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+#
+#    This file stores the Purchase and CoinData classes. The purchase class
+#    represents a purchase or acquisition of a coin (could be multiple of the
+#    same coin). CoinData stores information about a coin, and offers a way to
+#    print the information in a custom format.
+#
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 import weights
 from datetime import datetime

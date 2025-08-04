@@ -1,16 +1,14 @@
-"""
-   Author: Josh Gillum              .
-   Date: 25 July 2025              ":"         __ __
-                                  __|___       \ V /
-                                .'      '.      | |
-                                |  O       \____/  |
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-
-    This file stores the function for printing colored text. Running this script
-    as main will show a preview of how the colors will look.
-
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-"""
+#   Author: Josh Gillum              .
+#   Date: 25 July 2025              ":"         __ __
+#                                  __|___       \ V /
+#                                .'      '.      | |
+#                                |  O       \____/  |
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+#
+#    This file stores the function for printing colored text. Running this 
+#    script as main will show a preview of how the colors will look.
+#
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 from config import show_color
 

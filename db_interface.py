@@ -1,17 +1,15 @@
-"""
-   Author: Josh Gillum              .
-   Date: 3 August 2025             ":"         __ __
-                                  __|___       \ V /
-                                .'      '.      | |
-                                |  O       \____/  |
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-
-    This class is an abstraction for connecting to the database. It should be
-    updated if the database ever changes, so that calling code does not need
-    to change.
-
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-"""
+#   Author: Josh Gillum              .
+#   Date: 3 August 2025             ":"         __ __
+#                                  __|___       \ V /
+#                                .'      '.      | |
+#                                |  O       \____/  |
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+#
+#    This class is an abstraction for connecting to the database. It should be
+#    updated if the database ever changes, so that calling code does not need
+#    to change.
+#
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 import sys
 import mariadb

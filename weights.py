@@ -1,21 +1,19 @@
-"""
-   Author: Josh Gillum              .
-   Date: 18 July 2025              ":"         __ __
-                                  __|___       \ V /
-                                .'      '.      | |
-                                |  O       \____/  |
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-
-    The Weight class facilitates storage of weights, regardless of units.
-    Weights can be stored in any of the three systems that are meaningful to
-    coins: grams, avoirdupois (typical/standard) ounces, and troy ounces.
-    Regardless of which system the weight was input in, it can be retrieved
-    in any system, using the as_x() functions.
-
-    The Units class is used to identify which system a current weight is.
-
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-"""
+#   Author: Josh Gillum              .
+#   Date: 18 July 2025              ":"         __ __
+#                                  __|___       \ V /
+#                                .'      '.      | |
+#                                |  O       \____/  |
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+#
+#    The Weight class facilitates storage of weights, regardless of units.
+#    Weights can be stored in any of the three systems that are meaningful to
+#    coins: grams, avoirdupois (typical/standard) ounces, and troy ounces.
+#    Regardless of which system the weight was input in, it can be retrieved
+#    in any system, using the as_x() functions.
+#
+#    The Units class is used to identify which system a current weight is.
+#
+#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 from enum import Enum
 
