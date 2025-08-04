@@ -21,6 +21,7 @@ import sys
 import pathlib
 from datetime import datetime
 import math
+import copy
 
 # Various files for output
 environment_prefix = "test_"
@@ -347,6 +348,17 @@ if __name__ == "__main__":
                 "years":None,
                 }
         while True:
+            # Lists of query strings
+            copy_queries_countries = copy.copy(queries_countries)
+            copy_queries_denominations = copy.copy(queries_denominations)
+            copy_queries_values = copy.copy(queries_values)
+            copy_queries_coins = copy.copy(queries_coins)
+
+            # List of ids for items added during this session
+            copy_added_countries = copy.copy(added_countries)
+            copy_added_denominations = copy.copy(added_denominations)
+            copy_added_values = copy.copy(added_values)
+            copy_added_coins = copy.copy(added_coins)
             if not information["country_code"]:
                 information.update(country_code=input("ISO 3 Alpha country code=").lower())
             if not information["denomination_code"]:
@@ -407,7 +419,7 @@ if __name__ == "__main__":
             addCoin(information)
             print("Enter a string of characters for what to edit: 'c'-country 'd'-denomination 'v'-value (empty string to continue).")
             print("'n'-coin name 'g'-gross weight 'f'-fineness 'p'-precious metal weight 'm'-metal type 'y'-years")
-            response = input(": ")
+            response = input("'D' to discard last: ")
             if not response:
                 break
             else:
@@ -432,6 +444,16 @@ if __name__ == "__main__":
                     information["metal"] = None
                 if 'y' in response:
                     information["years"] = None
+                if 'D' in response: # Rollback latest updates
+                    response += 'a'
+                    queries_countries = copy_queries_countries
+                    queries_denominations = copy_queries_denominations
+                    queries_values = copy_queries_values
+                    queries_coins = copy_queries_coins
+                    added_countries = copy_added_countries
+                    added_denominations = copy_added_denominations
+                    added_values = copy_added_values
+                    added_coins = copy_added_coins
                 if 'a' in response:
                     for key in information:
                         information[key] = None
