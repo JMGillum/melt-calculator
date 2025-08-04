@@ -142,4 +142,10 @@ def setupParser():
         metavar="DB",
         help="Name of the database to connect to.",
     )
+    parser.add_argument(
+        "-u",
+        "--update_prices",
+        action="store_true",
+        help="Will push any prices set in the command line to the database.",
+    )
     return parser
