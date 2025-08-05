@@ -24,6 +24,7 @@ Since latest release:
   * Kuwait
   * Latvia
   * Lebanon
+  * Liberia
   * Luxembourg
 
 ## Melt Calculator

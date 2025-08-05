@@ -185,3 +185,8 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("kwt_dinar_5","kw
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbn_piastre_10","lbn_piastre",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbn_piastre_25","lbn_piastre",25);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbn_piastre_50","lbn_piastre",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_cent_10","lbr_cent",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_cent_25","lbr_cent",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_cent_50","lbr_cent",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_dollar_1","lbr_dollar",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_dollar_20","lbr_dollar",20);

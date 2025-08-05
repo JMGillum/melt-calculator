@@ -26,3 +26,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("jam","jamaica","jamaican","jumieka");
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("kwt","kuwait","state of kuwait");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("lbn","lebanon","lebanese","republic of lebanon");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("lbr","liberia","liberian","republic of liberia");

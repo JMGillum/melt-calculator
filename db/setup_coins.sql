@@ -316,3 +316,11 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbn_piastre_10_1","lbn_piastre_10",2,0.68,0.0437,"1929","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbn_piastre_25_1","lbn_piastre_25",5,0.68,0.1093,"1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbn_piastre_50_1","lbn_piastre_50",10,0.68,0.2186,"1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1952","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_cent_10_1","lbr_cent_10",2.32,0.925,0.069,"1896, 1906","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_cent_25_1","lbr_cent_25",5.8,0.925,0.1725,"1896, 1906","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_cent_50_1","lbr_cent_50",11.6,0.925,0.345,"1896, 1906","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_cent_10_2","lbr_cent_10",2.07,0.9,0.06,"1960, 1961","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_cent_25_2","lbr_cent_25",5.18,0.9,0.15,"1960, 1961","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_cent_50_2","lbr_cent_50",10.37,0.9,.3,"1960, 1961","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_dollar_1_1","lbr_dollar_1",20.74,0.9,0.6,"1961, 1962","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_dollar_20_1","lbr_dollar_20",18.65,0.9,0.5397,"1964","au");
