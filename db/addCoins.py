@@ -155,16 +155,40 @@ def addValue(information):
     prefix = information["value_prefix"].lower()
     code = information["value_code"]
     while True:
-        name = input(f"Value name for ({prefix}_{code}) (enter empty string to skip): ").lower()
+        name = ""
         alternative_names = []
-        if not name:
-            break
-        for i in range(5):
-            response = input("Alternative name? (enter empty string to skip): ")
-            if response:
-                alternative_names.append(response.lower())
-            else:
+        if "fractional" in code:
+            response = input("Use standard fractional names? (y/n): ").lower()
+            if response == 'y' or response =='yes':
+                nums = code.split("_")[1:]
+                whole_num = 0
+                numerator = 0
+                denominator = 0
+                try:
+                    if len(nums) >= 3:
+                        whole_num = int(nums[-3])
+                    if len(nums) >= 2:
+                        numerator = int(nums[-2])
+                        denominator = int(nums[-1])
+                except ValueError:
+                    print("Error parsing fractional name. Select 'no' for using fractional names to enter your own.")
+                    continue
+
+                whole_num_str = str(whole_num)+"-" if whole_num else ""
+                name = f"{whole_num_str}{numerator}/{denominator}"
+                if whole_num:
+                    alternative_names = [f"{whole_num_str}{numerator}/{denominator}".replace("-"," "),f"{numerator + whole_num*denominator}/{denominator}"]
+
+        else:
+            name = input(f"Value name for ({prefix}_{code}) (enter empty string to skip): ").lower()
+            if not name:
                 break
+            for i in range(5):
+                response = input("Alternative name? (enter empty string to skip): ")
+                if response:
+                    alternative_names.append(response.lower())
+                else:
+                    break
         print(f"\n---Value name: {name}---")
         for alternative_name in alternative_names:
             print(f"  {alternative_name}")
@@ -249,8 +273,9 @@ def addCoin(information):
         precious_metal_weight = round(precious_metal_weight,4)
         response = input(f"Is the calculated precious metal weight ({precious_metal_weight}) correct? (Press enter to continue. Enter it here (in troy ounces) to manually enter it.)")
         if response: # User wanted to change. Continually loop until they are satisfied
+            precious_metal_weight = response
             while True:
-                response(f"Is {precious_metal_weight} correct? (Press enter to continue. Enter it here (in troy ounces) to modify): ")
+                response = input(f"Is {precious_metal_weight} correct? (Press enter to continue. Enter it here (in troy ounces) to modify): ")
                 if response:
                     precious_metal_weight = response
                     precious_metal_weight = float(precious_metal_weight)
@@ -431,7 +456,6 @@ if __name__ == "__main__":
                     response += "vngfpmy"
                 if 'v' in response:
                     information["value_code"] = None
-                    response += "ngfpmy"
                 if 'n' in response:
                     information["nickname"] = None
                 if 'g' in response:
