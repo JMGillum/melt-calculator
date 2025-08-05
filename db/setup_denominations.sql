@@ -48,3 +48,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aus_crown","aus","crown","crowns");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aus_florin","aus","florin","florins");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aus_sovereign","aus","sovereign","sovereigns");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hnd_centavo","hnd","centavo","centavos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hnd_peso","hnd","peso","pesos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hnd_lempira","hnd","lempira","lempiras");

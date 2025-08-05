@@ -18,3 +18,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("cyp","Cyprus","cypriot","republic of cyprus");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("arg","argentina","argentine","argentine republic","republica argentina");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("aus","australia","australian","commonwealth of autralia");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("hnd","honduras","republic of honduras","republica de honduras");

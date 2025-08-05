@@ -152,3 +152,13 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_crown_1","au
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_florin_1","aus_florin",1);
 INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("aus_sovereign_fractional_1_2","aus_sovereign","1/2",0.5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_sovereign_1","aus_sovereign",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_centavo_5","hnd_centavo",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_centavo_10","hnd_centavo",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_centavo_25","hnd_centavo",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_centavo_50","hnd_centavo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_peso_1","hnd_peso",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_centavo_20","hnd_centavo",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_lempira_1","hnd_lempira",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_peso_5","hnd_peso",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_peso_10","hnd_peso",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_peso_20","hnd_peso",20);
