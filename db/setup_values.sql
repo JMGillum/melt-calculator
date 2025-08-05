@@ -162,3 +162,9 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_lempira_1","
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_peso_5","hnd_peso",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_peso_10","hnd_peso",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hnd_peso_20","hnd_peso",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_cent_5","hkg_cent",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_cent_10","hkg_cent",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_cent_20","hkg_cent",20);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("hkg_dollar_fractional_1_2","hkg_dollar","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_dollar_1","hkg_dollar",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_cent_50","hkg_cent",50);

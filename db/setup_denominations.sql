@@ -51,3 +51,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hnd_centavo","hnd","centavo","centavos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hnd_peso","hnd","peso","pesos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hnd_lempira","hnd","lempira","lempiras");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hkg_cent","hkg","cent","cents");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("hkg_dollar","hkg","dollar","dollars");
