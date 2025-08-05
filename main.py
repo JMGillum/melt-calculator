@@ -256,6 +256,8 @@ if __name__ == "__main__":
                             show_only_not_bullion=args["hide_bullion"],
                             only_coin_ids=args["only_coin_ids"],
                             hide_coins=args["no_coins"],
+                            hide_values=args["no_values"],
+                            hide_denominations=args["no_denominations"],
                         )
                         if results is None:
                             print(
@@ -300,6 +302,8 @@ if __name__ == "__main__":
                 show_only_not_bullion=args["hide_bullion"],
                 only_coin_ids=args["only_coin_ids"],
                 hide_coins=args["no_coins"],
+                hide_values=args["no_values"],
+                hide_denominations=args["no_denominations"],
             )
             results.cascading_set_fancy(config.tree_fancy_characters)
 

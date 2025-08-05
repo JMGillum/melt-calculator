@@ -143,10 +143,16 @@ class Coins:
             country = countries[country]
             current_denominations = []
             for denomination in country[1]:
-                denomination = denominations[denomination]
+                try:
+                    denomination = denominations[denomination]
+                except KeyError:
+                    continue
                 current_values = []
                 for value in denomination[1]:
-                    value = values[value]
+                    try:
+                        value = values[value]
+                    except KeyError:
+                        continue
                     current_coins = []
                     for coin in value[1]:
                         try:
@@ -252,6 +258,8 @@ class Coins:
         show_only_bullion=False,
         show_only_not_bullion=False,
         hide_coins=False,
+        hide_values=False,
+        hide_denominations=False,
         only_coin_ids=False,
     ):
         if not isinstance(entries, list):
@@ -269,37 +277,39 @@ class Coins:
             if show_only_not_bullion and entry[14]:
                 continue
             coins[entry[0]] = (entry[0], None)
-            if not hide_coins:
-                coins[entry[0]] = (
-                    coins[entry[0]][0],
-                    CoinData(
-                        weight=entry[1],
-                        fineness=entry[2],
-                        precious_metal_weight=entry[3],
-                        years=entry[4],
-                        metal=entry[5],
-                        nickname=entry[6],
-                    ),
-                )
-            if coins[entry[0]][1] is not None:
-                if prices:
-                    Coins.price(coins[entry[0]][1],**prices)
-                else:
-                    coins[entry[0]][1].togglePrice(False)
-            try:
-                values[entry[7]]
-            except KeyError:
-                # Display name, child coins, sorting number
-                values[entry[7]] = (entry[9] if entry[9] else entry[8], [], entry[8])
-            if entry[0] not in values[entry[7]][1]:
-                values[entry[7]][1].append(entry[0])
-            try:
-                denominations[entry[10]]
-            except KeyError:
-                # Display name, child values, bullion tag
-                denominations[entry[10]] = (entry[11], [], entry[14])
-            if entry[7] not in denominations[entry[10]][1]:
-                denominations[entry[10]][1].append(entry[7])
+            if not hide_denominations:
+                if not hide_values:
+                    if not hide_coins:
+                        coins[entry[0]] = (
+                            coins[entry[0]][0],
+                            CoinData(
+                                weight=entry[1],
+                                fineness=entry[2],
+                                precious_metal_weight=entry[3],
+                                years=entry[4],
+                                metal=entry[5],
+                                nickname=entry[6],
+                            ),
+                        )
+                    if coins[entry[0]][1] is not None:
+                        if prices:
+                            Coins.price(coins[entry[0]][1],**prices)
+                        else:
+                            coins[entry[0]][1].togglePrice(False)
+                    try:
+                        values[entry[7]]
+                    except KeyError:
+                        # Display name, child coins, sorting number
+                        values[entry[7]] = (entry[9] if entry[9] else entry[8], [], entry[8])
+                    if entry[0] not in values[entry[7]][1]:
+                        values[entry[7]][1].append(entry[0])
+                try:
+                    denominations[entry[10]]
+                except KeyError:
+                    # Display name, child values, bullion tag
+                    denominations[entry[10]] = (entry[11], [], entry[14])
+                if entry[7] not in denominations[entry[10]][1]:
+                    denominations[entry[10]][1].append(entry[7])
             try:
                 countries[entry[12]]
             except KeyError:

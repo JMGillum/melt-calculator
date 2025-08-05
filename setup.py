@@ -86,6 +86,18 @@ def setupParser():
         help="Disables printing of the actual coin objects. Will only print countries, denominations, and face values.",
     )
     parser.add_argument(
+        "-z",
+        "--no_values",
+        action="store_true",
+        help="Disables printing of the values down. Will only print countries and denominations.",
+    )
+    parser.add_argument(
+        "-x",
+        "--no_denominations",
+        action="store_true",
+        help="Disables printing of the denominations down. Will only print the countries.",
+    )
+    parser.add_argument(
         "-N",
         "--no_tree",
         action="store_true",
