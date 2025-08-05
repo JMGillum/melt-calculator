@@ -10,6 +10,7 @@ Since latest release:
 * Added the following countries:
   * Cuba
   * Curacao
+  * Cyprus
   * Haiti
   * Latvia
   * Luxembourg

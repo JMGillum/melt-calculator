@@ -134,3 +134,8 @@ INSERT INTO face_values(value_id,denomination_id,value,name) VALUES("cuw_gulden_
 INSERT INTO face_values(value_id,denomination_id,value,name) VALUES("cuw_gulden_fractional_1_4","cuw_gulden",0.25,"1/4");
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("cuw_gulden_1","cuw_gulden",1);
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1,alternative_name_2) VALUES("cuw_gulden_fractional_2_1_2","cuw_gulden",2.5,"2-1/2","2 1/2","5/2");
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cyp_piastre_3","cyp_piastre",3);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("cyp_piastre_fractional_4_1_2","cyp_piastre","4-1/2","4 1/2","9/2",4.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cyp_piastre_9","cyp_piastre",9);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cyp_piastre_18","cyp_piastre",18);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("cyp_piastre_45","cyp_piastre",45);
