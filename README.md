@@ -7,6 +7,7 @@ Since latest release:
 * Rewrote collectionReport.py to work with database system
 * Wrote function/script for updating metal prices in database
 * Made color support portable. 3-bit colors work on windows, or they can be turned off.
+* --no_values and --no_denominations flags
 * Added the following countries:
   * Argentina
   * Australia
