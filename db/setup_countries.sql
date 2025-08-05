@@ -21,3 +21,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VAL
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("hnd","honduras","republic of honduras","republica de honduras");
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("hkg","hong kong","hk");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("isl","iceland","island","icelandish","icelandic");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("ind","india","indian","republic of india");

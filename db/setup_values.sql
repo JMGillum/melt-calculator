@@ -169,3 +169,11 @@ INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("hkg_dollar_
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_dollar_1","hkg_dollar",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_cent_50","hkg_cent",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("isl_krona_500","isl_krona",500);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_anna_2","ind_anna",2);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("ind_rupee_fractional_1_4","ind_rupee","1/4",0.25);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("ind_rupee_fractional_1_2","ind_rupee","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_rupee_1","ind_rupee",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_rupee_5","ind_rupee",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_rupee_10","ind_rupee",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_mohur_1","ind_mohur",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_sovereign_1","ind_sovereign",1);
