@@ -118,6 +118,12 @@ if __name__ == "__main__":
             d.metals = prices
             for key in prices:
                 name,price,date = prices[key]
+                if price < 0:
+                    print(f"WARNING: PRICE FOR [{key}]({name.title()}) HAS NOT BEEN SET. PLEASE UPDATE DATABASE BEFORE CONTINUING...")
+                    exit(1)
+ 
+            for key in prices:
+                name,price,date = prices[key]
                 print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
 
         # Determines if the user provided any search criteria, either by
