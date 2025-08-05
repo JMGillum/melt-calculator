@@ -27,6 +27,7 @@ Since latest release:
   * Liberia
   * Luxembourg
   * Macau
+  * Paraguay
 
 ## Melt Calculator
 
