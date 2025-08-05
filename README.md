@@ -21,6 +21,7 @@ Since latest release:
   * India
   * Ireland
   * Jamaica
+  * Kuwait
   * Latvia
   * Luxembourg
 
