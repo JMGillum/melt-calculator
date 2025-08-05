@@ -154,6 +154,7 @@ def addDenomination(information):
 def addValue(information):
     prefix = information["value_prefix"].lower()
     code = information["value_code"]
+    value = code
     while True:
         name = ""
         alternative_names = []
@@ -178,6 +179,7 @@ def addValue(information):
                 name = f"{whole_num_str}{numerator}/{denominator}"
                 if whole_num:
                     alternative_names = [f"{whole_num_str}{numerator}/{denominator}".replace("-"," "),f"{numerator + whole_num*denominator}/{denominator}"]
+                value = whole_num + numerator/denominator
 
         else:
             name = input(f"Value name for ({prefix}_{code}) (enter empty string to skip): ").lower()
@@ -206,7 +208,7 @@ def addValue(information):
         query_string += f',"{name}"'
         for i in range(len(alternative_names)):
             query_string += f',"{alternative_names[i]}"'
-    query_string += f",{code}"
+    query_string += f",{value}"
     query_string += ");"
     log(query_string)
     added_values.append(f"{prefix}_{code}")
