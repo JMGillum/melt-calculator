@@ -233,6 +233,11 @@ def addCoin(information):
                 information["nickname"] = name
                 break
     gross_weight = information["gross_weight"]
+    if gross_weight is not None:
+        try:
+            gross_weight_usable = float(gross_weight)
+        except ValueError:
+            information["gross_weight"] = None
     fineness = information["fineness"]
     precious_metal_weight = information["precious_metal_weight"]
     gross_weight_usable = 0.0
