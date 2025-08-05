@@ -69,6 +69,14 @@ Invoke the script by callling it from the command line. Either:
 
 pass `--help` as a command line argument to get a list of supported arguments.
 
+## Output
+
+The basic output of the script is a four-level tree. The outer level has a branch for each country. Each of these has a branch for each currency type / denomination (ex: cents / dollars),
+ each of those has a branch for each face value they came in, and finally each of those has a branch for each grouping of the coin.  
+There is an optional fifth layer that represents a personal collection. Coins in the personal collection will appear as a child branch of the specific coin in the tree.
+
+Running the script on its own is a bit overwhelming, as it reports every single coin in the database. That is where the output customization comes into play.
+
 ## Customization
 
 The main script provides a number of command line flags and arguments for customizing the output and/or filtering results. Do note that all flags and arguments are case sensitive. The most basic arguments to know are:
@@ -78,6 +86,20 @@ The main script provides a number of command line flags and arguments for custom
 * `-H` or `--hide_price` - Disables printing of the values of coins
 
 The file `config.py` contains several variables that can be changed to further customize the output of the script. See the header comment in this file for more information.
+
+## Prices
+
+One of the main features of the output is the coin pricing (based on precious metal contents). In order to see accurate pricing, the value of the various precious metals must be kept up to date. There 
+are two ways of doing this.
+1. Use the various pricing flags (-s,-g,-p,-P,-r) along with the -u flag. The pricing flags on their own do not stick, and are only for that one execution of the script. The -u flag pushes these prices to the database
+ in order to update it for the future.
+2. Run updateMetalPrices.py, which will prompt you for the various metal prices. Any that you do not wish to update can be skipped. This method is a bit more out of the way, but it is more flexible as it lets you set the price as of date, which is used to determine if a price is stale. (Useful if you are using slightly old data)
+
+Every coin has two values: 
+1. Melt value - the value of the precious metal in the coin if it were melted down.
+2. Sell value - the value that a buyer would generally pay for the coin. Default value is 97% of the melt value, but some coins are higher or lower.
+
+The coins in the personal collection will be summarized on a per coin group basis, with gain/loss being reported using both the melt and sell values. In general, the melt value appears on the left and the sell value on the right.
 
 ## Tips
 
