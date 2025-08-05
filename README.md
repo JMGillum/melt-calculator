@@ -19,6 +19,7 @@ Since latest release:
   * Hong Kong
   * Iceland
   * India
+  * Ireland
   * Latvia
   * Luxembourg
 

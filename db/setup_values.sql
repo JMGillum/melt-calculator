@@ -177,3 +177,6 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_rupee_5","in
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_rupee_10","ind_rupee",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_mohur_1","ind_mohur",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_sovereign_1","ind_sovereign",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("irl_shilling_1","irl_shilling",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("irl_florin_1","irl_florin",1);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("irl_crown_fractional_1_2","irl_crown","1/2",0.5);
