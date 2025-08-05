@@ -324,3 +324,5 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_cent_50_2","lbr_cent_50",10.37,0.9,.3,"1960, 1961","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_dollar_1_1","lbr_dollar_1",20.74,0.9,0.6,"1961, 1962","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("lbr_dollar_20_1","lbr_dollar_20",18.65,0.9,0.5397,"1964","au");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("mac_pataca_1_1","mac_pataca_1",3,0.72,0.0694,"1952","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("mac_pataca_5_1","mac_pataca_5",15,0.72,0.3472,"1952","ag");

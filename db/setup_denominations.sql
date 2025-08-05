@@ -66,3 +66,4 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("lbn_piastre","lbn","piastre","piastres");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("lbr_cent","lbr","cent","cents");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("lbr_dollar","lbr","dollar","dollars");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("mac_pataca","mac","pataca","patacas");

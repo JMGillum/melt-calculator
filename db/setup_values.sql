@@ -190,3 +190,5 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_cent_25","lb
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_cent_50","lbr_cent",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_dollar_1","lbr_dollar",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbr_dollar_20","lbr_dollar",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mac_pataca_1","mac_pataca",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mac_pataca_5","mac_pataca",5);
