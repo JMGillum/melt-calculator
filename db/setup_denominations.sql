@@ -40,3 +40,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("cub_centavo","cub","centavo","centavos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("cuw_gulden","cuw","gulden","guilder","florin");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("cyp_piastre","cyp","piastre","piastres");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("arg_centavo","arg","centavo","centavos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("arg_peso","arg","peso","pesos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("arg_argentino","arg","argentino","argentinos");

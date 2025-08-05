@@ -8,6 +8,7 @@ Since latest release:
 * Wrote function/script for updating metal prices in database
 * Made color support portable. 3-bit colors work on windows, or they can be turned off.
 * Added the following countries:
+  * Argentina
   * Cuba
   * Curacao
   * Cyprus

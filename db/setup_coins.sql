@@ -257,3 +257,9 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cyp_piastre_9_1","cyp_piastre_9",5.6552,0.925,0.1682,"1901, 1907, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1938, 1940","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cyp_piastre_18_1","cyp_piastre_18",11.3104,0.925,0.3364,"1901, 1907, 1913, 1921, 1938, 1940","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("cyp_piastre_45_1","cyp_piastre_45",28.2759,0.925,0.8409,"1928","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("arg_centavo_10_1","arg_centavo_10",2.5,0.9,0.0723,"1881, 1882, 1883","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("arg_centavo_20_1","arg_centavo_20",5,0.9,0.1447,"1881, 1882, 1883","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("arg_centavo_50_1","arg_centavo_50",12.5,0.9,0.3617,"1881, 1882, 1883","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("arg_peso_1_1","arg_peso_1",25,0.9,0.7234,"1881, 1882, 1883","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("arg_argentino_fractional_1_2_1","arg_argentino_fractional_1_2",4.0322,0.9,0.1167,"1884","au");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("arg_argentino_1_1","arg_argentino_1",8.0645,0.9,0.2333,"1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896","au");

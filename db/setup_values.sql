@@ -139,3 +139,9 @@ INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alterna
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("cyp_piastre_9","cyp_piastre",9);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("cyp_piastre_18","cyp_piastre",18);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("cyp_piastre_45","cyp_piastre",45);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_centavo_10","arg_centavo",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_centavo_20","arg_centavo",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_centavo_50","arg_centavo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_peso_1","arg_peso",1);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("arg_argentino_fractional_1_2","arg_argentino","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_argentino_1","arg_argentino",1);
