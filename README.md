@@ -17,6 +17,7 @@ Since latest release:
   * Haiti
   * Honduras
   * Hong Kong
+  * Iceland
   * Latvia
   * Luxembourg
 

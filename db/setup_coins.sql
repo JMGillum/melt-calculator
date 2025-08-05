@@ -296,3 +296,4 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("hkg_dollar_fractional_1_2_1","hkg_dollar_fractional_1_2",13.4784,0.9,0.39,"1866, 1867, 1868","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("hkg_dollar_1_1","hkg_dollar_1",26.9568,0.9,0.78,"1866, 1867, 1868","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("hkg_cent_50_1","hkg_cent_50",13.5769,0.8,0.3492,"1890, 1891, 1892, 1893, 1894, 1902, 1903, 1904, 1905","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("isl_krona_500_1","isl_krona_500",8.9604,0.9,0.2593,"1961","au");

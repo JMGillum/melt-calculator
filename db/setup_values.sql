@@ -168,3 +168,4 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_cent_20","hk
 INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("hkg_dollar_fractional_1_2","hkg_dollar","1/2",0.5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_dollar_1","hkg_dollar",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("hkg_cent_50","hkg_cent",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("isl_krona_500","isl_krona",500);
