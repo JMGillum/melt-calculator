@@ -20,6 +20,7 @@ Since latest release:
   * Iceland
   * India
   * Ireland
+  * Jamaica
   * Latvia
   * Luxembourg
 

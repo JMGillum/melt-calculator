@@ -180,3 +180,4 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("ind_sovereign_1"
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("irl_shilling_1","irl_shilling",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("irl_florin_1","irl_florin",1);
 INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("irl_crown_fractional_1_2","irl_crown","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("jam_penny_fractional_1_1_2","jam_penny","1-1/2","1 1/2","3/2",1.5);

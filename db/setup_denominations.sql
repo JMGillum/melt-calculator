@@ -61,3 +61,4 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("irl_shilling","irl","shilling","shillings");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("irl_florin","irl","florin","florins");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("irl_crown","irl","crown","crowns");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("jam_penny","jam","penny","pence");
