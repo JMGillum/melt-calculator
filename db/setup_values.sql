@@ -182,3 +182,6 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("irl_florin_1","i
 INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("irl_crown_fractional_1_2","irl_crown","1/2",0.5);
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("jam_penny_fractional_1_1_2","jam_penny","1-1/2","1 1/2","3/2",1.5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("kwt_dinar_5","kwt_dinar",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbn_piastre_10","lbn_piastre",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbn_piastre_25","lbn_piastre",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("lbn_piastre_50","lbn_piastre",50);

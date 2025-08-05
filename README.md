@@ -23,6 +23,7 @@ Since latest release:
   * Jamaica
   * Kuwait
   * Latvia
+  * Lebanon
   * Luxembourg
 
 ## Melt Calculator

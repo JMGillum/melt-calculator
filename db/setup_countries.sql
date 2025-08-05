@@ -25,3 +25,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VAL
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("irl","ireland","eire","irish","republic of ireland");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("jam","jamaica","jamaican","jumieka");
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("kwt","kuwait","state of kuwait");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("lbn","lebanon","lebanese","republic of lebanon");
