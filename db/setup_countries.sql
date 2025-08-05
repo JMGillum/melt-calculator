@@ -17,3 +17,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("cuw","curacao","country of curacao","korsou","land curacao","pais korsou");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("cyp","Cyprus","cypriot","republic of cyprus");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("arg","argentina","argentine","argentine republic","republica argentina");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("aus","australia","australian","commonwealth of autralia");

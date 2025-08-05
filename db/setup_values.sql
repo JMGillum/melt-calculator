@@ -145,3 +145,10 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_centavo_50",
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_peso_1","arg_peso",1);
 INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("arg_argentino_fractional_1_2","arg_argentino","1/2",0.5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("arg_argentino_1","arg_argentino",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_penny_3","aus_penny",3);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_penny_6","aus_penny",6);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_shilling_1","aus_shilling",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_crown_1","aus_crown",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_florin_1","aus_florin",1);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("aus_sovereign_fractional_1_2","aus_sovereign","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("aus_sovereign_1","aus_sovereign",1);
