@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 3 August 2025             ":"         __ __
+#   Date: 6 August 2025             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -178,7 +178,7 @@ class Coins:
                                         if debug:
                                             print(f"  {match}")
                                         current_coins[-1].nodes.append(
-                                                Purchase(*match[1:6])
+                                                Purchase(*(match[1:4]+match[5:]))
                                         )
                                     Coins.__summarizePurchase(current_coins[-1])
                         # Sorts the coins by first year available

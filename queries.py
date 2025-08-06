@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 3 August 2025             ":"         __ __
+#   Date: 6 August 2025             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -133,4 +133,4 @@ class Queries:
         return (query,(price,date,metal_id))
 
     def purchases():
-        return "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"
+        return "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"
