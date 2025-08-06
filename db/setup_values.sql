@@ -95,7 +95,7 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("mex_peso_50","me
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("gbr_britannia_fractional_1_10_oz","gbr_britannia",10,"1/10 oz britannia","1/10");
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("gbr_britannia_fractional_1_4_oz","gbr_britannia",25,"1/4 oz britannia","1/4");
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("gbr_britannia_fractional_1_2_oz","gbr_britannia",50,"1/2 oz britannia","1/2");
-INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("gbr_britannia_1 oz","gbr_britannia",100,"1 oz britannia","1");
+INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("gbr_britannia_1_oz","gbr_britannia",100,"1 oz britannia","1");
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("zaf_krugerrand_1_oz","zaf_krugerrand",1,"1 oz krugerrand","1");
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("zaf_krugerrand_fractional_1_2_oz","zaf_krugerrand",0.5,"1/2 oz krugerrand","1/2");
 INSERT INTO face_values(value_id,denomination_id,value,name,alternative_name_1) VALUES("zaf_krugerrand_fractional_1_4_oz","zaf_krugerrand",0.25,"1/4 oz krugerrand","1/4");
