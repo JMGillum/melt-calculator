@@ -7,6 +7,7 @@ Since latest release:
 * Rewrote collectionReport.py to work with database system
 * Wrote function/script for updating metal prices in database
 * Wrote script for adding/deleting purchases/specific coins
+* Wrote script for backing up purchases and specific coins
 * Made color support portable. 3-bit colors work on windows, or they can be turned off.
 * --no_values and --no_denominations flags
 * Added the following countries:
@@ -51,7 +52,8 @@ Install python
 * Linux: `sudo apt install python3`
 * Windows: `python`
 
-    Note that you must install the mariadb and colorama packages. Colorama requires version >= 4.6, so you might have to update python if your version is older
+    Note that you must install the mariadb and colorama packages. Colorama requires version >= 0.4.6, which requires python >= 3.11, so you might have to update python if your version is older
+    Also note that linux users can use python 3.10 if they remove the line that imports colorama and the line that calls `just_fix_windows_console()`. Windows users can do the same, but this will remove color support for them.
 
 Install mariadb
 1. Install mariadb: https://mariadb.com/get-started-with-mariadb/
