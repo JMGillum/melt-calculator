@@ -68,8 +68,9 @@ if __name__ == "__main__":
     try:
         db = DB_Interface()
         db.connect(config.db_config)
-        setMetals(db)
+        setMetals(db) # Sets value of data.metals for translation when making CoinData objects
         entries = None
+        # Prompts user for information to search for a coin
         while True:
             coin_find_by_id = True
             response = input("Find coin by search string instead of id? (y/n): ").lower()
@@ -88,7 +89,7 @@ if __name__ == "__main__":
                 print("No results found. Try again...")
 
         entry_id = 0
-        if len(entries) > 1:
+        if len(entries) > 1: # Multiple results from search
             print("Multiple results found...")
             for i in range(len(entries)):
                 entry = entries[i]
@@ -107,7 +108,7 @@ if __name__ == "__main__":
                         continue
                 entry_id -= 1
                 break
-        else:
+        else: # Only one result from search
             entry = entries[0]
             temp_coin = CoinData(weight=entry[1],fineness=entry[2],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6])
             temp_coin.togglePrice(False)
@@ -116,9 +117,8 @@ if __name__ == "__main__":
 
         coin = entries[entry_index]
         print(f"Selected: {coin[1]}")
-
-
             
+        # Gets purchase date,quantity, and price from user
         date_string = getDate()
         purchase = {
                 "date": date_string,
@@ -156,6 +156,8 @@ if __name__ == "__main__":
             purchase["unit_price"] = price
             break
         print(f"({date_string}) {config.currency_symbol}{purchase['unit_price']} x {purchase['quantity']}")
+
+        # Gets specific coin information from user
         specific_coin = {"year":None,"mintmark":None}
         response = input("Enter specific coin details (year and/or mintmark)? (y/n): ").lower()
         if response == 'y' or response == 'yes':
@@ -183,6 +185,8 @@ if __name__ == "__main__":
                     break
                 specific_coin["year"] = specific_coin["mintmark"] = None
         specific_coin_id = None
+        
+        # Pushes the specific coin to the specific_coins table
         if specific_coin["year"] or specific_coin["mintmark"]:
             entries = db.fetchSpecificCoin(coin[0],year=specific_coin["year"],mintmark=specific_coin["mintmark"])
             if entries:
@@ -196,15 +200,14 @@ if __name__ == "__main__":
                     exit(1)
                 print("Added specific coin successfully")
                 specific_coin_id = entries[0][0]
-
-
-        else:
+        else: # User did not specify a specific coin
             specific_coin_id = None
 
+        # Some error occured while trying to push to purchases table
         if not db.addPurchase({"coin_id":coin[0],"purchase_date":purchase["date"],"unit_price":purchase["unit_price"],"quantity":purchase["quantity"],"specific_coin_id":specific_coin_id}):
             print("FAILED to add purchase")
             exit(1)
-        else:
+        else: # Successful
             print("Added purchase successfully.")
     finally:
         db.closeConnection()
