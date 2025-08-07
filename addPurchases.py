@@ -240,37 +240,36 @@ if __name__ == "__main__":
         setMetals(db) # Sets value of data.metals for translation when making CoinData objects
 
         if args["delete"]: # Delete mode
-            if getConfirmation("Search by coin? (no will search by purchase date)"): 
-                coin = getCoinInformation(db,{"show_only_owned":True})
-                purchases = db.fetchPurchasesByCoinId(coin[0],True,True)
-                if not purchases:
-                    print("No purchases found.")
+            coin = getCoinInformation(db,{"show_only_owned":True})
+            purchases = db.fetchPurchasesByCoinId(coin[0],True,True)
+            if not purchases:
+                print("No purchases found.")
+                exit(1)
+            purchases = sorted([(x[7],x[8],Purchase(*(x[1:4]+x[5:7]))) for x in purchases],key=lambda x: x[2].purchase_date)
+            purchase_id = selectEntry([x[2] for x in purchases])
+            purchase = purchases[purchase_id]
+            print(f"Selected: {purchase}")
+            if purchase[0] is None:
+                print("Error with purchase")
+                exit(1)
+            print("------------------------------------Warning-------------------------------------")
+            if getConfirmation("Continuing will alter the database. Continue?"): # Ensures user wants to continue
+                result = db.deleteById({"purchases":purchase[0]})
+                if result:
+                    print(f"Successfully deleted {purchase[2]}")
+                else:
+                    print(f"Failed to delete {purchase[2]}")
                     exit(1)
-                purchases = sorted([(x[7],x[8],Purchase(*(x[1:4]+x[5:7]))) for x in purchases],key=lambda x: x[2].purchase_date)
-                purchase_id = selectEntry([x[2] for x in purchases])
-                purchase = purchases[purchase_id]
-                print(f"Selected: {purchase}")
-                if purchase[0] is None:
-                    print("Error with purchase")
-                    exit(1)
-                print("------------------------------------Warning-------------------------------------")
-                if getConfirmation("Continuing will alter the database. Continue?"): # Ensures user wants to continue
-                    result = db.deleteById({"purchases":purchase[0]})
-                    if result:
-                        print(f"Successfully deleted {purchase[2]}")
-                    else:
-                        print(f"Failed to delete {purchase[2]}")
-                        exit(1)
-                    if not db.fetchPurchasesWithSpecificCoinId(purchase[1]):
-                        if getConfirmation("No remaining coins use the specific_coin information of the deleted coin. Delete entry from specific_coins table?"):
-                            result = db.deleteById({"specific_coins":purchase[1]})
-                            if result:
-                                print(f"Successfully deleted specific_coin with id {purchase[1]}")
-                            else:
-                                print(f"Failed to delete specific_coin with id {purchase[1]}")
-                                exit(1)
+                if not db.fetchPurchasesWithSpecificCoinId(purchase[1]):
+                    if getConfirmation("No remaining coins use the specific_coin information of the deleted coin. Delete entry from specific_coins table?"):
+                        result = db.deleteById({"specific_coins":purchase[1]})
+                        if result:
+                            print(f"Successfully deleted specific_coin with id {purchase[1]}")
                         else:
-                            print("Keeping specific coin information")
+                            print(f"Failed to delete specific_coin with id {purchase[1]}")
+                            exit(1)
+                    else:
+                        print("Keeping specific coin information")
         else: # Default add mode
             coin = getCoinInformation(db)
             purchase = getPurchaseInformation()
