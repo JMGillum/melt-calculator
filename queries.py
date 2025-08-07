@@ -133,7 +133,7 @@ class Queries:
         return (query,(price,date,metal_id))
 
     def purchases():
-        return "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"
+        return "SELECT purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark FROM purchases LEFT JOIN specific_coins ON purchases.specific_coin=specific_coins.id;"
 
     def purchasesByCoinId(coin_id,purchase_id=False,specific_coin_id=False):
         query_purchase_id = ""
@@ -167,7 +167,7 @@ class Queries:
             purchase_date = f'"{purchase_date}'
         if not purchase_date[-1] == '"':
             purchase_date = f'{purchase_date}"'
-        base_query = f"INSERT INTO purchases({column_names}) VALUES({column_placeholders})"
+        base_query = f"INSERT INTO purchases({column_names}) VALUES({column_placeholders});"
         return (base_query,(columns))
 
     def specificCoin(coin_id,year=None,mintmark=None):
@@ -189,7 +189,7 @@ class Queries:
                 query += mintmark_query
             else:
                 variables = (coin_id,)
-        return (query,variables)
+        return (f"{query};",variables)
 
     def addSpecificCoin(coin_id,year=None,mintmark=None):
         if not year and not mintmark:
