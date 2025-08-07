@@ -2,7 +2,7 @@ from db_interface import DB_Interface
 import config
 from datetime import datetime
 from coins import Coins
-from coinData import CoinData
+from coinData import CoinData,Purchase
 import data
 import argparse
 
@@ -156,7 +156,31 @@ def pushPurchase(db,coin,purchase,specific_coin_id):
     else: # Successful
         print("Added purchase successfully.")
 
-def getCoinInformation(db):
+
+def selectEntry(entries):
+    for i in range(len(entries)):
+        if len(entries) > 1:
+            print(f"{i+1}: {entries[i]}")
+        else:
+            print(f"{entries[i]}")
+    entry_id = 0
+    if len(entries) > 1: # Multiple results from search
+        while True:
+            try:
+                entry_id = int(input("Enter number for entry to select it: "))
+            except ValueError:
+                print("Must be numeric.")
+                continue
+            if entry_id <= 0 or entry_id > len(entries):
+                print("Value out of range")
+                continue
+            else:
+                entry_id -= 1
+                break
+    return entry_id
+
+
+def getCoinInformation(db,additional_search_args:dict=None):
     print("--------------------------------Find Coin----------------------------------------")
     # Prompts user for information to search for a coin
     while True:
@@ -169,7 +193,10 @@ def getCoinInformation(db):
         else:
             search_string = input("Search string: ")
             arguments = Coins.parseSearchString(search_string, db.fetchCountryNames())
-            entries = db.fetchCoins({"country":arguments[0],"denomination":arguments[1],"year":arguments[2],"face_value":arguments[3]})
+            search_args = {"country":arguments[0],"denomination":arguments[1],"year":arguments[2],"face_value":arguments[3]}
+            if additional_search_args:
+                search_args |= additional_search_args
+            entries = db.fetchCoins(search_args)
         if entries:
             break
         else:
@@ -183,25 +210,8 @@ def getCoinInformation(db):
         temp_coin = CoinData(weight=entry[1],fineness=entry[2],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6],face_value=entry[8],denomination=entry[11],country=entry[13])
         temp_coin.togglePrice(False)
         temp_output = temp_coin.print("%c %F %d " + temp_coin.getCoinString())
-        entries[i] = (entry[0],temp_output)
-        if len(entries) > 1:
-            print(f"{i+1}: {entries[i][1]}")
-    if len(entries) > 1: # Multiple results from search
-        while True:
-            try:
-                entry_id = int(input("Enter number for entry to select it: "))
-            except ValueError:
-                print("Must be numeric.")
-                continue
-            if entry_id <= 0 or entry_id > len(entries):
-                print("Value out of range")
-                continue
-            else:
-                entry_id -= 1
-                print(entry_id)
-                break
-    else: # Only one result from search
-        entry_id = 0
+        entries[i] = (entry[0],temp_output) # Tuple of (coin_id, coin string)
+    entry_id = selectEntry([x[1] for x in entries]) # Gets entry from list of coin strings
 
     coin = entries[entry_id]
     print(f"Selected: {coin[1]}")
@@ -218,6 +228,7 @@ def setMetals(db):
     data.metals = prices
 
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script for managing a personal collection for the melt calculator.")
     parser.add_argument("-d","--delete",action="store_true",help="Switches to delete mode. (Deletes the entry from the purchases table)")
@@ -226,12 +237,41 @@ if __name__ == "__main__":
         # Sets up connection to database
         db = DB_Interface()
         db.connect(config.db_config)
+        setMetals(db) # Sets value of data.metals for translation when making CoinData objects
 
         if args["delete"]: # Delete mode
-            getConfirmation("Search by coin? (no will search by purchase date)")
-            coin = getCoinInformation(db)
+            if getConfirmation("Search by coin? (no will search by purchase date)"): 
+                coin = getCoinInformation(db,{"show_only_owned":True})
+                purchases = db.fetchPurchasesByCoinId(coin[0],True,True)
+                if not purchases:
+                    print("No purchases found.")
+                    exit(1)
+                purchases = sorted([(x[7],x[8],Purchase(*(x[1:4]+x[5:7]))) for x in purchases],key=lambda x: x[2].purchase_date)
+                purchase_id = selectEntry([x[2] for x in purchases])
+                purchase = purchases[purchase_id]
+                print(f"Selected: {purchase}")
+                if purchase[0] is None:
+                    print("Error with purchase")
+                    exit(1)
+                print("------------------------------------Warning-------------------------------------")
+                if getConfirmation("Continuing will alter the database. Continue?"): # Ensures user wants to continue
+                    result = db.deleteById({"purchases":purchase[0]})
+                    if result:
+                        print(f"Successfully deleted {purchase[2]}")
+                    else:
+                        print(f"Failed to delete {purchase[2]}")
+                        exit(1)
+                    if not db.fetchPurchasesWithSpecificCoinId(purchase[1]):
+                        if getConfirmation("No remaining coins use the specific_coin information of the deleted coin. Delete entry from specific_coins table?"):
+                            result = db.deleteById({"specific_coins":purchase[1]})
+                            if result:
+                                print(f"Successfully deleted specific_coin with id {purchase[1]}")
+                            else:
+                                print(f"Failed to delete specific_coin with id {purchase[1]}")
+                                exit(1)
+                        else:
+                            print("Keeping specific coin information")
         else: # Default add mode
-            setMetals(db) # Sets value of data.metals for translation when making CoinData objects
             coin = getCoinInformation(db)
             purchase = getPurchaseInformation()
             specific_coin = getSpecificCoinInformation()

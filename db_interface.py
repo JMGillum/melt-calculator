@@ -99,6 +99,9 @@ class DB_Interface:
         """Gets all of the defined searches"""
         return self.fetch(Queries.purchases())
 
+    def fetchPurchasesByCoinId(self,coin_id,purchase_id=False,specific_coin_id=False):
+        return self.fetch(*Queries.purchasesByCoinId(coin_id,purchase_id,specific_coin_id))
+
     def fetchCountryNames(self):
         """Gets all of the names of every country"""
         return self.fetch(Queries.countryNames())
@@ -130,3 +133,12 @@ class DB_Interface:
     def fetchCoinById(self,coin_id):
         results = Queries.coinById(coin_id)
         return self.fetch(results[0],results[1])
+
+    def fetchPurchasesWithSpecificCoinId(self,specific_coin_id):
+       return self.fetch(*Queries.purchasesWithSpecificCoinId(specific_coin_id)) 
+
+    def deleteById(self,kwargs):
+        return self.update(*Queries.deleteById(**kwargs))
+
+    def fetchById(self,kwargs):
+        return self.fetch(*Queries.selectById(**kwargs))

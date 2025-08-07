@@ -135,6 +135,15 @@ class Queries:
     def purchases():
         return "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"
 
+    def purchasesByCoinId(coin_id,purchase_id=False,specific_coin_id=False):
+        query_purchase_id = ""
+        if purchase_id:
+            query_purchase_id = ",purchases.purchase_id"
+        query_specific_coin_id = ""
+        if specific_coin_id:
+            query_specific_coin_id = ",specific_coins.id"
+        return (f"select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark{query_purchase_id}{query_specific_coin_id} from purchases left join specific_coins on purchases.specific_coin=specific_coins.id where purchases.coin_id = ?",(coin_id,))
+
     def addPurchase(**kwargs):
         coin_id = Queries.__unpack(kwargs,"coin_id")
         purchase_date = Queries.__unpack(kwargs,"purchase_date")
@@ -203,5 +212,44 @@ class Queries:
     def coinById(coin_id):
         select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.name as denomination_name,countries.country_id,countries.name as country_name,tags.bullion"
         base_query = "from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
-        return (f"Select {select_columns} {base_query} where coins.coin_id = ?",(coin_id,))
+        return (f"Select {select_columns} {base_query} where coins.coin_id = ?;",(coin_id,))
         
+    def purchasesWithSpecificCoinId(specific_coin_id):
+        query = "SELECT purchase_id,coin_id,purchase_date,unit_price,purchase_quantity,specific_coin FROM purchases WHERE specific_coin = ?;"
+        return (query,(specific_coin_id,))
+
+    def deleteById(**kwargs):
+        purchases = Queries.__unpack(kwargs,"purchases")
+        specific_coins = Queries.__unpack(kwargs,"specific_coins")
+
+        query = ""
+        variables = []
+        if purchases is not None:
+            query += "DELETE from purchases where purchase_id = ?;"
+            variables.append(purchases)
+
+        if specific_coins is not None:
+            query += "DELETE from specific_coins where id = ?;"
+            variables.append(specific_coins)
+
+        return (query,tuple(variables))
+
+    def selectById(**kwargs):
+        purchases = Queries.__unpack(kwargs,"purchases")
+        specific_coins = Queries.__unpack(kwargs,"specific_coins")
+
+        query = ""
+        variables = []
+        if purchases is not None:
+            query += "SELECT purchase_id,coin_id,purchase_date,unit_price,purchase_quantity,specific_coin FROM purchases WHERE purchase_id = ?;"
+            variables.append(purchases)
+
+        if specific_coins is not None:
+            query += "SELECT id,coin_id,year,mintmark FROM specific_coins WHERE id = ?;"
+            variables.append(specific_coins)
+
+        return (query,tuple(variables))
+
+
+
+
