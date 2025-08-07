@@ -161,7 +161,7 @@ def getCoinInformation(db):
     # Prompts user for information to search for a coin
     while True:
         coin_find_by_id = True
-        if getConfirmation("Find coin by search string instead of id?"):
+        if getConfirmation("Use search string instead of coin id?"):
             coin_find_by_id = False
         if coin_find_by_id:
             coin_id = input("Coin id: ")
@@ -228,7 +228,8 @@ if __name__ == "__main__":
         db.connect(config.db_config)
 
         if args["delete"]: # Delete mode
-            getConfirmation("Delete Mode")
+            getConfirmation("Search by coin? (no will search by purchase date)")
+            coin = getCoinInformation(db)
         else: # Default add mode
             setMetals(db) # Sets value of data.metals for translation when making CoinData objects
             coin = getCoinInformation(db)
