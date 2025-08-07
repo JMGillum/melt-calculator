@@ -4,7 +4,17 @@ from datetime import datetime
 from coins import Coins
 from coinData import CoinData
 import data
+import argparse
 
+def getConfirmation(prompt):
+    while True:
+        response = input(f"{prompt} (y/n): ").lower()
+        if response == 'y' or response == "yes":
+            return True
+        elif response == 'n' or response == "no":
+            return False
+        else:
+            print("You must enter either 'y' or 'n'.")
 
 def getDate():
     date_prompt = "Enter date as either: 'D.M.Y', 'M/D/Y', or 'Y-M-D': "
@@ -70,8 +80,7 @@ def getPurchaseInformation():
             break
     price_by_unit = True
     if purchase["quantity"] > 1:
-        response = input("Enter price per coin? (No will have you enter price of entire purchase then calculate price per coin) (y/n):").lower()
-        if not (response == 'y' or response == 'yes'):
+        if not getConfirmation("Enter price per coin? (No will have you enter price of entire purchase then calculate price per coin)"):
             price_by_unit = False
     while True:
         try:
@@ -93,8 +102,7 @@ def getSpecificCoinInformation():
     # Gets specific coin information from user
     print("-------------------------------Specific Coin-------------------------------------")
     specific_coin = {"year":None,"mintmark":None}
-    response = input("Enter specific coin details (year and/or mintmark)? (y/n): ").lower()
-    if response == 'y' or response == 'yes':
+    if getConfirmation("Enter specific coin details (year and/or mintmark)?"):
         while True:
             while True:
                 year = input("Enter year or enter empty string to skip: ")
@@ -114,8 +122,7 @@ def getSpecificCoinInformation():
             mintmark = input("Enter mintmark or empty string to skip: ")
             if mintmark:
                 specific_coin["mintmark"] = mintmark
-            confirm = input(f"Is the year ({specific_coin['year']}) and mintmark ({specific_coin['mintmark']}) correct? (y/n):").lower()
-            if confirm =='y' or confirm == "yes":
+            if getConfirmation(f"Is the year ({specific_coin['year']}) and mintmark ({specific_coin['mintmark']}) correct?"):
                 break
             specific_coin["year"] = specific_coin["mintmark"] = None
     return specific_coin
@@ -154,8 +161,7 @@ def getCoinInformation(db):
     # Prompts user for information to search for a coin
     while True:
         coin_find_by_id = True
-        response = input("Find coin by search string instead of id? (y/n): ").lower()
-        if response == 'y' or response == "yes":
+        if getConfirmation("Find coin by search string instead of id?"):
             coin_find_by_id = False
         if coin_find_by_id:
             coin_id = input("Coin id: ")
@@ -186,12 +192,14 @@ def getCoinInformation(db):
                 entry_id = int(input("Enter number for entry to select it: "))
             except ValueError:
                 print("Must be numeric.")
+                continue
+            if entry_id <= 0 or entry_id > len(entries):
+                print("Value out of range")
+                continue
             else:
-                if entry_id <= 0 or entry_id > len(entries):
-                    print("Value out of range")
-                    continue
-            entry_id -= 1
-            break
+                entry_id -= 1
+                print(entry_id)
+                break
     else: # Only one result from search
         entry_id = 0
 
@@ -209,16 +217,29 @@ def setMetals(db):
             prices[key] = (name,float(price),date)
     data.metals = prices
 
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Script for managing a personal collection for the melt calculator.")
+    parser.add_argument("-d","--delete",action="store_true",help="Switches to delete mode. (Deletes the entry from the purchases table)")
+    args = vars(parser.parse_args())
     try:
+        # Sets up connection to database
         db = DB_Interface()
         db.connect(config.db_config)
-        setMetals(db) # Sets value of data.metals for translation when making CoinData objects
-        coin = getCoinInformation(db)
-        purchase = getPurchaseInformation()
-        specific_coin = getSpecificCoinInformation()
-        specific_coin_id = pushSpecificCoin(db,specific_coin)
-        pushPurchase(db,coin,purchase,specific_coin_id)
+
+        if args["delete"]: # Delete mode
+            getConfirmation("Delete Mode")
+        else: # Default add mode
+            setMetals(db) # Sets value of data.metals for translation when making CoinData objects
+            coin = getCoinInformation(db)
+            purchase = getPurchaseInformation()
+            specific_coin = getSpecificCoinInformation()
+            print("------------------------------------Warning-------------------------------------")
+            if getConfirmation("Continuing will alter the database. Continue?"): # Ensures user wants to continue
+                specific_coin_id = pushSpecificCoin(db,specific_coin)
+                pushPurchase(db,coin,purchase,specific_coin_id)
+            else:
+                print("Aborting...")
 
     finally:
         db.closeConnection()
