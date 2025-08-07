@@ -10,49 +10,41 @@ def getDate():
     date_prompt = "Enter date as either: 'D.M.Y', 'M/D/Y', or 'Y-M-D': "
     tries = 0
     found_date = None
-    response = input(date_prompt)
-    while tries == 0 or response:
-        tries += 1
-        if response:
-            values_dot = response.split(".")
-            values_slash = response.split("/")
-            values_dash = response.split("-")
-            day = -1
-            month = -1
-            year = -1
-
-            if len(values_dot) == 3:
-                day,month,year = values_dot
-            elif len(values_slash) == 3:
-                month,day,year = values_slash
-            elif len(values_dash) == 3:
-                year,month,day = values_dash
-
-            try:
-                year = int(year)
-                month = int(month)
-                day = int(day)
-            except ValueError:
-                print("Day, month, and year values must be whole numbers")
-                response = None
-            # Ensures date is within the range that can be sent to the database
+    response = None
+    while tries == 0 or response or response is None:
+        if tries == 0 or response is None:
+            response = input(date_prompt)
+        else:
+            response = input(f'Press enter to accept {found_date.strftime("%d %B %Y")} or {date_prompt}')
+        if tries <= 0 or response:
+            tries += 1
             if response:
-                if year < 100:
-                    year += 2000
-                if year < 1000 or year > 9999:
-                    print("Acceptable dates are between: '1000-01-01' and '9999-12-31'.")
+                values_dot = response.split(".")
+                values_slash = response.split("/")
+                values_dash = response.split("-")
+                day = -1
+                month = -1
+                year = -1
+
+                if len(values_dot) == 3:
+                    day,month,year = values_dot
+                elif len(values_slash) == 3:
+                    month,day,year = values_slash
+                elif len(values_dash) == 3:
+                    year,month,day = values_dash
+
+                try:
+                    year = int(year)
+                    if year < 100:
+                        year += 2000
+                    found_date = datetime(year,int(month),int(day))
+                except TypeError:
+                    print("All values must be numeric.")
                     response = None
-                if day <= 0 or day > 31:
-                    print("Day must be between 1 and 31")
+                except ValueError as e:
+                    print(f"Values are outside of the acceptable range. {e}")
                     response = None
-                if month <= 0 or month > 12:
-                    print("Month must be betwen 1 and 12")
-                    response = None
-            if response:
-                found_date = datetime(year,month,day)
-                response = input(f'Press enter to accept {found_date.strftime("%d %B %Y")} or {date_prompt}')
-            else:
-                response = input(date_prompt)
+                # Ensures date is within the range that can be sent to the database
     return found_date.strftime("%Y-%m-%d")
 
 def setMetals(db):
@@ -70,6 +62,7 @@ if __name__ == "__main__":
         db.connect(config.db_config)
         setMetals(db) # Sets value of data.metals for translation when making CoinData objects
         entries = None
+        print("--------------------------------Find Coin----------------------------------------")
         # Prompts user for information to search for a coin
         while True:
             coin_find_by_id = True
@@ -118,7 +111,9 @@ if __name__ == "__main__":
         print(f"Selected: {coin[1]}")
             
         # Gets purchase date,quantity, and price from user
+        print("------------------------------Purchase Date--------------------------------------")
         date_string = getDate()
+        print("---------------------------------Purchase----------------------------------------")
         purchase = {
                 "date": date_string,
                 "quantity": None,
@@ -157,6 +152,7 @@ if __name__ == "__main__":
         print(f"({date_string}) {config.currency_symbol}{purchase['unit_price']} x {purchase['quantity']}")
 
         # Gets specific coin information from user
+        print("-------------------------------Specific Coin-------------------------------------")
         specific_coin = {"year":None,"mintmark":None}
         response = input("Enter specific coin details (year and/or mintmark)? (y/n): ").lower()
         if response == 'y' or response == 'yes':
