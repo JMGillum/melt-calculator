@@ -93,7 +93,7 @@ if __name__ == "__main__":
             print("Multiple results found...")
         for i in range(len(entries)):
             entry = entries[i]
-            temp_coin = CoinData(weight=entry[1],fineness=entry[1],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6],face_value=entry[8],denomination=entry[11],country=entry[13])
+            temp_coin = CoinData(weight=entry[1],fineness=entry[2],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6],face_value=entry[8],denomination=entry[11],country=entry[13])
             temp_coin.togglePrice(False)
             temp_output = temp_coin.print("%c %F %d " + temp_coin.getCoinString())
             entries[i] = (entry[0],temp_output)
