@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 3 August 2025             ":"         __ __
+#   Date: 6 August 2025             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -114,3 +114,19 @@ class DB_Interface:
     def updateMetalPrice(self,args):
         results = Queries.updateMetalPrice(*args)
         return self.update(*results)
+
+    def fetchSpecificCoin(self,coin_id,year,mintmark):
+        results = Queries.specificCoin(coin_id,year,mintmark)
+        return self.fetch(results[0],results[1])
+
+    def addSpecificCoin(self,coin_id,year,mintmark):
+        results = Queries.addSpecificCoin(coin_id,year,mintmark)
+        return self.update(*results)
+
+    def addPurchase(self,kwargs):
+        results = Queries.addPurchase(**kwargs)
+        return self.update(*results)
+
+    def fetchCoinById(self,coin_id):
+        results = Queries.coinById(coin_id)
+        return self.fetch(results[0],results[1])

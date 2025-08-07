@@ -134,6 +134,64 @@ class Queries:
 
     def purchases():
         return "select purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark from purchases left join specific_coins on purchases.specific_coin=specific_coins.id"
+
+    def addPurchase(**kwargs):
+        coin_id = Queries.__unpack(kwargs,"coin_id")
+        purchase_date = Queries.__unpack(kwargs,"purchase_date")
+        unit_price = Queries.__unpack(kwargs,"unit_price")
+        quantity = Queries.__unpack(kwargs,"quantity")
+        specific_coin_id = Queries.__unpack(kwargs,"specific_coin_id")
+
+
+        columns = [x for x in [("coin_id",coin_id),("purchase_date",purchase_date),("unit_price",unit_price),("purchase_quantity",quantity),("specific_coin",specific_coin_id)] if x[1] is not None]
+        column_names = [x[0] for x in columns]
+        column_names = ",".join(column_names)
+        column_placeholders = ["?" for x in columns]
+        column_placeholders = ",".join(column_placeholders)
+
+        columns = [x[1] for x in columns]
+
+        if not coin_id or not purchase_date or not unit_price:
+            return ""
+        purchase_date = str(purchase_date)
+        if not purchase_date[0] == '"':
+            purchase_date = f'"{purchase_date}'
+        if not purchase_date[-1] == '"':
+            purchase_date = f'{purchase_date}"'
+        base_query = f"INSERT INTO purchases({column_names}) VALUES({column_placeholders})"
+        return (base_query,(columns))
+
+    def specificCoin(coin_id,year=None,mintmark=None):
+        base_query = "SELECT id,year,mintmark from specific_coins where coin_id = ?"
+        year_query = " AND year = ?"
+        mintmark_query = " AND mintmark = ?"
+        query = base_query
+        variables = None
+        if year:
+            query += year_query
+            if mintmark:
+                variables = (coin_id,year,mintmark)
+                query += mintmark_query
+            else:
+                variables = (coin_id,year)
+        else:
+            if mintmark:
+                variables = (coin_id,mintmark)
+                query += mintmark_query
+            else:
+                variables = (coin_id,)
+        return (query,variables)
+
+    def addSpecificCoin(coin_id,year=None,mintmark=None):
+        if not year and not mintmark:
+            return ""
+        base_query = "INSERT INTO specific_coins(coin_id,year,mintmark) VALUES("
+        if year is None:
+            year = "NULL"
+        if not mintmark:
+            mintmark = "NULL"
+        return (f"{base_query}?,?,?);",(coin_id,year,mintmark))
+
     
     def coinById(coin_id):
         select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.name as denomination_name,countries.country_id,countries.name as country_name,tags.bullion"
