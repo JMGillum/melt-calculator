@@ -89,14 +89,17 @@ if __name__ == "__main__":
                 print("No results found. Try again...")
 
         entry_id = 0
-        if len(entries) > 1: # Multiple results from search
+        if len(entries) > 1:
             print("Multiple results found...")
-            for i in range(len(entries)):
-                entry = entries[i]
-                temp_coin = CoinData(weight=entry[1],fineness=entry[1],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6])
-                temp_coin.togglePrice(False)
-                entries[i] = (entry[0],temp_coin)
+        for i in range(len(entries)):
+            entry = entries[i]
+            temp_coin = CoinData(weight=entry[1],fineness=entry[1],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6],face_value=entry[8],denomination=entry[11],country=entry[13])
+            temp_coin.togglePrice(False)
+            temp_output = temp_coin.print("%c %F %d " + temp_coin.getCoinString())
+            entries[i] = (entry[0],temp_output)
+            if len(entries) > 1:
                 print(f"{i+1}: {entries[i][1]}")
+        if len(entries) > 1: # Multiple results from search
             while True:
                 try:
                     entry_id = int(input("Enter number for entry to select it: "))
@@ -109,10 +112,6 @@ if __name__ == "__main__":
                 entry_id -= 1
                 break
         else: # Only one result from search
-            entry = entries[0]
-            temp_coin = CoinData(weight=entry[1],fineness=entry[2],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6])
-            temp_coin.togglePrice(False)
-            entries[0] = (entry[0],temp_coin)
             entry_index = 0
 
         coin = entries[entry_index]
