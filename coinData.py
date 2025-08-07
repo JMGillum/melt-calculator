@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 3 August 2025             ":"         __ __
+#   Date: 6 August 2025             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -95,7 +95,7 @@ class Purchase:
             if self.quantity > 1:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
-                    string += f" ({config.currency_symbol}{self.price * self.quantity})"
+                    string += f" ({config.currency_symbol}{self.price * self.quantity:.2f})"
         return printColored(string, config.purchase_color)
     
 
