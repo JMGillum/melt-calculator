@@ -185,12 +185,19 @@ class Queries:
     def addSpecificCoin(coin_id,year=None,mintmark=None):
         if not year and not mintmark:
             return ""
-        base_query = "INSERT INTO specific_coins(coin_id,year,mintmark) VALUES("
-        if year is None:
-            year = "NULL"
-        if not mintmark:
-            mintmark = "NULL"
-        return (f"{base_query}?,?,?);",(coin_id,year,mintmark))
+        variables = [coin_id]
+        columns = ["coin_id"]
+        if year is not None:
+            variables.append(year)
+            columns.append("year")
+        if mintmark:
+            variables.append(mintmark)
+            columns.append("mintmark")
+
+        question_marks = ",".join(["?" for x in variables])
+        columns = ",".join(columns)
+        base_query = f"INSERT INTO specific_coins({columns}) VALUES("
+        return (f"{base_query}{question_marks});",tuple(variables))
 
     
     def coinById(coin_id):

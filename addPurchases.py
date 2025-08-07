@@ -47,6 +47,159 @@ def getDate():
                 # Ensures date is within the range that can be sent to the database
     return found_date.strftime("%Y-%m-%d")
 
+def getPurchaseInformation():
+    # Gets purchase date,quantity, and price from user
+    print("---------------------------------Purchase----------------------------------------")
+    date_string = getDate()
+    purchase = {
+            "date": date_string,
+            "quantity": None,
+            "unit_price": None
+            }
+    while True:
+        quantity = input("Enter number of coins purchased: ")
+        if quantity:
+            try:
+                quantity = int(quantity)
+                if quantity <= 0:
+                    print("Quantity must be greater than 0")
+                    continue
+            except ValueError:
+                print("Quantity must be an integer value")
+            purchase["quantity"] = quantity
+            break
+    price_by_unit = True
+    if purchase["quantity"] > 1:
+        response = input("Enter price per coin? (No will have you enter price of entire purchase then calculate price per coin) (y/n):").lower()
+        if not (response == 'y' or response == 'yes'):
+            price_by_unit = False
+    while True:
+        try:
+            if price_by_unit:
+                price = input("Enter price (per coin if multiple purchased): ")
+                temp = float(price)
+            else:
+                price = input("Enter price of total purchase: ")
+                price = round(float(price)/quantity,2)
+        except ValueError:
+            print("Price must be numeric.")
+            continue
+        purchase["unit_price"] = price
+        break
+    print(f"({date_string}) {config.currency_symbol}{purchase['unit_price']} x {purchase['quantity']}")
+    return purchase
+
+def getSpecificCoinInformation():
+    # Gets specific coin information from user
+    print("-------------------------------Specific Coin-------------------------------------")
+    specific_coin = {"year":None,"mintmark":None}
+    response = input("Enter specific coin details (year and/or mintmark)? (y/n): ").lower()
+    if response == 'y' or response == 'yes':
+        while True:
+            while True:
+                year = input("Enter year or enter empty string to skip: ")
+                if not year:
+                    break
+                else:
+                    try:
+                        year = int(year)
+                        if year <= 1000:
+                            print("Year must be greater than 1000.")
+                            continue
+                        specific_coin["year"] = year
+                        break
+                    except ValueError:
+                        print("Year must be numeric")
+                        continue
+            mintmark = input("Enter mintmark or empty string to skip: ")
+            if mintmark:
+                specific_coin["mintmark"] = mintmark
+            confirm = input(f"Is the year ({specific_coin['year']}) and mintmark ({specific_coin['mintmark']}) correct? (y/n):").lower()
+            if confirm =='y' or confirm == "yes":
+                break
+            specific_coin["year"] = specific_coin["mintmark"] = None
+    return specific_coin
+
+def pushSpecificCoin(db,specific_coin):
+    specific_coin_id = None
+    
+    # Pushes the specific coin to the specific_coins table
+    if specific_coin["year"] or specific_coin["mintmark"]:
+        entries = db.fetchSpecificCoin(coin[0],year=specific_coin["year"],mintmark=specific_coin["mintmark"])
+        if entries:
+            specific_coin_id = entries[0][0]
+        else:
+            results = db.addSpecificCoin(coin[0],specific_coin["year"],specific_coin["mintmark"])
+            if not results:
+                exit(1)
+            entries = db.fetchSpecificCoin(coin[0],year=specific_coin["year"],mintmark=specific_coin["mintmark"])
+            if not entries:
+                exit(1)
+            print("Added specific coin successfully")
+            specific_coin_id = entries[0][0]
+    else: # User did not specify a specific coin
+        specific_coin_id = None
+    return specific_coin_id
+
+def pushPurchase(db,coin,purchase,specific_coin_id):
+    # Some error occured while trying to push to purchases table
+    if not db.addPurchase({"coin_id":coin[0],"purchase_date":purchase["date"],"unit_price":purchase["unit_price"],"quantity":purchase["quantity"],"specific_coin_id":specific_coin_id}):
+        print("FAILED to add purchase")
+        exit(1)
+    else: # Successful
+        print("Added purchase successfully.")
+
+def getCoinInformation(db):
+    print("--------------------------------Find Coin----------------------------------------")
+    # Prompts user for information to search for a coin
+    while True:
+        coin_find_by_id = True
+        response = input("Find coin by search string instead of id? (y/n): ").lower()
+        if response == 'y' or response == "yes":
+            coin_find_by_id = False
+        if coin_find_by_id:
+            coin_id = input("Coin id: ")
+            entries = db.fetchCoinById(coin_id)
+        else:
+            search_string = input("Search string: ")
+            arguments = Coins.parseSearchString(search_string, db.fetchCountryNames())
+            entries = db.fetchCoins({"country":arguments[0],"denomination":arguments[1],"year":arguments[2],"face_value":arguments[3]})
+        if entries:
+            break
+        else:
+            print("No results found. Try again...")
+
+    entry_id = 0
+    if len(entries) > 1:
+        print("Multiple results found...")
+    for i in range(len(entries)):
+        entry = entries[i]
+        temp_coin = CoinData(weight=entry[1],fineness=entry[2],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6],face_value=entry[8],denomination=entry[11],country=entry[13])
+        temp_coin.togglePrice(False)
+        temp_output = temp_coin.print("%c %F %d " + temp_coin.getCoinString())
+        entries[i] = (entry[0],temp_output)
+        if len(entries) > 1:
+            print(f"{i+1}: {entries[i][1]}")
+    if len(entries) > 1: # Multiple results from search
+        while True:
+            try:
+                entry_id = int(input("Enter number for entry to select it: "))
+            except ValueError:
+                print("Must be numeric.")
+            else:
+                if entry_id <= 0 or entry_id > len(entries[i]):
+                    print("Value out of range")
+                    continue
+            entry_id -= 1
+            break
+    else: # Only one result from search
+        entry_id = 0
+
+    coin = entries[entry_id]
+    print(f"Selected: {coin[1]}")
+    return coin
+
+
 def setMetals(db):
     prices = {}
     entries = db.fetchMetals()
@@ -62,147 +215,12 @@ if __name__ == "__main__":
         db.connect(config.db_config)
         setMetals(db) # Sets value of data.metals for translation when making CoinData objects
         entries = None
-        print("--------------------------------Find Coin----------------------------------------")
-        # Prompts user for information to search for a coin
-        while True:
-            coin_find_by_id = True
-            response = input("Find coin by search string instead of id? (y/n): ").lower()
-            if response == 'y' or response == "yes":
-                coin_find_by_id = False
-            if coin_find_by_id:
-                coin_id = input("Coin id: ")
-                entries = db.fetchCoinById(coin_id)
-            else:
-                search_string = input("Search string: ")
-                arguments = Coins.parseSearchString(search_string, db.fetchCountryNames())
-                entries = db.fetchCoins({"country":arguments[0],"denomination":arguments[1],"year":arguments[2],"face_value":arguments[3]})
-            if entries:
-                break
-            else:
-                print("No results found. Try again...")
-
-        entry_id = 0
-        if len(entries) > 1:
-            print("Multiple results found...")
-        for i in range(len(entries)):
-            entry = entries[i]
-            temp_coin = CoinData(weight=entry[1],fineness=entry[2],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6],face_value=entry[8],denomination=entry[11],country=entry[13])
-            temp_coin.togglePrice(False)
-            temp_output = temp_coin.print("%c %F %d " + temp_coin.getCoinString())
-            entries[i] = (entry[0],temp_output)
-            if len(entries) > 1:
-                print(f"{i+1}: {entries[i][1]}")
-        if len(entries) > 1: # Multiple results from search
-            while True:
-                try:
-                    entry_id = int(input("Enter number for entry to select it: "))
-                except ValueError:
-                    print("Must be numeric.")
-                else:
-                    if entry <= 0 or entry > len(entries[i]):
-                        print("Value out of range")
-                        continue
-                entry_id -= 1
-                break
-        else: # Only one result from search
-            entry_index = 0
-
-        coin = entries[entry_index]
-        print(f"Selected: {coin[1]}")
             
-        # Gets purchase date,quantity, and price from user
-        print("------------------------------Purchase Date--------------------------------------")
-        date_string = getDate()
-        print("---------------------------------Purchase----------------------------------------")
-        purchase = {
-                "date": date_string,
-                "quantity": None,
-                "unit_price": None
-                }
-        while True:
-            quantity = input("Enter number of coins purchased: ")
-            if quantity:
-                try:
-                    quantity = int(quantity)
-                    if quantity <= 0:
-                        print("Quantity must be greater than 0")
-                        continue
-                except ValueError:
-                    print("Quantity must be an integer value")
-                purchase["quantity"] = quantity
-                break
-        price_by_unit = True
-        if purchase["quantity"] > 1:
-            response = input("Enter price per coin? (No will have you enter price of entire purchase then calculate price per coin) (y/n):").lower()
-            if not (response == 'y' or response == 'yes'):
-                price_by_unit = False
-        while True:
-            try:
-                if price_by_unit:
-                    price = input("Enter price (per coin if multiple purchased): ")
-                    temp = float(price)
-                else:
-                    price = input("Enter price of total purchase: ")
-                    price = round(float(price)/quantity,2)
-            except ValueError:
-                print("Price must be numeric.")
-                continue
-            purchase["unit_price"] = price
-            break
-        print(f"({date_string}) {config.currency_symbol}{purchase['unit_price']} x {purchase['quantity']}")
+        coin = getCoinInformation(db)
+        purchase = getPurchaseInformation()
+        specific_coin = getSpecificCoinInformation()
+        specific_coin_id = pushSpecificCoin(db,specific_coin)
+        pushPurchase(db,coin,purchase,specific_coin_id)
 
-        # Gets specific coin information from user
-        print("-------------------------------Specific Coin-------------------------------------")
-        specific_coin = {"year":None,"mintmark":None}
-        response = input("Enter specific coin details (year and/or mintmark)? (y/n): ").lower()
-        if response == 'y' or response == 'yes':
-            while True:
-                while True:
-                    year = input("Enter year or enter empty string to skip: ")
-                    if not year:
-                        break
-                    else:
-                        try:
-                            year = int(year)
-                            if year <= 1000:
-                                print("Year must be greater than 1000.")
-                                continue
-                            specific_coin["year"] = year
-                            break
-                        except ValueError:
-                            print("Year must be numeric")
-                            continue
-                mintmark = input("Enter mintmark or empty string to skip: ")
-                if mintmark:
-                    specific_coin["mintmark"] = mintmark
-                confirm = input(f"Is the year ({specific_coin['year']}) and mintmark ({specific_coin['mintmark']}) correct? (y/n):").lower()
-                if confirm =='y' or confirm == "yes":
-                    break
-                specific_coin["year"] = specific_coin["mintmark"] = None
-        specific_coin_id = None
-        
-        # Pushes the specific coin to the specific_coins table
-        if specific_coin["year"] or specific_coin["mintmark"]:
-            entries = db.fetchSpecificCoin(coin[0],year=specific_coin["year"],mintmark=specific_coin["mintmark"])
-            if entries:
-                specific_coin_id = entries[0][0]
-            else:
-                results = db.addSpecificCoin(coin[0],specific_coin["year"],specific_coin["mintmark"])
-                if not results:
-                    exit(1)
-                entries = db.fetchSpecificCoin(coin[0],year=specific_coin["year"],mintmark=specific_coin["mintmark"])
-                if not entries:
-                    exit(1)
-                print("Added specific coin successfully")
-                specific_coin_id = entries[0][0]
-        else: # User did not specify a specific coin
-            specific_coin_id = None
-
-        # Some error occured while trying to push to purchases table
-        if not db.addPurchase({"coin_id":coin[0],"purchase_date":purchase["date"],"unit_price":purchase["unit_price"],"quantity":purchase["quantity"],"specific_coin_id":specific_coin_id}):
-            print("FAILED to add purchase")
-            exit(1)
-        else: # Successful
-            print("Added purchase successfully.")
     finally:
         db.closeConnection()
