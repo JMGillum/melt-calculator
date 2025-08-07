@@ -187,7 +187,7 @@ def getCoinInformation(db):
             except ValueError:
                 print("Must be numeric.")
             else:
-                if entry_id <= 0 or entry_id > len(entries[i]):
+                if entry_id <= 0 or entry_id > len(entries):
                     print("Value out of range")
                     continue
             entry_id -= 1
@@ -214,8 +214,6 @@ if __name__ == "__main__":
         db = DB_Interface()
         db.connect(config.db_config)
         setMetals(db) # Sets value of data.metals for translation when making CoinData objects
-        entries = None
-            
         coin = getCoinInformation(db)
         purchase = getPurchaseInformation()
         specific_coin = getSpecificCoinInformation()
