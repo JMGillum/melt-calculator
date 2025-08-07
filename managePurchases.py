@@ -227,7 +227,34 @@ def setMetals(db):
             prices[key] = (name,float(price),date)
     data.metals = prices
 
+def selectPurchase(db,coin):
+    purchases = db.fetchPurchasesByCoinId(coin[0],True,True)
+    if not purchases:
+        print("No purchases found.")
+        exit(1)
+    # Creates a list of tuples of (purchase_id,specific_coin_id,Purchase object). 
+    # They are then sorted by purchase date
+    purchases = sorted([(x[7],x[8],Purchase(*(x[1:4]+x[5:7]))) for x in purchases],key=lambda x: x[2].purchase_date)
+    purchase_id = selectEntry([x[2] for x in purchases])
+    purchase = purchases[purchase_id]
+    print(f"Selected: {purchase[2]}")
+    if purchase[0] is None:
+        print("Error with purchase")
+        exit(1)
+    return purchase
 
+def printResult(result,item,exit_on_fail=True):
+    if result:
+        print(f"Successfully deleted {item}")
+    else:
+        print(f"Failed to delete {item}")
+        if exit_on_fail:
+            exit(1)
+
+
+def alterDatabaseConfirmation():
+    print("------------------------------------Warning-------------------------------------")
+    return getConfirmation("Continuing will alter the database. Continue?") # Ensures user wants to continue
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Script for managing a personal collection for the melt calculator.")
@@ -241,41 +268,25 @@ if __name__ == "__main__":
 
         if args["delete"]: # Delete mode
             coin = getCoinInformation(db,{"show_only_owned":True})
-            purchases = db.fetchPurchasesByCoinId(coin[0],True,True)
-            if not purchases:
-                print("No purchases found.")
-                exit(1)
-            purchases = sorted([(x[7],x[8],Purchase(*(x[1:4]+x[5:7]))) for x in purchases],key=lambda x: x[2].purchase_date)
-            purchase_id = selectEntry([x[2] for x in purchases])
-            purchase = purchases[purchase_id]
-            print(f"Selected: {purchase}")
-            if purchase[0] is None:
-                print("Error with purchase")
-                exit(1)
-            print("------------------------------------Warning-------------------------------------")
-            if getConfirmation("Continuing will alter the database. Continue?"): # Ensures user wants to continue
+            purchase = selectPurchase(db,coin)
+            if alterDatabaseConfirmation():
                 result = db.deleteById({"purchases":purchase[0]})
-                if result:
-                    print(f"Successfully deleted {purchase[2]}")
-                else:
-                    print(f"Failed to delete {purchase[2]}")
-                    exit(1)
+                printResult(result,purchase[2])
+                # Check if specific_coin is used by other purchases
                 if not db.fetchPurchasesWithSpecificCoinId(purchase[1]):
+                    # It is not used, see if user wants to delete it
                     if getConfirmation("No remaining coins use the specific_coin information of the deleted coin. Delete entry from specific_coins table?"):
                         result = db.deleteById({"specific_coins":purchase[1]})
-                        if result:
-                            print(f"Successfully deleted specific_coin with id {purchase[1]}")
-                        else:
-                            print(f"Failed to delete specific_coin with id {purchase[1]}")
-                            exit(1)
+                        printResult(result,purchase[1])
                     else:
                         print("Keeping specific coin information")
+            else: # User didn't want to alter database
+                print("Aborting...")
         else: # Default add mode
             coin = getCoinInformation(db)
             purchase = getPurchaseInformation()
             specific_coin = getSpecificCoinInformation()
-            print("------------------------------------Warning-------------------------------------")
-            if getConfirmation("Continuing will alter the database. Continue?"): # Ensures user wants to continue
+            if alterDatabaseConfirmation():
                 specific_coin_id = pushSpecificCoin(db,specific_coin)
                 pushPurchase(db,coin,purchase,specific_coin_id)
             else:
