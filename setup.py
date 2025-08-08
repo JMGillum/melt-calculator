@@ -44,6 +44,12 @@ def setupParser():
         help="Face value of coin to return results for. Ex: 10",
     )
     parser.add_argument(
+        "-m",
+        "--face_value_name",
+        metavar="FACE_VALUE_NAME",
+        help="Name of face value of coin to return results for. Ex: Dime",
+    )
+    parser.add_argument(
         "-F",
         "--search_file",
         metavar="FILE",

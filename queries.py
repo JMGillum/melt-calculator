@@ -99,6 +99,7 @@ class Queries:
             country is not None
             or denomination is not None
             or face_value is not None
+            or face_value_name is not None
             or year is not None
         ):
             return_query += " where "

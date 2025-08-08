@@ -22,6 +22,7 @@ from tree.node import Node
 from config import currency_symbol, current_year, minimum_year
 import config
 from colors import printColored
+import general
 
 import re
 
@@ -334,32 +335,57 @@ class Coins:
     # is an alternative name
     def parseSearchString(text: str, countries: list[list[str]] | list[tuple[str]], debug: bool = False):
         """Parses a string to extract the country's name, year, denomination, and face value"""
-        numbers = re.findall("\d+", text)  # Regex finds all strings of digits
+        numbers_matched = [x for x in re.findall(r"((\d+(\s|\-)?\d+\/\d+)|\d+\.\d+|\d+)", text)]  # Regex finds all strings of digits
+        numbers = []
+        for number in numbers_matched:
+            if number[1]:
+                fail,result = general.strToNum(number[1])
+                if not fail:
+                    numbers.append((str(result),number[1]))
+            else:
+                numbers.append(number[0])
         words = re.findall("[a-zA-Z]+", text)  # Same for words
 
         year = ""
         denomination = ""
         country = ""
         face_value = ""
+        face_value_name = ""
         # If more than two numbers, picks year and denomination
         if len(numbers) >= 2:
-            if len(numbers[0]) != 4 and len(numbers[1]) == 4:
-                year = numbers[1]
-                face_value = numbers[0]
-            else:
+            if isinstance(numbers[0],tuple):
+                if isinstance(numbers[1],tuple):
+                    year = numbers[1][0]
+                else:
+                    year = numbers[1]
+                face_value = numbers[0][0]
+                face_value_name = numbers[0][1]
+            elif isinstance(numbers[1],tuple):
                 year = numbers[0]
-                face_value = numbers[1]
-        elif len(numbers) == 1:  # Only one number found
-            if (
-                len(numbers[0]) == 4
-            ):  # Checks if number is 4 digits (a year), then checks if within provided range
-                temp = int(numbers[0])
-                if temp >= minimum_year and temp <= current_year:
-                    year = numbers[0]
-                else:  # If not, uses number as face value
+                face_value = numbers[1][0]
+                face_value_name = numbers[1][1]
+            else: # Neither are tuples (dont have fractional number)
+                if len(numbers[0]) != 4 and len(numbers[1]) == 4:
+                    year = numbers[1]
                     face_value = numbers[0]
+                else:
+                    year = numbers[0]
+                    face_value = numbers[1]
+        elif len(numbers) == 1:  # Only one number found
+            if isinstance(numbers[0],tuple):
+                face_value = numbers[0][0]
+                face_value_name = numbers[0][1]
             else:
-                face_value = numbers[0]
+                if (
+                    len(numbers[0]) == 4
+                ):  # Checks if number is 4 digits (a year), then checks if within provided range
+                    temp = int(numbers[0])
+                    if temp >= minimum_year and temp <= current_year:
+                        year = numbers[0]
+                    else:  # If not, uses number as face value
+                        face_value = numbers[0]
+                else:
+                    face_value = numbers[0]
 
         # Sets the country name and denomination
         if len(words) >= 2:
@@ -391,8 +417,7 @@ class Coins:
 
         if debug:
             print(
-                f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value}"
+                    f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value},FACE VALUE NAME:{face_value_name}"
             )
 
-        # Sets values to None if they weren't found
-        return (country, denomination, year, face_value)
+        return (country, denomination, year, face_value, face_value_name)

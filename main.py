@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 4 August 2025             ":"         __ __
+#   Date: 6 August 2025             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -39,8 +39,8 @@
 
 import data as d
 from coins import Coins
-from queries import Queries
 import config
+import general
 
 from datetime import datetime
 import sys  # Used to check if stdin is not from a terminal (piping input)
@@ -55,6 +55,7 @@ COUNTRY = 0
 DENOMINATION = 1
 YEAR = 2
 FACE_VALUE = 3
+FACE_VALUE_NAME = 4
 
 
 
@@ -128,9 +129,9 @@ if __name__ == "__main__":
 
         # Determines if the user provided any search criteria, either by
         # Exact command line flags, a search string, or a search file
-        if args["country"] or args["denomination"] or args["year"] or args["face_value"]:
+        if args["country"] or args["denomination"] or args["year"] or args["face_value"] or args["face_value_name"]:
             arguments_list = [
-                (args["country"], args["denomination"], args["year"], args["face_value"])
+                (args["country"], args["denomination"], args["year"], args["face_value"],args["face_value_name"])
             ]
         else:
             arguments_list = []
@@ -159,6 +160,7 @@ if __name__ == "__main__":
                     or arguments[DENOMINATION]
                     or arguments[YEAR]
                     or arguments[FACE_VALUE]
+                    or arguments[FACE_VALUE_NAME]
                 ):
                     fail_year = False
                     fail_face_value = False
@@ -173,6 +175,7 @@ if __name__ == "__main__":
                                 arguments[DENOMINATION],
                                 year,
                                 arguments[FACE_VALUE],
+                                arguments[FACE_VALUE_NAME],
                             )
                             if args["verbose"]:
                                 print(f"Year was successfully converted to {year}")
@@ -185,57 +188,27 @@ if __name__ == "__main__":
                         )
                         fail_year = True
                     if arguments[FACE_VALUE]:
-                        try:  # Converts the face_value from a string to either an int or float
-                            face_value = int(arguments[FACE_VALUE])
-                        except ValueError:
-                            try:
-                                face_value = float(arguments[FACE_VALUE])
-                            except ValueError:
-                                index = arguments[FACE_VALUE].find("/")
-                                dash = arguments[FACE_VALUE].find("-")
-                                if dash < 0:
-                                    dash = arguments[FACE_VALUE].find(" ")
-                                if index > 0:
-                                    if dash > 0:
-                                        prefix = arguments[FACE_VALUE][:dash]
-                                        numerator = arguments[FACE_VALUE][dash + 1 : index]
-                                    else:
-                                        prefix = 0
-                                        numerator = arguments[FACE_VALUE][:index]
-                                    try:
-                                        denominator = arguments[FACE_VALUE][index + 1 :]
-                                        try:
-                                            numerator = int(numerator)
-                                            denominator = int(denominator)
-                                            prefix = int(prefix)
-                                            face_value = round(
-                                                prefix + numerator / denominator, 2
-                                            )
-                                        except ValueError:
-                                            fail_face_value = True
-                                    except IndexError:
-                                        fail_face_value = True
-                                else:
-                                    fail_face_value = True
+                        fail_face_value,face_value = general.strToNum(arguments[FACE_VALUE])
+                        if fail_face_value:
+                            print(
+                                f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
+                            )
+                        else:
+                            arguments = (
+                                arguments[COUNTRY],
+                                arguments[DENOMINATION],
+                                arguments[YEAR],
+                                face_value,
+                                arguments[FACE_VALUE_NAME]
+                            )
+                            print(
+                                f"Face value was successfully converted to {arguments[FACE_VALUE]}"
+                            )
+
 
                     else:
                         if args["verbose"]:
                             print("face_value was not provided. Ignoring...")
-                    if fail_face_value:
-                        print(
-                            f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
-                        )
-                    else:
-                        arguments = (
-                            arguments[COUNTRY],
-                            arguments[DENOMINATION],
-                            arguments[YEAR],
-                            face_value,
-                        )
-                        print(
-                            f"Face value was successfully converted to {arguments[FACE_VALUE]}"
-                        )
-
                     if (
                         not fail_year and not fail_face_value
                     ):  # The year and face_value could be converted to numeric types if applicable
@@ -248,6 +221,7 @@ if __name__ == "__main__":
                             "denomination":arguments[DENOMINATION],
                             "year":arguments[YEAR],
                             "face_value":arguments[FACE_VALUE],
+                            "face_value_name":arguments[FACE_VALUE_NAME],
                             "debug":args["verbose"],
                             "show_only_owned":args["owned"],
                             "show_only_not_owned":args["not_owned"],
