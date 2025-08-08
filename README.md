@@ -13,8 +13,8 @@ Since latest release:
 * Added the following countries:
   * Argentina
   * Australia
-  * Comoros
   * Colombia
+  * Comoros
   * Cuba
   * Curacao
   * Cyprus
@@ -32,7 +32,8 @@ Since latest release:
   * Luxembourg
   * Macau
   * Paraguay
-
+# Roadmap
+See roadmap.md for the order that countries will be added. Lower tier countries are higher priority than higher tier countries.
 ## Melt Calculator
 
 The melt calculator is a valuable resources for investing in or collecting coins made of precious metals. It provides an easy to use interface for searching for coins. Each coin has an associated melt/intrinsic value equal to:
