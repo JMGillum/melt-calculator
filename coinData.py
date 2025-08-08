@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 6 August 2025             ":"         __ __
+#   Date: 7 August 2025             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -288,8 +288,8 @@ class CoinData:
         string = string.replace(
             "%m", "Unknown metal" if self.metal is None else self.metalString()
         )
-        string = string.replace("%f", str(self.fineness))
-        string = string.replace("%p", str(self.fineness * 100))
+        string = string.replace("%f", f"{self.fineness:.2f}")
+        string = string.replace("%p", f"{self.fineness * 100:.2f}")
         string = string.replace(
             "%a",
             "Unknown weight"
