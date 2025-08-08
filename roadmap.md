@@ -5,7 +5,6 @@
 * Egypt
 * Finland
 * Great Britain
-* Greece
 * Japan
 * Netherlands, The
 * Poland

@@ -215,3 +215,12 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("col_peso_5","col
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("col_peso_20","col_peso",20);
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("col_peso_fractional_2_1_2","col_peso","2-1/2","2 1/2","5/2",2.5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("com_franc_5","com_franc",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_lepton_50","grc_lepton",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_1","grc_drachma",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_2","grc_drachma",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_5","grc_drachma",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_10","grc_drachma",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_20","grc_drachma",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_30","grc_drachma",30);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_50","grc_drachma",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_100","grc_drachma",100);

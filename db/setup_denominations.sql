@@ -73,3 +73,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("col_peso","col","peso","pesos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("col_centavo","col","centavo","centavos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("com_franc","com","franc","francs");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("grc_lepton","grc","lepton","lepto","lepta");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("grc_drachma","grc","drachma","drachmai","drachmae");

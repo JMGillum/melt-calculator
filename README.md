@@ -18,6 +18,7 @@ Since latest release:
   * Cuba
   * Curacao
   * Cyprus
+  * Greece
   * Haiti
   * Honduras
   * Hong Kong

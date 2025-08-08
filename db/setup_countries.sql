@@ -31,3 +31,4 @@ INSERT INTO countries(country_id,name,alternative_name_1) VALUES("mac","macau","
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("pry","paraguay","republic of paraguay","republica del paraguay","paraguai","paraguai tavakuaireta");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("col","colombia","colombian","republic of colombia","republica de colombia");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("com","comoros","union of the comoros","komori","comores","udzima wa komori","union des comores");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("grc","greece","greek","hellenic republic","elliniki dimokratia");
