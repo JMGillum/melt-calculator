@@ -204,8 +204,6 @@ if __name__ == "__main__":
                             print(
                                 f"Face value was successfully converted to {arguments[FACE_VALUE]}"
                             )
-
-
                     else:
                         if args["verbose"]:
                             print("face_value was not provided. Ignoring...")
