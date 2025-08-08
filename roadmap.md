@@ -7,7 +7,6 @@
 * Great Britain
 * Japan
 * Netherlands, The
-* Poland
 * Spain
 * Sweden
 * Venezuela

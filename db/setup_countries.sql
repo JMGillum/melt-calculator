@@ -32,3 +32,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("col","colombia","colombian","republic of colombia","republica de colombia");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("com","comoros","union of the comoros","komori","comores","udzima wa komori","union des comores");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("grc","greece","greek","hellenic republic","elliniki dimokratia");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("pol","poland","polish","republic of poland","rzeczpospolita polska","polska");

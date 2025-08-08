@@ -224,3 +224,8 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_20",
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_30","grc_drachma",30);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_50","grc_drachma",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("grc_drachma_100","grc_drachma",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("pol_zloty_1","pol_zloty",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("pol_zloty_2","pol_zloty",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("pol_zloty_5","pol_zloty",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("pol_zloty_10","pol_zloty",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("pol_zloty_20","pol_zloty",20);
