@@ -13,6 +13,7 @@ Since latest release:
 * Added the following countries:
   * Argentina
   * Australia
+  * Colombia
   * Cuba
   * Curacao
   * Cyprus

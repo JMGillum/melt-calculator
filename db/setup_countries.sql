@@ -29,3 +29,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VAL
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("lbr","liberia","liberian","republic of liberia");
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("mac","macau","macao");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("pry","paraguay","republic of paraguay","republica del paraguay","paraguai","paraguai tavakuaireta");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("col","colombia","colombian","republic of colombia","republica de colombia");
