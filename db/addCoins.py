@@ -1,21 +1,18 @@
-#!/bin/python3
-"""
-   Author: Josh Gillum              .
-   Date: 2 August 2025             ":"         __ __
-                                  __|___       \ V /
-                                .'      '.      | |
-                                |  O       \____/  |
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-
-    MUST BE RUN FROM ROOT PROJECT DIRECTORY!!!
-
-    This script makes it easier to add new coins to the database. It does not
-    actually add the coins to the database, it simply prints out the sql
-    queries that would do so. It will prompt for the needed country, 
-    denomination, and value if necessary.
-
-^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-"""
+#   Author: Josh Gillum              .
+#   Date: 7 August 2025             ":"         __ __
+#                                  __|___       \ V /
+#                                .'      '.      | |
+#                                |  O       \____/  |
+#^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^
+#
+#   MUST BE RUN FROM ROOT PROJECT DIRECTORY!!!
+#
+#   This script makes it easier to add new coins to the database. It does not
+#   actually add the coins to the database, it simply prints out the sql
+#   queries that would do so. It will prompt for the needed country, 
+#   denomination, and value if necessary.
+#   
+#^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^
 import mariadb
 import sys
 import pathlib
