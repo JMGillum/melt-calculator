@@ -335,16 +335,23 @@ class Coins:
     # is an alternative name
     def parseSearchString(text: str, countries: list[list[str]] | list[tuple[str]], debug: bool = False):
         """Parses a string to extract the country's name, year, denomination, and face value"""
-        numbers_matched = [x for x in re.findall(r"((\d+(\s|\-)?\d+\/\d+)|\d+\.\d+|\d+)", text)]  # Regex finds all strings of digits
+        numbers_matched = [x for x in re.findall(r"((\d+(\s|\-)?\d+\/\d+)|(\d+\.\d+)|(\d+))", text)]  # Regex finds all strings of digits
+        print(numbers_matched)
         numbers = []
         for number in numbers_matched:
+            test_num = None
             if number[1]:
-                fail,result = general.strToNum(number[1])
+                test_num = number[1]
+            if number[3]:
+                test_num = number[3]
+            if test_num is not None:
+                fail,result = general.strToNum(test_num)
                 if not fail:
-                    numbers.append((str(result),number[1]))
+                    numbers.append((str(result),test_num))
             else:
                 numbers.append(number[0])
         words = re.findall("[a-zA-Z]+", text)  # Same for words
+        print(numbers)
 
         year = ""
         denomination = ""
@@ -419,5 +426,8 @@ class Coins:
             print(
                     f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value},FACE VALUE NAME:{face_value_name}"
             )
+        
 
+        if face_value == face_value_name:
+            face_value_name = None
         return (country, denomination, year, face_value, face_value_name)
