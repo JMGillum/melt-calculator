@@ -76,3 +76,7 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("grc_lepton","grc","lepton","lepto","lepta");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("grc_drachma","grc","drachma","drachmai","drachmae");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("pol_zloty","pol","zloty","zlote","zlotych","zlotego");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_real","esp","real","reales");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_centimo","esp","centimo","centimos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_escudo","esp","escudo","escudos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_peseta","esp","peseta","pesetas");

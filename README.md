@@ -34,6 +34,7 @@ Since latest release:
   * Macau
   * Paraguay
   * Poland
+  * Spain
 # Roadmap
 See roadmap.md for the order that countries will be added. Lower tier countries are higher priority than higher tier countries.
 ## Melt Calculator

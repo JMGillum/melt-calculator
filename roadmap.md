@@ -7,7 +7,6 @@
 * Great Britain
 * Japan
 * Netherlands, The
-* Spain
 * Sweden
 * Venezuela
 # Tier 2
