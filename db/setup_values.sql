@@ -214,3 +214,4 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("col_peso_10","co
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("col_peso_5","col_peso",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("col_peso_20","col_peso",20);
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("col_peso_fractional_2_1_2","col_peso","2-1/2","2 1/2","5/2",2.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("com_franc_5","com_franc",5);

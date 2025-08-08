@@ -72,3 +72,4 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("col_decimo","col","decimo","decimos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("col_peso","col","peso","pesos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("col_centavo","col","centavo","centavos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("com_franc","com","franc","francs");
