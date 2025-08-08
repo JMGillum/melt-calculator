@@ -1,39 +1,6 @@
 # WEEKLY RELEASES EVERY FRIDAY
 
-Since latest release:
-* Split setup.sql into multiple files and wrote bash script for combining them into a single file
-* Created addCoins.py, which can be used to add new coins
-* Added Queries and DB_Interface for abstraction of interacting with the database.
-* Rewrote collectionReport.py to work with database system
-* Wrote function/script for updating metal prices in database
-* Wrote script for adding/deleting purchases/specific coins
-* Wrote script for backing up purchases and specific coins
-* Made color support portable. 3-bit colors work on windows, or they can be turned off.
-* --no_values and --no_denominations flags
-* Added the following countries:
-  * Argentina
-  * Australia
-  * Colombia
-  * Comoros
-  * Cuba
-  * Curacao
-  * Cyprus
-  * Greece
-  * Haiti
-  * Honduras
-  * Hong Kong
-  * Iceland
-  * India
-  * Ireland
-  * Jamaica
-  * Kuwait
-  * Latvia
-  * Lebanon
-  * Liberia
-  * Luxembourg
-  * Macau
-  * Paraguay
-  * Poland
+
 # Roadmap
 See roadmap.md for the order that countries will be added. Lower tier countries are higher priority than higher tier countries.
 ## Melt Calculator
