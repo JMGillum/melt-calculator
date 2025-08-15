@@ -251,3 +251,10 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("esp_peseta_10","
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("esp_peseta_20","esp_peseta",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("esp_peseta_25","esp_peseta",25);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("esp_peseta_100","esp_peseta",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bel_centime_50","bel_centime",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bel_franc_1","bel_franc",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bel_franc_2","bel_franc",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bel_franc_5","bel_franc",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bel_franc_20","bel_franc",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bel_franc_50","bel_franc",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bel_franc_100","bel_franc",100);

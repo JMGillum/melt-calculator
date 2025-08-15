@@ -80,3 +80,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_centimo","esp","centimo","centimos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_escudo","esp","escudo","escudos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_peseta","esp","peseta","pesetas");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bel_centime","bel","centime","centimes");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bel_franc","bel","franc","francs");
