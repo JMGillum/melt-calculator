@@ -306,3 +306,13 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_100",
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_500","egy_ghirsh",500);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_pound_1","egy_pound",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_pound_5","egy_pound",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_pennia_25","fin_pennia",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_pennia_50","fin_pennia",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_1","fin_markka",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_2","fin_markka",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_500","fin_markka",500);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_100","fin_markka",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_200","fin_markka",200);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_1000","fin_markka",1000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_10","fin_markka",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_20","fin_markka",20);

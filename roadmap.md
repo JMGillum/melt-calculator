@@ -1,5 +1,4 @@
 # Tier 1
-* Finland
 * Great Britain
 * Japan
 * Netherlands, The
