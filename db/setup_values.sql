@@ -382,3 +382,7 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_2","jpn_
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_5","jpn_yen",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_10","jpn_yen",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_20","jpn_yen",20);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) VALUES("haw_cent_10","haw_cent","dime","dimes",10);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) VALUES("haw_cent_25","haw_cent","quarter","quarters",25);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) VALUES("haw_cent_50","haw_cent","half","halves",50);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) VALUES("haw_dollar_1","haw_dollar","dollar","dollars",1);

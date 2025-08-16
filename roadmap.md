@@ -6,7 +6,6 @@
 * Cambodia
 * China
 * Costa Rica
-* Hawaii
 * Hungary
 * Norway
 * Peru

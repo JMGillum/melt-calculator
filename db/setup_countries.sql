@@ -40,7 +40,8 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VAL
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("egy","egypt","egyptian","arab republic of egypt");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("fin","finland","republic of finland","finnish","suomi","suomen tasavalta","republiken finland");
 insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("gbr","great britain","britain","british");
-INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("nld","netherlands","netherland","kingdom of the netherlands","the netherlands","nederlanden","dutch");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("nld","netherlands, the","netherland","kingdom of the netherlands","netherlands","the netherlands","dutch");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("swe","sweden","swedish","kingdom of sweden","konungariket sverige");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("ven","venezuela","venezuelan","bolivarian republic of venezuela","republica bolivariana de venezuela");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("jpn","japan","japanese","nihon","nippon","nihon-koku","nippon-koku");
+INSERT INTO countries(country_id,name,alternative_name_1) VALUES("haw","hawaii","hawaiian");
