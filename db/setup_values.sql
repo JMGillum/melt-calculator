@@ -316,3 +316,16 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_200",
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_1000","fin_markka",1000);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_10","fin_markka",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("fin_markka_20","fin_markka",20);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("gbr_penny_3","gbr_penny","threepence","threepenny","threepenny bit",3);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,value) VALUES("gbr_penny_4","gbr_penny","fourpence","groat","joey","fourpenny","fourpenny bit",4);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,alternative_name_3,value) VALUES("gbr_penny_6","gbr_penny","sixpence","tanner","sixpenny","sixpenny bit",6);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("gbr_shilling_1","gbr_shilling","bob",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_florin_1","gbr_florin",1);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("gbr_crown_fractional_1_2","gbr_crown","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_crown_1","gbr_crown",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_florin_2","gbr_florin",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_dollar_1","gbr_dollar",1);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("gbr_sovereign_fractional_1_2","gbr_sovereign","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_sovereign_1","gbr_sovereign",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_pound_2","gbr_pound",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_pound_5","gbr_pound",5);

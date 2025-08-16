@@ -95,3 +95,10 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alt
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("egy_pound","egy","pound","pounds");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("fin_pennia","fin","pennia");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("fin_markka","fin","markka","markaa");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_penny","gbr","penny","pence");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_shilling","gbr","shilling","shillings");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_florin","gbr","florin","florins");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_crown","gbr","crown","crowns");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("gbr_dollar","gbr","trade dollar","dollar","dollars","trade dollars");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_sovereign","gbr","sovereign","sovereigns");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_pound","gbr","pound","pounds");
