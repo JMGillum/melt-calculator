@@ -1,6 +1,5 @@
 # Tier 1
 * Japan
-* Venezuela
 # Tier 2
 * Bolivia (pre-decimal and decimal)
 * Brazil

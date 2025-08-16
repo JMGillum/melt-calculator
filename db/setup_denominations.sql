@@ -110,3 +110,8 @@ INSERT INTO denominations(denomination_id,country_id,name) VALUES("swe_riksdaler
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("swe_krona","swe","krona","kronor");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("swe_dukat","swe","dukat");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("swe_carolin","swe","carolin","carolins");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("ven_real","ven","real","reales");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("ven_bolivar","ven","bolivar","bolivares");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("ven_centavo","ven","centavo","centavos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("ven_centimo","ven","centimo","centimos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("ven_venezolano","ven","venezolano","venezolanos");

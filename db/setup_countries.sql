@@ -42,3 +42,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 insert into countries(country_id,name,alternative_name_1,alternative_name_2) values("gbr","great britain","britain","british");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("nld","netherlands","netherland","kingdom of the netherlands","the netherlands","nederlanden","dutch");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("swe","sweden","swedish","kingdom of sweden","konungariket sverige");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("ven","venezuela","venezuelan","bolivarian republic of venezuela","republica bolivariana de venezuela");
