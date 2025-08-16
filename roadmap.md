@@ -3,7 +3,6 @@
 * Brazil
 * Bulgaria
 * Burma
-* Cambodia
 * China
 * Costa Rica
 * Hungary

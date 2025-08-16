@@ -386,3 +386,9 @@ INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) 
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) VALUES("haw_cent_25","haw_cent","quarter","quarters",25);
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) VALUES("haw_cent_50","haw_cent","half","halves",50);
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,value) VALUES("haw_dollar_1","haw_dollar","dollar","dollars",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("khm_centime_25","khm_centime",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("khm_centime_50","khm_centime",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("khm_franc_1","khm_franc",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("khm_franc_2","khm_franc",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("khm_franc_4","khm_franc",4);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("khm_piastre_1","khm_piastre",1);

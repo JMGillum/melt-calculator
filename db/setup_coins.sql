@@ -641,3 +641,9 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("haw_cent_25_1","haw_cent_25",6.25,0.9,0.1808,"1883","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("haw_cent_50_1","haw_cent_50",12.5,0.9,0.3617,"1883","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("haw_dollar_1_1","haw_dollar_1",26.7295,0.9,0.7734,"1883","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("khm_centime_25_1","khm_centime_25",1.25,0.9,0.0362,"1860","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("khm_centime_50_1","khm_centime_50",2.5,0.9,0.0723,"1860","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("khm_franc_1_1","khm_franc_1",5,0.9,0.1447,"1860","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("khm_franc_2_1","khm_franc_2",10,0.9,0.2894,"1860","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("khm_franc_4_1","khm_franc_4",20,0.9,0.5787,"1860","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("khm_piastre_1_1","khm_piastre_1",27,0.9,0.7813,"1860","ag");

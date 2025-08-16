@@ -120,3 +120,6 @@ INSERT INTO denominations(denomination_id,country_id,name) VALUES("jpn_yen","jpn
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("jpn_dollar","jpn","trade dollar","dollar","dollars","trade dollars");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("haw_cent","haw","cent","cents");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("haw_dollar","haw","dollar","dollars");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("khm_centime","khm","centime","centimes");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("khm_franc","khm","franc","francs");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("khm_piastre","khm","piastre","piastres");
