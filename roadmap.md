@@ -1,5 +1,4 @@
 # Tier 1
-* Egypt
 * Finland
 * Great Britain
 * Japan

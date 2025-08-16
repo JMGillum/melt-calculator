@@ -295,3 +295,14 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_christian d'
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_christian d'or_2","dnk_christian d'or",2);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_krone_10","dnk_krone",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_krone_20","dnk_krone",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_1","egy_ghirsh",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_2","egy_ghirsh",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_5","egy_ghirsh",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_10","egy_ghirsh",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_20","egy_ghirsh",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_25","egy_ghirsh",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_50","egy_ghirsh",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_100","egy_ghirsh",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_ghirsh_500","egy_ghirsh",500);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_pound_1","egy_pound",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("egy_pound_5","egy_pound",5);

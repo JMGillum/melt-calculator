@@ -91,3 +91,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("dnk_ore","dnk","ore");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("dnk_krone","dnk","krone","kroner");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("dnk_christian d'or","dnk","christian d'or","christian","d'or");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("egy_ghirsh","egy","ghirsh","qirsh","piastre");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("egy_pound","egy","pound","pounds");
