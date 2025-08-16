@@ -370,3 +370,15 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("ven_venezolano_5
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ven_bolivar_10","ven_bolivar",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ven_bolivar_20","ven_bolivar",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ven_bolivar_100","ven_bolivar",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_sen_5","jpn_sen",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_sen_10","jpn_sen",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_sen_20","jpn_sen",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_sen_50","jpn_sen",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_1","jpn_yen",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_dollar_1","jpn_dollar",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_100","jpn_yen",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_1000","jpn_yen",1000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_2","jpn_yen",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_5","jpn_yen",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_10","jpn_yen",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("jpn_yen_20","jpn_yen",20);
