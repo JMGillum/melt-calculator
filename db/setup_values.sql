@@ -329,3 +329,14 @@ INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("gbr_soverei
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_sovereign_1","gbr_sovereign",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_pound_2","gbr_pound",2);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("gbr_pound_5","gbr_pound",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_cents_5","nld_cents",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_cents_10","nld_cents",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_cents_25","nld_cents",25);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("nld_gulden_fractional_1_2","nld_gulden","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_gulden_1","nld_gulden",1);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("nld_gulden_fractional_2_1_2","nld_gulden","2-1/2","2 1/2","5/2",2.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_dukaat_1","nld_dukaat",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_dukaat_2","nld_dukaat",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_gulden_5","nld_gulden",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_gulden_10","nld_gulden",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_gulden_20","nld_gulden",20);

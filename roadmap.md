@@ -1,6 +1,5 @@
 # Tier 1
 * Japan
-* Netherlands, The
 * Sweden
 * Venezuela
 # Tier 2

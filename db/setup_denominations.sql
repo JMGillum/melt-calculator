@@ -102,3 +102,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("gbr_dollar","gbr","trade dollar","dollar","dollars","trade dollars");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_sovereign","gbr","sovereign","sovereigns");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("gbr_pound","gbr","pound","pounds");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nld_cents","nld","cent","cents");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nld_gulden","nld","gulden","guldens");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("nld_dukaat","nld","dukaat");
