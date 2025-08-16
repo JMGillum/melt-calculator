@@ -105,3 +105,8 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nld_cents","nld","cent","cents");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nld_gulden","nld","gulden","guldens");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("nld_dukaat","nld","dukaat");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("swe_ore","swe","ore","oren");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("swe_riksdaler riksmynt","swe","riksdaler riksmynt");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("swe_krona","swe","krona","kronor");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("swe_dukat","swe","dukat");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("swe_carolin","swe","carolin","carolins");

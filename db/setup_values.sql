@@ -340,3 +340,16 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_dukaat_2","n
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_gulden_5","nld_gulden",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_gulden_10","nld_gulden",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("nld_gulden_20","nld_gulden",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_ore_10","swe_ore",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_ore_25","swe_ore",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_ore_50","swe_ore",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_riksdaler riksmynt_1","swe_riksdaler riksmynt",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_riksdaler riksmynt_2","swe_riksdaler riksmynt",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_riksdaler riksmynt_4","swe_riksdaler riksmynt",4);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_krona_1","swe_krona",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_krona_2","swe_krona",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_krona_5","swe_krona",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_dukat_1","swe_dukat",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_carolin_1","swe_carolin",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_krona_10","swe_krona",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("swe_krona_20","swe_krona",20);
