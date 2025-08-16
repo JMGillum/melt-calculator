@@ -285,3 +285,13 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("aut_krone_10","a
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("aut_krone_20","aut_krone",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("aut_krone_100","aut_krone",100);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("aut_schilling_100","aut_schilling",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_ore_10","dnk_ore",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_ore_25","dnk_ore",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_ore_50","dnk_ore",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_krone_1","dnk_krone",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_krone_2","dnk_krone",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_krone_5","dnk_krone",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_christian d'or_1","dnk_christian d'or",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_christian d'or_2","dnk_christian d'or",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_krone_10","dnk_krone",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("dnk_krone_20","dnk_krone",20);

@@ -88,3 +88,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aut_krone","aut","krone","kronen");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aut_schilling","aut","schilling","schillings");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aut_dukat","aut","dukat","dukaten");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("dnk_ore","dnk","ore");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("dnk_krone","dnk","krone","kroner");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2) VALUES("dnk_christian d'or","dnk","christian d'or","christian","d'or");
