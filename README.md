@@ -1,17 +1,5 @@
 # WEEKLY RELEASES EVERY FRIDAY
 
-## Since Last Release
-* Completed Tier 1:
-  * Austria
-  * Denmark
-  * Egypt
-  * Finland
-  * Great Britain
-  * The Netherlands
-  * Sweden
-  * Venezuela
-  * Japan
-
 # Roadmap
 See roadmap.md for the order that countries will be added. Lower tier countries are higher priority than higher tier countries.
 ## Melt Calculator
