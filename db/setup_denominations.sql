@@ -82,3 +82,9 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("esp_peseta","esp","peseta","pesetas");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bel_centime","bel","centime","centimes");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bel_franc","bel","franc","francs");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("aut_vereinsthaler","aut","vereinsthaler");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("aut_kreuzer","aut","kreuzer");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aut_florin","aut","florin","florins");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aut_krone","aut","krone","kronen");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aut_schilling","aut","schilling","schillings");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("aut_dukat","aut","dukat","dukaten");

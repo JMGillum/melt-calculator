@@ -1,5 +1,4 @@
 # Tier 1
-* Austria
 * Denmark
 * Egypt
 * Finland

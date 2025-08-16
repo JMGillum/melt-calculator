@@ -35,3 +35,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("pol","poland","polish","republic of poland","rzeczpospolita polska","polska");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("esp","spain","spanish","kingdom of spain","espana","reino de espana");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("bel","belgium","kingdom of belgium","belgie","belgique","belgien");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("aut","austria","republic of austria","osterreich","republik osterreich");
