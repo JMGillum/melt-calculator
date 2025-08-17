@@ -144,3 +144,12 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("cri_onza","cri","onza","onzas");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("cri_peso","cri","peso","pesos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("cri_colon","cri","colon","colones");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("hun_krajczar","hun","krajczar");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("hun_forint","hun","forint");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("hun_korona","hun","korona");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("hun_pengo","hun","pengo");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("hun_dukat","hun","dukat","ducat","dukats","ducats");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("nor_skilling","nor","skilling");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nor_speciedaler","nor","speciedaler","speciedalers");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("nor_ore","nor","ore");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nor_krone","nor","krone","kroner");

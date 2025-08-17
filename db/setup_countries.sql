@@ -52,3 +52,5 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("mmr","myanmar","burma","burmese","union of myanmar","republic of the union of myanmar","republic of myanmar");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("chn","china","chinese","republic of china","people's republic of china","peoples republic of china");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("cri","costa rica","costa rican","republic of costa rica","republica de costa rica");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("hun","hungary","hungarian","magyarorszag");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("nor","norway","norwegian","kingdom of norway","norge","noreg","kongeriket norge");
