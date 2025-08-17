@@ -47,3 +47,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("haw","hawaii","hawaiian");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("khm","cambodia","cambodian","kingdom of cambodia");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("bol","bolivia","bolivian","plurinational state of bolivia","estada plurinacional de bolivia");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("bra","brazil","brazilian","brasil","federative republic of brazil","republica federativa do brasil","republic of brazil");

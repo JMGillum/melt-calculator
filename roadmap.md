@@ -1,5 +1,4 @@
 # Tier 2
-* Brazil
 * Bulgaria
 * Burma
 * China

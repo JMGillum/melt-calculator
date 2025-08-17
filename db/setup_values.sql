@@ -412,3 +412,12 @@ INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("bol_bolivia
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bol_boliviano_1","bol_boliviano",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bol_centavo_20","bol_centavo",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bol_centavo_50","bol_centavo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_200","bra_real",200);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_500","bra_real",500);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_1000","bra_real",1000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_2000","bra_real",2000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_400","bra_real",400);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_4000","bra_real",4000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_5000","bra_real",5000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_10000","bra_real",10000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_20000","bra_real",20000);
