@@ -130,3 +130,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bol_boliviano","bol","boliviano","bolivianos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("bol_centavo","bol","centavo","centavos","centecimo","centecimos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bra_real","bra","real","reis");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bgr_stotinka","bgr","stotinka","stotinki");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bgr_lev","bgr","lev","leva");

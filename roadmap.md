@@ -1,5 +1,4 @@
 # Tier 2
-* Bulgaria
 * Burma
 * China
 * Costa Rica

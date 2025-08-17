@@ -421,3 +421,11 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_4000","
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_5000","bra_real",5000);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_10000","bra_real",10000);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bra_real_20000","bra_real",20000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_stotinka_50","bgr_stotinka",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_1","bgr_lev",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_2","bgr_lev",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_5","bgr_lev",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_20","bgr_lev",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_50","bgr_lev",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_100","bgr_lev",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_10","bgr_lev",10);
