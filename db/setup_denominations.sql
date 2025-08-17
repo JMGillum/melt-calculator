@@ -159,3 +159,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_peseta","per","peseta","pesetas");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_escudo","per","escudo","escudos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_libra","per","libra","libras");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("prt_real","prt","real","reis");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("prt_centavo","prt","centavo","centavos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("prt_escudo","prt","escudo","escudos");

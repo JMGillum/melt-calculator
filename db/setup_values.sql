@@ -516,3 +516,18 @@ INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("per_libra_f
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("per_libra_1","per_libra",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("per_sol_50","per_sol",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("per_sol_100","per_sol",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_50","prt_real",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_100","prt_real",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_200","prt_real",200);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_500","prt_real",500);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_1000","prt_real",1000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_2000","prt_real",2000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_5000","prt_real",5000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_real_10000","prt_real",10000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_centavo_10","prt_centavo",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_centavo_20","prt_centavo",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_centavo_50","prt_centavo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_escudo_1","prt_escudo",1);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("prt_escudo_fractional_2_1_2","prt_escudo","2-1/2","2 1/2","5/2",2.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_escudo_5","prt_escudo",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_escudo_10","prt_escudo",10);

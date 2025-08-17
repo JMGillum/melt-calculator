@@ -55,3 +55,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("hun","hungary","hungarian","magyarorszag");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("nor","norway","norwegian","kingdom of norway","norge","noreg","kongeriket norge");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("per","peru","peruvian","republic of peru","republica del peru");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("prt","portugal","portuguese","portuguese republic","republica portuguesa","republica pertuesa","portuguesa");
