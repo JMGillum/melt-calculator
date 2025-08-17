@@ -135,3 +135,7 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("mmr_anna","mmr","anna","annas");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("mmr_kyat","mmr","kyat");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("mmr_rupee","mmr","rupee","rupees");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("chn_cent","chn","cent","cents");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("chn_dollar","chn","dollar","dollars");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("chn_chio","chn","chio");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("chn_yuan","chn","yuan");

@@ -1,5 +1,4 @@
 # Tier 2
-* China
 * Costa Rica
 * Hungary
 * Norway

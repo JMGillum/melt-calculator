@@ -438,3 +438,13 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_1","mm
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_2","mmr_rupee",2);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_4","mmr_rupee",4);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_5","mmr_rupee",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_cent_10","chn_cent",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_cent_20","chn_cent",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_cent_50","chn_cent",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_dollar_1","chn_dollar",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_chio_1","chn_chio",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_chio_2","chn_chio",2);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("chn_yuan_fractional_1_2","chn_yuan","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_yuan_1","chn_yuan",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_yuan_10","chn_yuan",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chn_yuan_20","chn_yuan",20);
