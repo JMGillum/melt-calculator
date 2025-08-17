@@ -1,5 +1,4 @@
 # Tier 2
-* Bolivia (pre-decimal and decimal)
 * Brazil
 * Bulgaria
 * Burma
