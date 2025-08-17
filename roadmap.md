@@ -1,5 +1,4 @@
 # Tier 2
-* Romania
 # Tier 3
 * Afghanistan
 * Albania

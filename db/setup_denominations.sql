@@ -162,3 +162,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("prt_real","prt","real","reis");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("prt_centavo","prt","centavo","centavos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("prt_escudo","prt","escudo","escudos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("rou_banu","rou","banu","bani");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("rou_leu","rou","leu","lei");

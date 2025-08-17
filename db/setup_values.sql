@@ -531,3 +531,17 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_escudo_1","p
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("prt_escudo_fractional_2_1_2","prt_escudo","2-1/2","2 1/2","5/2",2.5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_escudo_5","prt_escudo",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("prt_escudo_10","prt_escudo",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_banu_50","rou_banu",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_1","rou_leu",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_2","rou_leu",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_5","rou_leu",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_100","rou_leu",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_250","rou_leu",250);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_500","rou_leu",500);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_200","rou_leu",200);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_25000","rou_leu",25000);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_100000","rou_leu",100000);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("rou_leu_fractional_12_1_2","rou_leu","12-1/2","12 1/2","25/2",12.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_20","rou_leu",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_25","rou_leu",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("rou_leu_50","rou_leu",50);
