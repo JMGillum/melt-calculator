@@ -1,5 +1,4 @@
 # Tier 2
-* Peru
 * Portugal
 * Romania
 # Tier 3

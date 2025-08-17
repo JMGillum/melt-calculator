@@ -153,3 +153,9 @@ INSERT INTO denominations(denomination_id,country_id,name) VALUES("nor_skilling"
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nor_speciedaler","nor","speciedaler","speciedalers");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("nor_ore","nor","ore");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("nor_krone","nor","krone","kroner");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_dinero","per","dinero","dineros");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_sol","per","sol","soles");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_real","per","real","reales");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_peseta","per","peseta","pesetas");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_escudo","per","escudo","escudos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("per_libra","per","libra","libras");
