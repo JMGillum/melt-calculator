@@ -132,3 +132,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1,alt
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bra_real","bra","real","reis");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bgr_stotinka","bgr","stotinka","stotinki");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bgr_lev","bgr","lev","leva");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("mmr_anna","mmr","anna","annas");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("mmr_kyat","mmr","kyat");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("mmr_rupee","mmr","rupee","rupees");

@@ -429,3 +429,12 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_20","bgr
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_50","bgr_lev",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_100","bgr_lev",100);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bgr_lev_10","bgr_lev",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_anna_1","mmr_anna",1);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("mmr_kyat_fractional_1_8","mmr_kyat","1/8",0.125);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("mmr_kyat_fractional_1_4","mmr_kyat","1/4",0.25);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("mmr_kyat_fractional_1_2","mmr_kyat","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_kyat_1","mmr_kyat",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_1","mmr_rupee",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_2","mmr_rupee",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_4","mmr_rupee",4);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("mmr_rupee_5","mmr_rupee",5);
