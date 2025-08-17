@@ -1,4 +1,3 @@
-# Tier 2
 # Tier 3
 * Afghanistan
 * Albania
