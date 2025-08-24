@@ -58,3 +58,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alte
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4,alternative_name_5) VALUES("prt","portugal","portuguese","portuguese republic","republica portuguesa","republica pertuesa","portuguesa");
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("rou","romania","romanian");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("afg","afghanistan","afghan","afghani","afghanistani","islamic emirate of afghanistan");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("alb","albania","albanian","shqiperise","republic of albania","republika e shqiperise");

@@ -1,5 +1,4 @@
 # Tier 3
-* Albania
 * Bermuda
 * Chile
 * Czechoslavakia

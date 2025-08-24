@@ -561,3 +561,12 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("afg_tilla_5","af
 INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("afg_tilla_fractional_2_1_2","afg_tilla","2-1/2","2 1/2","5/2",2.5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("afg_habibi_1","afg_habibi",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("afg_afghani_20","afg_afghani",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_1","alb_frang ar",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_2","alb_frang ar",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_5","alb_frang ar",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_lek_5","alb_lek",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_lek_10","alb_lek",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_10","alb_frang ar",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_20","alb_frang ar",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_50","alb_frang ar",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_100","alb_frang ar",100);

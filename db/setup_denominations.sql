@@ -171,3 +171,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_afghani","afg","afghani","afghanis");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_tilla","afg","tilla","tillas");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_habibi","afg","habibi","habibis");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("alb_frang ar","alb","frang ar","franga ar");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("alb_lek","alb","lek");
