@@ -1,5 +1,4 @@
 # Tier 3
-* Afghanistan
 * Albania
 * Bermuda
 * Chile

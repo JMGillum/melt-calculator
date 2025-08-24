@@ -164,3 +164,10 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("prt_escudo","prt","escudo","escudos");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("rou_banu","rou","banu","bani");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("rou_leu","rou","leu","lei");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_sanar","afg","sanar","sanars");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_abbasi","afg","abbasi","abbasis");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_qiran","afg","qiran","qirans");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_rupee","afg","rupee","rupees");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_afghani","afg","afghani","afghanis");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_tilla","afg","tilla","tillas");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("afg_habibi","afg","habibi","habibis");
