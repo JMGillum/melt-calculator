@@ -1,5 +1,4 @@
 # Tier 3
-* Bermuda
 * Chile
 * Czechoslavakia
 * Ecuador

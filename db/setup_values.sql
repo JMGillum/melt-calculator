@@ -570,3 +570,4 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_10"
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_20","alb_frang ar",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_50","alb_frang ar",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_100","alb_frang ar",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("bmu_crown_1","bmu_crown",1);

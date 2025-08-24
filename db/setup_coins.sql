@@ -885,3 +885,5 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("alb_frang ar_20_1","alb_frang ar_20",6.4516,0.9,0.1867,"1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938","au");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("alb_frang ar_50_1","alb_frang ar_50",16.1290,0.9,0.4667,"1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938","au");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("alb_frang ar_100_1","alb_frang ar_100",32.2581,0.9,0.9334,"1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938","au");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("bmu_crown_1_1","bmu_crown_1",28.28,0.925,0.841,"1959","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("bmu_crown_1_2","bmu_crown_1",22.62,0.5,0.3636,"1964","ag");
