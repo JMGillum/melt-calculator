@@ -1,5 +1,4 @@
 # Tier 3
-* Ecuador
 * El Salvador
 * Eritrea
 * Estonia

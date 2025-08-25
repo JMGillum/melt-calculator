@@ -595,3 +595,13 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_1","cs
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_2","csk_dukat",2);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_5","csk_dukat",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_10","csk_dukat",10);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("ecu_decimo_fractional_1_2","ecu_decimo","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_decimo_1","ecu_decimo",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_decimo_2","ecu_decimo",2);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("ecu_sucre_fractional_1_2","ecu_sucre","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_sucre_1","ecu_sucre",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_centavo_50","ecu_centavo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_sucre_2","ecu_sucre",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_sucre_5","ecu_sucre",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_sucre_10","ecu_sucre",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_condor_1","ecu_condor",1);
