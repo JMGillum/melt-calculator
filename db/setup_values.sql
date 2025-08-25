@@ -585,3 +585,13 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_10","ch
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_20","chl_peso",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_50","chl_peso",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_100","chl_peso",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_koruna_5","csk_koruna",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_koruna_10","csk_koruna",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_koruna_20","csk_koruna",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_koruna_50","csk_koruna",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_koruna_100","csk_koruna",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_koruna_25","csk_koruna",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_1","csk_dukat",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_2","csk_dukat",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_5","csk_dukat",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("csk_dukat_10","csk_dukat",10);

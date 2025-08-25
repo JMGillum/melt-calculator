@@ -1,5 +1,4 @@
 # Tier 3
-* Czechoslavakia
 * Ecuador
 * El Salvador
 * Eritrea
