@@ -1,5 +1,4 @@
 # Tier 3
-* Chile
 * Czechoslavakia
 * Ecuador
 * El Salvador

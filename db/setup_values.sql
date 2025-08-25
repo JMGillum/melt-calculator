@@ -571,3 +571,17 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_20"
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_50","alb_frang ar",50);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("alb_frang ar_100","alb_frang ar",100);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("bmu_crown_1","bmu_crown",1);
+INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("chl_decimo_fractional_1_2","chl_decimo","1/2",0.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_decimo_1","chl_decimo",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_centavo_20","chl_centavo",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_centavo_50","chl_centavo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_1","chl_peso",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_centavo_5","chl_centavo",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_centavo_10","chl_centavo",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_centavo_40","chl_centavo",40);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_2","chl_peso",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_5","chl_peso",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_10","chl_peso",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_20","chl_peso",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_50","chl_peso",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("chl_peso_100","chl_peso",100);

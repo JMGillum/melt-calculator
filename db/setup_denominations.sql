@@ -174,3 +174,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("alb_frang ar","alb","frang ar","franga ar");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("alb_lek","alb","lek");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("bmu_crown","bmu","crown","crowns");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("chl_decimo","chl","decimo","decimos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("chl_centavo","chl","centavo","centavos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("chl_peso","chl","peso","pesos");
