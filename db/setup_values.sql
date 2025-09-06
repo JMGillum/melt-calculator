@@ -616,3 +616,8 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_peso_5","slv
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_peso_10","slv_peso",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_peso_20","slv_peso",20);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_colon_20","slv_colon",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_centisimo_50","eri_centisimo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_lira_1","eri_lira",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_lira_2","eri_lira",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_lira_5","eri_lira",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_tallero_1","eri_tallero",1);

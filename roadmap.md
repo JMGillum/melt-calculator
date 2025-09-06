@@ -1,5 +1,4 @@
 # Tier 3
-* Eritrea
 * Estonia
 * Ethiopia
 * Fiji

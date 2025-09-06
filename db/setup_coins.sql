@@ -976,3 +976,8 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("slv_peso_10_1","slv_peso_10",16.1290,0.9,0.4667,"1892","au");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("slv_peso_20_1","slv_peso_20",32.2581,0.9,0.9334,"1892","au");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("slv_colon_20_1","slv_colon_20",15.56,0.9,0.4502,"1925","au");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("eri_centisimo_50_1","eri_centisimo_50",2.5,0.835,0.0671,"1890, 1891, 1892, 1893, 1894, 1895, 1896","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("eri_lira_1_1","eri_lira_1",5,0.835,0.1342,"1890, 1891, 1892, 1893, 1894, 1895, 1896","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("eri_lira_2_1","eri_lira_2",10,0.835,0.2685,"1890, 1891, 1892, 1893, 1894, 1895, 1896","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("eri_lira_5_1","eri_lira_5",28.1250,0.8,0.7234,"1890, 1891, 1892, 1893, 1894, 1895, 1896","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("eri_tallero_1_1","eri_tallero_1",28.0668,0.835,0.7535,"1918","ag");
