@@ -1,5 +1,4 @@
 # Tier 3
-* El Salvador
 * Eritrea
 * Estonia
 * Ethiopia

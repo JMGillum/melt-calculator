@@ -63,3 +63,4 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VAL
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("chl","chile","republic of chile","republica de chile");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("csk","czechoslovakia","czechoslovakian","ceskoslovensko");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("ecu","ecuador","ecuadorian","republic of ecuador","republica del ecuador");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("slv","el salvador","republic of el salvador","republica de el salvador");

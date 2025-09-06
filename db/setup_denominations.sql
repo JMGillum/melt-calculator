@@ -183,3 +183,6 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("ecu_sucre","ecu","sucre","sucres");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("ecu_centavo","ecu","centavo","centavos");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("ecu_condor","ecu","condor");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("slv_centavo","slv","centavo","centavos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("slv_peso","slv","peso","pesos");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("slv_colon","slv","colon","colones");

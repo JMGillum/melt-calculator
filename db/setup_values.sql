@@ -605,3 +605,14 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_sucre_2","ec
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_sucre_5","ecu_sucre",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_sucre_10","ecu_sucre",10);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("ecu_condor_1","ecu_condor",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_centavo_5","slv_centavo",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_centavo_10","slv_centavo",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_centavo_20","slv_centavo",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_centavo_25","slv_centavo",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_centavo_50","slv_centavo",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_peso_1","slv_peso",1);
+INSERT INTO face_values(value_id,denomination_id,name,alternative_name_1,alternative_name_2,value) VALUES("slv_peso_fractional_2_1_2","slv_peso","2-1/2","2 1/2","5/2",2.5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_peso_5","slv_peso",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_peso_10","slv_peso",10);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_peso_20","slv_peso",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("slv_colon_20","slv_colon",20);
