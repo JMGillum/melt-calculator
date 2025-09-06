@@ -983,3 +983,9 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("eri_tallero_1_1","eri_tallero_1",28.0668,0.835,0.7535,"1918","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("est_kroon_1_1","est_kroon_1",6,0.5,0.0965,"1930, 1931, 1932, 1933","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("est_kroon_2_1","est_kroon_2",12,0.5,0.1929,"1930, 1931, 1932, 1933","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("fji_penny_6_1","fji_penny_6",2.8276,0.5,0.0455,"1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("fji_penny_6_2","fji_penny_6",2.8276,0.9,0.0818,"1942, 1943","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("fji_shilling_1_1","fji_shilling_1",5.6552,0.5,0.0909,"1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("fji_shilling_1_2","fji_shilling_1",5.6552,0.9,0.1636,"1942, 1943","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("fji_florin_1_1","fji_florin_1",11.3104,0.5,0.1818,"1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("fji_florin_1_2","fji_florin_1",11.3104,0.9,0.3273,"1942, 1943","ag");

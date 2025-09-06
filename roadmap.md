@@ -1,6 +1,5 @@
 # Tier 3
 * Ethiopia
-* Fiji
 * Guatemala
 * Iran
 * Iraq
