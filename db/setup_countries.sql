@@ -63,9 +63,9 @@ INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VAL
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("chl","chile","republic of chile","republica de chile");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("csk","czechoslovakia","czechoslovakian","ceskoslovensko");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("ecu","ecuador","ecuadorian","republic of ecuador","republica del ecuador");
-INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("slv","el salvador","republic of el salvador","republica de el salvador");
-INSERT INTO countries(country_id,name,alternative_name_1) VALUES("eri","eritrea","state of eritrea");
-INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("est","estonia","republic of estonia","eesti","eesti vabariik");
-INSERT INTO countries(country_id,name,alternative_name_1) VALUES("fji","fiji","republic of fiji");
-INSERT INTO countries(country_id,name,alternative_name_1) VALUES("irq","iraq","republic of iraq");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("slv","el salvador","republic of el salvador","republica de el salvador","el salvadorean","salvadorean");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("eri","eritrea","state of eritrea","eritrean");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("est","estonia","republic of estonia","eesti","eesti vabariik","estonian");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("fji","fiji","republic of fiji","fijian");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2) VALUES("irq","iraq","republic of iraq","iraqi");
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("ltu","lithuania","republic of lithuania","lietuvos","lietuvos respublika","lithuanian");
