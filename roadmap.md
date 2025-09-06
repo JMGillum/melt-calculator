@@ -5,7 +5,6 @@
 * Israel
 * Korea
 * Liechtenstein
-* Mongolia
 * Morocco
 * Nepal
 * Newfoundland
