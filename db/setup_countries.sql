@@ -68,3 +68,4 @@ INSERT INTO countries(country_id,name,alternative_name_1) VALUES("eri","eritrea"
 INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3) VALUES("est","estonia","republic of estonia","eesti","eesti vabariik");
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("fji","fiji","republic of fiji");
 INSERT INTO countries(country_id,name,alternative_name_1) VALUES("irq","iraq","republic of iraq");
+INSERT INTO countries(country_id,name,alternative_name_1,alternative_name_2,alternative_name_3,alternative_name_4) VALUES("ltu","lithuania","republic of lithuania","lietuvos","lietuvos respublika","lithuanian");

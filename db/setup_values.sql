@@ -631,3 +631,7 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_fils_50","ir
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_riyal_1","irq_riyal",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_fils_25","irq_fils",25);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_fils_100","irq_fils",100);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ltu_litas_1","ltu_litas",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ltu_litas_2","ltu_litas",2);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ltu_litas_5","ltu_litas",5);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("ltu_litas_10","ltu_litas",10);

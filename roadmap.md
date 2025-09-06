@@ -5,7 +5,6 @@
 * Israel
 * Korea
 * Liechtenstein
-* Lithuania
 * Mongolia
 * Morocco
 * Nepal

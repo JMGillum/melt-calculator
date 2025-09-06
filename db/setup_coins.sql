@@ -995,3 +995,8 @@ INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_wei
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("irq_fils_25_1","irq_fils_25",2.5,0.5,0.0402,"1959","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("irq_fils_50_2","irq_fils_50",5,0.5,0.0804,"1959","ag");
 INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("irq_fils_100_1","irq_fils_100",10,0.5,0.1608,"1959","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("ltu_litas_1_1","ltu_litas_1",2.7,0.5,0.0434,"1925","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("ltu_litas_2_1","ltu_litas_2",5.4,0.5,0.0868,"1925","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("ltu_litas_5_1","ltu_litas_5",13.5,0.5,0.217,"1925","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("ltu_litas_5_2","ltu_litas_5",9,0.75,0.217,"1936, 1937, 1938","ag");
+INSERT INTO coins(coin_id,face_value_id,gross_weight,fineness,precious_metal_weight,years,metal) VALUES("ltu_litas_10_1","ltu_litas_10",18,0.75,0.434,"1936, 1937, 1938","ag");
