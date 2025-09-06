@@ -189,3 +189,4 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("eri_centisimo","eri","centisimo","centesimi");
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("eri_lira","eri","lira","lire");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("eri_tallero","eri","tallero");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("est_kroon","est","kroon","krooni");

@@ -621,3 +621,5 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_lira_1","eri
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_lira_2","eri_lira",2);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_lira_5","eri_lira",5);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("eri_tallero_1","eri_tallero",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("est_kroon_1","est_kroon",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("est_kroon_2","est_kroon",2);
