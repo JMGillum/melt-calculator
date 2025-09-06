@@ -193,3 +193,5 @@ INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VA
 INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("fji_penny","fji","penny","pence");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("fji_shilling","fji","shilling");
 INSERT INTO denominations(denomination_id,country_id,name) VALUES("fji_florin","fji","florin");
+INSERT INTO denominations(denomination_id,country_id,name) VALUES("irq_fils","irq","fils");
+INSERT INTO denominations(denomination_id,country_id,name,alternative_name_1) VALUES("irq_riyal","irq","riyal","riyals");

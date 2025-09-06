@@ -2,7 +2,6 @@
 * Ethiopia
 * Guatemala
 * Iran
-* Iraq
 * Israel
 * Korea
 * Liechtenstein

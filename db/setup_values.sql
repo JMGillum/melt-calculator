@@ -626,3 +626,8 @@ INSERT INTO face_values(value_id,denomination_id,value) VALUES("est_kroon_2","es
 INSERT INTO face_values(value_id,denomination_id,name,value) VALUES("fji_penny_6","fji_penny","sixpence",6);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("fji_shilling_1","fji_shilling",1);
 INSERT INTO face_values(value_id,denomination_id,value) VALUES("fji_florin_1","fji_florin",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_fils_20","irq_fils",20);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_fils_50","irq_fils",50);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_riyal_1","irq_riyal",1);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_fils_25","irq_fils",25);
+INSERT INTO face_values(value_id,denomination_id,value) VALUES("irq_fils_100","irq_fils",100);
