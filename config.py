@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 4 August 2025             ":"         __ __
+#   Date: 8 September 2025          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -72,3 +72,4 @@ db_config = {
     "password": None,
     "database": "coin_data",
 }
+enforce_prices_set = True

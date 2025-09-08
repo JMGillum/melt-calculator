@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 6 August 2025             ":"         __ __
+#   Date: 8 September 2025          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -119,7 +119,7 @@ if __name__ == "__main__":
             d.metals = prices
             for key in prices:
                 name,price,date = prices[key]
-                if price < 0:
+                if config.enforce_prices_set and price < 0:
                     print(f"WARNING: PRICE FOR [{key}]({name.title()}) HAS NOT BEEN SET. PLEASE UPDATE DATABASE BEFORE CONTINUING...")
                     exit(1)
  
