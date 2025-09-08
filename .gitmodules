@@ -1,3 +1,6 @@
 [submodule "tree"]
 	path = tree
 	url = https://github.com/JMGillum/python-tree.git
+[submodule "db"]
+	path = db
+	url = git@github.com:JMGillum/coin-data.git
