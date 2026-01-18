@@ -398,7 +398,7 @@ class Coins:
         if len(words) > 0:
             # Attempts to find a country name in the string
             for word in words:
-                temp = ""
+                temp = None
                 result = db.fetchCountryId(word)
                 if result is not None and len(result) > 0:
                     temp = db.fetchCountryDisplayName(result[0][0])

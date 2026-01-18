@@ -31,10 +31,12 @@ class Queries:
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
             show_only_not_owned = False
-        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
+        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
         base_query = "from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
         if country:
             base_query = f"{base_query} inner join country_names on countries.country_id = country_names.country_id"
+        if denomination:
+            base_query = f"{base_query} inner join denomination_names on denominations.denomination_id = denomination_names.denomination_id"
         if show_only_owned:
             base_query = f"SELECT DISTINCT {select_columns} {base_query} right join purchases on purchases.coin_id = coins.coin_id"
         elif show_only_not_owned:
@@ -49,13 +51,13 @@ class Queries:
         year_query = ""
         queries = [
             (country_query, country, "country_names"),
-            (denomination_query, denomination, "denominations"),
+            (denomination_query, denomination, "denomination_names"),
             (value_name_query, face_value_name, "face_values"),
         ]
         for i in range(len(queries)):
             item = queries[i]
             if item[1]:
-                if i == 0: # Countries are special for the time being
+                if i == 0 or i == 1: # Countries / denominations are special for the time being
                     queries[i] = (
                         f"{item[2]}.name like ?", item[1], 1
                     )
@@ -73,7 +75,10 @@ class Queries:
                         item[1],
                     )
                 if found_first_specifier:
-                    queries[i] = (f"AND {queries[i][0]}", item[1])
+                    if i == 0 or i == 1:
+                        queries[i] = (f"AND {queries[i][0]}", item[1],1)
+                    else:
+                        queries[i] = (f"AND {queries[i][0]}", item[1])
                 found_first_specifier = True
 
         # Adds specifier for actual value
@@ -139,6 +144,14 @@ class Queries:
 
     def countryDisplayName(country_id):
         query = "SELECT display_name from countries where country_id=?;"
+        return (query,(country_id,))
+
+    def denominationId(name):
+        query = "SELECT denomination_id from denomination_names where name=?;"
+        return (query,(name,))
+
+    def denominationDisplayName(country_id):
+        query = "SELECT display_name from denominations where denomination_id=?;"
         return (query,(country_id,))
 
     def metals():
@@ -226,7 +239,7 @@ class Queries:
 
     
     def coinById(coin_id):
-        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
+        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
         base_query = "from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
         return (f"Select {select_columns} {base_query} where coins.coin_id = ?;",(coin_id,))
         

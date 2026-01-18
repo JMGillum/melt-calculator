@@ -116,6 +116,16 @@ class DB_Interface:
         results = Queries.countryDisplayName(country_id)
         return self.fetch(results[0],results[1])
 
+    def fetchDenominationId(self,denomination_name):
+        """Returns the denomination id associated with the given denomination_name"""
+        results = Queries.denominationId(denomination_name)
+        return self.fetch(results[0],results[1])
+
+    def fetchDenominationDisplayName(self,denomination_id):
+        """Returns the display name associated with the given denomination_id"""
+        results = Queries.denominationDisplayName(denomination_id)
+        return self.fetch(results[0],results[1])
+
     def fetchMetals(self):
         return self.fetch(Queries.metals())
 
