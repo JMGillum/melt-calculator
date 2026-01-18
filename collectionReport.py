@@ -48,7 +48,7 @@ if __name__ == "__main__":
         
     for entry in entries:
         key = entry[0]
-        purchase = Purchase(*entry[1:])
+        purchase = Purchase(*(entry[1:4]+entry[5:]))
         try:
             purchases[key][1].append(purchase)
         except KeyError:

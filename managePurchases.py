@@ -192,7 +192,7 @@ def getCoinInformation(db,additional_search_args:dict=None):
             entries = db.fetchCoinById(coin_id)
         else:
             search_string = input("Search string: ")
-            arguments = Coins.parseSearchString(search_string, db.fetchCountryNames())
+            arguments = Coins.parseSearchString(db, search_string)
             search_args = {"country":arguments[0],"denomination":arguments[1],"year":arguments[2],"face_value":arguments[3]}
             if additional_search_args:
                 search_args |= additional_search_args
