@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 6 August 2025             ":"         __ __
+#   Date: 18 January 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -105,6 +105,26 @@ class DB_Interface:
     def fetchCountryNames(self):
         """Gets all of the names of every country"""
         return self.fetch(Queries.countryNames())
+
+    def fetchCountryId(self,country_name):
+        """Returns the country id associated with the given country_name"""
+        results = Queries.countryId(country_name)
+        return self.fetch(results[0],results[1])
+
+    def fetchCountryDisplayName(self,country_id):
+        """Returns the display name associated with the given country_id"""
+        results = Queries.countryDisplayName(country_id)
+        return self.fetch(results[0],results[1])
+
+    def fetchDenominationId(self,denomination_name):
+        """Returns the denomination id associated with the given denomination_name"""
+        results = Queries.denominationId(denomination_name)
+        return self.fetch(results[0],results[1])
+
+    def fetchDenominationDisplayName(self,denomination_id):
+        """Returns the display name associated with the given denomination_id"""
+        results = Queries.denominationDisplayName(denomination_id)
+        return self.fetch(results[0],results[1])
 
     def fetchMetals(self):
         return self.fetch(Queries.metals())

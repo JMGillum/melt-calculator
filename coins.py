@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 6 August 2025             ":"         __ __
+#   Date: 18 January 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -333,7 +333,7 @@ class Coins:
     # countries should be a list of tuples or lists. Each item of countries represents a 
     # country. The first value in the item is the proper name and each subsequent value
     # is an alternative name
-    def parseSearchString(text: str, countries: list[list[str]] | list[tuple[str]], debug: bool = False):
+    def parseSearchString(db, text: str, debug: bool = False):
         """Parses a string to extract the country's name, year, denomination, and face value"""
         numbers_matched = [x for x in re.findall(r"(((\d+(\s|\-))?\d+\/\d+)|(\d*\.\d+)|(\d+))", text)]  # Regex finds all strings of digits
         print(numbers_matched)
@@ -395,31 +395,23 @@ class Coins:
                     face_value = numbers[0]
 
         # Sets the country name and denomination
-        if len(words) >= 2:
+        if len(words) > 0:
+            # Attempts to find a country name in the string
             for word in words:
-                temp = ""
-                for item in countries:
-                    for name in item:
-                        if name and word.lower() == name.lower():
-                            temp = item[0]
+                temp = None
+                result = db.fetchCountryId(word)
+                if result is not None and len(result) > 0:
+                    temp = db.fetchCountryDisplayName(result[0][0])
+                    if temp is not None and len(result) > 0:
+                        temp = temp[0][0]
                 if debug:
                     print(f"Found country name: {temp if temp else 'None'}")
                 if temp is not None:
                     country = temp
-                    words.remove(word)
+                    words.remove(word) # Removes the country name from list so it isn't considered a denomination.
                     break
-            denomination = words[0]
-        elif len(words) > 0:
-            temp = None
-            for item in countries:
-                for name in item:
-                    if name and words[0].lower() == name.lower():
-                        temp = item[0]
-            if debug:
-                print(f"Found country name: {temp if temp else 'None'}")
-            if temp:
-                country = temp
-            else:
+            # If any words are left after searching for country name, the first is the denomination
+            if len(words) > 0:
                 denomination = words[0]
 
         if debug:
