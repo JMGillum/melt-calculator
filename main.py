@@ -148,7 +148,7 @@ if __name__ == "__main__":
         # Parses all of the search strings and gets 4 element tuples of arguments
         for item in input_strings:
             arguments_list.append(
-                Coins.parseSearchString(item, db.fetchCountryNames(), debug=args["verbose"])
+                Coins.parseSearchString(db, item, debug=args["verbose"])
             )
 
         # Goes through each set of arguments and searches
