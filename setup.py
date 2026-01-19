@@ -10,14 +10,12 @@ import config
 
 # Initializes all of the available command line arguments
 def setupParser():
-    parser = argparse.ArgumentParser(
-        description="Prints information and prices on various coins made of gold and silver. These command line arguments are optional."
-    )
-    basics_parser = argparse.ArgumentParser(add_help=False)
-    basics_parser.add_argument(
+    version_parser = argparse.ArgumentParser(add_help=False)
+    version_parser.add_argument(
         "-v", "--version", action="version", version=f"%(prog)s {__version__}"
     )
-    basics_parser.add_argument(
+    verbose_parser = argparse.ArgumentParser(add_help=False)
+    verbose_parser.add_argument(
         "-V",
         "--verbose",
         action="store_true",
@@ -158,9 +156,17 @@ def setupParser():
         help="Disables printing of actual coin objects, only printing their id's instead",
     )
 
+    parser = argparse.ArgumentParser(
+        description="Prints information and prices on various coins made of gold and silver. These command line arguments are optional.", parents=[version_parser]
+    )
+
     subparsers = parser.add_subparsers(dest="command")
-    search_parser = subparsers.add_parser("search",parents=[metal_prices_parser,bullion_parser,search_parameter_parser,basics_parser,database_parser,tree_output_modification_parser])
-    collection_parser = subparsers.add_parser("collection",parents=[metal_prices_parser,bullion_parser,basics_parser,database_parser,tree_output_modification_parser])
+    search_parser = subparsers.add_parser("search",parents=[metal_prices_parser,bullion_parser,search_parameter_parser,version_parser,verbose_parser,database_parser,tree_output_modification_parser])
+    collection_parser = subparsers.add_parser("collection",parents=[version_parser])
+    collection_subparsers = collection_parser.add_subparsers(dest="collection_command")
+    report_parser = collection_subparsers.add_parser("report",parents=[metal_prices_parser,bullion_parser,version_parser,verbose_parser,database_parser,tree_output_modification_parser])
+    collection_manage_parser = collection_subparsers.add_parser("manage",parents=[database_parser,version_parser,verbose_parser])
+    collection_manage_parser.add_argument("-d","--delete",action="store_true",help="Switches to delete mode. (Deletes the entry from the purchases table)")
     search_parser.add_argument(
         "-C",
         "--hide_collection",
@@ -203,6 +209,11 @@ def initialSetup():
 
 def updatePrices(prices,args,db=None):
     # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
+    update_prices = False
+    try:
+        update_prices = args["update_prices"]
+    except KeyError:
+        pass
     updates = []
     for key in prices:
         if not key == "other":
@@ -212,10 +223,14 @@ def updatePrices(prices,args,db=None):
                     current_date = datetime.today().strftime("%Y-%m-%d")
                     if args[name] is not None:
                         prices[key] = (name,round(float(args[name]), 2),current_date)
-                        if args["update_prices"]:
+                        if update_prices:
                             updates.append((key,prices[key][1],current_date))
                 except KeyError:
-                    print(f"Error updating price for key: {key}")
+                    try:
+                        if args["verbose"]:
+                            print(f"Error updating price for key: {key}")
+                    except KeyError:
+                        pass
 
             except ValueError:
                 print(
@@ -264,5 +279,6 @@ def setupMetals(db,args):
 
         for key in prices:
             name,price,date = prices[key]
-            print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
+            if not hide_price:
+                print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
     return purchases,prices

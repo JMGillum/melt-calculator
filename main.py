@@ -45,6 +45,7 @@ import sys  # Used to check if stdin is not from a terminal (piping input)
 from setup import initialSetup,setupMetals
 from db_interface import DB_Interface
 from coinData import Purchase, CoinData, PurchaseStats as Stats
+import managePurchases
 
 
 # Enumeration used for argument tuples for searches
@@ -309,7 +310,10 @@ if __name__ == "__main__":
             
             purchases,prices = setupMetals(db,args)
             if args["command"] == "collection":
-                collectionReport(args,db,purchases,prices)
+                if args["collection_command"] == "report":
+                    collectionReport(args,db,purchases,prices)
+                if args["collection_command"] == "manage":
+                    managePurchases.start(args,db)
             if args["command"] == "search":
                 search(args,db,purchases,prices)
         finally:

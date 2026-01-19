@@ -127,7 +127,7 @@ def getSpecificCoinInformation():
             specific_coin["year"] = specific_coin["mintmark"] = None
     return specific_coin
 
-def pushSpecificCoin(db,specific_coin):
+def pushSpecificCoin(db,specific_coin,coin):
     specific_coin_id = None
     
     # Pushes the specific coin to the specific_coins table
@@ -256,46 +256,34 @@ def alterDatabaseConfirmation():
     print("------------------------------------Warning-------------------------------------")
     return getConfirmation("Continuing will alter the database. Continue?") # Ensures user wants to continue
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Script for managing a personal collection for the melt calculator.")
-    parser.add_argument("-d","--delete",action="store_true",help="Switches to delete mode. (Deletes the entry from the purchases table)")
-    args = vars(parser.parse_args())
-    try:
-        # Sets up connection to database
-        db = DB_Interface()
-        db.connect(config.db_config)
-        setMetals(db) # Sets value of data.metals for translation when making CoinData objects
-
-        while True:
-            if args["delete"]: # Delete mode
-                coin = getCoinInformation(db,{"show_only_owned":True})
-                purchase = selectPurchase(db,coin)
-                if alterDatabaseConfirmation():
-                    result = db.deleteById({"purchases":purchase[0]})
-                    printResult(result,purchase[2])
-                    # Check if specific_coin is used by other purchases
-                    if purchase[1] is not None and not db.fetchPurchasesWithSpecificCoinId(purchase[1]):
-                        # It is not used, see if user wants to delete it
-                        if getConfirmation("No remaining coins use the specific_coin information of the deleted coin. Delete entry from specific_coins table?"):
-                            result = db.deleteById({"specific_coins":purchase[1]})
-                            printResult(result,purchase[1])
-                        else:
-                            print("Keeping specific coin information")
-                else: # User didn't want to alter database
-                    print("Aborting...")
-                    exit(0)
-            else: # Default add mode
-                coin = getCoinInformation(db)
-                purchase = getPurchaseInformation()
-                specific_coin = getSpecificCoinInformation()
-                if alterDatabaseConfirmation():
-                    specific_coin_id = pushSpecificCoin(db,specific_coin)
-                    pushPurchase(db,coin,purchase,specific_coin_id)
-                else:
-                    print("Aborting...")
-                    exit(0)
-            if not getConfirmation(f"{'Delete' if args['delete'] else 'Add'} another purchase?"):
-                break
-
-    finally:
-        db.closeConnection()
+def start(args,db):
+    while True:
+        if args["delete"]: # Delete mode
+            coin = getCoinInformation(db,{"show_only_owned":True})
+            purchase = selectPurchase(db,coin)
+            if alterDatabaseConfirmation():
+                result = db.deleteById({"purchases":purchase[0]})
+                printResult(result,purchase[2])
+                # Check if specific_coin is used by other purchases
+                if purchase[1] is not None and not db.fetchPurchasesWithSpecificCoinId(purchase[1]):
+                    # It is not used, see if user wants to delete it
+                    if getConfirmation("No remaining coins use the specific_coin information of the deleted coin. Delete entry from specific_coins table?"):
+                        result = db.deleteById({"specific_coins":purchase[1]})
+                        printResult(result,purchase[1])
+                    else:
+                        print("Keeping specific coin information")
+            else: # User didn't want to alter database
+                print("Aborting...")
+                exit(0)
+        else: # Default add mode
+            coin = getCoinInformation(db)
+            purchase = getPurchaseInformation()
+            specific_coin = getSpecificCoinInformation()
+            if alterDatabaseConfirmation():
+                specific_coin_id = pushSpecificCoin(db,specific_coin,coin)
+                pushPurchase(db,coin,purchase,specific_coin_id)
+            else:
+                print("Aborting...")
+                exit(0)
+        if not getConfirmation(f"{'Delete' if args['delete'] else 'Add'} another purchase?"):
+            break
