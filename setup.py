@@ -301,3 +301,6 @@ def setupMetals(db,args):
             if not hide_price:
                 print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
     return purchases,prices
+
+if __name__ == "__main__":
+    print("This script is not meant to be called on its own. Please use the main script.")

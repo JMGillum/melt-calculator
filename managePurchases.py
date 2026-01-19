@@ -287,3 +287,6 @@ def start(args,db):
                 exit(0)
         if not getConfirmation(f"{'Delete' if args['delete'] else 'Add'} another purchase?"):
             break
+
+if __name__ == "__main__":
+    print("This script is not meant to be called on its own. Please use the main script.")

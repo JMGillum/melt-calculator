@@ -144,3 +144,6 @@ def backup(args,db: DB_Interface):
         print("Backup of coins complete.")
         pass
     return 0
+
+if __name__ == "__main__":
+    print("This script is not meant to be called on its own. Please use the main script.")
