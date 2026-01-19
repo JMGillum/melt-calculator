@@ -162,6 +162,25 @@ def setupParser():
 
     subparsers = parser.add_subparsers(dest="command")
     search_parser = subparsers.add_parser("search",parents=[metal_prices_parser,bullion_parser,search_parameter_parser,version_parser,verbose_parser,database_parser,tree_output_modification_parser])
+
+    manage_parser = subparsers.add_parser("manage",parents=[version_parser])
+    manage_subparsers = manage_parser.add_subparsers(dest="manage_command")
+    backup_parser = manage_subparsers.add_parser("backup",parents=[version_parser,verbose_parser,database_parser])
+    prices_parser = manage_subparsers.add_parser("prices",parents=[version_parser,verbose_parser,database_parser])
+
+    backup_parser.add_argument("-p","--backup_purchases",action="store_true",help="Will backup the purchases and specific coin tables.")
+    backup_parser.add_argument("-c","--backup_countries",action="store_true",help="Will backup the countries and country_names tables.")
+    backup_parser.add_argument("-d","--backup_denominations",action="store_true",help="Will backup the denominations and denomination_names tables.")
+    backup_parser.add_argument("-f","--backup_face_values",action="store_true",help="Will backup the face_values and face_values_names tables.")
+    backup_parser.add_argument("-C","--backup_coins",action="store_true",help="Will backup the coins table.")
+    backup_parser.add_argument("-a","--backup_all",action="store_true",help="Will backup all of the tables. Shorthand for -pcCdf")
+    backup_parser.add_argument(
+        "-o",
+        "--output_destination",
+        metavar="STRING",
+        help="Path to the directory that will store the backups. Backups will be stored /path/<timestamp>/xx. Default location is ./backups/<timestamp>/xx",
+    )
+
     collection_parser = subparsers.add_parser("collection",parents=[version_parser])
     collection_subparsers = collection_parser.add_subparsers(dest="collection_command")
     report_parser = collection_subparsers.add_parser("report",parents=[metal_prices_parser,bullion_parser,version_parser,verbose_parser,database_parser,tree_output_modification_parser])

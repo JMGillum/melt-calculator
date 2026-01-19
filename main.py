@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 18 January 2026           ":"         __ __
+#   Date: 19 January 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -46,6 +46,7 @@ from setup import initialSetup,setupMetals
 from db_interface import DB_Interface
 from coinData import Purchase, CoinData, PurchaseStats as Stats
 import managePurchases
+import backup
 
 
 # Enumeration used for argument tuples for searches
@@ -303,7 +304,7 @@ def collectionReport(args,db,purchases,prices):
 if __name__ == "__main__":
     args = initialSetup()
 
-    if args["command"] in ["collection","search"]:
+    if args["command"] in ["collection","manage","search"]:
         try:  # Connects to database
             db = DB_Interface(debug=args["verbose"])
             db.connect(config.db_config)
@@ -314,8 +315,13 @@ if __name__ == "__main__":
                     collectionReport(args,db,purchases,prices)
                 if args["collection_command"] == "manage":
                     managePurchases.start(args,db)
-            if args["command"] == "search":
+            elif args["command"] == "manage":
+                if args["manage_command"] == "backup":
+                    backup.backup(args,db)
+            elif args["command"] == "search":
                 search(args,db,purchases,prices)
+            else:
+                print(f"Error: Unknown command type: {args['command']}")
         finally:
             # 4. Close Cursor and Connection
             db.closeConnection()
