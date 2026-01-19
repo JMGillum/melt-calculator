@@ -89,8 +89,7 @@ if __name__ == "__main__":
 
         with open("./db/setup_values.sql.organized","w") as f:
             for line in values:
-                line = (line[0],line[1],str(line[2]),line[3] if line[3] is not None else "NULL",line[4])
-                f.write(f"INSERT INTO face_values(value_id, denomination_id, value, display_name, tags) VALUES{line};\n")
+                f.write(f"INSERT INTO face_values(value_id, denomination_id, value, display_name, tags) VALUES(\"{line[0]}\", \"{line[1]}\", {str(line[2])}, {'NULL' if line[3] is None or line[3].upper() == 'NULL' else f'\"{line[3]}\"'}, '{line[4]}');\n")
             for line in value_names:
                 f.write(f"INSERT INTO face_values_names(value_id, name) VALUES{line};\n")
 
