@@ -126,9 +126,41 @@ def setupParser():
         help="Year of coin to return results for. Ex: 1898",
     )
 
+    tree_output_modification_parser = argparse.ArgumentParser(add_help=False)
+    tree_output_modification_parser.add_argument(
+        "-n",
+        "--no_coins",
+        action="store_true",
+        help="Disables printing of the actual coin objects. Will only print countries, denominations, and face values.",
+    )
+    tree_output_modification_parser.add_argument(
+        "-z",
+        "--no_values",
+        action="store_true",
+        help="Disables printing of the values down. Will only print countries and denominations.",
+    )
+    tree_output_modification_parser.add_argument(
+        "-x",
+        "--no_denominations",
+        action="store_true",
+        help="Disables printing of the denominations down. Will only print the countries.",
+    )
+    tree_output_modification_parser.add_argument(
+        "-N",
+        "--no_tree",
+        action="store_true",
+        help="Disables printing of the output tree. Only really useful for seeing debugging output.",
+    )
+    tree_output_modification_parser.add_argument(
+        "-i",
+        "--only_coin_ids",
+        action="store_true",
+        help="Disables printing of actual coin objects, only printing their id's instead",
+    )
+
     subparsers = parser.add_subparsers(dest="command")
-    search_parser = subparsers.add_parser("search",parents=[metal_prices_parser,bullion_parser,search_parameter_parser,basics_parser,database_parser])
-    collection_parser = subparsers.add_parser("collection",parents=[metal_prices_parser,bullion_parser,basics_parser,database_parser])
+    search_parser = subparsers.add_parser("search",parents=[metal_prices_parser,bullion_parser,search_parameter_parser,basics_parser,database_parser,tree_output_modification_parser])
+    collection_parser = subparsers.add_parser("collection",parents=[metal_prices_parser,bullion_parser,basics_parser,database_parser,tree_output_modification_parser])
     search_parser.add_argument(
         "-C",
         "--hide_collection",
@@ -152,36 +184,6 @@ def setupParser():
         "--hide_price",
         action="store_true",
         help="Use to disable printing of the melt value of the coins.",
-    )
-    search_parser.add_argument(
-        "-n",
-        "--no_coins",
-        action="store_true",
-        help="Disables printing of the actual coin objects. Will only print countries, denominations, and face values.",
-    )
-    search_parser.add_argument(
-        "-z",
-        "--no_values",
-        action="store_true",
-        help="Disables printing of the values down. Will only print countries and denominations.",
-    )
-    search_parser.add_argument(
-        "-x",
-        "--no_denominations",
-        action="store_true",
-        help="Disables printing of the denominations down. Will only print the countries.",
-    )
-    search_parser.add_argument(
-        "-N",
-        "--no_tree",
-        action="store_true",
-        help="Disables printing of the output tree. Only really useful for seeing debugging output.",
-    )
-    search_parser.add_argument(
-        "-i",
-        "--only_coin_ids",
-        action="store_true",
-        help="Disables printing of actual coin objects, only printing their id's instead",
     )
     return parser
 
@@ -228,14 +230,25 @@ def updatePrices(prices,args,db=None):
 
 
 def setupMetals(db,args):
+    hide_collection = False
+    try:
+        hide_collection = args["hide_collection"]
+    except KeyError:
+        pass
+    hide_price = False
+    try:
+        hide_price = args["hide_price"]
+    except KeyError:
+        pass
+        
     purchases = None
-    if not args["hide_collection"]:
+    if not hide_collection:
         purchases = db.fetchPurchases()
 
     # Fetches prices for the metals, as well as their names.
     # Updates prices if they were specified in the command line
     prices = {}
-    if not args["hide_price"]:
+    if not hide_price:
         entries = db.fetchMetals()
         for entry in entries:
             key,name,price,date = entry 

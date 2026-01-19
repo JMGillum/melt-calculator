@@ -262,6 +262,7 @@ class Coins:
         hide_values=False,
         hide_denominations=False,
         only_coin_ids=False,
+        do_not_build_tree=False
     ):
         if not isinstance(entries, list):
             entries = [entries]
@@ -277,7 +278,7 @@ class Coins:
                 continue
             if show_only_not_bullion and entry[14]:
                 continue
-            coins[entry[0]] = (entry[0], None)
+            coins[entry[0]] = (entry[0], None) # (coin_id, CoinData object)
             if not hide_denominations:
                 if not hide_values:
                     if not hide_coins:
@@ -318,6 +319,8 @@ class Coins:
             if entry[10] not in countries[entry[12]][1]:
                 countries[entry[12]][1].append(entry[10])
 
+        if do_not_build_tree:
+            return (countries,denominations,values,coins)
         return Coins.buildTree(
             countries,
             denominations,
