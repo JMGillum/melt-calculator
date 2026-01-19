@@ -19,34 +19,33 @@ from queries import Queries
 from coins import Coins
 import config
 from coinData import Purchase,CoinData, PurchaseStats as Stats
-from data import metals
+
+from setup import initialSetup,setupMetals
 
 
 if __name__ == "__main__":
-    silver = Stats()
-    gold = Stats()
-    platinum = Stats()
-    palladium = Stats()
-    rhodium = Stats()
-    other = Stats()
-    metals = [("ag",silver),("au",gold),("pt",platinum),("pd",palladium),("rh",rhodium),("other",other)]
-    entries = []
-    coins = []
+
+    args = initialSetup()
+    # Stores sum and count statistics for each metal type
+
+    coins = [] # Stores all coins with purchases
+    metal_stats = {}
     purchases = {}
-    prices = {}
-    prices_entries = {}
+    purchase_entries = []
+    metal_prices = {}
     try:
         db = DB_Interface()
         db.connect(config.db_config)
-
-        coins = db.fetchCoins({"show_only_owned":True})
-        entries = db.fetchPurchases()
-        prices_entries = db.fetchMetals()
+        purchase_entries, metal_prices = setupMetals(db,args) # Gets a list of all purchases and the metal prices.
+        for key,_ in metal_prices.items():
+            metal_stats[key] = Stats()
+        metal_stats |= {"other": Stats()} # Catch all for any undefined metals
+        coins = db.fetchCoins({"show_only_owned":True}) # Gets a list of all coins with associated purchases
         
     finally:
         db.closeConnection()
         
-    for entry in entries:
+    for entry in purchase_entries:
         key = entry[0]
         purchase = Purchase(*(entry[1:4]+entry[5:]))
         try:
@@ -55,6 +54,7 @@ if __name__ == "__main__":
             purchases[key] = (None,[purchase])
 
     for entry in coins:
+        # Create CoinData objects for each coin with purchases
         item = CoinData(
                     weight=entry[1],
                     fineness=entry[2],
@@ -68,41 +68,53 @@ if __name__ == "__main__":
         except KeyError:
             continue
 
-    for entry in prices_entries:
-        key,name,price,date = entry
+    for key,entry in metal_prices.items():
+        name,price,date = entry
         if key == "other":
             price = 0
         if price < 0:
             print(f"WARNING: PRICE FOR [{key}]({name.title()}) HAS NOT BEEN SET. PLEASE UPDATE DATABASE BEFORE CONTINUING...")
             exit(1)
-        prices[key] = (name,float(price),date)
+        metal_prices[key] = (name,float(price),date)
     for key in purchases.keys():
         entry = purchases[key]
-        Coins.price(entry[0],**prices)
-        runner = other
-        for key,metal in metals:
-            if entry[0].metal == key:
-                runner = metal
+        Coins.price(entry[0],**metal_prices)
+        runner = metal_stats["other"]
+        try: # Sets which metal the stats will be updated for
+            runner = metal_stats[entry[0].metal]
+        except KeyError: # The metal composition of the coin is not a defined type.
+            pass
 
         temp = Stats()
         print(f"+-{entry[0]}")
-        for purchase in entry[1]:
+        for purchase in entry[1]: # Prints each purchase associated with the coin
             print(f"|~ {purchase}")
             temp.addPurchase(purchase,entry[0].value,entry[0].value*entry[0].retention)
             runner.addPurchase(purchase,entry[0].value,entry[0].value*entry[0].retention)
         print(f"+-{Coins.print_statistics(stats=temp)}")
         print()
 
-    total = other
-    for _,metal in metals:
+    total = metal_stats["other"]
+    for _,metal in metal_stats.items():
         total += metal
     
     if total.count > 0:
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         print("|                                   Totals:                                    |")
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
-        for key,metal in metals:
-            print(f"{prices[key][0].title()}:\n  ",end="")
+        for key,metal in metal_stats.items():
+            # Determines the name of the metal for total statistics display
+            name = "Undefined"
+            if key.lower() == "other":
+                name = "Other"
+            else:
+                try:
+                    name = metal_prices[key][0].title()
+                except KeyError:
+                    pass
+
+            # Prints the name of the metal and the associated statistics
+            print(f"{name}:\n  ",end="")
             print(Coins.print_statistics(stats=metal))
         print("Total:\n  ",end="")
         print(Coins.print_statistics(stats=total))
