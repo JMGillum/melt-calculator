@@ -21,17 +21,16 @@ def updateMetalPrices(db:DB_Interface,*prices):
         results.append((price,db.updateMetalPrice(price)))
     return results
 
-def getMetalPricesFromUser(db):
+def getMetalPricesFromUser(db,metals):
     """Prompts the user to input metal prices and the dates they were valid on."""
     # Fetches the defined metals and preps it.
-    metals = db.fetchMetals()
-    metals = [x for x in metals if not x[0] == "other"]
+    print(metals)
     updates = []
 
     # Loops through each metal
-    for metal in metals:
+    for metal_id,metal in metals.items():
         while True:
-            metal_id,name,price,price_date = metal
+            name,price,price_date = metal
 
             # Gets price from user
             price = input(f"Enter Price for [{metal_id}]({name}) (currently:{config.currency_symbol}{price}) (enter empty string to skip): ")

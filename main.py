@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
                 # Updates metal prices
                 elif args["manage_command"] == "prices":
-                    updateMetalPrices.getMetalPricesFromUser(db)
+                    updateMetalPrices.getMetalPricesFromUser(db,prices)
 
             # The operation mode is search, which will search the database for coins.
             elif args["command"] == "search":
