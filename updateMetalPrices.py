@@ -6,7 +6,10 @@
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 #
 #    This script provides a function that prompts the user to enter the current
-#    prices for the metals defined in the database.
+#    prices for the metals defined in the database. 
+#
+#    This script is still rough and further refinement is necessary. The prompts
+#    and output needs to be improved, as well as the directions.
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 

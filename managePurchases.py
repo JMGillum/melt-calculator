@@ -18,19 +18,23 @@ from coins import Coins
 from coinData import CoinData, Purchase
 import data
 
-from general import getConfirmation, getDate, selectEntry
+from general import centerText,getConfirmation, getDate, selectEntry
 
 
 def getPurchaseInformation():
-    # Gets purchase date,quantity, and price from user
-    print("---------------------------------Purchase----------------------------------------")
+    """Gets purchase date,quantity, and price from user"""
+    print(centerText("Purchase",filler_character='-',width=80))
+
+    # Gets the date from the user, in the form yyyy-mm-dd
     date_string = getDate()
+
+    # Stores a purchase
     purchase = {
             "date": date_string,
             "quantity": None,
             "unit_price": None
             }
-    while True:
+    while True: # Gets the quantity of the issue purchased.
         quantity = input("Enter number of coins purchased: ")
         if quantity:
             try:
@@ -42,11 +46,12 @@ def getPurchaseInformation():
                 print("Quantity must be an integer value")
             purchase["quantity"] = quantity
             break
-    price_by_unit = True
+    price_by_unit = True # True if price is per coin, False for price by lot.
     if purchase["quantity"] > 1:
+        # If multiple coins purchased, checks if user wants to enter price per coin or for the entire lot
         if not getConfirmation("Enter price per coin? (No will have you enter price of entire purchase then calculate price per coin)"):
             price_by_unit = False
-    while True:
+    while True: # Gets price from the user
         try:
             if price_by_unit:
                 price = input("Enter price (per coin if multiple purchased): ")
@@ -64,8 +69,8 @@ def getPurchaseInformation():
 
 
 def getSpecificCoinInformation():
-    # Gets specific coin information from user
-    print("-------------------------------Specific Coin-------------------------------------")
+    """Gets information for a specific coin entry from the user (mint year and mint mark)"""
+    print(centerText("Specific Coin",filler_character='-',width=80))
     specific_coin = {"year":None,"mintmark":None}
     if getConfirmation("Enter specific coin details (year and/or mintmark)?"):
         while True:
@@ -124,7 +129,7 @@ def pushPurchase(db,coin,purchase,specific_coin_id):
 
 
 def getCoinInformation(db,additional_search_args:dict=None):
-    print("--------------------------------Find Coin----------------------------------------")
+    print(centerText("Find Coin",filler_character='-',width=80))
     # Prompts user for information to search for a coin
     while True:
         coin_find_by_id = True
@@ -196,7 +201,7 @@ def printResult(result,item,exit_on_fail=True):
 
 
 def alterDatabaseConfirmation():
-    print("------------------------------------Warning-------------------------------------")
+    print(centerText("Warning",filler_character='-',width=80))
     return getConfirmation("Continuing will alter the database. Continue?") # Ensures user wants to continue
 
 def start(args,db):

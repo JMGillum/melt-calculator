@@ -112,3 +112,16 @@ def selectEntry(entries):
                 entry_id -= 1
                 break
     return entry_id
+
+
+def centerText(text,filler_character='-',width=80):
+    if len(text) >= width:
+        return text
+    suffix_length = (width - len(text)) // 2 # floor of half of space left after subtracting length of text
+    prefix_length = width - suffix_length - len(text)
+
+    prefix = ''.zfill(prefix_length).replace('0',filler_character)
+    suffix = ''.zfill(suffix_length).replace('0',filler_character)
+
+    return f"{prefix}{text}{suffix}"
+
