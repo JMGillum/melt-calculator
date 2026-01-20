@@ -16,7 +16,8 @@ from db_interface import DB_Interface
 from datetime import datetime
 
 def updateMetalPrices(db:DB_Interface,*prices):
-    results = []
+    """Pushes a metal price to the database"""
+    results = [] # Stores the status messages returned by the database
     for price in prices:
         results.append((price,db.updateMetalPrice(price)))
     return results
