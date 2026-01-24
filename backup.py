@@ -87,6 +87,13 @@ def backupValues(db,dir):
             f.write(f"INSERT INTO face_values_names(value_id, name) VALUES{line};\n")
 
 
+def backupConfig(dir):
+    output_file = dir / Path("config.py")
+    with open("config.py","r") as i:
+        with open(output_file,"w") as f:
+            for line in i:
+                f.write(line)
+
 
 def backup(args,db: DB_Interface):
     """Performs backups of the database. """
@@ -143,6 +150,10 @@ def backup(args,db: DB_Interface):
         print("No backup for coins is available yet")
         print("Backup of coins complete.")
         pass
+
+    if args["backup_config"] or args["backup_all"]:
+        backupConfig(dir)
+        print("Backup of config complete.")
     return 0
 
 if __name__ == "__main__":
