@@ -1,2 +1,5 @@
 colorama >= 0.4.6
 mariadb
+datetime
+pathlib
+argparse
