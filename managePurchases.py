@@ -55,7 +55,7 @@ def getPurchaseInformation():
         try:
             if price_by_unit:
                 price = input("Enter price (per coin if multiple purchased): ")
-                temp = float(price)
+                float(price)
             else:
                 price = input("Enter price of total purchase: ")
                 price = round(float(price)/quantity,2)
