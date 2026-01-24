@@ -174,6 +174,7 @@ def setupParser():
     backup_parser.add_argument("-d","--backup_denominations",action="store_true",help="Will backup the denominations and denomination_names tables.")
     backup_parser.add_argument("-f","--backup_face_values",action="store_true",help="Will backup the face_values and face_values_names tables.")
     backup_parser.add_argument("-C","--backup_coins",action="store_true",help="Will backup the coins table.")
+    backup_parser.add_argument("-F","--backup_config",action="store_true",help="Will backup the config file.")
     backup_parser.add_argument("-a","--backup_all",action="store_true",help="Will backup all of the tables. Shorthand for -pcCdf")
     backup_parser.add_argument(
         "-o",
