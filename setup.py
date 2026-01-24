@@ -6,6 +6,7 @@ from colorama import just_fix_windows_console
 import data as d
 from datetime import datetime
 import config
+from colors import Colors
 
 
 # Initializes all of the available command line arguments
@@ -299,7 +300,15 @@ def setupMetals(db,args):
         for key in prices:
             name,price,date = prices[key]
             if not hide_price:
-                print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
+                printed = False
+                if config.show_metal_colors:
+                    try:
+                        print(f"{Colors.printColored(name.title(),config.color_definitions["metals"][key])} spot: {config.currency_symbol}{price:.2f} as of: {date}")
+                        printed = True
+                    except KeyError:
+                        pass
+                if not printed:
+                    print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
     return purchases,prices
 
 if __name__ == "__main__":

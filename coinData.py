@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 August 2025             ":"         __ __
+#   Date: 23 Janaury 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -16,7 +16,7 @@ import weights
 from datetime import datetime
 import data
 import config
-from colors import printColored
+from colors import Colors
 
 
 class PurchaseStats:
@@ -96,7 +96,7 @@ class Purchase:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
                     string += f" ({config.currency_symbol}{self.price * self.quantity:.2f})"
-        return printColored(string, config.purchase_color)
+        return Colors.printColored(string, config.color_definitions["types"]["purchase"])
     
 
 
@@ -246,10 +246,20 @@ class CoinData:
     def metalString(self):
         if self.metal is not None:
             try:
+                if config.show_metal_colors:
+                    try:
+                        return Colors.printColored(data.metals[self.metal][0].title(),config.color_definitions["metals"][self.metal])
+                    except KeyError: # Color for metal is not defined
+                        pass
                 return data.metals[self.metal][0].title()
             except KeyError:
                 pass
-        return "Unknown metal"
+        if config.show_metal_colors:
+            try:
+                return Colors.printColored("Unknown metal",config.color_definitions["metals"]["other"])
+            except KeyError: # Color for other metal is not defined
+                pass
+            return "Unknown metal"
 
     def asAString(self, format: str):
         """Very simple attempt at a format string for information

@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 18 January 2026           ":"         __ __
+#   Date: 23 January 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -21,7 +21,7 @@ from tree.tree import Tree
 from tree.node import Node
 from config import currency_symbol, current_year, minimum_year
 import config
-from colors import printColored
+from colors import Colors
 import general
 
 import re
@@ -48,9 +48,9 @@ class Coins:
 
     def __gainOrLossString(value):
         if value > 0:
-            return printColored(f"+{currency_symbol}{value:.2f}", config.gain_color)
+            return Colors.printColored(f"+{currency_symbol}{value:.2f}", config.color_definitions["other"]["gain"])
         elif value < 0:
-            return printColored(f"(-{currency_symbol}{-value:.2f})", config.loss_color)
+            return Colors.printColored(f"(-{currency_symbol}{-value:.2f})", config.color_definitions["other"]["loss"])
         else:
             return f"{value}"
 
@@ -210,8 +210,8 @@ class Coins:
                     current_values.append(
                         (
                             Tree(
-                                name=printColored(
-                                    str(value[0]).title(), config.value_color
+                                name=Colors.printColored(
+                                    str(value[0]).title(), config.color_definitions["types"]["value"]
                                 ),
                                 nodes=current_coins,
                             ),
@@ -224,14 +224,14 @@ class Coins:
                 current_values = [x[0] for x in current_values]
                 # Appends denomination tree
                 name = str(denomination[0]).title()
-                color = config.denomination_color
+                color = config.color_definitions["types"]["denomination"]
 
                 if denomination[2]:
                     name += config.bullion_hint
-                    color = config.bullion_color
+                    color = config.color_definitions["tags"]["bullion"]
                 current_denominations.append(
                     Tree(
-                        name=printColored(name, color),
+                        name=Colors.printColored(name, color),
                         nodes=current_values,
                     )
                 )
@@ -241,7 +241,7 @@ class Coins:
             # Appends country tree
             current_countries.append(
                 Tree(
-                    name=printColored(str(country[0]).title(), config.country_color),
+                    name=Colors.printColored(str(country[0]).title(), config.color_definitions["types"]["country"]),
                     nodes=current_denominations,
                 )
             )
