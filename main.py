@@ -38,20 +38,27 @@
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-import config # Various config information
-
-from setup import initialSetup,setupMetals # Sets up argument parser and metals
-from db_interface import DB_Interface # Manages connecting to the database
 
 # Scripts for various operation modes
-import managePurchases
-import updateMetalPrices
-import backup
-import report
-import search
+from check_config import validateConfig
 
     
 if __name__ == "__main__":
+    if validateConfig():
+        print("Config error. Aborting...")
+        exit(1)
+
+    # Only import modules if config file is setup correctly
+    import config # Various config information
+
+    from setup import initialSetup,setupMetals # Sets up argument parser and metals
+    from db_interface import DB_Interface # Manages connecting to the database
+
+    import managePurchases
+    import updateMetalPrices
+    import backup
+    import report
+    import search
     # Sets up argument parser and then parses them
     args = initialSetup()
 

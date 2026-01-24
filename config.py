@@ -1,5 +1,6 @@
+from datetime import datetime
 #   Author: Josh Gillum              .
-#   Date: 8 September 2025          ":"         __ __
+#   Date: 23 January 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -46,7 +47,7 @@ tree_fancy_characters = True
 
 currency_symbol = "$"
 
-current_year = 2025  # Current year
+current_year = datetime.now().year  # Current year
 minimum_year = (
     1800  # Earliest number that will be considered a year and not a face value
 )
@@ -54,17 +55,40 @@ date_format = "%m/%d/%y"
 
 bullion_hint = " (Bullion)"
 
-show_color = True
-colors_8_bit = True
-country_color = "blue"
-denomination_color = "purple"
-bullion_color = "magenta"
-value_color = "yellow"
-gain_color = "green"
-loss_color = "red"
-purchase_color = "teal"
+# Color settings
+show_color = True # Toggles all colors on or off
+colors_8_bit = True # Whether to use 8 bit colors instead of 3 bit colors
+show_metal_colors = True # Whether coin metals will be colored
+# Different colors for things that are printed
+color_definitions = {
+    # The colors of metals when printed. Key needs to be the index used in database for metal
+    "metals":{ 
+        "ag":"silver",
+        "au":"bright_yellow",
+        "pd":"bronze",
+        "pt":"rose",
+        "rh":"lime",
+        "other":"red"
+    },
+    # The colors of item types
+    "types" : {
+        "country":"blue",
+        "denomination":"purple",
+        "value":"yellow",
+        "purchase":"teal"
+    },
+    # The colors of tags
+    "tags": {
+        "bullion":"magenta"
+    },
+    # Other colors
+    "other": {
+        "gain":"green",
+        "loss":"red"
+    }
+}
 
-# 1. Database Connection Parameters
+# Database Connection Parameters
 db_config = {
     "host": "localhost",
     "port": 3306,
