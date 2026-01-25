@@ -31,8 +31,8 @@ class Queries:
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
             show_only_not_owned = False
-        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,coins.years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.display_name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
-        base_query = "from coins inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
+        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,GROUP_CONCAT(year SEPARATOR ', ') AS combined_years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.display_name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
+        base_query = "from coins inner join years on coins.coin_id = years.coin_id inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
         if country:
             base_query = f"{base_query} inner join country_names on countries.country_id = country_names.country_id"
         if denomination:
@@ -78,27 +78,10 @@ class Queries:
                 )
             found_first_specifier = True
 
-        # Adds specifier for actual value
-        if year:
-            queries.append((year_query, f"%{year}%", 1))
-            queries[-1] = ("    coins.years like ?", queries[-1][1], queries[-1][2])
-            if found_first_specifier:
-                queries[-1] = (
-                    f"\nAND\n  {queries[-1][0].strip()}",
-                    queries[-1][1],
-                    queries[-1][2],
-                )
-            found_first_specifier = True
 
         return_query = base_query
         variables = []
-        if (
-            country is not None
-            or denomination is not None
-            or face_value is not None
-            or face_value_name is not None
-            or year is not None
-        ):
+        if found_first_specifier:
             return_query += " where "
             for item in queries:
                 if item[0]:
@@ -108,6 +91,10 @@ class Queries:
                         repetitions = item[2]
                     for _ in range(repetitions):
                         variables.append(item[1])
+        return_query += " GROUP BY coin_id"
+        if year:
+            return_query += " HAVING combined_years like ?"
+            variables.append(f"%{year}%")
 
         if show_only_not_owned:
             return_query += ") as filter_by_owned where filter_by_owned.filter is null"
