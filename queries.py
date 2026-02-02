@@ -31,7 +31,7 @@ class Queries:
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
             show_only_not_owned = False
-        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,GROUP_CONCAT(year SEPARATOR ', ') AS combined_years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.display_name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
+        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,GROUP_CONCAT(year ORDER BY year ASC SEPARATOR ', ') AS combined_years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.display_name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
         base_query = "from coins inner join years on coins.coin_id = years.coin_id inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
         if country:
             base_query = f"{base_query} inner join country_names on countries.country_id = country_names.country_id"
