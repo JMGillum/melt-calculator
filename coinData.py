@@ -102,8 +102,8 @@ class Purchase:
 
 class CoinData:
     # Templates for printing information about one of the member coins
-    coin_string = "[%y] ... %a %m (%w @ %p%)"
-    coin_string_name = "%n [%y] ... %a %m (%w @ %p%)"
+    coin_string = "[%y] ... %a %m (%w @ %p)"
+    coin_string_name = "%n [%y] ... %a %m (%w @ %p)"
     coin_string_value = (
         f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}%V]"
     )
@@ -299,7 +299,10 @@ class CoinData:
             "%m", "Unknown metal" if self.metal is None else self.metalString()
         )
         string = string.replace("%f", f"{self.fineness:.2f}")
-        string = string.replace("%p", f"{self.fineness * 100:.2f}")
+        if not config.use_permille:
+            string = string.replace("%p", f"{self.fineness * 100:.2f}%")
+        else:
+            string = string.replace("%p", f"{self.fineness * 1000:.2f}‰")
         string = string.replace(
             "%a",
             "Unknown weight"
