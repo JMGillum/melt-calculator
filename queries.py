@@ -134,7 +134,7 @@ class Queries:
         return (query,(price,date,metal_id))
 
     def purchases():
-        return "SELECT purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark FROM purchases LEFT JOIN specific_coins ON purchases.specific_coin=specific_coins.id;"
+        return "SELECT purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark FROM purchases LEFT JOIN specific_coins ON purchases.specific_coin=specific_coins.id ORDER BY purchases.purchase_date,specific_coins.year,specific_coins.mintmark ASC;"
 
     def purchasesByCoinId(coin_id,purchase_id=False,specific_coin_id=False):
         query_purchase_id = ""
