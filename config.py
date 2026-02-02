@@ -41,6 +41,9 @@ from datetime import datetime
 # have it explicitly set. Default is 97% (0.97)
 default_retention = 0.97
 
+# Set to True to use milessimal fineness (parts per 1000 instead of percent)
+use_permille = True
+
 # This dictates whether the tree uses less-supported characters in order
 # to improve visuals. Default is True if not set.
 tree_fancy_characters = True
