@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 #   Author: Josh Gillum              .
 #   Date: 19 January 2026           ":"         __ __
 #                                  __|___       \ V /
