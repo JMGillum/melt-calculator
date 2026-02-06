@@ -1,4 +1,68 @@
 from datetime import datetime
+import formatString
+
+
+def PrintDepth(depth=0,tab="    "):
+    """ Prints the specified number of tabs
+
+    Args:
+        depth (): The number of tabs to print
+        tab (): The characters to print per tab
+    """
+    print(depth*tab,end="")
+
+
+def PrintComment(comment,depth=0,tab=None):
+    if not isinstance(comment,list):
+        comment = [comment]
+    # Each item in the list is a line
+    for line in comment:
+        # Only prints the comment if it is a string
+        if isinstance(line,str):
+            # Prints the necessary number of tabs
+            if tab is not None:
+                PrintDepth(depth,tab)
+            else:
+                PrintDepth(depth)
+            # Prints the actual comment text
+            print(f"# {line}")
+
+def PrintHeaderWhale(author,date):
+    author_string = f"  Author: {author}" 
+    if len(author_string) < 36:
+        author_string = author_string + "".zfill(35-len(author_string)).replace("0"," ") + "."
+    date_string = f"  Date: {date}"
+    if len(date_string) < 35:
+        date_string = date_string + "".zfill(34-len(date_string)).replace("0"," ") + "\":\"         __ __"
+
+    whale = [author_string,
+             date_string,
+             "                                 __|___       \\ V /",
+             "                               .'      '.      | |",
+             "                               |  O       \\____/  |",
+             "~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^"
+             ] 
+    PrintComment(whale)
+
+def PrintHeaderComments(sections):
+    tab = 4
+    lines = []
+    for section in sections:
+        text_type, text = section
+        if text_type == "regular":
+            lines += formatString.tabulate(text,spaces=tab).split("\n")[:-1]
+        elif text_type == "bullet":
+            results = formatString.tabulate(f"{text}",spaces=tab*2).split("\n")[:-1]
+            results[0] = formatString.combineStrings(results[0][tab-1:],"->",78,tab-2,tab)
+            lines += results
+        elif text_type == "bullet2":
+            results = formatString.tabulate(f"{text}",spaces=tab*3).split("\n")[:-1]
+            results[0] = formatString.combineStrings(results[0][tab-1:],"->",78,tab-2,tab*2)
+            lines += results
+        lines += [""]
+    lines += ["~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^"]
+    PrintComment(lines)
+    print()
 
 def strToNum(num):
     fail = False
