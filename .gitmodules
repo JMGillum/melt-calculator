@@ -4,3 +4,6 @@
 [submodule "db"]
 	path = db
 	url = git@github.com:JMGillum/coin-data.git
+[submodule "treasure"]
+	path = treasure
+	url = git@github.com:JMGillum/treasure.git

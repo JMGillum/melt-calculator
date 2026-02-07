@@ -18,12 +18,13 @@ from coins import Coins
 from coinData import CoinData, Purchase
 import data
 
-from general import centerText,getConfirmation, getDate, selectEntry
+from general import getConfirmation, getDate, selectEntry
+from treasure.text import CenterText
 
 
 def getPurchaseInformation():
     """Gets purchase date,quantity, and price from user"""
-    print(centerText("Purchase",filler_character='-',width=80))
+    print(CenterText("Purchase",filler_character='-',width=80))
 
     # Gets the date from the user, in the form yyyy-mm-dd
     date_string = getDate()
@@ -70,7 +71,7 @@ def getPurchaseInformation():
 
 def getSpecificCoinInformation():
     """Gets information for a specific coin entry from the user (mint year and mint mark)"""
-    print(centerText("Specific Coin",filler_character='-',width=80))
+    print(CenterText("Specific Coin",filler_character='-',width=80))
     specific_coin = {"year":None,"mintmark":None}
     if getConfirmation("Enter specific coin details (year and/or mintmark)?"):
         while True:
@@ -129,7 +130,7 @@ def pushPurchase(db,coin,purchase,specific_coin_id):
 
 
 def getCoinInformation(db,additional_search_args:dict=None):
-    print(centerText("Find Coin",filler_character='-',width=80))
+    print(CenterText("Find Coin",filler_character='-',width=80))
     # Prompts user for information to search for a coin
     while True:
         coin_find_by_id = True
@@ -201,7 +202,7 @@ def printResult(result,item,exit_on_fail=True):
 
 
 def alterDatabaseConfirmation():
-    print(centerText("Warning",filler_character='-',width=80))
+    print(CenterText("Warning",filler_character='-',width=80))
     return getConfirmation("Continuing will alter the database. Continue?") # Ensures user wants to continue
 
 def start(args,db):
