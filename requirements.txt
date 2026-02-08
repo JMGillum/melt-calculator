@@ -1,5 +1,2 @@
 colorama >= 0.4.6
-mariadb
-datetime
-pathlib
-argparse
+mariadb >= 1.1.13
