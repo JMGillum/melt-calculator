@@ -10,7 +10,6 @@
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-from config import show_color, colors_8_bit
 
 class Colors:
     """Provides a method for printing colored text"""
@@ -32,10 +31,12 @@ class Colors:
     }
 
 
-    def PrintColored(text, fg_color="", custom_color=""):
+    def PrintColored(text, show_color=False, colors_8_bit=False, fg_color="", custom_color=""):
         """Generates a string to print the text in the specified color
 
         Args:
+            show_color (): Whether the text is supposed to be colored.
+            colors_8_bit (): Pass True to use 8 bit colors and False to use 3 bit colors.
             fg_color (): A key for the Colors.colors dictionary. Defines which color to print in
             custom_color (): Ansi escape sequence for the color to print.
 

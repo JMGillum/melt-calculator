@@ -304,7 +304,7 @@ def SetupMetals(db,args):
                 printed = False
                 if config.show_metal_colors:
                     try:
-                        print(f"{Colors.PrintColored(name.title(),config.color_definitions["metals"][key])} spot: {config.currency_symbol}{price:.2f} as of: {date}")
+                        print(f"{Colors.PrintColored(name.title(),config.show_color,config.colors_8_bit,config.color_definitions["metals"][key])} spot: {config.currency_symbol}{price:.2f} as of: {date}")
                         printed = True
                     except KeyError:
                         pass

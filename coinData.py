@@ -96,7 +96,7 @@ class Purchase:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
                     string += f" ({config.currency_symbol}{self.price * self.quantity:.2f})"
-        return Colors.PrintColored(string, config.color_definitions["types"]["purchase"])
+        return Colors.PrintColored(string,config.show_color,config.colors_8_bit, config.color_definitions["types"]["purchase"])
     
 
 
@@ -248,7 +248,7 @@ class CoinData:
             try:
                 if config.show_metal_colors:
                     try:
-                        return Colors.PrintColored(data.metals[self.metal][0].title(),config.color_definitions["metals"][self.metal])
+                        return Colors.PrintColored(data.metals[self.metal][0].title(),config.show_color,config.colors_8_bit,config.color_definitions["metals"][self.metal])
                     except KeyError: # Color for metal is not defined
                         pass
                 return data.metals[self.metal][0].title()
@@ -256,7 +256,7 @@ class CoinData:
                 pass
         if config.show_metal_colors:
             try:
-                return Colors.PrintColored("Unknown metal",config.color_definitions["metals"]["other"])
+                return Colors.PrintColored("Unknown metal",config.show_color,config.colors_8_bit,config.color_definitions["metals"]["other"])
             except KeyError: # Color for other metal is not defined
                 pass
             return "Unknown metal"

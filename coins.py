@@ -48,9 +48,9 @@ class Coins:
 
     def __gainOrLossString(value):
         if value > 0:
-            return Colors.PrintColored(f"+{currency_symbol}{value:.2f}", config.color_definitions["other"]["gain"])
+            return Colors.PrintColored(f"+{currency_symbol}{value:.2f}",config.show_color,config.colors_8_bit, config.color_definitions["other"]["gain"])
         elif value < 0:
-            return Colors.PrintColored(f"(-{currency_symbol}{-value:.2f})", config.color_definitions["other"]["loss"])
+            return Colors.PrintColored(f"(-{currency_symbol}{-value:.2f})",config.show_color,config.colors_8_bit, config.color_definitions["other"]["loss"])
         else:
             return f"{value}"
 
@@ -211,7 +211,7 @@ class Coins:
                         (
                             Tree(
                                 name=Colors.PrintColored(
-                                    str(value[0]).title(), config.color_definitions["types"]["value"]
+                                    str(value[0]).title(),config.show_color,config.colors_8_bit, config.color_definitions["types"]["value"]
                                 ),
                                 nodes=current_coins,
                             ),
@@ -231,7 +231,7 @@ class Coins:
                     color = config.color_definitions["tags"]["bullion"]
                 current_denominations.append(
                     Tree(
-                        name=Colors.PrintColored(name, color),
+                        name=Colors.PrintColored(name,config.show_color,config.colors_8_bit, color),
                         nodes=current_values,
                     )
                 )
@@ -241,7 +241,7 @@ class Coins:
             # Appends country tree
             current_countries.append(
                 Tree(
-                    name=Colors.PrintColored(str(country[0]).title(), config.color_definitions["types"]["country"]),
+                    name=Colors.PrintColored(str(country[0]).title(),config.show_color,config.colors_8_bit, config.color_definitions["types"]["country"]),
                     nodes=current_denominations,
                 )
             )
