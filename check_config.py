@@ -1,6 +1,5 @@
 import config
 
-from general import PrintDepth
 import treasure.text
 
 config_file_name = "config.py"
@@ -112,9 +111,9 @@ def CloseDictionary(depth,to_depth=1,tab=None):
         while depth >= to_depth:
             depth -= 1
             if tab is not None:
-                PrintDepth(depth,tab)
+                treasure.text.PrintDepth(depth,tab)
             else:
-                PrintDepth(depth)
+                treasure.text.PrintDepth(depth)
             print("}",end="")
             if to_depth > 1 and depth < to_depth:
                 print(",")
@@ -144,7 +143,7 @@ def PrintBasicConfig(key,data_type,value,depth=0,key_in_quotes=False,comma_at_en
             key = f'\"{key}\"'
         if data_type == "str":
             value = f'\"{value}\"'
-        PrintDepth(depth)
+        treasure.text.PrintDepth(depth)
         if comma_at_end:
             value = f"{value},"
         print(f"{key} = {value}")
@@ -189,7 +188,7 @@ def PrintDefaultConfig():
             PrintComment(config_options_comments,key,current_depth-1)
 
             # Opens new dictionary
-            PrintDepth(current_depth-1)
+            treasure.text.PrintDepth(current_depth-1)
 
             # If nested, the name is a key in its parent dictionary, so its name must be in quotes
             if current_depth > 1:
