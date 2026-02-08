@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 23 Janaury 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -96,7 +96,7 @@ class Purchase:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
                     string += f" ({config.currency_symbol}{self.price * self.quantity:.2f})"
-        return Colors.printColored(string, config.color_definitions["types"]["purchase"])
+        return Colors.PrintColored(string, config.color_definitions["types"]["purchase"])
     
 
 
@@ -175,7 +175,7 @@ class CoinData:
             and fineness is not None
         ):
             self.precious_metal_weight = weights.Weight(
-                round(self.weight.as_troy_ounces() * self.fineness, 4),
+                round(self.weight.AsTroyOunces() * self.fineness, 4),
                 weights.Units.TROY_OUNCES,
             )
         self.value = value
@@ -192,10 +192,10 @@ class CoinData:
             self.default_retention = False
             self.retention = retention
 
-    def togglePrice(self, show_price: bool):
+    def TogglePrice(self, show_price: bool):
         self.show_value = show_price
 
-    def getCoinString(self):
+    def GetCoinString(self):
         """Returns a format string for use with a CoinData object. Depends on settings and information about the coin"""
         string = ""
         if self.nickname is None:
@@ -209,7 +209,7 @@ class CoinData:
                 string += CoinData.coin_string_value
         return string
 
-    def yearsList(self):
+    def YearsList(self):
         if self.years is not None:
             if isinstance(self.years, int):
                 return str(self.years)
@@ -243,12 +243,12 @@ class CoinData:
                 return string
         return "Unknown years"
 
-    def metalString(self):
+    def MetalString(self):
         if self.metal is not None:
             try:
                 if config.show_metal_colors:
                     try:
-                        return Colors.printColored(data.metals[self.metal][0].title(),config.color_definitions["metals"][self.metal])
+                        return Colors.PrintColored(data.metals[self.metal][0].title(),config.color_definitions["metals"][self.metal])
                     except KeyError: # Color for metal is not defined
                         pass
                 return data.metals[self.metal][0].title()
@@ -256,12 +256,12 @@ class CoinData:
                 pass
         if config.show_metal_colors:
             try:
-                return Colors.printColored("Unknown metal",config.color_definitions["metals"]["other"])
+                return Colors.PrintColored("Unknown metal",config.color_definitions["metals"]["other"])
             except KeyError: # Color for other metal is not defined
                 pass
             return "Unknown metal"
 
-    def asAString(self, format: str):
+    def AsAString(self, format: str):
         """Very simple attempt at a format string for information
         %c - country
         %F - face value
@@ -293,10 +293,10 @@ class CoinData:
             else f"{round(self.value * self.retention, 2):.2f}",
         )
         string = string.replace(
-            "%y", "Unknown years" if self.years is None else self.yearsList()
+            "%y", "Unknown years" if self.years is None else self.YearsList()
         )
         string = string.replace(
-            "%m", "Unknown metal" if self.metal is None else self.metalString()
+            "%m", "Unknown metal" if self.metal is None else self.MetalString()
         )
         string = string.replace("%f", f"{self.fineness:.2f}")
         if not config.use_permille:
@@ -307,19 +307,19 @@ class CoinData:
             "%a",
             "Unknown weight"
             if not isinstance(self.precious_metal_weight, weights.Weight)
-            else f"{self.precious_metal_weight.as_troy_ounces()} toz",
+            else f"{self.precious_metal_weight.AsTroyOunces()} toz",
         )
         string = string.replace(
             "%w",
             "Unknown weight"
             if not isinstance(self.weight, weights.Weight)
-            else f"{self.weight.as_grams()}g",
+            else f"{self.weight.AsGrams()}g",
         )
         string = string.replace("%n", "" if self.nickname is None else self.nickname)
         return string
 
-    def print(self, format_string):
-        return self.asAString(format_string)
+    def Print(self, format_string):
+        return self.AsAString(format_string)
 
     def __str__(self):
-        return self.asAString(self.getCoinString())
+        return self.AsAString(self.GetCoinString())

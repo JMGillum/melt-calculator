@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 19 January 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -17,7 +17,7 @@ import config
 from coins import Coins # Functions for finding coins and building tree
 import general # Used to convert strings to numbers
 
-def search(args,db,purchases,prices):
+def Search(args,db,purchases,prices):
     """Searches the database for coins that match the given criteria."""
     # Enumeration used for argument tuples for searches
     COUNTRY = 0
@@ -47,7 +47,7 @@ def search(args,db,purchases,prices):
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
         arguments_list.append(
-            Coins.parseSearchString(db, item, debug=args["verbose"])
+            Coins.ParseSearchString(db, item, debug=args["verbose"])
         )
 
     # Goes through each set of arguments and searches
@@ -87,7 +87,7 @@ def search(args,db,purchases,prices):
                     )
                     fail_year = True
                 if arguments[FACE_VALUE]:
-                    fail_face_value,face_value = general.strToNum(arguments[FACE_VALUE])
+                    fail_face_value,face_value = general.StrToNum(arguments[FACE_VALUE])
                     if fail_face_value:
                         print(
                             f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
@@ -123,9 +123,9 @@ def search(args,db,purchases,prices):
                         "show_only_owned":args["owned"],
                         "show_only_not_owned":args["not_owned"],
                     }
-                    results = db.fetchCoins(search_arguments) # Fetches coins based on search criteria
+                    results = db.FetchCoins(search_arguments) # Fetches coins based on search criteria
                     # Builds the results into a tree
-                    results = Coins.build(
+                    results = Coins.Build(
                         results,
                         prices=prices,
                         purchases=purchases,
@@ -176,8 +176,8 @@ def search(args,db,purchases,prices):
             "show_only_owned":args["owned"],
             "show_only_not_owned":args["not_owned"],
         }
-        results = db.fetchCoins(search_arguments)
-        results = Coins.build(
+        results = db.FetchCoins(search_arguments)
+        results = Coins.Build(
             results,
             prices=prices,
             purchases=purchases,

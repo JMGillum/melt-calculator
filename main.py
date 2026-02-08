@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   Author: Josh Gillum              .
-#   Date: 19 January 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -41,18 +41,18 @@
 
 
 # Scripts for various operation modes
-from check_config import validateConfig
+from check_config import ValidateConfig
 
     
 if __name__ == "__main__":
-    if validateConfig():
+    if ValidateConfig():
         print("Config error. Aborting...")
         exit(1)
 
     # Only import modules if config file is setup correctly
     import config # Various config information
 
-    from setup import initialSetup,setupMetals # Sets up argument parser and metals
+    from setup import InitialSetup,SetupMetals # Sets up argument parser and metals
     from db_interface import DB_Interface # Manages connecting to the database
 
     import managePurchases
@@ -61,17 +61,17 @@ if __name__ == "__main__":
     import report
     import search
     # Sets up argument parser and then parses them
-    args = initialSetup()
+    args = InitialSetup()
 
     if args["command"] in ["collection","manage","search"]:
         try:  
             # Perform setup for whichever operation mode
             # Connects to database
             db = DB_Interface(debug=args["verbose"])
-            db.connect(config.db_config)
+            db.Connect(config.db_config)
             
             # Fetches all of the purchases and sets up and fetches metal prices
-            purchases,prices = setupMetals(db,args)
+            purchases,prices = SetupMetals(db,args)
 
 
             # Determines which operation mode to enter, and what to do
@@ -79,30 +79,30 @@ if __name__ == "__main__":
             if args["command"] == "collection":
                 # Collection report
                 if args["collection_command"] == "report":
-                    report.collectionReport(args,db,purchases,prices)
+                    report.CollectionReport(args,db,purchases,prices)
 
                 # Manage purchases for collection
                 if args["collection_command"] == "manage":
-                    managePurchases.start(args,db)
+                    managePurchases.Start(args,db)
             
             # The operation mode is manage, which is managing various database components
             elif args["command"] == "manage":
 
                 # Backs up database entries for the various tables
                 if args["manage_command"] == "backup":
-                    backup.backup(args,db)
+                    backup.Backup(args,db)
 
                 # Updates metal prices
                 elif args["manage_command"] == "prices":
-                    updateMetalPrices.getMetalPricesFromUser(db,prices)
+                    updateMetalPrices.GetMetalPricesFromUser(db,prices)
 
             # The operation mode is search, which will search the database for coins.
             elif args["command"] == "search":
-                search.search(args,db,purchases,prices)
+                search.Search(args,db,purchases,prices)
 
             # Other / undefined operation mode
             else:
                 print(f"Error: Unknown command type: {args['command']}")
         finally:
             # Close Cursor and Connection
-            db.closeConnection()
+            db.CloseConnection()

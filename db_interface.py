@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 18 January 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -23,7 +23,7 @@ class DB_Interface:
         self.cursor = None
         self.debug = debug
 
-    def connect(self,db_config,debug=None):
+    def Connect(self,db_config,debug=None):
         if self.debug and debug is None:
             debug = True
         try:
@@ -56,7 +56,7 @@ class DB_Interface:
         self.conn = conn
         self.cursor = conn.cursor()
 
-    def closeConnection(self,debug=None):
+    def CloseConnection(self,debug=None):
         if self.debug and debug is None:
             debug = self.debug
         if self.cursor:
@@ -68,7 +68,7 @@ class DB_Interface:
             if debug:
                 print("Connection closed.")
 
-    def fetch(self,*args):
+    def Fetch(self,*args):
         """Submits a query to the database"""
         if self.cursor:
             try:
@@ -78,7 +78,7 @@ class DB_Interface:
                 sys.exit(1)
             return list(self.cursor)
 
-    def update(self,*args):
+    def Update(self,*args):
         try:
             self.cursor.execute(*args)
             self.conn.commit()  # Commit the transaction for DML
@@ -95,70 +95,70 @@ class DB_Interface:
             self.conn.rollback()
             return False
 
-    def fetchPurchases(self):
+    def FetchPurchases(self):
         """Gets all of the defined searches"""
-        return self.fetch(Queries.purchases())
+        return self.Fetch(Queries.Purchases())
 
-    def fetchPurchasesByCoinId(self,coin_id,purchase_id=False,specific_coin_id=False):
-        return self.fetch(*Queries.purchasesByCoinId(coin_id,purchase_id,specific_coin_id))
+    def FetchPurchasesByCoinId(self,coin_id,purchase_id=False,specific_coin_id=False):
+        return self.Fetch(*Queries.PurchasesByCoinId(coin_id,purchase_id,specific_coin_id))
 
-    def fetchCountryNames(self):
+    def FetchCountryNames(self):
         """Gets all of the names of every country"""
-        return self.fetch(Queries.countryNames())
+        return self.Fetch(Queries.CountryNames())
 
-    def fetchCountryId(self,country_name):
+    def FetchCountryId(self,country_name):
         """Returns the country id associated with the given country_name"""
-        results = Queries.countryId(country_name)
-        return self.fetch(results[0],results[1])
+        results = Queries.CountryId(country_name)
+        return self.Fetch(results[0],results[1])
 
-    def fetchCountryDisplayName(self,country_id):
+    def FetchCountryDisplayName(self,country_id):
         """Returns the display name associated with the given country_id"""
-        results = Queries.countryDisplayName(country_id)
-        return self.fetch(results[0],results[1])
+        results = Queries.CountryDisplayName(country_id)
+        return self.Fetch(results[0],results[1])
 
-    def fetchDenominationId(self,denomination_name):
+    def FetchDenominationId(self,denomination_name):
         """Returns the denomination id associated with the given denomination_name"""
-        results = Queries.denominationId(denomination_name)
-        return self.fetch(results[0],results[1])
+        results = Queries.DenominationId(denomination_name)
+        return self.Fetch(results[0],results[1])
 
-    def fetchDenominationDisplayName(self,denomination_id):
+    def FetchDenominationDisplayName(self,denomination_id):
         """Returns the display name associated with the given denomination_id"""
-        results = Queries.denominationDisplayName(denomination_id)
-        return self.fetch(results[0],results[1])
+        results = Queries.DenominationDisplayName(denomination_id)
+        return self.Fetch(results[0],results[1])
 
-    def fetchMetals(self):
-        return self.fetch(Queries.metals())
+    def FetchMetals(self):
+        return self.Fetch(Queries.Metals())
 
-    def fetchCoins(self,search_arguments):
+    def FetchCoins(self,search_arguments):
         """search_arguments should be a dictionary for **kwargs of Queries.search()"""
-        results = Queries.search(**search_arguments)
-        return self.fetch(results[0],results[1])
+        results = Queries.Search(**search_arguments)
+        return self.Fetch(results[0],results[1])
 
-    def updateMetalPrice(self,args):
-        results = Queries.updateMetalPrice(*args)
-        return self.update(*results)
+    def UpdateMetalPrice(self,args):
+        results = Queries.UpdateMetalPrice(*args)
+        return self.Update(*results)
 
-    def fetchSpecificCoin(self,coin_id,year,mintmark):
-        results = Queries.specificCoin(coin_id,year,mintmark)
-        return self.fetch(results[0],results[1])
+    def FetchSpecificCoin(self,coin_id,year,mintmark):
+        results = Queries.SpecificCoin(coin_id,year,mintmark)
+        return self.Fetch(results[0],results[1])
 
-    def addSpecificCoin(self,coin_id,year,mintmark):
-        results = Queries.addSpecificCoin(coin_id,year,mintmark)
-        return self.update(*results)
+    def AddSpecificCoin(self,coin_id,year,mintmark):
+        results = Queries.AddSpecificCoin(coin_id,year,mintmark)
+        return self.Update(*results)
 
-    def addPurchase(self,kwargs):
-        results = Queries.addPurchase(**kwargs)
-        return self.update(*results)
+    def AddPurchase(self,kwargs):
+        results = Queries.AddPurchase(**kwargs)
+        return self.Update(*results)
 
-    def fetchCoinById(self,coin_id):
-        results = Queries.coinById(coin_id)
-        return self.fetch(results[0],results[1])
+    def FetchCoinById(self,coin_id):
+        results = Queries.CoinById(coin_id)
+        return self.Fetch(results[0],results[1])
 
-    def fetchPurchasesWithSpecificCoinId(self,specific_coin_id):
-       return self.fetch(*Queries.purchasesWithSpecificCoinId(specific_coin_id)) 
+    def FetchPurchasesWithSpecificCoinId(self,specific_coin_id):
+       return self.Fetch(*Queries.PurchasesWithSpecificCoinId(specific_coin_id)) 
 
-    def deleteById(self,kwargs):
-        return self.update(*Queries.deleteById(**kwargs))
+    def DeleteById(self,kwargs):
+        return self.Update(*Queries.DeleteById(**kwargs))
 
-    def fetchById(self,kwargs):
-        return self.fetch(*Queries.selectById(**kwargs))
+    def FetchById(self,kwargs):
+        return self.Fetch(*Queries.SelectById(**kwargs))

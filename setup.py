@@ -1,7 +1,7 @@
 from __init__ import __version__
 import argparse
 
-from updateMetalPrices import updateMetalPrices
+from updateMetalPrices import UpdateMetalPrices
 from colorama import just_fix_windows_console
 import data as d
 from datetime import datetime
@@ -10,7 +10,7 @@ from colors import Colors
 
 
 # Initializes all of the available command line arguments
-def setupParser():
+def SetupParser():
     version_parser = argparse.ArgumentParser(add_help=False)
     version_parser.add_argument(
         "-v", "--version", action="version", version=f"%(prog)s {__version__}"
@@ -214,10 +214,10 @@ def setupParser():
     )
     return parser
 
-def initialSetup():
+def InitialSetup():
     just_fix_windows_console() # Enables ANSI code support on windows or strips them if necessary
     # Command line arguments
-    parser = setupParser()
+    parser = SetupParser()
     args = vars(parser.parse_args())
     if args["verbose"]:
         print(f"arguments: {args}")
@@ -228,7 +228,7 @@ def initialSetup():
 
     return args
 
-def updatePrices(prices,args,db=None):
+def UpdatePrices(prices,args,db=None):
     # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
     update_prices = False
     try:
@@ -258,14 +258,14 @@ def updatePrices(prices,args,db=None):
                     f"{name.title()} price provided is invalid type. Using value from database ({config.currency_symbol}{price})..."
                 )
     if updates and db:
-        results = updateMetalPrices(db,*updates)
+        results = UpdateMetalPrices(db,*updates)
         for item,result in results:
             if not result:
                 print(f"{item} was not updated.")
 
 
 
-def setupMetals(db,args):
+def SetupMetals(db,args):
     hide_collection = False
     try:
         hide_collection = args["hide_collection"]
@@ -279,18 +279,18 @@ def setupMetals(db,args):
         
     purchases = None
     if not hide_collection:
-        purchases = db.fetchPurchases()
+        purchases = db.FetchPurchases()
 
     # Fetches prices for the metals, as well as their names.
     # Updates prices if they were specified in the command line
     prices = {}
     if not hide_price:
-        entries = db.fetchMetals()
+        entries = db.FetchMetals()
         for entry in entries:
             key,name,price,date = entry 
             if not key == "other":
                 prices[key] = (name,float(price),date)
-        updatePrices(prices,args,db)
+        UpdatePrices(prices,args,db)
         d.metals = prices
         for key in prices:
             name,price,date = prices[key]
@@ -304,7 +304,7 @@ def setupMetals(db,args):
                 printed = False
                 if config.show_metal_colors:
                     try:
-                        print(f"{Colors.printColored(name.title(),config.color_definitions["metals"][key])} spot: {config.currency_symbol}{price:.2f} as of: {date}")
+                        print(f"{Colors.PrintColored(name.title(),config.color_definitions["metals"][key])} spot: {config.currency_symbol}{price:.2f} as of: {date}")
                         printed = True
                     except KeyError:
                         pass

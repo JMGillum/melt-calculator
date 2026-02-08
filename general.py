@@ -42,7 +42,7 @@ def PrintHeaderComments(sections):
     PrintComment(lines)
     print()
 
-def strToNum(num):
+def StrToNum(num):
     fail = False
     temp_num = 0
     try:  # Converts the temp_num from a string to either an int or float
@@ -80,7 +80,7 @@ def strToNum(num):
     return (fail,temp_num)
 
 
-def getConfirmation(prompt):
+def GetConfirmation(prompt):
     while True:
         response = input(f"{prompt} (y/n): ").lower()
         if response == 'y' or response == "yes":
@@ -91,7 +91,7 @@ def getConfirmation(prompt):
             print("You must enter either 'y' or 'n'.")
 
 
-def getDate():
+def GetDate():
     date_prompt = "Enter date as either: 'D.M.Y', 'M/D/Y', or 'Y-M-D': "
     tries = 0
     found_date = None
@@ -133,7 +133,7 @@ def getDate():
     return found_date.strftime("%Y-%m-%d")
 
 
-def selectEntry(entries):
+def SelectEntry(entries):
     for i in range(len(entries)):
         if len(entries) > 1:
             print(f"{i+1}: {entries[i]}")

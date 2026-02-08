@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 18 July 2025              ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -35,16 +35,16 @@ class Weight:
         self.weight = weight
         self.units = units
 
-    def get_weight(self, units: Units):
+    def GetWeight(self, units: Units):
         """Returns the stored weight in the specified units"""
         if units == Units.GRAMS:
-            return self.as_grams
-        if units == Units.OUNCS:
-            return self.as_ounces
+            return self.AsGrams
+        if units == Units.OUNCES:
+            return self.AsOunces
         if units == Units.TROY_OUNCES:
-            return self.as_troy_ounces
+            return self.AsTroyOunces
 
-    def as_grams(self):
+    def AsGrams(self):
         """Returns the stored weight in grams. -1 on error"""
         if self.units == Units.GRAMS:
             return self.weight
@@ -55,7 +55,7 @@ class Weight:
         else:
             return -1.0
 
-    def as_ounces(self):
+    def AsOunces(self):
         """Returns the stored wieght in ounces. -1 on error"""
         if self.units == Units.GRAMS:
             return self.weight * 0.03527396
@@ -66,7 +66,7 @@ class Weight:
         else:
             return -1.0
 
-    def as_troy_ounces(self):
+    def AsTroyOunces(self):
         """Returns the stored weight in troy ounces. -1 on error"""
         if self.units == Units.GRAMS:
             return self.weight * 0.03215075

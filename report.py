@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 19 January 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -15,7 +15,7 @@ import config
 from coins import Coins # Provides functions for searching for coins and building the results tree
 from coinData import Purchase, PurchaseStats as Stats # Classes for storing purchases for statistical purposes.
 
-def collectionReport(args,db,purchases,prices):
+def CollectionReport(args,db,purchases,prices):
     """Prints out a tree of owned coins as well as some profit statistics broken down by metal type."""
 
     metal_stats = {} # Stores totals for each metal type, key is atomic symbol, and value is Stats() object
@@ -30,8 +30,8 @@ def collectionReport(args,db,purchases,prices):
         "show_only_owned":True,
     }
     # Builds the associations between coins
-    results = db.fetchCoins(search_arguments)
-    results = Coins.build(
+    results = db.FetchCoins(search_arguments)
+    results = Coins.Build(
         results,
         prices=prices,
         purchases=purchases,
@@ -67,7 +67,7 @@ def collectionReport(args,db,purchases,prices):
         total += metal
 
     # Finishes building tree using saved tuple from Coins.build()
-    results = Coins.buildTree(*results,purchases=purchases,debug=args["verbose"],only_coin_ids=args["only_coin_ids"])
+    results = Coins.BuildTree(*results,purchases=purchases,debug=args["verbose"],only_coin_ids=args["only_coin_ids"])
     results.cascading_set_fancy(config.tree_fancy_characters)
 
     # Prints tree
@@ -93,9 +93,9 @@ def collectionReport(args,db,purchases,prices):
 
             # Prints the name of the metal and the associated statistics
             print(f"{name}:\n  ",end="")
-            print(Coins.print_statistics(stats=metal))
+            print(Coins.PrintStatistics(stats=metal))
         print("Total:\n  ",end="")
-        print(Coins.print_statistics(stats=total))
+        print(Coins.PrintStatistics(stats=total))
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 if __name__ == "__main__":

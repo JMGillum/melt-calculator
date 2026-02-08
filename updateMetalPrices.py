@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 19 January 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -18,14 +18,14 @@ import config
 from db_interface import DB_Interface
 from datetime import datetime
 
-def updateMetalPrices(db:DB_Interface,*prices):
+def UpdateMetalPrices(db:DB_Interface,*prices):
     """Pushes a metal price to the database"""
     results = [] # Stores the status messages returned by the database
     for price in prices:
-        results.append((price,db.updateMetalPrice(price)))
+        results.append((price,db.UpdateMetalPrice(price)))
     return results
 
-def getMetalPricesFromUser(db,metals):
+def GetMetalPricesFromUser(db,metals):
     """Prompts the user to input metal prices and the dates they were valid on."""
     # Fetches the defined metals and preps it.
     print(metals)
@@ -65,7 +65,7 @@ def getMetalPricesFromUser(db,metals):
         confirmation = input("Push updates to database? (y/n): ").lower()
         if confirmation == 'y' or confirmation == "yes":
             print("Updates: ")
-            results = updateMetalPrices(db,*updates) # Pushes to database
+            results = UpdateMetalPrices(db,*updates) # Pushes to database
             for item,result in results: # Status as to whether the metal was updated successfully.
                 print(f"{item} was updated {'successfully' if result else 'unsuccessfully'}")
         else: # User did not want to push to database

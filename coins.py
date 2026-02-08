@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 23 January 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -36,26 +36,26 @@ class Coins:
             return default_value
 
     # Calculates the value of all defined coin objects, using the provided precious metal values
-    def price(coin, **prices):
+    def Price(coin, **prices):
         for key in prices:
             Coins.__unpack(prices,key)
         try:
             spot = prices[coin.metal][1]
-            coin.value = coin.precious_metal_weight.as_troy_ounces() * spot
-            coin.togglePrice(True)
+            coin.value = coin.precious_metal_weight.AsTroyOunces() * spot
+            coin.TogglePrice(True)
         except KeyError:
             coin.value = -1
 
     def __gainOrLossString(value):
         if value > 0:
-            return Colors.printColored(f"+{currency_symbol}{value:.2f}", config.color_definitions["other"]["gain"])
+            return Colors.PrintColored(f"+{currency_symbol}{value:.2f}", config.color_definitions["other"]["gain"])
         elif value < 0:
-            return Colors.printColored(f"(-{currency_symbol}{-value:.2f})", config.color_definitions["other"]["loss"])
+            return Colors.PrintColored(f"(-{currency_symbol}{-value:.2f})", config.color_definitions["other"]["loss"])
         else:
             return f"{value}"
 
     # Prints summary statistics for a group of purchases (really just a total,count and worth)
-    def print_statistics(
+    def PrintStatistics(
         total: float = 0.0,
         count: int = 0,
         value: float = 0.0,
@@ -111,7 +111,7 @@ class Coins:
                     i -= 1
                 i += 1
             coin.nodes.append(
-                Coins.print_statistics(
+                Coins.PrintStatistics(
                     total, count, coin.data.value, coin.data.value * coin.data.retention
                 )
             )
@@ -119,7 +119,7 @@ class Coins:
         return None
 
     # Returns a tree object for a collection of countries, their denominations, their values, and their coins
-    def buildTree(
+    def BuildTree(
         countries,
         denominations,
         values,
@@ -210,7 +210,7 @@ class Coins:
                     current_values.append(
                         (
                             Tree(
-                                name=Colors.printColored(
+                                name=Colors.PrintColored(
                                     str(value[0]).title(), config.color_definitions["types"]["value"]
                                 ),
                                 nodes=current_coins,
@@ -231,7 +231,7 @@ class Coins:
                     color = config.color_definitions["tags"]["bullion"]
                 current_denominations.append(
                     Tree(
-                        name=Colors.printColored(name, color),
+                        name=Colors.PrintColored(name, color),
                         nodes=current_values,
                     )
                 )
@@ -241,7 +241,7 @@ class Coins:
             # Appends country tree
             current_countries.append(
                 Tree(
-                    name=Colors.printColored(str(country[0]).title(), config.color_definitions["types"]["country"]),
+                    name=Colors.PrintColored(str(country[0]).title(), config.color_definitions["types"]["country"]),
                     nodes=current_denominations,
                 )
             )
@@ -251,7 +251,7 @@ class Coins:
         return results
 
     # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
-    def build(
+    def Build(
         entries,
         prices=None,
         purchases=None,
@@ -295,7 +295,7 @@ class Coins:
                         )
                     if coins[entry[0]][1] is not None:
                         if prices:
-                            Coins.price(coins[entry[0]][1],**prices)
+                            Coins.Price(coins[entry[0]][1],**prices)
                         else:
                             coins[entry[0]][1].togglePrice(False)
                     try:
@@ -321,7 +321,7 @@ class Coins:
 
         if do_not_build_tree:
             return (countries,denominations,values,coins)
-        return Coins.buildTree(
+        return Coins.BuildTree(
             countries,
             denominations,
             values,
@@ -336,7 +336,7 @@ class Coins:
     # countries should be a list of tuples or lists. Each item of countries represents a 
     # country. The first value in the item is the proper name and each subsequent value
     # is an alternative name
-    def parseSearchString(db, text: str, debug: bool = False):
+    def ParseSearchString(db, text: str, debug: bool = False):
         """Parses a string to extract the country's name, year, denomination, and face value"""
         numbers_matched = [x for x in re.findall(r"(((\d+(\s|\-))?\d+\/\d+)|(\d*\.\d+)|(\d+))", text)]  # Regex finds all strings of digits
         print(numbers_matched)
@@ -348,7 +348,7 @@ class Coins:
             if number[4]:
                 test_num = number[4]
             if test_num is not None:
-                fail,result = general.strToNum(test_num)
+                fail,result = general.StrToNum(test_num)
                 if not fail:
                     numbers.append((str(result),test_num))
             else:
@@ -402,9 +402,9 @@ class Coins:
             # Attempts to find a country name in the string
             for word in words:
                 temp = None
-                result = db.fetchCountryId(word)
+                result = db.FetchCountryId(word)
                 if result is not None and len(result) > 0:
-                    temp = db.fetchCountryDisplayName(result[0][0])
+                    temp = db.FetchCountryDisplayName(result[0][0])
                     if temp is not None and len(result) > 0:
                         temp = temp[0][0]
                 if debug:

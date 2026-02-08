@@ -222,7 +222,7 @@ def PrintDefaultConfig():
     CloseDictionary(depth)
 
 
-def printValueError(variable_name,variable_type):
+def PrintValueError(variable_name,variable_type):
     if variable_type == "float":
         print(float_value_error[0],f"\'{variable_name}\'",float_value_error[1])
     elif variable_type == "bool":
@@ -234,13 +234,13 @@ def printValueError(variable_name,variable_type):
     elif variable_type == "dict":
         print(dict_value_error[0],f"\'{variable_name}\'",dict_value_error[1])
 
-def printAttributeError(variable_name,variable_default):
+def PrintAttributeError(variable_name,variable_default):
     print(missing_variable_error[0],f"\'{variable_name}\'",missing_variable_error[1],variable_default)
 
-def printKeyError(variable_name,dictionary_name,message=""):
+def PrintKeyError(variable_name,dictionary_name,message=""):
     print(f"The key \"{variable_name}\" is missing. Add it to the dictionary",f"\"{dictionary_name}\" in {config_file_name}.",message)
 
-def checkKeys(dictionary,dictionary_name,keys):
+def CheckKeys(dictionary,dictionary_name,keys):
     num_errors = 0
     for key in keys:
         message = ""
@@ -253,22 +253,22 @@ def checkKeys(dictionary,dictionary_name,keys):
             if num_errors == 0:
                 print("Keys are missing in",dictionary_name)
             num_errors += 1
-            printKeyError(key,dictionary_name,message)
+            PrintKeyError(key,dictionary_name,message)
     return num_errors
 
 
-def validateConfig():
+def ValidateConfig():
     errors_count = 0
     # --- Default Retention --- 
     variable_name = "default_retention"
     variable_default = "default_retention = 0.97"
     try:
         if not isinstance(config.default_retention,(float,int)): # Incorrect type
-            printValueError(variable_name,"float")
+            PrintValueError(variable_name,"float")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -277,11 +277,11 @@ def validateConfig():
     variable_default = "tree_fancy_characters = True"
     try:
         if not isinstance(config.tree_fancy_characters,bool): # Incorrect type
-            printValueError(variable_name,"bool")
+            PrintValueError(variable_name,"bool")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -290,11 +290,11 @@ def validateConfig():
     variable_default = "currency_symbol = \"$\""
     try:
         if not isinstance(config.currency_symbol,str): # Incorrect type
-            printValueError(variable_name,"str")
+            PrintValueError(variable_name,"str")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -303,11 +303,11 @@ def validateConfig():
     variable_default = "current_year = datetime.now().year # alternatively: current_year = xxxx & replace xxxx with year"
     try:
         if not isinstance(config.current_year,int): # Incorrect type
-            printValueError(variable_name,"int")
+            PrintValueError(variable_name,"int")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -316,11 +316,11 @@ def validateConfig():
     variable_default = "minimum_year = 1800"
     try:
         if not isinstance(config.minimum_year,int): # Incorrect type
-            printValueError(variable_name,"int")
+            PrintValueError(variable_name,"int")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -329,7 +329,7 @@ def validateConfig():
     variable_default = "date_format = %m/%d/%y"
     try:
         if not isinstance(config.date_format,str): # Incorrect type
-            printValueError(variable_name,"int")
+            PrintValueError(variable_name,"int")
             errors_count += 1
             print()
         elif config.date_format.find("%d") < 0 or config.date_format.find("%m") < 0 or config.date_format.find("%y") < 0: 
@@ -337,7 +337,7 @@ def validateConfig():
             errors_count += 1
             print()
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -347,11 +347,11 @@ def validateConfig():
     variable_default = "bullion_hint = \" (Bullion)\" # This is the text displayed after a denomination's name for all denominations tagged as bullion."
     try:
         if not isinstance(config.bullion_hint,str): # Incorrect type
-            printValueError(variable_name,"str")
+            PrintValueError(variable_name,"str")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -360,11 +360,11 @@ def validateConfig():
     variable_default = "show_color = True # Toggles all colors on or off"
     try:
         if not isinstance(config.show_color,bool): # Incorrect type
-            printValueError(variable_name,"bool")
+            PrintValueError(variable_name,"bool")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -373,11 +373,11 @@ def validateConfig():
     variable_default = "colors_8_bit = True # Whether to use 8 bit colors instead of 3 bit colors"
     try:
         if not isinstance(config.colors_8_bit,bool): # Incorrect type
-            printValueError(variable_name,"bool")
+            PrintValueError(variable_name,"bool")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -386,11 +386,11 @@ def validateConfig():
     variable_default = "show_metal_colors = True # Whether coin metals will be colored"
     try:
         if not isinstance(config.show_metal_colors,bool): # Incorrect type
-            printValueError(variable_name,"bool")
+            PrintValueError(variable_name,"bool")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -428,71 +428,71 @@ color_definitions = {
     """
     try:
         if not isinstance(config.color_definitions,dict): # Incorrect type
-            printValueError(variable_name,"dict")
+            PrintValueError(variable_name,"dict")
             print()
             errors_count += 1
         else: # Correct type. Check subdictionaries
             # ~~~ Metals subdictionary ~~~
             try:
                 if not isinstance(config.color_definitions["metals"],dict): # Incorrect type
-                    printValueError(variable_name,"dict")
+                    PrintValueError(variable_name,"dict")
                     print()
                     errors_count += 1
             except KeyError: # Variable is not defined
-                printKeyError("metals",variable_name,"This dictionary may be empty, however it must exist. Keys should be the primary keys in metals table in database.")
+                PrintKeyError("metals",variable_name,"This dictionary may be empty, however it must exist. Keys should be the primary keys in metals table in database.")
                 print()
                 errors_count += 1
 
             # ~~~ Types subdictionary ~~~
             try:
                 if not isinstance(config.color_definitions["types"],dict): # Incorrect type
-                    printValueError(variable_name,"dict")
+                    PrintValueError(variable_name,"dict")
                     print()
                     errors_count += 1
                 else:
-                    num_errors = checkKeys(config.color_definitions["types"],f"{variable_name}[\"types\"]",["country","denomination","value","purchase"])
+                    num_errors = CheckKeys(config.color_definitions["types"],f"{variable_name}[\"types\"]",["country","denomination","value","purchase"])
                     if num_errors:
                         print()
                         errors_count += num_errors
             except KeyError: # Variable is not defined
-                printKeyError("types",variable_name)
+                PrintKeyError("types",variable_name)
                 print()
                 errors_count += 1
 
             # ~~~ Tags subdictionary ~~~
             try:
                 if not isinstance(config.color_definitions["tags"],dict): # Incorrect type
-                    printValueError(variable_name,"dict")
+                    PrintValueError(variable_name,"dict")
                     print()
                     errors_count += 1
                 else:
-                    num_errors = checkKeys(config.color_definitions["tags"],f"{variable_name}[\"tags\"]",["bullion"])
+                    num_errors = CheckKeys(config.color_definitions["tags"],f"{variable_name}[\"tags\"]",["bullion"])
                     if num_errors:
                         print()
                         errors_count += num_errors
             except KeyError: # Variable is not defined
-                printKeyError("tags",variable_name)
+                PrintKeyError("tags",variable_name)
                 print()
                 errors_count += 1
 
             # ~~~ Other subdictionary ~~~
             try:
                 if not isinstance(config.color_definitions["other"],dict): # Incorrect type
-                    printValueError(variable_name,"dict")
+                    PrintValueError(variable_name,"dict")
                     print()
                     errors_count += 1
                 else:
-                    num_errors = checkKeys(config.color_definitions["other"],f"{variable_name}[\"other\"]",["gain","loss"])
+                    num_errors = CheckKeys(config.color_definitions["other"],f"{variable_name}[\"other\"]",["gain","loss"])
                     if num_errors:
                         print()
                         errors_count += num_errors
             except KeyError: # Variable is not defined
-                printKeyError("other",variable_name)
+                PrintKeyError("other",variable_name)
                 print()
                 errors_count += 1
 
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -510,16 +510,16 @@ db_config = {
     """
     try:
         if not isinstance(config.db_config,dict): # Incorrect type
-            printValueError(variable_name,"dict")
+            PrintValueError(variable_name,"dict")
             print()
             errors_count += 1
         else:
-            num_errors = checkKeys(config.db_config,variable_name,["host","port","user",("password","It is best to set the value of this to None (no quotes). This will prompt you for the database password each time the program is run."),"database"])
+            num_errors = CheckKeys(config.db_config,variable_name,["host","port","user",("password","It is best to set the value of this to None (no quotes). This will prompt you for the database password each time the program is run."),"database"])
             if num_errors:
                 print()
                 errors_count += num_errors
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -528,11 +528,11 @@ db_config = {
     variable_default = "enforce_prices_set = True # If metal prices must be changed from default."
     try:
         if not isinstance(config.enforce_prices_set,bool): # Incorrect type
-            printValueError(variable_name,"bool")
+            PrintValueError(variable_name,"bool")
             print()
             errors_count += 1
     except AttributeError: # Variable is not defined
-        printAttributeError(variable_name,variable_default)
+        PrintAttributeError(variable_name,variable_default)
         print()
         errors_count += 1
 
@@ -540,5 +540,5 @@ db_config = {
     return errors_count
 
 if __name__ == "__main__":
-    print("Errors:",validateConfig())
+    print("Errors:",ValidateConfig())
     PrintDefaultConfig()

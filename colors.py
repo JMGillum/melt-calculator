@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 23 January 2026           ":"         __ __
+#   Date: 7 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -32,7 +32,7 @@ class Colors:
     }
 
 
-    def printColored(text, fg_color="", custom_color=""):
+    def PrintColored(text, fg_color="", custom_color=""):
         """Generates a string to print the text in the specified color
 
         Args:
@@ -69,4 +69,4 @@ class Colors:
 
 if __name__ == "__main__":
     for color in Colors.colors:
-        print(Colors.printColored(color, color))
+        print(Colors.PrintColored(color, color))
