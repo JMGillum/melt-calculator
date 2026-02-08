@@ -15,7 +15,7 @@ import sys # Used to check if stdin is not from a terminal (input was piped)
 import config
 
 from coins import Coins # Functions for finding coins and building tree
-import general # Used to convert strings to numbers
+import treasure.text # Used to convert strings to numbers
 
 def Search(args,db,purchases,prices):
     """Searches the database for coins that match the given criteria."""
@@ -87,7 +87,7 @@ def Search(args,db,purchases,prices):
                     )
                     fail_year = True
                 if arguments[FACE_VALUE]:
-                    fail_face_value,face_value = general.StrToNum(arguments[FACE_VALUE])
+                    fail_face_value,face_value = treasure.text.FractionStrToNum(arguments[FACE_VALUE])
                     if fail_face_value:
                         print(
                             f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"

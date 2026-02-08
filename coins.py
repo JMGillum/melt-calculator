@@ -22,7 +22,7 @@ from tree.node import Node
 from config import currency_symbol, current_year, minimum_year
 import config
 from colors import Colors
-import general
+import treasure.text
 
 import re
 
@@ -348,7 +348,7 @@ class Coins:
             if number[4]:
                 test_num = number[4]
             if test_num is not None:
-                fail,result = general.StrToNum(test_num)
+                fail,result = treasure.text.FractionStrToNum(test_num)
                 if not fail:
                     numbers.append((str(result),test_num))
             else:

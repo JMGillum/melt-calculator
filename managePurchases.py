@@ -18,8 +18,8 @@ from coins import Coins
 from coinData import CoinData, Purchase
 import data
 
-from general import GetConfirmation, GetDate, SelectEntry
 from treasure.text import CenterText
+from treasure.prompt import GetConfirmation, GetDate, SelectEntry
 
 
 def GetPurchaseInformation():

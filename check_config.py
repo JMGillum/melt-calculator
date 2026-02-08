@@ -1,7 +1,7 @@
 import config
 
 from general import PrintDepth
-import general
+import treasure.text
 
 config_file_name = "config.py"
 
@@ -91,7 +91,7 @@ def PrintComment(dictionary,key,depth=0,tab=None):
 
     # Comments should be a list of strings. If not, places the single string into its own list
     try:
-        general.PrintComment(dictionary[key],depth,tab)
+        treasure.text.PrintComment(dictionary[key],depth,tab)
     except KeyError:
         return
 
@@ -165,9 +165,9 @@ def GetDepthAndLastItem(text):
 
 
 def PrintDefaultConfig():
-    general.PrintHeaderWhale("Josh Gillum","5 Feburary 2026")
+    treasure.text.PrintHeaderWhale("Josh Gillum","5 Feburary 2026")
     option_comments = [("bullet" if key.find('[') < 0 else "bullet2",f"{key}: {value}") for key,value in config_options_header_comments.items()]
-    general.PrintHeaderComments([("regular","This file contains basic configuration for the program. Below will be a summary of each item that can be configured.")]+option_comments)
+    treasure.text.PrintHeaderComments([("regular","This file contains basic configuration for the program. Below will be a summary of each item that can be configured.")]+option_comments)
     PrintConfigImports()
     keys = list(config_options.keys())
     depth = 0 # Stores how deep within nested dictionaries we are
