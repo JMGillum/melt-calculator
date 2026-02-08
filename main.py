@@ -53,7 +53,7 @@ if __name__ == "__main__":
     import config # Various config information
 
     from setup import InitialSetup,SetupMetals # Sets up argument parser and metals
-    from db_interface import DB_Interface # Manages connecting to the database
+    from db.interface import DB_Interface # Manages connecting to the database
 
     import managePurchases
     import updateMetalPrices

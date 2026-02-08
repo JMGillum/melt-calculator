@@ -8,9 +8,9 @@
 #    This script is used to backup information stored in the database
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
-from db_interface import DB_Interface
+from db.interface import DB_Interface
 import config
-from queries import Queries
+from db.queries import Queries
 from datetime import datetime
 from pathlib import Path
 

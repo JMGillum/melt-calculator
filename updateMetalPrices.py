@@ -15,7 +15,7 @@
 
 import config
 
-from db_interface import DB_Interface
+from db.interface import DB_Interface
 from datetime import datetime
 
 def UpdateMetalPrices(db:DB_Interface,*prices):

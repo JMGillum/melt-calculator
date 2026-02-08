@@ -15,7 +15,7 @@ import sys
 import mariadb
 import getpass
 
-from queries import Queries
+from .queries import Queries
 
 class DB_Interface:
     def __init__(self,debug=False):
