@@ -2,7 +2,7 @@
 	path = tree
 	url = https://github.com/JMGillum/python-tree.git
 [submodule "db"]
-	path = db
+	path = database
 	url = git@github.com:JMGillum/coin-data.git
 [submodule "treasure"]
 	path = treasure
