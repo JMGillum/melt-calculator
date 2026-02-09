@@ -13,7 +13,6 @@
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-import config
 from coins import Coins
 from coinData import CoinData, Purchase
 import data
@@ -22,7 +21,7 @@ from treasure.text import CenterText
 from treasure.prompt import GetConfirmation, GetDate, SelectEntry
 
 
-def GetPurchaseInformation():
+def GetPurchaseInformation(config):
     """Gets purchase date,quantity, and price from user"""
     print(CenterText("Purchase",filler_character='-',width=80))
 
@@ -65,7 +64,7 @@ def GetPurchaseInformation():
             continue
         purchase["unit_price"] = price
         break
-    print(f"({date_string}) {config.currency_symbol}{purchase['unit_price']} x {purchase['quantity']}")
+    print(f"({date_string}) {config["currency_symbol"]}{purchase['unit_price']} x {purchase['quantity']}")
     return purchase
 
 
@@ -129,7 +128,7 @@ def PushPurchase(db,coin,purchase,specific_coin_id):
         print("Added purchase successfully.")
 
 
-def GetCoinInformation(db,additional_search_args:dict=None):
+def GetCoinInformation(db,additional_search_args:dict=None,config={}):
     print(CenterText("Find Coin",filler_character='-',width=80))
     # Prompts user for information to search for a coin
     while True:
@@ -156,7 +155,23 @@ def GetCoinInformation(db,additional_search_args:dict=None):
         print("Multiple results found...")
     for i in range(len(entries)):
         entry = entries[i]
-        temp_coin = CoinData(weight=entry[1],fineness=entry[2],precious_metal_weight=entry[3],years=entry[4],metal=entry[5],nickname=entry[6],face_value=entry[8],denomination=entry[11],country=entry[13])
+        temp_coin = CoinData(weight=entry[1],
+                             fineness=entry[2],
+                             precious_metal_weight=entry[3],
+                             years=entry[4],
+                             metal=entry[5],
+                             nickname=entry[6],
+                             face_value=entry[8],
+                             denomination=entry[11],
+                             country=entry[13],
+                             currency_symbol=config["currency_symbol"],
+                             def_retention=config["default_retention"],
+                             show_color=config["show_color"],
+                             colors_8_bit=config["colors_8_bit"],
+                             show_metal_colors=config["show_metal_colors"],
+                             metal_colors=config["metals_colors"],
+                             use_permille=config["use_permille"]
+                             )
         temp_coin.TogglePrice(False)
         temp_output = temp_coin.Print("%c %F %d " + temp_coin.GetCoinString())
         entries[i] = (entry[0],temp_output) # Tuple of (coin_id, coin string)
@@ -176,14 +191,14 @@ def SetMetals(db):
             prices[key] = (name,float(price),date)
     data.metals = prices
 
-def SelectPurchase(db,coin):
+def SelectPurchase(db,coin,config):
     purchases = db.FetchPurchasesByCoinId(coin[0],True,True)
     if not purchases:
         print("No purchases found.")
         exit(1)
     # Creates a list of tuples of (purchase_id,specific_coin_id,Purchase object). 
     # They are then sorted by purchase date
-    purchases = sorted([(x[7],x[8],Purchase(*(x[1:4]+x[5:7]))) for x in purchases],key=lambda x: x[2].purchase_date)
+    purchases = sorted([(x[7],x[8],Purchase(*(x[1:4]+x[5:7])),config["date_format"],config["currency_symbol"],config["show_color"],config["colors_8_bit"],config["types_colors"]["purchase"]) for x in purchases],key=lambda x: x[2].purchase_date)
     purchase_id = SelectEntry([x[2] for x in purchases])
     purchase = purchases[purchase_id]
     print(f"Selected: {purchase[2]}")
@@ -205,11 +220,11 @@ def AlterDatabaseConfirmation():
     print(CenterText("Warning",filler_character='-',width=80))
     return GetConfirmation("Continuing will alter the database. Continue?") # Ensures user wants to continue
 
-def Start(args,db):
+def Start(args,db,config):
     while True:
         if args["delete"]: # Delete mode
-            coin = GetCoinInformation(db,{"show_only_owned":True})
-            purchase = SelectPurchase(db,coin)
+            coin = GetCoinInformation(db,{"show_only_owned":True},config=config)
+            purchase = SelectPurchase(db,coin,config)
             if AlterDatabaseConfirmation():
                 result = db.DeleteById({"purchases":purchase[0]})
                 PrintResult(result,purchase[2])
@@ -225,8 +240,8 @@ def Start(args,db):
                 print("Aborting...")
                 exit(0)
         else: # Default add mode
-            coin = GetCoinInformation(db)
-            purchase = GetPurchaseInformation()
+            coin = GetCoinInformation(db,config=config)
+            purchase = GetPurchaseInformation(config)
             specific_coin = GetSpecificCoinInformation()
             if AlterDatabaseConfirmation():
                 specific_coin_id = PushSpecificCoin(db,specific_coin,coin)

@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 February 2026           ":"         __ __
+#   Date: 8 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -44,6 +44,8 @@ class Colors:
             
         """
         if not show_color:
+            return text
+        if not fg_color and not custom_color:
             return text
         index = 1 if colors_8_bit else 0 # Which index in the tuples to use
 

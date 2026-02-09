@@ -5,7 +5,6 @@ from updateMetalPrices import UpdateMetalPrices
 from colorama import just_fix_windows_console
 import data as d
 from datetime import datetime
-import config
 from colors import Colors
 
 
@@ -214,7 +213,7 @@ def SetupParser():
     )
     return parser
 
-def InitialSetup():
+def InitialSetup(config):
     just_fix_windows_console() # Enables ANSI code support on windows or strips them if necessary
     # Command line arguments
     parser = SetupParser()
@@ -224,11 +223,11 @@ def InitialSetup():
 
     # The database was specified in the command line
     if args["database"]:
-        config.db_config["database"] = args["database"]
+        config["db_config"]["database"] = args["database"]
 
     return args
 
-def UpdatePrices(prices,args,db=None):
+def UpdatePrices(prices,args,config,db=None):
     # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
     update_prices = False
     try:
@@ -255,7 +254,7 @@ def UpdatePrices(prices,args,db=None):
 
             except ValueError:
                 print(
-                    f"{name.title()} price provided is invalid type. Using value from database ({config.currency_symbol}{price})..."
+                    f"{name.title()} price provided is invalid type. Using value from database ({config["currency_symbol"]}{price})..."
                 )
     if updates and db:
         results = UpdateMetalPrices(db,*updates)
@@ -265,7 +264,7 @@ def UpdatePrices(prices,args,db=None):
 
 
 
-def SetupMetals(db,args):
+def SetupMetals(db,args,config):
     hide_collection = False
     try:
         hide_collection = args["hide_collection"]
@@ -290,11 +289,11 @@ def SetupMetals(db,args):
             key,name,price,date = entry 
             if not key == "other":
                 prices[key] = (name,float(price),date)
-        UpdatePrices(prices,args,db)
+        UpdatePrices(prices,args,config,db)
         d.metals = prices
         for key in prices:
             name,price,date = prices[key]
-            if config.enforce_prices_set and price < 0:
+            if config["enforce_prices_set"] and price < 0:
                 print(f"WARNING: PRICE FOR [{key}]({name.title()}) HAS NOT BEEN SET. PLEASE UPDATE DATABASE BEFORE CONTINUING...")
                 exit(1)
 
@@ -302,14 +301,14 @@ def SetupMetals(db,args):
             name,price,date = prices[key]
             if not hide_price:
                 printed = False
-                if config.show_metal_colors:
+                if config["show_metal_colors"]:
                     try:
-                        print(f"{Colors.PrintColored(name.title(),config.show_color,config.colors_8_bit,config.color_definitions["metals"][key])} spot: {config.currency_symbol}{price:.2f} as of: {date}")
+                        print(f"{Colors.PrintColored(name.title(),config["show_color"],config["colors_8_bit"],config["metals_colors"][key])} spot: {config["currency_symbol"]}{price:.2f} as of: {date}")
                         printed = True
                     except KeyError:
                         pass
                 if not printed:
-                    print(f"{name.title()} spot: {config.currency_symbol}{price:.2f} as of: {date}")
+                    print(f"{name.title()} spot: {config["currency_symbol"]}{price:.2f} as of: {date}")
     return purchases,prices
 
 if __name__ == "__main__":

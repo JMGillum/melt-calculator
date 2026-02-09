@@ -15,7 +15,7 @@
 import weights
 from datetime import datetime
 import data
-import config
+#import config
 from colors import Colors
 
 
@@ -59,6 +59,12 @@ class Purchase:
         purchase_date=None,
         mint_date=None,
         mint_mark=None,
+
+        date_format="%m/%d/%y",
+        currency_symbol="$",
+        show_color=True,
+        colors_8_bit=True,
+        color_purchase="teal"
     ):
         try:
             self.price = float(price)
@@ -75,6 +81,12 @@ class Purchase:
         self.mint_date = mint_date
         self.mint_mark = mint_mark
 
+        self.date_format=date_format
+        self.currency_symbol=currency_symbol
+        self.show_color=show_color
+        self.colors_8_bit=colors_8_bit
+        self.color_purchase=color_purchase
+
     def __str__(self):
         string = ""
         if self.purchase_date is not None:
@@ -82,7 +94,7 @@ class Purchase:
                 string += f"({self.purchase_date})"
             else:
                 try:
-                    string += f"({self.purchase_date.strftime(config.date_format)})"
+                    string += f"({self.purchase_date.strftime(self.date_format)})"
                 except AttributeError:
                     pass
         if self.mint_date is not None and not (self.mint_date == ""):
@@ -90,13 +102,13 @@ class Purchase:
             if self.mint_mark is not None and not (self.mint_mark == ""):
                 string += f"{self.mint_mark}"
         if self.price is not None:
-            string += f" - {config.currency_symbol}{self.price:.2f}"
+            string += f" - {self.currency_symbol}{self.price:.2f}"
         if self.quantity is not None:
             if self.quantity > 1:
                 string += f" x{self.quantity}"
                 if self.price is not None and self.price >= 0:
-                    string += f" ({config.currency_symbol}{self.price * self.quantity:.2f})"
-        return Colors.PrintColored(string,config.show_color,config.colors_8_bit, config.color_definitions["types"]["purchase"])
+                    string += f" ({self.currency_symbol}{self.price * self.quantity:.2f})"
+        return Colors.PrintColored(string,self.show_color,self.colors_8_bit,self.color_purchase)
     
 
 
@@ -105,10 +117,10 @@ class CoinData:
     coin_string = "[%y] ... %a %m (%w @ %p)"
     coin_string_name = "%n [%y] ... %a %m (%w @ %p)"
     coin_string_value = (
-        f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}%V]"
+        " - [Melt: %C%v Sell: %C%V]"
     )
     coin_string_value_default_retention = (
-        f" - [Melt: {config.currency_symbol}%v Sell: {config.currency_symbol}(%V)]"
+        " - [Melt: %C%v Sell: %C(%V)]"
     )
 
     def __init__(
@@ -125,6 +137,14 @@ class CoinData:
         value=None,
         retention=None,
         show_value=True,
+        currency_symbol="$",
+        def_retention=0.97,
+        show_color=True,
+        colors_8_bit=True,
+        show_metal_colors=True,
+        metal_colors={},
+        use_permille=False
+
     ):
         try:
             weight = float(weight)
@@ -186,11 +206,18 @@ class CoinData:
         ):  # Percentage of melt value that coin is typically bought at
             self.default_retention = True
             self.retention = (
-                config.default_retention
+                def_retention
             )  # Default retention of 97% of melt value
         else:
             self.default_retention = False
             self.retention = retention
+
+        self.currency_symbol = currency_symbol
+        self.show_color=show_color
+        self.colors_8_bit=colors_8_bit
+        self.show_metal_colors=show_metal_colors
+        self.metal_colors=metal_colors
+        self.use_permille=use_permille
 
     def TogglePrice(self, show_price: bool):
         self.show_value = show_price
@@ -246,17 +273,17 @@ class CoinData:
     def MetalString(self):
         if self.metal is not None:
             try:
-                if config.show_metal_colors:
+                if self.show_metal_colors:
                     try:
-                        return Colors.PrintColored(data.metals[self.metal][0].title(),config.show_color,config.colors_8_bit,config.color_definitions["metals"][self.metal])
+                        return Colors.PrintColored(data.metals[self.metal][0].title(),self.show_color,self.colors_8_bit,self.metal_colors[self.metal])
                     except KeyError: # Color for metal is not defined
                         pass
                 return data.metals[self.metal][0].title()
             except KeyError:
                 pass
-        if config.show_metal_colors:
+        if self.show_metal_colors:
             try:
-                return Colors.PrintColored("Unknown metal",config.show_color,config.colors_8_bit,config.color_definitions["metals"]["other"])
+                return Colors.PrintColored("Unknown metal",self.show_color,self.colors_8_bit,self.metal_colors["other"])
             except KeyError: # Color for other metal is not defined
                 pass
             return "Unknown metal"
@@ -264,6 +291,7 @@ class CoinData:
     def AsAString(self, format: str):
         """Very simple attempt at a format string for information
         %c - country
+        %C - currency symbol
         %F - face value
         %d - denomination
         %y - years
@@ -280,6 +308,7 @@ class CoinData:
         string = string.replace(
             "%c", "Unknown country" if self.country is None else self.country.title()
         )
+        string = string.replace("%c", self.currency_symbol)
         string = string.replace("%d", str(self.denomination))
         string = string.replace("%F", str(self.face_value))
         string = string.replace(
@@ -299,7 +328,7 @@ class CoinData:
             "%m", "Unknown metal" if self.metal is None else self.MetalString()
         )
         string = string.replace("%f", f"{self.fineness:.2f}")
-        if not config.use_permille:
+        if not self.use_permille:
             string = string.replace("%p", f"{self.fineness * 100:.2f}%")
         else:
             string = string.replace("%p", f"{self.fineness * 1000:.2f}‰")

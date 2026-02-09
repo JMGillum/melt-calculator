@@ -99,4 +99,4 @@ db_config = {
     "password": None,
     "database": "coin_data",
 }
-enforce_prices_set = True
+enforce_prices_set = False

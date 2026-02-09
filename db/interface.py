@@ -23,6 +23,31 @@ class DB_Interface:
         self.cursor = None
         self.debug = debug
 
+    def ValidateConfig(config):
+        if config is not None and isinstance(config,dict):
+            fails = []
+            for key,datatype in (("host","str"),("port","int"),("user","str"),("database","str"),("password","str")):
+                try:
+                    fail = False
+                    if datatype == "str":
+                        if not isinstance(config[key],str):
+                            fail = True
+                    elif datatype == "int":
+                        if not isinstance(config[key],int):
+                            fail = True
+                    if fail:
+                        fails.append(f"Error: db_config {key}")
+                except KeyError:
+                    if key == "password":
+                        pass
+                    else:
+                        fails.append(f"Missing key: '{key}' of type: {datatype}")
+            return fails
+
+        else:
+            fails.append("db_config must be a dictionary.")
+            return fails
+
     def Connect(self,db_config,debug=None):
         if self.debug and debug is None:
             debug = True

@@ -9,7 +9,6 @@
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 from db.interface import DB_Interface
-import config
 from db.queries import Queries
 from datetime import datetime
 from pathlib import Path

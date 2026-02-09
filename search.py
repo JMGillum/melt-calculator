@@ -12,12 +12,11 @@
 
 import sys # Used to check if stdin is not from a terminal (input was piped)
 
-import config
 
 from coins import Coins # Functions for finding coins and building tree
 import treasure.text # Used to convert strings to numbers
 
-def Search(args,db,purchases,prices):
+def Search(args,db,purchases,prices,config):
     """Searches the database for coins that match the given criteria."""
     # Enumeration used for argument tuples for searches
     COUNTRY = 0
@@ -127,6 +126,7 @@ def Search(args,db,purchases,prices):
                     # Builds the results into a tree
                     results = Coins.Build(
                         results,
+                        config=config,
                         prices=prices,
                         purchases=purchases,
                         debug=args["verbose"],
@@ -164,7 +164,7 @@ def Search(args,db,purchases,prices):
                             f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
                         )
                         # Updates whether the tree will use fancy characters or not
-                        results.cascading_set_fancy(config.tree_fancy_characters)
+                        results.cascading_set_fancy(config["tree_fancy_characters"])
                         if not args["no_tree"]: # If tree is to be printed, print it.
                             for line in results.print():
                                 print(line)
@@ -189,7 +189,7 @@ def Search(args,db,purchases,prices):
             hide_values=args["no_values"],
             hide_denominations=args["no_denominations"],
         )
-        results.cascading_set_fancy(config.tree_fancy_characters)
+        results.cascading_set_fancy(config["tree_fancy_characters"])
 
         if not args["no_tree"]:
             for line in results.print():

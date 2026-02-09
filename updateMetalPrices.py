@@ -13,7 +13,6 @@
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-import config
 
 from db.interface import DB_Interface
 from datetime import datetime
@@ -25,7 +24,7 @@ def UpdateMetalPrices(db:DB_Interface,*prices):
         results.append((price,db.UpdateMetalPrice(price)))
     return results
 
-def GetMetalPricesFromUser(db,metals):
+def GetMetalPricesFromUser(db,metals,config):
     """Prompts the user to input metal prices and the dates they were valid on."""
     # Fetches the defined metals and preps it.
     print(metals)
@@ -37,7 +36,7 @@ def GetMetalPricesFromUser(db,metals):
             name,price,price_date = metal
 
             # Gets price from user
-            price = input(f"Enter Price for [{metal_id}]({name}) (currently:{config.currency_symbol}{price}) (enter empty string to skip): ")
+            price = input(f"Enter Price for [{metal_id}]({name}) (currently:{config["currency_symbol"]}{price}) (enter empty string to skip): ")
             if price: # The user entered a valid price
                 
                 # Gets the date from the user, or defaults to current date
@@ -48,7 +47,7 @@ def GetMetalPricesFromUser(db,metals):
                     price_date = response
 
                 # Gets confirmation that the information is correct
-                if input(f"Press enter to update [{metal_id}]({name}) to {config.currency_symbol}{price} as of {price_date} (enter any other key to modify): "):
+                if input(f"Press enter to update [{metal_id}]({name}) to {config["currency_symbol"]}{price} as of {price_date} (enter any other key to modify): "):
                     # User wants to re-enter information for this metal
                     continue
                 else:

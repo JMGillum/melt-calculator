@@ -10,12 +10,11 @@
 #
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-import config
 
 from coins import Coins # Provides functions for searching for coins and building the results tree
 from coinData import Purchase, PurchaseStats as Stats # Classes for storing purchases for statistical purposes.
 
-def CollectionReport(args,db,purchases,prices):
+def CollectionReport(args,db,purchases,prices,config):
     """Prints out a tree of owned coins as well as some profit statistics broken down by metal type."""
 
     metal_stats = {} # Stores totals for each metal type, key is atomic symbol, and value is Stats() object
@@ -33,6 +32,7 @@ def CollectionReport(args,db,purchases,prices):
     results = db.FetchCoins(search_arguments)
     results = Coins.Build(
         results,
+        config,
         prices=prices,
         purchases=purchases,
         debug=args["verbose"],
@@ -48,7 +48,7 @@ def CollectionReport(args,db,purchases,prices):
     # coins is a dict of {coin_id: (coin_id,CoinData)}
     for entry in purchases:
         key = entry[0] # coin_id purchase is associated with
-        purchase = Purchase(*(entry[1:4]+entry[5:])) # purchase price, quantity, date, mint date, mint mark
+        purchase = Purchase(*(entry[1:4]+entry[5:]),config["date_format"],config["currency_symbol"],config["show_color"],config["colors_8_bit"],config["types_colors"]["purchase"]) # purchase price, quantity, date, mint date, mint mark
         coin = None
         try:
             coin = results[3][key][1] # CoinData object
@@ -67,8 +67,8 @@ def CollectionReport(args,db,purchases,prices):
         total += metal
 
     # Finishes building tree using saved tuple from Coins.build()
-    results = Coins.BuildTree(*results,purchases=purchases,debug=args["verbose"],only_coin_ids=args["only_coin_ids"])
-    results.cascading_set_fancy(config.tree_fancy_characters)
+    results = Coins.BuildTree(*results,purchases=purchases,debug=args["verbose"],only_coin_ids=args["only_coin_ids"],config = config)
+    results.cascading_set_fancy(config["tree_fancy_characters"])
 
     # Prints tree
     if not args["no_tree"]:
@@ -93,9 +93,9 @@ def CollectionReport(args,db,purchases,prices):
 
             # Prints the name of the metal and the associated statistics
             print(f"{name}:\n  ",end="")
-            print(Coins.PrintStatistics(stats=metal))
+            print(Coins.PrintStatistics(config=config,stats=metal))
         print("Total:\n  ",end="")
-        print(Coins.PrintStatistics(stats=total))
+        print(Coins.PrintStatistics(config=config,stats=total))
         print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 if __name__ == "__main__":
