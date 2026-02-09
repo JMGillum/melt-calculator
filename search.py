@@ -188,6 +188,7 @@ def Search(args,db,purchases,prices,config):
             hide_coins=args["no_coins"],
             hide_values=args["no_values"],
             hide_denominations=args["no_denominations"],
+            config=config
         )
         results.cascading_set_fancy(config["tree_fancy_characters"])
 

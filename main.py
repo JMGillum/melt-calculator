@@ -42,8 +42,6 @@
 
 # Scripts for various operation modes
 from check_config import ValidateConfig
-import treasure.config
-
     
 if __name__ == "__main__":
     config, errors = ValidateConfig()
