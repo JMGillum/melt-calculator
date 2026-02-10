@@ -128,8 +128,8 @@ def foo(x:int|float,y:int|float)->int|float:
     """ Returns the square of the product of the two variables.
 
     Args:
-        x (int|float): The first value for the arithmetic operation
-        y (int|float): The first value for the arithmetic operation
+        x: The first value for the arithmetic operation
+        y: The first value for the arithmetic operation
 
     Returns (int|float): The square of the product of the two variables
     """
