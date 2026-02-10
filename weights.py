@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 February 2026           ":"         __ __
+#   Date: 9 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -30,8 +30,14 @@ class Weight:
     """Represents a weight and provides conversion functions. Can store weights as grams, ounces, or troy ounces, and can report them in either of the 3."""
 
     def __init__(self, weight: float | int, units: Units):
-        if isinstance(weight, int):
-            weight = float(weight)
+        if isinstance(weight,Weight):
+            return weight
+
+        # Defaults to 0.0 grams
+        if weight is None:
+            weight = 0.0
+            units = Units.GRAMS
+        weight = float(weight)
         self.weight = weight
         self.units = units
 
