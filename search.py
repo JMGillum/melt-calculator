@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 8 February 2026           ":"         __ __
+#   Date: 10 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -122,10 +122,11 @@ def Search(args,db,purchases,prices,config):
                         "show_only_owned":args["owned"],
                         "show_only_not_owned":args["not_owned"],
                     }
-                    results = db.FetchCoins(search_arguments) # Fetches coins based on search criteria
+                    results,mapping = db.FetchCoins(search_arguments) # Fetches coins based on search criteria
                     # Builds the results into a tree
                     results = Coins.Build(
                         results,
+                        mapping,
                         config=config,
                         prices=prices,
                         purchases=purchases,
@@ -176,9 +177,10 @@ def Search(args,db,purchases,prices,config):
             "show_only_owned":args["owned"],
             "show_only_not_owned":args["not_owned"],
         }
-        results = db.FetchCoins(search_arguments)
+        results,mapping = db.FetchCoins(search_arguments)
         results = Coins.Build(
             results,
+            mapping,
             prices=prices,
             purchases=purchases,
             debug=args["verbose"],

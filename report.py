@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 8 February 2026           ":"         __ __
+#   Date: 10 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -29,9 +29,10 @@ def CollectionReport(args,db,purchases,prices,config):
         "show_only_owned":True,
     }
     # Builds the associations between coins
-    results = db.FetchCoins(search_arguments)
+    results,mapping = db.FetchCoins(search_arguments)
     results = Coins.Build(
         results,
+        mapping,
         config,
         prices=prices,
         purchases=purchases,

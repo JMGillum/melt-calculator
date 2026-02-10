@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 February 2026           ":"         __ __
+#   Date: 10 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -27,11 +27,55 @@ class Queries:
         debug = Queries.__unpack(kwargs,"debug")
         show_only_owned = Queries.__unpack(kwargs,"show_only_owned")
         show_only_not_owned = Queries.__unpack(kwargs,"show_only_not_owned")
+        select_cols = Queries.__unpack(kwargs,"select_cols")
 
         if show_only_owned and show_only_not_owned:
             show_only_owned = False
             show_only_not_owned = False
-        select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,GROUP_CONCAT(year ORDER BY year ASC SEPARATOR ', ') AS combined_years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.display_name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
+
+
+        
+        cols = {
+            "coin_id":"coins.coin_id",
+            "gross_weight":"coins.gross_weight",
+            "fineness":"coins.fineness",
+            "precious_metal_weight":"coins.precious_metal_weight",
+            "years":"GROUP_CONCAT(year ORDER BY year ASC SEPARATOR ', ') AS combined_years",
+            "coin_display_name":"coins.name",
+            "metal":"coins.metal",
+            "value_id":"face_values.value_id",
+            "value":"face_values.value",
+            "value_display_name":"face_values.display_name as fv_display_name",
+            "denomination_id":"denominations.denomination_id",
+            "denomination_display_name":"denominations.display_name as d_display_name",
+            "country_id":"countries.country_id",
+            "country_display_name":"countries.display_name as c_display_name",
+            "tag_bullion":"tags.bullion",
+        }
+
+
+        # Will limit selection columns if select_cols is specified,
+        # otherwise just select all of them.
+        if select_cols is not None:
+            cols = {k:v for (k,v) in cols.items() if k in select_cols}
+
+        # Builds the selection criteria and maps
+        return_cols = {}
+        select_columns = ""
+        i = 0
+        for key,value in cols.items():
+            select_columns += f"{value}, " 
+
+            # Maps the column index to the key
+            return_cols[key]=i
+            i += 1
+
+        # Removes trailing comma and space
+        if select_columns:
+            select_columns = select_columns[:-2]
+
+
+        #select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,GROUP_CONCAT(year ORDER BY year ASC SEPARATOR ', ') AS combined_years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.display_name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
         base_query = "from coins inner join years on coins.coin_id = years.coin_id inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
         if country:
             base_query = f"{base_query} inner join country_names on countries.country_id = country_names.country_id"
@@ -91,7 +135,7 @@ class Queries:
                         repetitions = item[2]
                     for _ in range(repetitions):
                         variables.append(item[1])
-        return_query += " GROUP BY coin_id"
+        return_query += " GROUP BY coins.coin_id"
         if year:
             return_query += " HAVING combined_years like ?"
             variables.append(f"%{year}%")
@@ -105,7 +149,7 @@ class Queries:
             print(f"Variables:\n{variables}")
             print("-----------------------------------")
 
-        return (return_query, tuple(variables))
+        return (return_query, tuple(variables), return_cols)
     
     def CountryNames():
         return "SELECT name,country_id from country_names;"

@@ -164,13 +164,7 @@ def GetCoinInformation(db,additional_search_args:dict=None,config={}):
                              face_value=entry[8],
                              denomination=entry[11],
                              country=entry[13],
-                             currency_symbol=config["currency_symbol"],
-                             def_retention=config["default_retention"],
-                             show_color=config["show_color"],
-                             colors_8_bit=config["colors_8_bit"],
-                             show_metal_colors=config["show_metal_colors"],
-                             metal_colors=config["metals_colors"],
-                             use_permille=config["use_permille"]
+                             config=config
                              )
         temp_coin.TogglePrice(False)
         temp_output = temp_coin.Print("%c %F %d " + temp_coin.GetCoinString())
@@ -185,10 +179,10 @@ def GetCoinInformation(db,additional_search_args:dict=None,config={}):
 def SetMetals(db):
     prices = {}
     entries = db.FetchMetals()
+    print(entries)
     for entry in entries:
         key,name,price,date = entry 
-        if not key == "other":
-            prices[key] = (name,float(price),date)
+        prices[key] = (name,float(price),date)
     data.metals = prices
 
 def SelectPurchase(db,coin,config):

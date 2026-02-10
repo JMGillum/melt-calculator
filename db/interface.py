@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 February 2026           ":"         __ __
+#   Date: 10 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -157,7 +157,7 @@ class DB_Interface:
     def FetchCoins(self,search_arguments):
         """search_arguments should be a dictionary for **kwargs of Queries.search()"""
         results = Queries.Search(**search_arguments)
-        return self.Fetch(results[0],results[1])
+        return self.Fetch(results[0],results[1]),results[2]
 
     def UpdateMetalPrice(self,args):
         results = Queries.UpdateMetalPrice(*args)
