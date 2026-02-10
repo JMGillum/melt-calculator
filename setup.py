@@ -287,8 +287,7 @@ def SetupMetals(db,args,config):
         entries = db.FetchMetals()
         for entry in entries:
             key,name,price,date = entry 
-            if not key == "other":
-                prices[key] = (name,float(price),date)
+            prices[key] = (name,float(price),date)
         UpdatePrices(prices,args,config,db)
         d.metals = prices
         for key in prices:
