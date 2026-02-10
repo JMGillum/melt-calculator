@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 8 February 2026           ":"         __ __
+#   Date: 10 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -144,7 +144,7 @@ def GetCoinInformation(db,additional_search_args:dict=None,config={}):
             search_args = {"country":arguments[0],"denomination":arguments[1],"year":arguments[2],"face_value":arguments[3]}
             if additional_search_args:
                 search_args |= additional_search_args
-            entries = db.FetchCoins(search_args)
+            entries,mapping = db.FetchCoins(search_args)
         if entries:
             break
         else:
@@ -155,15 +155,15 @@ def GetCoinInformation(db,additional_search_args:dict=None,config={}):
         print("Multiple results found...")
     for i in range(len(entries)):
         entry = entries[i]
-        temp_coin = CoinData(weight=entry[1],
-                             fineness=entry[2],
-                             precious_metal_weight=entry[3],
-                             years=entry[4],
-                             metal=entry[5],
-                             nickname=entry[6],
-                             face_value=entry[8],
-                             denomination=entry[11],
-                             country=entry[13],
+        temp_coin = CoinData(weight=entry[mapping["gross_weight"]],
+                             fineness=entry[mapping["fineness"]],
+                             precious_metal_weight=entry[mapping["precious_metal_weight"]],
+                             years=entry[mapping["years"]],
+                             metal=entry[mapping["metal"]],
+                             nickname=entry[mapping["coin_display_name"]],
+                             face_value=entry[mapping["value"]],
+                             denomination=entry[mapping["denomination_display_name"]],
+                             country=entry[mapping["country_display_name"]],
                              config=config
                              )
         temp_coin.TogglePrice(False)
