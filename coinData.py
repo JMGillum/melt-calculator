@@ -13,9 +13,7 @@
 #~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 import weights
-from datetime import datetime
 import data
-#import config
 from colors import Colors
 
 
@@ -308,7 +306,7 @@ class CoinData:
         string = string.replace(
             "%c", "Unknown country" if self.country is None else self.country.title()
         )
-        string = string.replace("%c", self.currency_symbol)
+        string = string.replace("%C", self.currency_symbol)
         string = string.replace("%d", str(self.denomination))
         string = string.replace("%F", str(self.face_value))
         string = string.replace(
