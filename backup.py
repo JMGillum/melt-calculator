@@ -12,6 +12,7 @@ from db.interface import DB_Interface
 from db.queries import Queries
 from datetime import datetime
 from pathlib import Path
+import treasure.config
 
 def ConvertSQL(query,values):
     for item in values:
@@ -87,14 +88,19 @@ def BackupValues(db,dir):
 
 
 def BackupConfig(dir):
-    output_file = dir / Path("config.py")
-    with open("config.py","r") as i:
-        with open(output_file,"w") as f:
-            for line in i:
-                f.write(line)
+    config_path = treasure.config.DefaultConfigPath("metals")
+    if config_path is not None:
+        input = config_path / "config.toml"
+        output = Path(dir) / "config.toml"
+        with input.open(mode="r") as i:
+            with output.open(mode="w") as f:
+                for line in i:
+                    f.write(line)
+        return True
+    return False
 
 
-def Backup(args,db: DB_Interface):
+def Backup(args,db: DB_Interface,dir=None):
     """Performs backups of the database. """
     # If no specific file is specified, all will undergo backup
     if not (args["backup_purchases"] or 
@@ -107,7 +113,10 @@ def Backup(args,db: DB_Interface):
         args["backup_all"] = True
 
 
-    dir = Path.cwd() / Path("db") / Path("backups") # default location is ./db/backups
+    if dir is None:
+        dir = Path.cwd() / Path("database") / Path("backups") # default location is ./database/backups
+    else:
+        dir = Path(dir)
     if args["output_destination"]: # Backup location was specified in command line
         dir = Path(args["output_destination"])
     try:
@@ -152,8 +161,10 @@ def Backup(args,db: DB_Interface):
         pass
 
     if args["backup_config"] or args["backup_all"]:
-        BackupConfig(dir)
-        print("Backup of config complete.")
+        if BackupConfig(dir):
+            print("Backup of config complete.")
+        else:
+            print("Backup of config failed.")
     return 0
 
 if __name__ == "__main__":
