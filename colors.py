@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 8 February 2026           ":"         __ __
+#   Date: 10 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -12,8 +12,12 @@
 
 
 class Colors:
-    """Provides a method for printing colored text"""
-    # Stores all of the defined colors. Each value is a tuple of (3 bit value, 8 bit value)
+    """ Provides a method for printing colored text
+
+    Attributes: 
+        colors: Stores all of the defined colors. Each value is a tuple of (3 bit value, 8 bit value)
+    """
+
     colors = {
         "blue": (34,4),
         "bright_yellow": (33,11),
@@ -31,22 +35,27 @@ class Colors:
     }
 
 
-    def PrintColored(text, show_color=False, colors_8_bit=False, fg_color="", custom_color=""):
+    def PrintColored(text, show_color:bool=False, colors_8_bit:bool=False, fg_color:str="", custom_color:str=""):
         """Generates a string to print the text in the specified color
 
         Args:
-            show_color (): Whether the text is supposed to be colored.
-            colors_8_bit (): Pass True to use 8 bit colors and False to use 3 bit colors.
-            fg_color (): A key for the Colors.colors dictionary. Defines which color to print in
-            custom_color (): Ansi escape sequence for the color to print.
+            show_color: Whether the text is supposed to be colored.
+            colors_8_bit: Pass True to use 8 bit colors and False to use 3 bit colors.
+            fg_color: A key for the Colors.colors dictionary. Defines which color to print in
+            custom_color: Ansi escape sequence for the color to print.
 
         Returns: String of the form <ansi_escape_colored> <text> <ansi_reset_to_default_color>
             
         """
+
+        # Returns the text with no changes if show_color is False
         if not show_color:
             return text
+
+        # If no color is specified, return text unaltered
         if not fg_color and not custom_color:
             return text
+
         index = 1 if colors_8_bit else 0 # Which index in the tuples to use
 
         # Ansi codes for printing colors
@@ -57,19 +66,43 @@ class Colors:
         color_string = ""
         ansi_string = ""
 
+        # Uses the custom color string
         if custom_color:
             color_string = custom_color
-        else: # fg_color was specified
-            test = fg_color.lower().strip()
-            try: # Attempts to retrieve color from dictionary
-                color_string = Colors.colors[test][index]
+
+        # fg_color was specified
+        else:
+
+            # Attempts to retrieve color from dictionary
+            try: 
+                color_string = Colors.colors[fg_color.lower().strip()][index]
+
+            # Color is not defined, so return text unchanged
             except KeyError:
-                color_string = ""
-            # Entire ansi sequence for colored text
-            ansi_string = f"{prefix[index]}{color_string}{suffix[index]}"
+                return text
+
+        # Entire ansi sequence for colored text
+        ansi_string = f"{prefix[index]}{color_string}{suffix[index]}"
+
         return f"{ansi_string}{text}{default[index]}"
 
 
 if __name__ == "__main__":
-    for color in Colors.colors:
-        print(Colors.PrintColored(color, color))
+
+    # Fetches and validates config
+    from check_config import ValidateConfig
+    config, errors = ValidateConfig()
+
+    # Some sort of errors in the config
+    for error in errors:
+        print(error,flush=True)
+    if config is None:
+        print("Config error. Aborting...")
+        exit(1)
+
+    # Prints out relevant config settings
+    print(f"Current config - show_color:{config['show_color']}, colors_8_bit:{config['colors_8_bit']}")
+
+    # Prints out every defined color, using current config.
+    for color in Colors.colors.keys():
+        print(Colors.PrintColored(color, config["show_color"],config["colors_8_bit"], color))
