@@ -3,7 +3,7 @@
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 #
 #    The Weight class facilitates storage of weights, regardless of units.
 #    Weights can be stored in any of the three systems that are meaningful to
@@ -13,7 +13,7 @@
 #
 #    The Units class is used to identify which system a current weight is.
 #
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 from enum import Enum
 
@@ -30,7 +30,7 @@ class Weight:
     """Represents a weight and provides conversion functions. Can store weights as grams, ounces, or troy ounces, and can report them in either of the 3."""
 
     def __init__(self, weight: float | int, units: Units):
-        if isinstance(weight,Weight):
+        if isinstance(weight, Weight):
             return weight
 
         # Defaults to 0.0 grams

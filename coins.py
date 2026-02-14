@@ -3,43 +3,41 @@
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 #
 #    This file stores the Coins class, which provides an interface for
 #    interacting with the database that stores the coin information.
 #
-#    Thie class has no functions for actually getting data. It simply turns 
+#    Thie class has no functions for actually getting data. It simply turns
 #    data from the database into CoinData objects and builds a tree to represent
-#    them. 
+#    them.
 #
 #    See db_interface.py and queries.py for database specific functions.
 #
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 from coinData import CoinData, Purchase, PurchaseStats
 from tree.tree import Tree
 from tree.node import Node
 from colors import Colors
 import treasure.text
-from datetime import datetime
 
 import re
 
 
 class Coins:
-
     """Container class for various functions related to displaying coins."""
-    def __unpack(dictionary,key,default_value=None):
+
+    def __unpack(dictionary, key, default_value=None):
         try:
             dictionary[key]
         except KeyError:
             dictionary[key] = default_value
 
-
     # Calculates the value of all defined coin objects, using the provided precious metal values
     def Price(coin, **prices):
         for key in prices:
-            Coins.__unpack(prices,key)
+            Coins.__unpack(prices, key)
         try:
             spot = prices[coin.metal][1]
             coin.value = coin.precious_metal_weight.AsTroyOunces() * spot
@@ -47,11 +45,21 @@ class Coins:
         except KeyError:
             coin.value = -1
 
-    def __gainOrLossString(value,config):
+    def __gainOrLossString(value, config):
         if value > 0:
-            return Colors.PrintColored(f"+{config["currency_symbol"]}{value:.2f}",config["show_color"],config["colors_8_bit"],config["misc_colors"]["gain"])
+            return Colors.PrintColored(
+                f"+{config['currency_symbol']}{value:.2f}",
+                config["show_color"],
+                config["colors_8_bit"],
+                config["misc_colors"]["gain"],
+            )
         elif value < 0:
-            return Colors.PrintColored(f"-{config["currency_symbol"]}{-value:.2f}",config["show_color"],config["colors_8_bit"],config["misc_colors"]["loss"])
+            return Colors.PrintColored(
+                f"-{config['currency_symbol']}{-value:.2f}",
+                config["show_color"],
+                config["colors_8_bit"],
+                config["misc_colors"]["loss"],
+            )
         else:
             return f"{value}"
 
@@ -75,7 +83,7 @@ class Coins:
             total = round(total, 2)
             count = int(count)
             value = round(value, 2)
-            other_value = round(other_value,2)
+            other_value = round(other_value, 2)
         if count > 0:
             total_value = round(value * count, 2)
             other_total_value = round(other_value * count, 2)
@@ -84,21 +92,23 @@ class Coins:
             other_gain_loss = round(other_total_value - total, 2)
             average_gain_loss = round(value - average, 2)
             other_average_gain_loss = round(other_value - average, 2)
-            gain_loss_string = Coins.__gainOrLossString(gain_loss,config)
-            average_gain_loss_string = Coins.__gainOrLossString(average_gain_loss,config)
-            other_gain_loss_string = Coins.__gainOrLossString(other_gain_loss,config)
-            other_average_gain_loss_string = Coins.__gainOrLossString(other_average_gain_loss,config)
-            return_string = ""
-            return_string += f"[Count:{count}] [Sum:{config["currency_symbol"]}{total:.2f}] [Avg:{config["currency_symbol"]}{average:.2f}]"
-            return_string += f" [Value:{config["currency_symbol"]}{total_value:.2f}/{config["currency_symbol"]}{other_total_value:.2f}]"
-            return_string += (
-                f" [G/L:{gain_loss_string}/{other_gain_loss_string}] [Avg G/L:{average_gain_loss_string}/{other_average_gain_loss_string}]"
+            gain_loss_string = Coins.__gainOrLossString(gain_loss, config)
+            average_gain_loss_string = Coins.__gainOrLossString(
+                average_gain_loss, config
             )
+            other_gain_loss_string = Coins.__gainOrLossString(other_gain_loss, config)
+            other_average_gain_loss_string = Coins.__gainOrLossString(
+                other_average_gain_loss, config
+            )
+            return_string = ""
+            return_string += f"[Count:{count}] [Sum:{config['currency_symbol']}{total:.2f}] [Avg:{config['currency_symbol']}{average:.2f}]"
+            return_string += f" [Value:{config['currency_symbol']}{total_value:.2f}/{config['currency_symbol']}{other_total_value:.2f}]"
+            return_string += f" [G/L:{gain_loss_string}/{other_gain_loss_string}] [Avg G/L:{average_gain_loss_string}/{other_average_gain_loss_string}]"
             return return_string
         return "N/A"
 
     # Adds the summary node to a coin object
-    def __summarizePurchase(coin,config):
+    def __summarizePurchase(coin, config):
         if isinstance(coin, Node):
             i = 0
             total = 0.0
@@ -114,7 +124,11 @@ class Coins:
                 i += 1
             coin.nodes.append(
                 Coins.PrintStatistics(
-                    config,total, count, coin.data.value, coin.data.value * coin.data.retention
+                    config,
+                    total,
+                    count,
+                    coin.data.value,
+                    coin.data.value * coin.data.retention,
                 )
             )
 
@@ -129,7 +143,7 @@ class Coins:
         purchases=None,
         debug=False,
         only_coin_ids=False,
-        config={}
+        config={},
     ):
         if debug:
             for item in [
@@ -182,9 +196,16 @@ class Coins:
                                         if debug:
                                             print(f"  {match}")
                                         current_coins[-1].nodes.append(
-                                                Purchase(*(match[1:4]+match[5:]),config["date_format"],config["currency_symbol"],config["show_color"],config["colors_8_bit"],config["types_colors"]["purchase"])
+                                            Purchase(
+                                                *(match[1:4] + match[5:]),
+                                                config["date_format"],
+                                                config["currency_symbol"],
+                                                config["show_color"],
+                                                config["colors_8_bit"],
+                                                config["types_colors"]["purchase"],
+                                            )
                                         )
-                                    Coins.__summarizePurchase(current_coins[-1],config)
+                                    Coins.__summarizePurchase(current_coins[-1], config)
                         # Sorts the coins by first year available
                     if only_coin_ids:
                         current_coins = sorted(
@@ -214,7 +235,10 @@ class Coins:
                         (
                             Tree(
                                 name=Colors.PrintColored(
-                                    str(value[0]).title(),config["show_color"],config["colors_8_bit"],config["types_colors"]["value"]
+                                    str(value[0]).title(),
+                                    config["show_color"],
+                                    config["colors_8_bit"],
+                                    config["types_colors"]["value"],
                                 ),
                                 nodes=current_coins,
                             ),
@@ -234,7 +258,9 @@ class Coins:
                     color = config["tags_colors"]["bullion"]
                 current_denominations.append(
                     Tree(
-                        name=Colors.PrintColored(name,config["show_color"],config["colors_8_bit"], color),
+                        name=Colors.PrintColored(
+                            name, config["show_color"], config["colors_8_bit"], color
+                        ),
                         nodes=current_values,
                     )
                 )
@@ -244,7 +270,12 @@ class Coins:
             # Appends country tree
             current_countries.append(
                 Tree(
-                    name=Colors.PrintColored(str(country[0]).title(),config["show_color"],config["colors_8_bit"],config["types_colors"]["country"]),
+                    name=Colors.PrintColored(
+                        str(country[0]).title(),
+                        config["show_color"],
+                        config["colors_8_bit"],
+                        config["types_colors"]["country"],
+                    ),
                     nodes=current_denominations,
                 )
             )
@@ -284,43 +315,84 @@ class Coins:
                 continue
             if show_only_not_bullion and entry[mapping["tag_bullion"]]:
                 continue
-            coins[entry[mapping["coin_id"]]] = (entry[mapping["coin_id"]], None) # (coin_id, CoinData object)
+            coins[entry[mapping["coin_id"]]] = (
+                entry[mapping["coin_id"]],
+                None,
+            )  # (coin_id, CoinData object)
             if not hide_denominations:
                 if not hide_values:
                     if not hide_coins:
-                        coin_specs={"weight":entry[mapping["gross_weight"]],"fineness":entry[mapping["fineness"]],"precious_metal_weight":entry[mapping["precious_metal_weight"]],"years":entry[mapping["years"]],"metal":entry[mapping["metal"]],"nickname":entry[mapping["coin_display_name"]],"config":config}
+                        coin_specs = {
+                            "weight": entry[mapping["gross_weight"]],
+                            "fineness": entry[mapping["fineness"]],
+                            "precious_metal_weight": entry[
+                                mapping["precious_metal_weight"]
+                            ],
+                            "years": entry[mapping["years"]],
+                            "metal": entry[mapping["metal"]],
+                            "nickname": entry[mapping["coin_display_name"]],
+                            "config": config,
+                        }
                         coins[entry[mapping["coin_id"]]] = (
                             coins[entry[mapping["coin_id"]]][0],
                             CoinData(**coin_specs),
                         )
                     if coins[entry[mapping["coin_id"]]][1] is not None:
                         if prices:
-                            Coins.Price(coins[entry[mapping["coin_id"]]][1],**prices)
+                            Coins.Price(coins[entry[mapping["coin_id"]]][1], **prices)
                         else:
                             coins[entry[mapping["coin_id"]]][1].togglePrice(False)
                     try:
                         values[entry[mapping["value_id"]]]
                     except KeyError:
                         # Display name, child coins, sorting number
-                        values[entry[mapping["value_id"]]] = (entry[mapping["value_display_name"]] if entry[mapping["value_display_name"]] else entry[mapping["value"]], [], entry[mapping["value"]])
-                    if entry[mapping["coin_id"]] not in values[entry[mapping["value_id"]]][1]:
-                        values[entry[mapping["value_id"]]][1].append(entry[mapping["coin_id"]])
+                        values[entry[mapping["value_id"]]] = (
+                            entry[mapping["value_display_name"]]
+                            if entry[mapping["value_display_name"]]
+                            else entry[mapping["value"]],
+                            [],
+                            entry[mapping["value"]],
+                        )
+                    if (
+                        entry[mapping["coin_id"]]
+                        not in values[entry[mapping["value_id"]]][1]
+                    ):
+                        values[entry[mapping["value_id"]]][1].append(
+                            entry[mapping["coin_id"]]
+                        )
                 try:
                     denominations[entry[mapping["denomination_id"]]]
                 except KeyError:
                     # Display name, child values, bullion tag
-                    denominations[entry[mapping["denomination_id"]]] = (entry[mapping["denomination_display_name"]], [], entry[mapping["tag_bullion"]])
-                if entry[mapping["value_id"]] not in denominations[entry[mapping["denomination_id"]]][1]:
-                    denominations[entry[mapping["denomination_id"]]][1].append(entry[mapping["value_id"]])
+                    denominations[entry[mapping["denomination_id"]]] = (
+                        entry[mapping["denomination_display_name"]],
+                        [],
+                        entry[mapping["tag_bullion"]],
+                    )
+                if (
+                    entry[mapping["value_id"]]
+                    not in denominations[entry[mapping["denomination_id"]]][1]
+                ):
+                    denominations[entry[mapping["denomination_id"]]][1].append(
+                        entry[mapping["value_id"]]
+                    )
             try:
                 countries[entry[mapping["country_id"]]]
             except KeyError:
-                countries[entry[mapping["country_id"]]] = (entry[mapping["country_display_name"]], [])
-            if entry[mapping["denomination_id"]] not in countries[entry[mapping["country_id"]]][1]:
-                countries[entry[mapping["country_id"]]][1].append(entry[mapping["denomination_id"]])
+                countries[entry[mapping["country_id"]]] = (
+                    entry[mapping["country_display_name"]],
+                    [],
+                )
+            if (
+                entry[mapping["denomination_id"]]
+                not in countries[entry[mapping["country_id"]]][1]
+            ):
+                countries[entry[mapping["country_id"]]][1].append(
+                    entry[mapping["denomination_id"]]
+                )
 
         if do_not_build_tree:
-            return (countries,denominations,values,coins)
+            return (countries, denominations, values, coins)
         return Coins.BuildTree(
             countries,
             denominations,
@@ -329,19 +401,20 @@ class Coins:
             purchases=purchases,
             debug=debug,
             only_coin_ids=only_coin_ids,
-            config=config
+            config=config,
         )
 
-
     # Parses a string into the four specifiers (country, denomination, year, and face value)
-    # countries should be a list of tuples or lists. Each item of countries represents a 
+    # countries should be a list of tuples or lists. Each item of countries represents a
     # country. The first value in the item is the proper name and each subsequent value
     # is an alternative name
-    def ParseSearchString(db, text: str, debug: bool = False,config={}):
+    def ParseSearchString(db, text: str, debug: bool = False, config={}):
         """Parses a string to extract the country's name, year, denomination, and face value"""
 
         # Regex finds all strings of digits
-        numbers_matched = [x for x in re.findall(r"(((\d+(\s|\-))?\d+\/\d+)|(\d*\.\d+)|(\d+))", text)]
+        numbers_matched = [
+            x for x in re.findall(r"(((\d+(\s|\-))?\d+\/\d+)|(\d*\.\d+)|(\d+))", text)
+        ]
         print(numbers_matched)
         numbers = []
         for number in numbers_matched:
@@ -351,9 +424,9 @@ class Coins:
             if number[4]:
                 test_num = number[4]
             if test_num is not None:
-                fail,result = treasure.text.FractionStrToNum(test_num)
+                fail, result = treasure.text.FractionStrToNum(test_num)
                 if not fail:
-                    numbers.append((str(result),test_num))
+                    numbers.append((str(result), test_num))
             else:
                 numbers.append(number[0])
         words = re.findall("[a-zA-Z]+", text)  # Same for words
@@ -366,18 +439,18 @@ class Coins:
         face_value_name = ""
         # If more than two numbers, picks year and denomination
         if len(numbers) >= 2:
-            if isinstance(numbers[0],tuple):
-                if isinstance(numbers[1],tuple):
+            if isinstance(numbers[0], tuple):
+                if isinstance(numbers[1], tuple):
                     year = numbers[1][0]
                 else:
                     year = numbers[1]
                 face_value = numbers[0][0]
                 face_value_name = numbers[0][1]
-            elif isinstance(numbers[1],tuple):
+            elif isinstance(numbers[1], tuple):
                 year = numbers[0]
                 face_value = numbers[1][0]
                 face_value_name = numbers[1][1]
-            else: # Neither are tuples (dont have fractional number)
+            else:  # Neither are tuples (dont have fractional number)
                 if len(numbers[0]) != 4 and len(numbers[1]) == 4:
                     year = numbers[1]
                     face_value = numbers[0]
@@ -385,7 +458,7 @@ class Coins:
                     year = numbers[0]
                     face_value = numbers[1]
         elif len(numbers) == 1:  # Only one number found
-            if isinstance(numbers[0],tuple):
+            if isinstance(numbers[0], tuple):
                 face_value = numbers[0][0]
                 face_value_name = numbers[0][1]
             else:
@@ -393,7 +466,10 @@ class Coins:
                     len(numbers[0]) == 4
                 ):  # Checks if number is 4 digits (a year), then checks if within provided range
                     temp = int(numbers[0])
-                    if temp >= config["minimum_year"] and temp <= config["current_year"]:
+                    if (
+                        temp >= config["minimum_year"]
+                        and temp <= config["current_year"]
+                    ):
                         year = numbers[0]
                     else:  # If not, uses number as face value
                         face_value = numbers[0]
@@ -414,7 +490,9 @@ class Coins:
                     print(f"Found country name: {temp if temp else 'None'}")
                 if temp is not None:
                     country = temp
-                    words.remove(word) # Removes the country name from list so it isn't considered a denomination.
+                    words.remove(
+                        word
+                    )  # Removes the country name from list so it isn't considered a denomination.
                     break
             # If any words are left after searching for country name, the first is the denomination
             if len(words) > 0:
@@ -422,12 +500,11 @@ class Coins:
 
         if debug:
             print(
-                    f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value},FACE VALUE NAME:{face_value_name}"
+                f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value},FACE VALUE NAME:{face_value_name}"
             )
-        
 
-        if face_value_name and face_value_name.strip()[0] == '.':
-            face_value_name = '0' + face_value_name
+        if face_value_name and face_value_name.strip()[0] == ".":
+            face_value_name = "0" + face_value_name
         if face_value == face_value_name:
             face_value_name = None
         return (country, denomination, year, face_value, face_value_name)

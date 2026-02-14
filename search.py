@@ -3,20 +3,21 @@
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 #
-#    This script provides a function for performing a search on the coins 
+#    This script provides a function for performing a search on the coins
 #    within the database.
 #
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-import sys # Used to check if stdin is not from a terminal (input was piped)
+import sys  # Used to check if stdin is not from a terminal (input was piped)
 
 
-from coins import Coins # Functions for finding coins and building tree
-import treasure.text # Used to convert strings to numbers
+from coins import Coins  # Functions for finding coins and building tree
+import treasure.text  # Used to convert strings to numbers
 
-def Search(args,db,purchases,prices,config):
+
+def Search(args, db, purchases, prices, config):
     """Searches the database for coins that match the given criteria."""
     # Enumeration used for argument tuples for searches
     COUNTRY = 0
@@ -27,9 +28,21 @@ def Search(args,db,purchases,prices,config):
 
     # Determines if the user provided any search criteria, either by
     # Exact command line flags, a search string, or a search file
-    if args["country"] or args["denomination"] or args["year"] or args["face_value"] or args["face_value_name"]:
+    if (
+        args["country"]
+        or args["denomination"]
+        or args["year"]
+        or args["face_value"]
+        or args["face_value_name"]
+    ):
         arguments_list = [
-            (args["country"], args["denomination"], args["year"], args["face_value"],args["face_value_name"])
+            (
+                args["country"],
+                args["denomination"],
+                args["year"],
+                args["face_value"],
+                args["face_value_name"],
+            )
         ]
     else:
         arguments_list = []
@@ -45,9 +58,7 @@ def Search(args,db,purchases,prices,config):
 
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
-        arguments_list.append(
-            Coins.ParseSearchString(db, item, debug=args["verbose"])
-        )
+        arguments_list.append(Coins.ParseSearchString(db, item, debug=args["verbose"]))
 
     # Goes through each set of arguments and searches
     if arguments_list:
@@ -86,7 +97,9 @@ def Search(args,db,purchases,prices,config):
                     )
                     fail_year = True
                 if arguments[FACE_VALUE]:
-                    fail_face_value,face_value = treasure.text.FractionStrToNum(arguments[FACE_VALUE])
+                    fail_face_value, face_value = treasure.text.FractionStrToNum(
+                        arguments[FACE_VALUE]
+                    )
                     if fail_face_value:
                         print(
                             f"The specified face_value ({arguments[FACE_VALUE]}) is not valid. It must be a number"
@@ -97,7 +110,7 @@ def Search(args,db,purchases,prices,config):
                             arguments[DENOMINATION],
                             arguments[YEAR],
                             face_value,
-                            arguments[FACE_VALUE_NAME]
+                            arguments[FACE_VALUE_NAME],
                         )
                         print(
                             f"Face value was successfully converted to {arguments[FACE_VALUE]}"
@@ -113,16 +126,18 @@ def Search(args,db,purchases,prices,config):
                             "The year and/or face_value arguments were successfully converted."
                         )
                     search_arguments = {
-                        "country":arguments[COUNTRY],
-                        "denomination":arguments[DENOMINATION],
-                        "year":arguments[YEAR],
-                        "face_value":arguments[FACE_VALUE],
-                        "face_value_name":arguments[FACE_VALUE_NAME],
-                        "debug":args["verbose"],
-                        "show_only_owned":args["owned"],
-                        "show_only_not_owned":args["not_owned"],
+                        "country": arguments[COUNTRY],
+                        "denomination": arguments[DENOMINATION],
+                        "year": arguments[YEAR],
+                        "face_value": arguments[FACE_VALUE],
+                        "face_value_name": arguments[FACE_VALUE_NAME],
+                        "debug": args["verbose"],
+                        "show_only_owned": args["owned"],
+                        "show_only_not_owned": args["not_owned"],
                     }
-                    results,mapping = db.FetchCoins(search_arguments) # Fetches coins based on search criteria
+                    results, mapping = db.FetchCoins(
+                        search_arguments
+                    )  # Fetches coins based on search criteria
                     # Builds the results into a tree
                     results = Coins.Build(
                         results,
@@ -145,7 +160,7 @@ def Search(args,db,purchases,prices,config):
                     else:  # Search found some results
                         # Determines how to present the search performed as a string, then sets the title of the tree to it.
                         # the provided year, otherwise nothing
-                        text_year = f"{arguments[YEAR]} " if arguments[YEAR] else "" 
+                        text_year = f"{arguments[YEAR]} " if arguments[YEAR] else ""
                         # The provided country, otherwise nothing
                         text_country = (
                             f"{arguments[COUNTRY]} " if arguments[COUNTRY] else ""
@@ -166,18 +181,18 @@ def Search(args,db,purchases,prices,config):
                         )
                         # Updates whether the tree will use fancy characters or not
                         results.cascading_set_fancy(config["tree_fancy_characters"])
-                        if not args["no_tree"]: # If tree is to be printed, print it.
+                        if not args["no_tree"]:  # If tree is to be printed, print it.
                             for line in results.print():
                                 print(line)
 
     # Done when no search specifiers were provided.
     else:  # Simply prints out all of the coins.
         search_arguments = {
-            "debug":args["verbose"],
-            "show_only_owned":args["owned"],
-            "show_only_not_owned":args["not_owned"],
+            "debug": args["verbose"],
+            "show_only_owned": args["owned"],
+            "show_only_not_owned": args["not_owned"],
         }
-        results,mapping = db.FetchCoins(search_arguments)
+        results, mapping = db.FetchCoins(search_arguments)
         results = Coins.Build(
             results,
             mapping,
@@ -190,7 +205,7 @@ def Search(args,db,purchases,prices,config):
             hide_coins=args["no_coins"],
             hide_values=args["no_values"],
             hide_denominations=args["no_denominations"],
-            config=config
+            config=config,
         )
         results.cascading_set_fancy(config["tree_fancy_characters"])
 
@@ -198,5 +213,8 @@ def Search(args,db,purchases,prices,config):
             for line in results.print():
                 print(line)
 
+
 if __name__ == "__main__":
-    print("This script is not meant to be called on its own. Please use the main script.")
+    print(
+        "This script is not meant to be called on its own. Please use the main script."
+    )

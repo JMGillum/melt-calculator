@@ -2,7 +2,7 @@ from datetime import datetime
 import treasure.config
 from db.interface import DB_Interface
 
-default_config_contents="""
+default_config_contents = """
 # Config file for metals program
 
 default_retention = 0.97 # Value of coin that a show will pay. Is percentage of melt.
@@ -65,19 +65,26 @@ database="coin_data"
 config_name = "config.toml"
 config_dir = "metals"
 
+
 def CheckFloat(item):
-    return not isinstance(item,bool) and (isinstance(item,float) or isinstance(item,int))
+    return not isinstance(item, bool) and (
+        isinstance(item, float) or isinstance(item, int)
+    )
+
 
 def CheckInt(item):
-    return isinstance(item,int)
+    return isinstance(item, int)
+
 
 def CheckStr(item):
-    return isinstance(item,str)
+    return isinstance(item, str)
+
 
 def CheckBool(item):
-    return isinstance(item,bool)
+    return isinstance(item, bool)
 
-def CheckValue(datatype,item):
+
+def CheckValue(datatype, item):
     if datatype == "float":
         return CheckFloat(item)
     if datatype == "int":
@@ -90,51 +97,67 @@ def CheckValue(datatype,item):
 
 
 def ValidateConfig():
-    errors = [] # A list of error strings. Allows this to function in non-terminal environments
+    errors = []  # A list of error strings. Allows this to function in non-terminal environments
 
-    config = treasure.config.FetchConfig(config_name,config_dir)
+    config = treasure.config.FetchConfig(config_name, config_dir)
     if config is None:
-        errors.append(f"Config file not found. Creating {config_name}: {treasure.config.DefaultConfigPath(config_dir)}")
-        treasure.config.CreateConfig(default_config_contents,config_name,config_dir)
-        return (None,errors)
+        errors.append(
+            f"Config file not found. Creating {config_name}: {treasure.config.DefaultConfigPath(config_dir)}"
+        )
+        treasure.config.CreateConfig(default_config_contents, config_name, config_dir)
+        return (None, errors)
 
     # Validate basic config options are of the correct datatypes
-    float_keys = (("default_retention",0.97),)
-    int_keys = (("current_year",datetime.now().year),("minimum_year",1800))
-    str_keys = (("currency_symbol","$"),("date_format","%m/%d/%y"),("bullion_hint"," (Bullion)"))
-    bool_keys = (("use_permille",False),("tree_fancy_characters",True),("enforce_prices_set",True),("show_color",True),("colors_8_bit",True),("show_metal_colors",True))
+    float_keys = (("default_retention", 0.97),)
+    int_keys = (("current_year", datetime.now().year), ("minimum_year", 1800))
+    str_keys = (
+        ("currency_symbol", "$"),
+        ("date_format", "%m/%d/%y"),
+        ("bullion_hint", " (Bullion)"),
+    )
+    bool_keys = (
+        ("use_permille", False),
+        ("tree_fancy_characters", True),
+        ("enforce_prices_set", True),
+        ("show_color", True),
+        ("colors_8_bit", True),
+        ("show_metal_colors", True),
+    )
 
+    keys = {"float": float_keys, "int": int_keys, "str": str_keys, "bool": bool_keys}
 
-    keys = {"float":float_keys,"int":int_keys,"str":str_keys,"bool":bool_keys}
-
-    for datatype,type_keys in keys.items():
+    for datatype, type_keys in keys.items():
         for key in type_keys:
-            key,default = key
-            if treasure.config.ExtractConfigItem(config,key,default):
-                if not CheckValue(datatype,config[key]):
+            key, default = key
+            if treasure.config.ExtractConfigItem(config, key, default):
+                if not CheckValue(datatype, config[key]):
                     errors.append(f"Error: {key}")
 
-
     # Validate each of the color dictionaries
-    dict_keys = (("metals_colors",("ag","au","pd","pt","rh","other")),("types_colors",("country","denomination","value","purchase")),("tags_colors",("bullion",)),("misc_colors",("gain","loss")))
-    for key,sub_keys in dict_keys:
-        if treasure.config.ExtractConfigItem(config,key,{}):
-            if not isinstance(config[key],dict):
+    dict_keys = (
+        ("metals_colors", ("ag", "au", "pd", "pt", "rh", "other")),
+        ("types_colors", ("country", "denomination", "value", "purchase")),
+        ("tags_colors", ("bullion",)),
+        ("misc_colors", ("gain", "loss")),
+    )
+    for key, sub_keys in dict_keys:
+        if treasure.config.ExtractConfigItem(config, key, {}):
+            if not isinstance(config[key], dict):
                 errors.append(f"Error: {key}")
             else:
                 for sub_key in sub_keys:
-                    if treasure.config.ExtractConfigItem(config[key],sub_key,""):
-                        if not isinstance(config[key][sub_key],str):
+                    if treasure.config.ExtractConfigItem(config[key], sub_key, ""):
+                        if not isinstance(config[key][sub_key], str):
                             errors.append(f"Error: {key} {sub_key}")
 
     # Let db_interface class handle validating the db config
-    treasure.config.ExtractConfigItem(config,"db_config",None)
+    treasure.config.ExtractConfigItem(config, "db_config", None)
     errors += DB_Interface.ValidateConfig(config["db_config"])
 
-    return (config,errors)
+    return (config, errors)
 
 
 if __name__ == "__main__":
-    _,errors = ValidateConfig()
+    _, errors = ValidateConfig()
     for error in errors:
         print(error)

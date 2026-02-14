@@ -3,13 +3,13 @@
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 #
 #    This class is an abstraction for connecting to the database. It should be
 #    updated if the database ever changes, so that calling code does not need
 #    to change.
 #
-#~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
+# ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 import sys
 import mariadb
@@ -17,23 +17,30 @@ import getpass
 
 from .queries import Queries
 
+
 class DB_Interface:
-    def __init__(self,debug=False):
+    def __init__(self, debug=False):
         self.conn = None
         self.cursor = None
         self.debug = debug
 
     def ValidateConfig(config):
-        if config is not None and isinstance(config,dict):
+        if config is not None and isinstance(config, dict):
             fails = []
-            for key,datatype in (("host","str"),("port","int"),("user","str"),("database","str"),("password","str")):
+            for key, datatype in (
+                ("host", "str"),
+                ("port", "int"),
+                ("user", "str"),
+                ("database", "str"),
+                ("password", "str"),
+            ):
                 try:
                     fail = False
                     if datatype == "str":
-                        if not isinstance(config[key],str):
+                        if not isinstance(config[key], str):
                             fail = True
                     elif datatype == "int":
-                        if not isinstance(config[key],int):
+                        if not isinstance(config[key], int):
                             fail = True
                     if fail:
                         fails.append(f"Error: db_config {key}")
@@ -48,7 +55,7 @@ class DB_Interface:
             fails.append("db_config must be a dictionary.")
             return fails
 
-    def Connect(self,db_config,debug=None):
+    def Connect(self, db_config, debug=None):
         if self.debug and debug is None:
             debug = True
         try:
@@ -64,7 +71,9 @@ class DB_Interface:
                 )
                 sys.exit(1)
             else:
-                db_config["password"] = getpass.getpass(f"Password for mariadb database({db_config['database']}): ")
+                db_config["password"] = getpass.getpass(
+                    f"Password for mariadb database({db_config['database']}): "
+                )
 
         try:
             # Creates the connection
@@ -81,7 +90,7 @@ class DB_Interface:
         self.conn = conn
         self.cursor = conn.cursor()
 
-    def CloseConnection(self,debug=None):
+    def CloseConnection(self, debug=None):
         if self.debug and debug is None:
             debug = self.debug
         if self.cursor:
@@ -93,7 +102,7 @@ class DB_Interface:
             if debug:
                 print("Connection closed.")
 
-    def Fetch(self,*args):
+    def Fetch(self, *args):
         """Submits a query to the database"""
         if self.cursor:
             try:
@@ -103,7 +112,7 @@ class DB_Interface:
                 sys.exit(1)
             return list(self.cursor)
 
-    def Update(self,*args):
+    def Update(self, *args):
         try:
             self.cursor.execute(*args)
             self.conn.commit()  # Commit the transaction for DML
@@ -124,66 +133,70 @@ class DB_Interface:
         """Gets all of the defined searches"""
         return self.Fetch(Queries.Purchases())
 
-    def FetchPurchasesByCoinId(self,coin_id,purchase_id=False,specific_coin_id=False):
-        return self.Fetch(*Queries.PurchasesByCoinId(coin_id,purchase_id,specific_coin_id))
+    def FetchPurchasesByCoinId(
+        self, coin_id, purchase_id=False, specific_coin_id=False
+    ):
+        return self.Fetch(
+            *Queries.PurchasesByCoinId(coin_id, purchase_id, specific_coin_id)
+        )
 
     def FetchCountryNames(self):
         """Gets all of the names of every country"""
         return self.Fetch(Queries.CountryNames())
 
-    def FetchCountryId(self,country_name):
+    def FetchCountryId(self, country_name):
         """Returns the country id associated with the given country_name"""
         results = Queries.CountryId(country_name)
-        return self.Fetch(results[0],results[1])
+        return self.Fetch(results[0], results[1])
 
-    def FetchCountryDisplayName(self,country_id):
+    def FetchCountryDisplayName(self, country_id):
         """Returns the display name associated with the given country_id"""
         results = Queries.CountryDisplayName(country_id)
-        return self.Fetch(results[0],results[1])
+        return self.Fetch(results[0], results[1])
 
-    def FetchDenominationId(self,denomination_name):
+    def FetchDenominationId(self, denomination_name):
         """Returns the denomination id associated with the given denomination_name"""
         results = Queries.DenominationId(denomination_name)
-        return self.Fetch(results[0],results[1])
+        return self.Fetch(results[0], results[1])
 
-    def FetchDenominationDisplayName(self,denomination_id):
+    def FetchDenominationDisplayName(self, denomination_id):
         """Returns the display name associated with the given denomination_id"""
         results = Queries.DenominationDisplayName(denomination_id)
-        return self.Fetch(results[0],results[1])
+        return self.Fetch(results[0], results[1])
 
     def FetchMetals(self):
         return self.Fetch(Queries.Metals())
 
-    def FetchCoins(self,search_arguments):
+    def FetchCoins(self, search_arguments):
         """search_arguments should be a dictionary for **kwargs of Queries.search()"""
         results = Queries.Search(**search_arguments)
-        return self.Fetch(results[0],results[1]),results[2]
+        return self.Fetch(results[0], results[1]), results[2]
 
-    def UpdateMetalPrice(self,args):
+    def UpdateMetalPrice(self, args):
         results = Queries.UpdateMetalPrice(*args)
         return self.Update(*results)
 
-    def FetchSpecificCoin(self,coin_id,year,mintmark):
-        results = Queries.SpecificCoin(coin_id,year,mintmark)
-        return self.Fetch(results[0],results[1])
+    def FetchSpecificCoin(self, coin_id, year, mintmark):
+        results = Queries.SpecificCoin(coin_id, year, mintmark)
+        return self.Fetch(results[0], results[1])
 
-    def AddSpecificCoin(self,coin_id,year,mintmark):
-        results = Queries.AddSpecificCoin(coin_id,year,mintmark)
+    def AddSpecificCoin(self, coin_id, year, mintmark):
+        results = Queries.AddSpecificCoin(coin_id, year, mintmark)
         return self.Update(*results)
 
-    def AddPurchase(self,kwargs):
+    def AddPurchase(self, kwargs):
         results = Queries.AddPurchase(**kwargs)
         return self.Update(*results)
 
-    def FetchCoinById(self,coin_id):
+    def FetchCoinById(self, coin_id):
         results = Queries.CoinById(coin_id)
-        return self.Fetch(results[0],results[1])
+        return self.Fetch(results[0], results[1])
 
-    def FetchPurchasesWithSpecificCoinId(self,specific_coin_id):
-       return self.Fetch(*Queries.PurchasesWithSpecificCoinId(specific_coin_id)) 
+    def FetchPurchasesWithSpecificCoinId(self, specific_coin_id):
+        return self.Fetch(*Queries.PurchasesWithSpecificCoinId(specific_coin_id))
 
-    def DeleteById(self,kwargs):
+    def DeleteById(self, kwargs):
         return self.Update(*Queries.DeleteById(**kwargs))
 
-    def FetchById(self,kwargs):
+    def FetchById(self, kwargs):
         return self.Fetch(*Queries.SelectById(**kwargs))
