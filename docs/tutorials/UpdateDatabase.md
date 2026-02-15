@@ -1,4 +1,5 @@
-\* This tutorial assumes that the installed database is MariaDB. It may work for other databases, but it is not guaranteed. \*
+> [!Note]
+> This tutorial assumes that the installed database is MariaDB. It may work for other databases, but it is not guaranteed.
 
 # Updating the database
 
@@ -14,11 +15,13 @@ The database stores its version number in a simple table structure. The name of 
 
 ### Git
 The database contents are stored within SQL files that are within a git repository separate from the main project repository. To pull changes from the git repository, you must execute `git pull` from within the `database` directory. This will pull all changes. Because this project is still in development, changes may be pushed to the repository, however it may not be in a finished state yet. Changes are tested and packaged into releases to indicate that they are tested and safe to apply to the database.  
+
 It is recommended to only pull changes whenever a new release is published, and to then checkout the release tag using: `git checkout <tag name>`. Tags indicate the state of the repository at the point of release, and guarantee that you do not have any untested changes within the directory.
 
 ## Updates
 
 There are two methods for performing the incremental update, automatic or manual. Automatic should be preferred as it ensures that the database is updated in the correct order in the event that there are multiple pending updates. The manual method will work the same however, so it is up to you.  
+
 All incremental updates to the database are stored within the `updates` directory inside the `database` directory. The file names follow a strict format and are used to determine what the update is for. The file names are of the format `<starting major version>_<starting minor version>_to_<end major version>_<end minor version>.sql`. Ex: `1_0_to_1_1.sql` will update from version 1.0 to 1.1. Updates may skip versions as well, ex: `1_0_to_1_2.sql`. These may be provided as a consolidation of multiple updates, and function the same as doing each of the skipped updates individually.
 
 > [!Caution]
@@ -27,7 +30,7 @@ All incremental updates to the database are stored within the `updates` director
 ### Automatic
 
 >[!Note]
-> Is available for Linux users, via BASH. For those on Windows, use the manual method.
+> The automatic update script is available for Linux users, via BASH. For those on Windows, use the manual method.
 
 1. Enter the `database` directory
 2. The update script should be used like so: `./update.sh <user> <database> <directory>`. Execute the script and follow its prompts.
