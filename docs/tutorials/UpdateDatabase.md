@@ -1,11 +1,11 @@
-> [!Note]
-> This tutorial assumes that the installed database is MariaDB. It may work for other databases, but it is not guaranteed.
-
 # Updating the database
 
-This tutorial will walk through how to update the database in place when a new release is available. If you would like to start fresh or do not have the database already set up, see the `CreateDatabase.md` tutorial.
+> [!Note]
+> This tutorial assumes that the installed database management system is MariaDB. It may work for other databases, but it is not guaranteed.
+
+This tutorial will walk through how to update the database in place when a new release is available. If you would like to start fresh or do not have the database already set up, see the tutorial in [CreateDatabase.md](./CreateDatabase.md).
 > [!Warning]
-> It is crucial that you backup the contents of the database before proceeding. See the `BackupDatabase.md` tutorial for how to do so.
+> It is crucial that you backup the contents of the database before proceeding. See the tutorial in [Backups.md](./Backups.md) for how to do so.
 
 ## Database versioning
 
