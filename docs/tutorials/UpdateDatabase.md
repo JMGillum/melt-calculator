@@ -1,7 +1,7 @@
 # Updating the database
 
 > [!Note]
-> This tutorial assumes that the installed database management system is MariaDB. It may work for other databases, but it is not guaranteed.
+> This tutorial assumes that the installed database management system is MariaDB. Pats of it may work for other databases, but it is not guaranteed.
 
 This tutorial will walk through how to update the database in place when a new release is available. If you would like to start fresh or do not have the database already set up, see the tutorial in [CreateDatabase.md](./CreateDatabase.md).
 > [!Warning]
@@ -40,7 +40,7 @@ All incremental updates to the database are stored within the `updates` director
 
 ### Manual 
 
-The manual method requires feeding the update scripts to the database management software by hand. This can be done interactively or by passing the name of the script. Updates must be performed sequentially and none should be skipped.
+The manual method requires feeding the update files to the database management software by hand. This can be done interactively or by passing the name of the file. Updates must be performed sequentially and none should be skipped.
 
 #### Interactively
 
