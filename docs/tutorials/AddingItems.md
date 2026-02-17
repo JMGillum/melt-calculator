@@ -185,7 +185,7 @@ As with countries and denominations, face values with display names require name
 The query to create a name association is: 
 
 ``` SQL
-INSERT INTO face_values_names(value_id,name) VALUES("<value_id>","<name>");
+INSERT INTO face_values_names(value_id, name, series) VALUES("<value_id>","<name>", "<series>");
 ```
 
 #### Fractional values
@@ -202,7 +202,7 @@ Russia 37.5 ruble would be `rus_ruble_fractional_37_1_2`
 ```
 
 * If there is no specific display name for the item, use:
-    * `<whole amount>-<numerator>/<denominator>` (the same format as the first format in both of the two examples below)
+  * `<whole amount>-<numerator>/<denominator>` (the same format as the first format in both of the two examples below)
 * The following name associations should be added, along with any for the display name:
   * `<whole amount>-<numerator>/<denominator>`
   * `<whole amount> <numerator>/<denominator>`
@@ -276,21 +276,25 @@ Coins support an optional display name, similar to face values.
 The query to create a coin object with a display name:
 
 ``` SQL
-INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal_weight, metal, name) VALUES("<coin_id>", "<face_value_id>", <gross_weight>, <fineness>, <precious_metal_weight>, "<metal>", "<name>");
+INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal_weight, metal, name, series) VALUES("<coin_id>", "<face_value_id>", <gross_weight>, <fineness>, <precious_metal_weight>, "<metal>", "<name>", "<series>");
 ```
 
 The query to create a coin object without a display name:
 
 ``` SQL
-INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal_weight, metal) VALUES("<coin_id>", "<face_value_id>", <gross_weight>, <fineness>, <precious_metal_weight>, "<metal>");
+INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal_weight, metal, series) VALUES("<coin_id>", "<face_value_id>", <gross_weight>, <fineness>, <precious_metal_weight>, "<metal>","<series>");
 ```
+
+> [!Warning]
+> `<gross_weight>` must be in grams and `<precious_metal_weight>` must be in troy ounces.
 
 * The `coin_id` of each coin must be unique within the table. The convention of the **base** series is to append a counter to the end of the `value_id`, in the format `<value_id>_<counter>`. This counter starts at 1 and goes up by one for each subsequent coin with that value as a parent.
 * `<value_id>` must be exactly the same as the `value_id` of the parent face value, as this is what establishes the realtionship between the two.
-* `<gross_weight>` is a **decimal** value that can hold 10 digits on either side of the decimal point. It stores the weight of the coin, as it is measured on a scale.
+* `<gross_weight>` is a **decimal** value that can hold 10 digits on either side of the decimal point. It stores the weight of the coin, as it is measured on a scale. **THIS VALUE MUST BE IN GRAMS**
 * `<fineness>` is a **decimal** value that can hold 1 digit to the left of the decimal point, and 10 to the right. It stores the fineness of coin (percentage of the coin that is the precious metal) as a decimal (90% -> 0.9).
-* `<precious_metal_weight>` is a **decimal** value that can hold 10 digits on either side of the decimal point. It stores the actual precious metal content of the coin. This should be equivalent to `<gross_weight>` * `<fineness>`
+* `<precious_metal_weight>` is a **decimal** value that can hold 10 digits on either side of the decimal point. It stores the actual precious metal content of the coin. This should be equivalent to `<gross_weight>` * `<fineness>`. **THIS VALUE MUST BE IN TROY OUNCES**
 * `<metal>` must be exactly the same as one value in the `metal_id` column in the metal table. This table stores the various precious metals that the database knows about. See the [Metal queries](#metal-queries) section below for how to add new metals.
+
 
 > [!Note]
 > `SELECT * from metals;` will list the metals currently defined.
@@ -302,7 +306,7 @@ All coin objects need to have additional rows added that state which years the c
 The query to associate a year with a coin:
 
 ``` SQL
-INSERT INTO years(coin_id,year) VALUES("<coin_id>", <year>);
+INSERT INTO years(coin_id,year,series) VALUES("<coin_id>", <year>,"<series>");
 ```
 
 * `<coin_id>` must be exactly the same as the `coin_id` of the coin object, as this is what links the year to the coin.
@@ -327,3 +331,221 @@ INSERT INTO metals(metal_id, name, price, price_date) VALUES("<metal_id>", "<nam
 * `<name>` is the display name of the metal.
 * `<price>` is a **decimal** value that can hold 20 digits to the left of and 10 digits to the right of the decimal point. It must be present, but you can enter -1 if you do not know the current price. This is the safe default value for when the price has not been set. It is easy to update the price later.
 * `<price_date>` is a **datetime** value that stores the date on which the `price` column was set. If you set `price` to -1, enter "1000-01-01". This is the safe default value. If you set `price`, enter the current date in the form `YYYY-mm-dd`.
+
+## Example
+
+> [!Note]
+> A script exists to create most of the queries for you, however it is not perfect, hence why you need to understand the queries so that you can double check its output. See the [script](#script) section for a walkthrough of the script.
+
+This walkthrough will feature several examples that increase in complexity. The first example will mostly reuse **base** series objects. The amount of reuse will increase as we progress through the examples.
+
+Each example will assume that you are connected to MariaDb interactively. Do this with `mariadb -u <user> -p <database name>`. Each example will also belong to the **tutorial** series.
+
+> [!Note]
+> SQL conditions are case insensitive, such that x = "example" will return the same results as x = "EXAMPLE"
+
+### Example 1
+
+This example will create a new coin object and associate years with it.
+
+``` text
+The coin for this example will have the following attributes:
+country = Russia
+denomination = Ruble
+face value = 10
+metal = platinum
+gross weight = 10g
+fineness = 75%
+years minted = 1899-1902
+name = shiny pinckett
+```
+
+1. Check if country exists and find `country_id`:
+
+    ``` SQL
+    SELECT country_id from country_names where name = "russia";
+    ```
+
+2. Step 1 told us that the `country_id` is `rus`. Check if the denomination exists and find `denomination_id`:
+
+    ```SQL
+    SELECT denomination_id from denominations where country_id = "rus" and (denomination_id = "rus_ruble" or denomination_id like "%ruble");
+    ```
+
+3. Step 2 returns the `denomination_id` of `rus_ruble`. Check if face value exists and find `value_id`:
+
+    ``` SQL
+    SELECT value_id from face_values where denomination_id = "rus_ruble" and (value = 5 or value_id = "rus_ruble_5");
+    ```
+
+4. Step 3 returns the `value_id` of `rus_ruble_5`. Check if any child coins of this face value already exists:
+
+    ``` SQL
+    SELECT coin_id from coins where face_value_id = "rus_ruble_5";
+    ```
+
+5. Step 4. returns `rus_ruble_5_1` `rus_ruble_5_2` `rus_ruble_5_3`. Which indicates that there are three child coins of our face value. To continue with the naming convention, our new coin should have the `coin_id` of `rus_ruble_5_4`.
+6. Check if metal exists and find `metal_id`:
+
+    ``` SQL
+    SELECT metal_id from metals where name = "platinum";
+    ```
+
+7. Step 6 returns `pt`. Calculate precious metal weight: gross weight * fineness = 10g \* 0.75 = 7.5g = 0.24113 toz
+
+8. Create coin object:
+
+    ``` SQL
+    INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal_weight, metal, name, series) VALUES("rus_ruble_5_4", "rus_ruble_5", 10.0000000000, 0.7500000000, 0.2411300000, "pt", "shiny pinckett", "tutorial");
+    ```
+
+9. Create year associations for the coin:
+
+    ``` SQL
+    INSERT INTO years(coin_id,year) VALUES("rus_ruble_5_4",1899);
+    INSERT INTO years(coin_id,year) VALUES("rus_ruble_5_4",1900);
+    INSERT INTO years(coin_id,year) VALUES("rus_ruble_5_4",1901);
+    INSERT INTO years(coin_id,year) VALUES("rus_ruble_5_4",1902);
+    ```
+
+10. Add the queries to files:
+    1. Those from step 8 to `tutorial_setup_coins.sql`
+    2. Those from step 9 to `tutorial_setup_coins_years.sql`
+
+### Example 2
+
+This example will create a bullion coin with a new metal.
+
+``` text
+The coin for this example will have the following attributes:
+country = Great Britain
+denomination = Britannia
+tags = Bullion
+face value = 2000 (nominal)
+metal = Copper
+precious metal weight = 3 toz
+fineness = 91.7%
+years minted = 2000
+```
+
+1. Perform steps 1-4 of [Example 1](#example-1) with the info of this coin. We find that:
+
+    * `country_id` = `gbr`
+    * `denomination_id` = `gbr_britannia`
+    * `value_id` returns empty set, indicating that it does not exist.
+
+2. Create new value with `value` column equal to the nominal value, and `display_name` following the [bullion naming conventions](#bullion-values)
+
+    ``` SQL
+    INSERT INTO face_values(value_id, denomination_id, value, display_name) VALUES("gbr_britannia_2000", "gbr_britannia", 2000, "3 oz britannia");
+    ```
+
+3. Check if metal exists:
+
+    ``` SQL
+    SELECT metal_id from metals where name = "copper";
+    ```
+
+4. Step 3 returns empty set, so add new metal with `metal_id` of `cu` and `name` of `copper`, and default `price` and `price_date`:
+
+    ``` SQL
+    INSERT INTO metals(metal_id, name, price, price_date, series) VALUES("cu", "copper", -1, "1000-01-01", "tutorial");
+    ```
+
+5. Calculate gross weight: 3 / 0.917 = 3.27153762268 toz = 101.755
+6. Create new coin object:
+
+    ``` SQL
+    INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal_weight, metal, series) VALUES("gbr_britannia_2000_1", "gbr_britannia_2000", 101.7550000000, 0.9170000000, 3.0000000000, "cu", "tutorial");
+    ```
+
+7. Create year associations for the coin:
+
+    ``` SQL
+    INSERT INTO years(coin_id,year) VALUES("gbr_britannia_2000_1",2000);
+    ```
+
+8. Add the queries to files:
+    1. Those from step 2 to `tutorial_setup_values.sql`
+    2. Those from step 4 to `tutorial_setup_db.sql`
+    3. Those from step 6 to `tutorial_setup_coins.sql`
+    4. Those from step 7 to `tutorial_setup_coins_years.sql`
+
+### Example 3
+
+This example will create a new country, denomination, fractional face value, and coin.
+
+``` text
+The coin for this example will have the following attributes:
+country = West Zagafar
+denomination = Dilmar
+face value = 6-1/4
+metal = silver
+gross weight = 1.5625g
+fineness = 90%
+years minted = 1800-1802,1805
+```
+
+1. Repeat step 1 of [Example 1](#example-1) with the info of this coin. We find that:
+    * `country_id` returns empty set, indicating that the country does not exist.
+2. Check if country code `zaf` is already in use:
+
+    ``` SQL
+    SELECT * from countries where country_id like "zaf";
+    ```
+
+3. Step 2 returns `South Africa`, which indicates that the code is already in use. Repeat step 2 but replace with a new code until it returns empty set.
+4. Create country object:
+
+    ``` SQL
+    INSERT INTO countries(country_id, display_name, series) VALUES("zag", "West Zagafar", "tutorial");
+    ```
+
+5. Create name associations for country:
+
+    ``` SQL
+    INSERT INTO country_names(name, country_id, series) VALUES ("West Zagafar","zag","tutorial");
+    INSERT INTO country_names(name, country_id, series) VALUES ("West Zagafarian","zag","tutorial");
+    INSERT INTO country_names(name, country_id, series) VALUES ("W Zagafar","zag","tutorial");
+    INSERT INTO country_names(name, country_id, series) VALUES ("W Zagafarian","zag","tutorial");
+    INSERT INTO country_names(name, country_id, series) VALUES ("W. Zagafar","zag","tutorial");
+    INSERT INTO country_names(name, country_id, series) VALUES ("W. Zagafarian","zag","tutorial");
+    ```
+
+6. Create new denomination:
+
+    ``` SQL
+    INSERT INTO denominations(denomination_id, country_id, display_name, series) VALUES("zag_dilmar", "zag", "dilmar", "tutorial");
+    ```
+
+7. Create name associations for denomination:
+
+    ``` SQL
+    INSERT INTO denomination_names(denomination_id, name, series) VALUE("zag", "dilmar", "tutorial");
+    INSERT INTO denomination_names(denomination_id, name, series) VALUE("zag", "dilmars", "tutorial");
+    ```
+
+8. Create new face value:
+
+    ``` SQL
+    INSERT INTO face_values(value_id, denomination_id, value, display_name, series) VALUE ("zag_dilmar_fractional_6_1_2", "zag_dilmar", 6.2500000000, "6-1/4", "tutorial");
+    ```
+
+9. Add name associations for face value:
+
+    ``` SQL
+    INSERT INTO face_values_names(value_id, name, series) VALUES("zag_dilmar_fractional_6_1_4", "6-1/4", "tutorial");
+    INSERT INTO face_values_names(value_id, name, series) VALUES("zag_dilmar_fractional_6_1_4", "6 1/4", "tutorial");
+    INSERT INTO face_values_names(value_id, name, series) VALUES("zag_dilmar_fractional_6_1_4", "25/4", "tutorial");
+    ```
+
+10. Add the queries to files:
+    1. Those from step 4-5 to `tutorial_setup_countries.sql`
+    2. Those from step 6-7 to `tutorial_setup_denominations.sql`
+    3. Those from step 8-9 to `tutorial_setup_values.sql`
+11. Perform steps 5-7, 8.3-8.4 of [Example 2](#example-2)
+
+
+## Script
+
+This section covers how to use the script included with this repository.
