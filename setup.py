@@ -175,12 +175,12 @@ def SetupParser():
         ],
     )
 
-    manage_parser = subparsers.add_parser("manage", parents=[version_parser])
-    manage_subparsers = manage_parser.add_subparsers(dest="manage_command")
-    backup_parser = manage_subparsers.add_parser(
+    admin_parser = subparsers.add_parser("admin", parents=[version_parser])
+    admin_subparsers = admin_parser.add_subparsers(dest="admin_command")
+    backup_parser = admin_subparsers.add_parser(
         "backup", parents=[version_parser, verbose_parser, database_parser]
     )
-    prices_parser = manage_subparsers.add_parser(
+    prices_parser = admin_subparsers.add_parser(
         "prices", parents=[version_parser, verbose_parser, database_parser]
     )
 
