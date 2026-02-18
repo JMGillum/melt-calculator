@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # Sets up argument parser and then parses them
     args = InitialSetup(config)
 
-    if args["command"] in ["collection", "admin", "search"]:
+    if args["command"] in ["manage-purchases", "report", "admin", "search"]:
         try:
             # Perform setup for whichever operation mode
             # Connects to database
@@ -76,16 +76,13 @@ if __name__ == "__main__":
             # Fetches all of the purchases and sets up and fetches metal prices
             purchases, prices = SetupMetals(db, args, config)
 
-            # Determines which operation mode to enter, and what to do
-            # The operation mode is collection, which manages or views purchases
-            if args["command"] == "collection":
-                # Collection report
-                if args["collection_command"] == "report":
-                    report.CollectionReport(args, db, purchases, prices, config)
+            # Collection report
+            if args["command"] == "report":
+                report.CollectionReport(args, db, purchases, prices, config)
 
-                # Manage purchases for collection
-                if args["collection_command"] == "manage":
-                    managePurchases.Start(args, db, config)
+            # Manage purchases for collection
+            elif args["command"] == "manage-purchases":
+                managePurchases.Start(args, db, config)
 
             # The operation mode is manage, which is managing various database components
             elif args["command"] == "admin":

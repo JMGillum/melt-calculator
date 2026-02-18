@@ -230,9 +230,7 @@ def SetupParser():
         help="Path to the directory that will store the backups. Backups will be stored /path/<timestamp>/xx. Default location is ./backups/<timestamp>/xx",
     )
 
-    collection_parser = subparsers.add_parser("collection", parents=[version_parser])
-    collection_subparsers = collection_parser.add_subparsers(dest="collection_command")
-    report_parser = collection_subparsers.add_parser(
+    subparsers.add_parser(
         "report",
         parents=[
             metal_prices_parser,
@@ -243,8 +241,8 @@ def SetupParser():
             tree_output_modification_parser,
         ],
     )
-    collection_manage_parser = collection_subparsers.add_parser(
-        "manage", parents=[database_parser, version_parser, verbose_parser]
+    collection_manage_parser = subparsers.add_parser(
+        "manage-purchases", parents=[database_parser, version_parser, verbose_parser]
     )
     collection_manage_parser.add_argument(
         "-d",
