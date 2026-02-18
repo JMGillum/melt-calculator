@@ -1,0 +1,5 @@
+name: melt
+dependencies:
+  - pip
+  - conda-forge::mariadb >= 1.1.13
+  - colorama >= 0.4.6

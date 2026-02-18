@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # Sets up argument parser and then parses them
     args = InitialSetup(config)
 
-    if args["command"] in ["collection", "manage", "search"]:
+    if args["command"] in ["collection", "admin", "search"]:
         try:
             # Perform setup for whichever operation mode
             # Connects to database
@@ -88,7 +88,7 @@ if __name__ == "__main__":
                     managePurchases.Start(args, db, config)
 
             # The operation mode is manage, which is managing various database components
-            elif args["command"] == "manage":
+            elif args["command"] == "admin":
                 # Backs up database entries for the various tables
                 if args["manage_command"] == "backup":
                     backup.Backup(args, db)
