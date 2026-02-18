@@ -157,7 +157,7 @@ def GetCoinInformation(db, additional_search_args: dict = None, config={}):
             entries = db.FetchCoinById(coin_id)
         else:
             search_string = input("Search string: ")
-            arguments = Coins.ParseSearchString(db, search_string)
+            arguments = Coins.ParseSearchString(db, search_string,config=config)
             search_args = {
                 "country": arguments[0],
                 "denomination": arguments[1],
