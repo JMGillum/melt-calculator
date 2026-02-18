@@ -200,3 +200,22 @@ class DB_Interface:
 
     def FetchById(self, kwargs):
         return self.Fetch(*Queries.SelectById(**kwargs))
+
+    def CheckExistence(self, return_value=False, kwargs={}):
+        """Checks if an id is already in the table.
+
+        Args:
+            return_value: True to return results, False to return boolean as to whether results were found.
+            kwargs: The arguments that will be passed to the Query function.
+
+        Returns: if return_value is True, return the results of the query. If return_value is False, return boolean as to whether any results were found.
+            
+        """
+        results = self.Fetch(*Queries.CheckExistence(**kwargs))
+        if return_value:
+            return results
+        else:
+            if len(results) > 0:
+                return True
+            return False
+

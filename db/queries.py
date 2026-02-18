@@ -305,3 +305,26 @@ class Queries:
             variables.append(specific_coins)
 
         return (query, tuple(variables))
+
+    def CheckExistence(id,id_type,use_like=False):
+        id_name = ""
+        table_name = ""
+        if id_type.lower() == "country":
+            id_name = "country_id"
+            table_name = "countries"
+        elif id_type.lower() == "denomination":
+            id_name = "denomination_id"
+            table_name = "denominations"
+        elif id_type.lower() == "value":
+            id_name = "value_id"
+            table_name = "face_values"
+        elif id_type.lower() == "coin":
+            id_name = "coin_id"
+            table_name = "coins"
+
+        specificity = "="
+        if use_like:
+            specificity = "LIKE"
+        query = f"SELECT {id_name} FROM {table_name} WHERE {id_name} {specificity} ?"
+
+        return (query, (id,))
