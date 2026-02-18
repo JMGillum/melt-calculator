@@ -61,7 +61,7 @@ def SetupParser():
     )
     metal_prices_parser.add_argument(
         "-u",
-        "--update_prices",
+        "--update-prices",
         action="store_true",
         help="Will push any prices set in the command line to the database.",
     )
@@ -69,15 +69,15 @@ def SetupParser():
     bullion_parser = argparse.ArgumentParser(add_help=False)
     bullion_parser.add_argument(
         "-b",
-        "--only_bullion",
+        "--only-bullion",
         action="store_true",
-        help="Show only the coins that are tagged as bullion. Does nothing when used with the --hide_bullion flag.",
+        help="Show only the coins that are tagged as bullion. Does nothing when used with the --hide-bullion flag.",
     )
     bullion_parser.add_argument(
         "-B",
-        "--hide_bullion",
+        "--hide-bullion",
         action="store_true",
-        help="Shows only the coins that are not tagged as bullion. Does nothing when used with the --only_bullion flag.",
+        help="Shows only the coins that are not tagged as bullion. Does nothing when used with the --only-bullion flag.",
     )
 
     search_parameter_parser = argparse.ArgumentParser(add_help=False)
@@ -95,25 +95,25 @@ def SetupParser():
     )
     search_parameter_parser.add_argument(
         "-f",
-        "--face_value",
+        "--face-value",
         metavar="FACE_VALUE",
         help="Face value of coin to return results for. Ex: 10",
     )
     search_parameter_parser.add_argument(
         "-m",
-        "--face_value_name",
+        "--face-value-name",
         metavar="FACE_VALUE_NAME",
         help="Name of face value of coin to return results for. Ex: Dime",
     )
     search_parameter_parser.add_argument(
         "-F",
-        "--search_file",
+        "--search-file",
         metavar="FILE",
         help="Name of file containing searches. Multiple searches are supported, and must be separated by newlines.",
     )
     search_parameter_parser.add_argument(
         "-S",
-        "--search_string",
+        "--search-string",
         metavar="STRING",
         help="String enclosed in quotes, containing a search to be performed. Ex: '1898 German 10 mark'",
     )
@@ -127,31 +127,31 @@ def SetupParser():
     tree_output_modification_parser = argparse.ArgumentParser(add_help=False)
     tree_output_modification_parser.add_argument(
         "-n",
-        "--no_coins",
+        "--no-coins",
         action="store_true",
         help="Disables printing of the actual coin objects. Will only print countries, denominations, and face values.",
     )
     tree_output_modification_parser.add_argument(
         "-z",
-        "--no_values",
+        "--no-values",
         action="store_true",
         help="Disables printing of the values down. Will only print countries and denominations.",
     )
     tree_output_modification_parser.add_argument(
         "-x",
-        "--no_denominations",
+        "--no-denominations",
         action="store_true",
         help="Disables printing of the denominations down. Will only print the countries.",
     )
     tree_output_modification_parser.add_argument(
         "-N",
-        "--no_tree",
+        "--no-tree",
         action="store_true",
         help="Disables printing of the output tree. Only really useful for seeing debugging output.",
     )
     tree_output_modification_parser.add_argument(
         "-i",
-        "--only_coin_ids",
+        "--only-coin-ids",
         action="store_true",
         help="Disables printing of actual coin objects, only printing their id's instead",
     )
@@ -186,46 +186,46 @@ def SetupParser():
 
     backup_parser.add_argument(
         "-p",
-        "--backup_purchases",
+        "--backup-purchases",
         action="store_true",
         help="Will backup the purchases and specific coin tables.",
     )
     backup_parser.add_argument(
         "-c",
-        "--backup_countries",
+        "--backup-countries",
         action="store_true",
         help="Will backup the countries and country_names tables.",
     )
     backup_parser.add_argument(
         "-d",
-        "--backup_denominations",
+        "--backup-denominations",
         action="store_true",
         help="Will backup the denominations and denomination_names tables.",
     )
     backup_parser.add_argument(
         "-f",
-        "--backup_face_values",
+        "--backup-face-values",
         action="store_true",
         help="Will backup the face_values and face_values_names tables.",
     )
     backup_parser.add_argument(
-        "-C", "--backup_coins", action="store_true", help="Will backup the coins table."
+        "-C", "--backup-coins", action="store_true", help="Will backup the coins table."
     )
     backup_parser.add_argument(
         "-F",
-        "--backup_config",
+        "--backup-config",
         action="store_true",
         help="Will backup the config file.",
     )
     backup_parser.add_argument(
         "-a",
-        "--backup_all",
+        "--backup-all",
         action="store_true",
         help="Will backup all of the tables. Shorthand for -pcCdf",
     )
     backup_parser.add_argument(
         "-o",
-        "--output_destination",
+        "--output-destination",
         metavar="STRING",
         help="Path to the directory that will store the backups. Backups will be stored /path/<timestamp>/xx. Default location is ./backups/<timestamp>/xx",
     )
@@ -252,7 +252,7 @@ def SetupParser():
     )
     search_parser.add_argument(
         "-C",
-        "--hide_collection",
+        "--hide-collection",
         action="store_true",
         help="Use to disable printing of the personal collection of coins. Does nothing when used with --owned flag",
     )
@@ -260,17 +260,17 @@ def SetupParser():
         "-o",
         "--owned",
         action="store_true",
-        help="Show only the coins that are in the personal collection. Takes precedence over --hide_collection. Does nothing when used with the --not_owned flag.",
+        help="Show only the coins that are in the personal collection. Takes precedence over --hide-collection. Does nothing when used with the --not-owned flag.",
     )
     search_parser.add_argument(
         "-O",
-        "--not_owned",
+        "--not-owned",
         action="store_true",
         help="Show only the coins that are not in the personal collection. Does nothing when used with the --owned flag.",
     )
     search_parser.add_argument(
         "-H",
-        "--hide_price",
+        "--hide-price",
         action="store_true",
         help="Use to disable printing of the melt value of the coins.",
     )
