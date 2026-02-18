@@ -183,6 +183,14 @@ def SetupParser():
     prices_parser = admin_subparsers.add_parser(
         "prices", parents=[version_parser, verbose_parser, database_parser]
     )
+    new_items_parser = admin_subparsers.add_parser(
+        "new-items", parents=[version_parser, verbose_parser, database_parser]
+    )
+    new_items_parser.add_argument(
+        "-p",
+        "--prefix",
+        help="String to place before the file type.",
+    )
 
     backup_parser.add_argument(
         "-p",

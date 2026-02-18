@@ -59,6 +59,7 @@ if __name__ == "__main__":
 
     import managePurchases
     import updateMetalPrices
+    import addCoins
     import backup
     import report
     import search
@@ -87,12 +88,16 @@ if __name__ == "__main__":
             # The operation mode is manage, which is managing various database components
             elif args["command"] == "admin":
                 # Backs up database entries for the various tables
-                if args["manage_command"] == "backup":
+                if args["admin_command"] == "backup":
                     backup.Backup(args, db)
 
                 # Updates metal prices
-                elif args["manage_command"] == "prices":
+                elif args["admin_command"] == "prices":
                     updateMetalPrices.GetMetalPricesFromUser(db, prices, config)
+
+                # Adds new coins
+                elif args["admin_command"] == "new-items":
+                    addCoins.AddCoins(db, args["prefix"], config)
 
             # The operation mode is search, which will search the database for coins.
             elif args["command"] == "search":
