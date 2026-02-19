@@ -545,7 +545,6 @@ years minted = 1800-1802,1805
     3. Those from step 8-9 to `tutorial_setup_values.sql`
 11. Perform steps 5-7, 8.3-8.4 of [Example 2](#example-2)
 
-
 ## Script
 
-This section covers how to use the script included with this repository.
+Bundles with the `main.py` script is a script for adding new items to the database. Invoke it with `main.py admin new-items` to enter the wizard for adding new items. Follow the on screen instructions and prompts.
