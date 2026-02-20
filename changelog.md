@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.0.0 (????)
+
+* Started versioning the database. From now on, database changes will be reflected in the database changelog.
+* Enabled database [version 1.0](./database/changelog.md#v1.0)
+* Refactored codebase to improve maintainability.
+* Cleaned up python package requirements and made setup simpler.
+* Added documentation, namely rewriting the install instructions and creating tutorials.
+* Moved config to a static location and changed to toml file.
+* Reorganized structure of arguments and how to call various scripts.
+* Other general housekeeping.
+
 ## v0.8.1 (February 6, 2026)
 
 > [!warning]
