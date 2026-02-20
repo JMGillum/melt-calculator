@@ -239,6 +239,7 @@ def ValidateConfig() -> (dict,list[str]):
 if __name__ == "__main__":
 
     # Simply validates the config and prints out any errors
+    print(f"Config location: {treasure.config.DefaultConfigPath('metals')}")
     _, errors = ValidateConfig()
     for error in errors:
         print(error)
