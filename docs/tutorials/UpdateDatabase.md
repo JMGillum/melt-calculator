@@ -14,9 +14,8 @@ The database stores its version number in a simple table structure. The name of 
 > To check the version number of your database, execute the SQL query: `SELECT major,minor from version;`
 
 ### Git
-The database contents are stored within SQL files that are within a git repository separate from the main project repository. To pull changes from the git repository, you must execute `git pull` from within the `database` directory. This will pull all changes. Because this project is still in development, changes may be pushed to the repository, however it may not be in a finished state yet. Changes are tested and packaged into releases to indicate that they are tested and safe to apply to the database.  
 
-It is recommended to only pull changes whenever a new release is published, and to then checkout the release tag using: `git checkout <tag name>`. Tags indicate the state of the repository at the point of release, and guarantee that you do not have any untested changes within the directory.
+Follow the [git tutorial](./UsingGit.md)
 
 ## Updates
 
@@ -38,7 +37,7 @@ All incremental updates to the database are stored within the `updates` director
     * The database argument specifies which database to connect to.
     * The directory argument specifies the path to the updates directory. This is optional and defaults to `./updates/` if not provided.
 
-### Manual 
+### Manual
 
 The manual method requires feeding the update files to the database management software by hand. This can be done interactively or by passing the name of the file. Updates must be performed sequentially and none should be skipped.
 
