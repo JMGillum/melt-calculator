@@ -58,7 +58,7 @@ def Search(args, db, purchases, prices, config):
 
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
-        arguments_list.append(Coins.ParseSearchString(db, item, debug=args["verbose"]))
+        arguments_list.append(Coins.ParseSearchString(db, item, debug=args["verbose"],config=config))
 
     # Goes through each set of arguments and searches
     if arguments_list:
