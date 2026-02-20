@@ -5,7 +5,7 @@ from db.interface import DB_Interface
 default_config_contents = """
 # Config file for metals program
 
-default_retention = 0.97 # Value of coin that a show will pay. Is percentage of melt.
+default_retention = 0.97 # Value of coin that a shop will pay. Is percentage of melt.
 
 use_permille = false # Uses parts per thousand instead of parts per hundred (percent)
 
@@ -66,25 +66,72 @@ config_name = "config.toml"
 config_dir = "metals"
 
 
-def CheckFloat(item):
+def CheckFloat(item) -> bool:
+    """ Returns whether the item is a float or an int
+
+    Args:
+        item (): The item to check
+
+    Returns: True if item is int or float, False otherwise
+        
+    """
+    
     return not isinstance(item, bool) and (
         isinstance(item, float) or isinstance(item, int)
     )
 
 
-def CheckInt(item):
+def CheckInt(item) -> bool:
+    """ Returns whether the item is an int
+
+    Args:
+        item (): The item to check
+
+    Returns: True if item is int, False otherwise.
+        
+    """
+    
     return isinstance(item, int)
 
 
-def CheckStr(item):
+def CheckStr(item) -> bool:
+    """ Returns whether the item is str
+
+    Args:
+        item (): The item to check
+
+    Returns: True if item is str, False otherwise.
+        
+    """
+    
     return isinstance(item, str)
 
 
-def CheckBool(item):
+def CheckBool(item) -> bool:
+    """ Returns whether the item is bool
+
+    Args:
+        item (): The item to check
+
+    Returns: True if item is bool, False otherwise.
+        
+    """
+
     return isinstance(item, bool)
 
 
-def CheckValue(datatype, item):
+def CheckValue(datatype:str, item) -> bool:
+    """ Returns whether the item is of the specified datatype
+
+    Args:
+        datatype: A string of either "float", "int", "str", or "bool". What datatype the item is being compared to.
+        item (): The item to check the datatype of
+
+    Returns: True if item matches provided datatpye, False otherwise
+        
+    """
+
+    datatype = datatype.lower()
     if datatype == "float":
         return CheckFloat(item)
     if datatype == "int":
@@ -96,25 +143,44 @@ def CheckValue(datatype, item):
     return False
 
 
-def ValidateConfig():
+def ValidateConfig() -> (dict,list[str]):
+    """ Loads the config from the file, checks if the datatypes of the variables match what they are supposed to be.
+
+    Returns: (dict object of config, list of strings describing errors)
+        
+    """
     errors = []  # A list of error strings. Allows this to function in non-terminal environments
 
+    # Gets the config from the default location
     config = treasure.config.FetchConfig(config_name, config_dir)
+
+    # Config was not found, create at default location
     if config is None:
         errors.append(
             f"Config file not found. Creating {config_name}: {treasure.config.DefaultConfigPath(config_dir)}"
         )
+
+        # Creates config file with default contents.
         treasure.config.CreateConfig(default_config_contents, config_name, config_dir)
         return (None, errors)
 
     # Validate basic config options are of the correct datatypes
+    # Each item is a tuple of (key,default value)
+
+    # All variables that should be of float type
     float_keys = (("default_retention", 0.97),)
+
+    # All variables that should be of int type
     int_keys = (("current_year", datetime.now().year), ("minimum_year", 1800))
+
+    # All variables that should be of str type
     str_keys = (
         ("currency_symbol", "$"),
         ("date_format", "%m/%d/%y"),
         ("bullion_hint", " (Bullion)"),
     )
+
+    # All variables that should be of bool type
     bool_keys = (
         ("use_permille", False),
         ("tree_fancy_characters", True),
@@ -126,10 +192,15 @@ def ValidateConfig():
 
     keys = {"float": float_keys, "int": int_keys, "str": str_keys, "bool": bool_keys}
 
+    # Loops through each key, setting default value if not present in config file.
     for datatype, type_keys in keys.items():
         for key in type_keys:
             key, default = key
+
+            # Fetches specific config item, or uses default if it is not found
             if treasure.config.ExtractConfigItem(config, key, default):
+
+                # Config item is of the wrong datatype
                 if not CheckValue(datatype, config[key]):
                     errors.append(f"Error: {key}")
 
@@ -140,11 +211,19 @@ def ValidateConfig():
         ("tags_colors", ("bullion",)),
         ("misc_colors", ("gain", "loss")),
     )
+
     for key, sub_keys in dict_keys:
+
+        # If config item is missing, use empty dictionary. This allows the user
+        # to disable color output for specific items.
         if treasure.config.ExtractConfigItem(config, key, {}):
+
+            # Checks each dict object
             if not isinstance(config[key], dict):
                 errors.append(f"Error: {key}")
             else:
+
+                # Loops through each sub key in the dictionary
                 for sub_key in sub_keys:
                     if treasure.config.ExtractConfigItem(config[key], sub_key, ""):
                         if not isinstance(config[key][sub_key], str):
@@ -158,6 +237,8 @@ def ValidateConfig():
 
 
 if __name__ == "__main__":
+
+    # Simply validates the config and prints out any errors
     _, errors = ValidateConfig()
     for error in errors:
         print(error)

@@ -8,8 +8,12 @@ from datetime import datetime
 from colors import Colors
 
 
-# Initializes all of the available command line arguments
-def SetupParser():
+def SetupParser() -> argparse.ArgumentParser:
+    """ Initializes all of the available command line arguments
+
+    Returns: The ArgumentParser object for the arguments
+        
+    """
     version_parser = argparse.ArgumentParser(add_help=False)
     version_parser.add_argument(
         "-v", "--version", action="version", version=f"%(prog)s {__version__}"
@@ -285,8 +289,17 @@ def SetupParser():
     return parser
 
 
-def InitialSetup(config):
+def InitialSetup(config:dict) -> dict:
+    """ Parses command line arguments and returns
+
+    Args:
+        config: Must include "verbose" key, for whether to print the arguments. Must also include "db_config" for setting which database to use.
+
+    Returns: The parsed arguments.
+        
+    """
     just_fix_windows_console()  # Enables ANSI code support on windows or strips them if necessary
+
     # Command line arguments
     parser = SetupParser()
     args = vars(parser.parse_args())
@@ -300,8 +313,17 @@ def InitialSetup(config):
     return args
 
 
-def UpdatePrices(prices, args, config, db=None):
-    # Updates data.silver_spot_price and data.gold_spot_price with values provided on command line, if applicable
+def UpdatePrices(prices:dict, args:dict, config:dict, db=None):
+    """ Updates metal price dictionary with values specified in command line, if any.
+
+    Args:
+        db (): The db_interface object from db.interface
+        prices: Dictionary of metals with keys that match the keys for metals in the database.
+        args: The command line arguments dictionary. 
+        config: The config dictionary
+    """
+
+    # Whether to push prices set in command line to the database
     update_prices = False
     try:
         update_prices = args["update_prices"]
@@ -329,6 +351,8 @@ def UpdatePrices(prices, args, config, db=None):
                 print(
                     f"{name.title()} price provided is invalid type. Using value from database ({config['currency_symbol']}{price})..."
                 )
+
+    # Pushes updated metal prices to the database
     if updates and db:
         results = UpdateMetalPrices(db, *updates)
         for item, result in results:
@@ -336,7 +360,18 @@ def UpdatePrices(prices, args, config, db=None):
                 print(f"{item} was not updated.")
 
 
-def SetupMetals(db, args, config):
+def SetupMetals(db, args:dict, config:dict):
+    """ Fetches metal prices from the database, and fetches purchases.
+
+    Args:
+        db (): 
+        args (): 
+        config (): 
+
+    Returns:
+        
+    """
+
     hide_collection = False
     try:
         hide_collection = args["hide_collection"]

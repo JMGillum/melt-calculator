@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 9 February 2026           ":"         __ __
+#   Date: 19 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -27,7 +27,12 @@ class Units(Enum):
 
 
 class Weight:
-    """Represents a weight and provides conversion functions. Can store weights as grams, ounces, or troy ounces, and can report them in either of the 3."""
+    """ Represents a weight and provides conversion functions. Can store weights as grams, ounces, or troy ounces, and can report them in either of the 3.
+
+    Attributes: 
+        weight: The weight being stored, as a float
+        units: What units the weight is in
+    """
 
     def __init__(self, weight: float | int, units: Units):
         if isinstance(weight, Weight):
