@@ -13,6 +13,7 @@ from db.queries import Queries
 from datetime import datetime
 from pathlib import Path
 import treasure.config
+import treasure.text
 
 
 def ConvertSQL(query, values):
@@ -21,7 +22,7 @@ def ConvertSQL(query, values):
     return query
 
 
-def BackupPurchases(db, dir):
+def BackupPurchases(db:DB_Interface, dir:Path):
     specific_coins = {}
     purchases = db.FetchPurchases()
     current_specific_coin_id = 1
@@ -64,61 +65,103 @@ def BackupPurchases(db, dir):
             f.write("\n")
 
 
-def BackupCountries(db, dir):
-    countries = db.Fetch("SELECT country_id,display_name,tags FROM countries;")
-    country_names = db.Fetch("SELECT country_id,name FROM country_names;")
+def BackupResults(results, table, columns, dir, file_name, append):
+    if not results:
+        return
 
-    output_file = dir / Path("setup_countries.sql")
-    with open(output_file, "w") as f:
-        for line in countries:
-            f.write(
-                f"INSERT INTO countries(country_id, display_name, tags) VALUES{line};\n"
-            )
-        for line in country_names:
-            f.write(f"INSERT INTO country_names(country_id, name) VALUES{line};\n")
+    output_file = dir / Path(file_name)
+    write_mode = "w"
+    if append:
+        write_mode = "a"
+    with open(output_file, write_mode) as f:
 
+        # Print out every result as an insert statement.
+        for line in results:
+            f.write(f"INSERT INTO {table}({', '.join(columns)}) VALUES(")
+            for i in range(len(line)):
+                if line[i] is not None:
 
-def BackupDenominations(db, dir):
-    denominations = db.Fetch(
-        "SELECT denomination_id,country_id,display_name,tags FROM denominations;"
-    )
-    denomination_names = db.Fetch(
-        "SELECT denomination_id,name FROM denomination_names;"
-    )
+                    # Has to print out quotes around text if a string, as well escape quotes
+                    if isinstance(line[i],str):
+                        f.write(f"'{treasure.text.EscapeQuotes(line[i])}'")
+                    else:
+                        f.write(str(line[i]))
 
-    output_file = dir / Path("setup_denominations.sql")
-    with open(output_file, "w") as f:
-        for line in denominations:
-            f.write(
-                f"INSERT INTO denominations(denomination_id, country_id, display_name, tags) VALUES{line};\n"
-            )
-        for line in denomination_names:
-            f.write(
-                f"INSERT INTO denomination_names(denomination_id, name) VALUES{line};\n"
-            )
+                # None type needs to be NULL in SQL
+                else:
+                    f.write("NULL")
 
-
-def BackupValues(db, dir):
-    values = db.Fetch(
-        "SELECT value_id,denomination_id,value,display_name,tags FROM face_values;"
-    )
-    value_names = db.Fetch(
-        "SELECT value_id,name FROM face_values_names ORDER BY value_id;"
-    )
-
-    output_file = dir / Path("setup_values.sql")
-    with open(output_file, "w") as f:
-        for line in values:
-            f.write(
-                f'INSERT INTO face_values(value_id, denomination_id, value, display_name, tags) VALUES("{line[0]}", "{line[1]}", {str(line[2])}, {"NULL" if line[3] is None or line[3].upper() == "NULL" else f'"{line[3]}"'}, \'{line[4]}\');\n'
-            )
-        for line in value_names:
-            f.write(f"INSERT INTO face_values_names(value_id, name) VALUES{line};\n")
+                # Writes comma for all except last line
+                if i < len(line)-1:
+                    f.write(", ")
+            
+            f.write(");\n")
 
 
-def BackupConfig(dir):
+def BasicBackup(db:DB_Interface,dir:Path,columns:list[str],table:str,file_name:str,append:bool=False,order_by:str=None,filter_by_series=True,series=None):
+    """ Performs a standardized, basic backup of the specified columns of the spcified table.
+
+    Args:
+        append: True to append to file instead of truncating 
+        order_by: Pass a str to append "ORDER BY {order_by}" to the end of the query. None will abstain from order by 
+        db: db_interface object for interacting with database
+        dir: Path to directory that will store file
+        columns: List of columns to backup
+        table: Name of table to backup
+        file_name: Name of file to store backup in
+    """
+
+    # Build query
+    query = f"SELECT {','.join(columns)} FROM {table}"
+    if order_by:
+        query += f" ORDER BY {order_by}"
+    query += ";"
+
+    results = []
+    if filter_by_series:
+
+        # Backup all series separately if not explicitly specified
+        if series is None:
+            series = db.Fetch(f"SELECT DISTINCT series FROM {table}")
+            series = list(series)
+
+        # Recursively backup each series
+        if isinstance(series,list) or isinstance(series,tuple):
+            print(series)
+            for item in series:
+                if (isinstance(item,tuple) or isinstance(item,list)) and len(item) == 1:
+                    item = item[0]
+                print(item)
+                print(len(item))
+                BasicBackup(db,dir,columns,table,f"{item}_{file_name}",append,order_by,filter_by_series=True,series=item)
+            return
+        else:
+            query = query[:-1]
+            query += " WHERE series=?;"
+            results = db.Fetch(query,(f"{series}",))
+
+    # Do no filtering by series, just put all series in this file
+    else:
+        results = db.Fetch(query)
+
+    BackupResults(results, table, columns, dir, file_name, append)
+
+
+
+def BackupConfig(dir:Path):
+    """ Performs a backup of the config file
+
+    Args:
+        dir: Path to directory that will store backup
+
+    Returns: True if config exists, False if it doesnt
+        
+    """
+
     config_path = treasure.config.DefaultConfigPath("metals")
     if config_path is not None:
+
+        # Simply read every line and write it at same time
         input = config_path / "config.toml"
         output = Path(dir) / "config.toml"
         with input.open(mode="r") as i:
@@ -175,15 +218,21 @@ def Backup(args, db: DB_Interface, dir=None):
         print("Backup of purchases complete.")
 
     if args["backup_countries"] or args["backup_all"]:
-        BackupCountries(db, dir)
+        #BackupCountries(db, dir)
+        BasicBackup(db,dir,["country_id","display_name","tags","series"],"countries","setup_countries.sql")
+        BasicBackup(db,dir,["country_id","name"],"country_names","setup_countries.sql",append=True,filter_by_series=False)
         print("Backup of countries complete.")
 
     if args["backup_denominations"] or args["backup_all"]:
-        BackupDenominations(db, dir)
+        #BackupDenominations(db, dir)
+        BasicBackup(db,dir,["denomination_id","country_id","display_name","tags","series"],"denominations","setup_denominations.sql")
+        BasicBackup(db,dir,["denomination_id","name"],"denomination_names","setup_denominations.sql",append=True,filter_by_series=False)
         print("Backup of denominations complete.")
 
     if args["backup_face_values"] or args["backup_all"]:
-        BackupValues(db, dir)
+        #BackupValues(db, dir)
+        BasicBackup(db,dir,["value_id","denomination_id","value","display_name","tags","series"],"face_values","setup_values.sql")
+        BasicBackup(db,dir,["value_id","name"],"face_values_names","setup_values.sql",append=True,order_by="value_id",filter_by_series=False)
         print("Backup of face values complete.")
 
     if args["backup_coins"] or args["backup_all"]:
