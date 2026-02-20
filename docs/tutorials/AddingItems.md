@@ -3,7 +3,7 @@
 > [!Note]
 > This tutorial assumes that the installed database management system is MariaDB. Parts of it may work for other databases, but it is not guaranteed.
 
-This tutorial will walk through how to add custom items to the database in way that makes updating the database in the future easy. 
+This tutorial will walk through how to add custom items to the database in way that makes updating the database in the future easy.
 
 > [!Warning]
 > It is crucial to backup the database before continuing. See the tutorial in [Backups.md](./Backups.md)
@@ -294,7 +294,6 @@ INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal
 * `<fineness>` is a **decimal** value that can hold 1 digit to the left of the decimal point, and 10 to the right. It stores the fineness of coin (percentage of the coin that is the precious metal) as a decimal (90% -> 0.9).
 * `<precious_metal_weight>` is a **decimal** value that can hold 10 digits on either side of the decimal point. It stores the actual precious metal content of the coin. This should be equivalent to `<gross_weight>` * `<fineness>`. **THIS VALUE MUST BE IN TROY OUNCES**
 * `<metal>` must be exactly the same as one value in the `metal_id` column in the metal table. This table stores the various precious metals that the database knows about. See the [Metal queries](#metal-queries) section below for how to add new metals.
-
 
 > [!Note]
 > `SELECT * from metals;` will list the metals currently defined.
