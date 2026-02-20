@@ -3,7 +3,7 @@
 > [!Note]
 > This tutorial assumes that the installed database management system is MariaDB. Parts of it may work for other databases, but it is not guaranteed.
 
-This tutorial will walk through how to setup the database with the provided data. This will not cover installing the the database management system, refer to the provider for that. 
+This tutorial will walk through how to setup the database with the provided data. This will not cover installing the the database management system, refer to the provider for that.
 
 > [!Note]
 > This method will work to update the database to a new version, however an incrmental update will be more efficient. See the tutorial in [UpdateDatabase.md](./UpdateDatabase.md) and follow it if possible.

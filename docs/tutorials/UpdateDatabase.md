@@ -9,7 +9,7 @@ This tutorial will walk through how to update the database in place when a new r
 
 ## Database versioning
 
-The database stores its version number in a simple table structure. The name of the table is `version`, and it contains the two columns: `major` and `minor`. There should only ever be one entry in this table, which stores the version number of the database. Each release of the database will be either minor (a change in only the minor column) or major (a change in the major column and the minor column gets set to 0). Any release that does not change the schema of the database (such as adding/removing tables or modifying their columns) will be classified as a minor release. All other releases will be major. 
+The database stores its version number in a simple table structure. The name of the table is `version`, and it contains the two columns: `major` and `minor`. There should only ever be one entry in this table, which stores the version number of the database. Each release of the database will be either minor (a change in only the minor column) or major (a change in the major column and the minor column gets set to 0). Any release that does not change the schema of the database (such as adding/removing tables or modifying their columns) will be classified as a minor release. All other releases will be major.
 > [!Tip]
 > To check the version number of your database, execute the SQL query: `SELECT major,minor from version;`
 

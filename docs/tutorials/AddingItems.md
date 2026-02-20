@@ -120,7 +120,7 @@ The first step in creating a denomination is to choose a unique id for it. The c
 
 The query to create a new denomination is:
 
-``` SQL 
+``` SQL
 INSERT INTO denominations(denomination_id, country_id, display_name, tags, series) VALUES("<denomination_id>","<country_id>","<display_name>","<tags>","<series");
 ```
 
@@ -133,7 +133,7 @@ INSERT INTO denominations(denomination_id, country_id, display_name, tags, serie
   
 Denominations require name associations to be set, exactly the same as with countries. See the [Countries](#country-queries) section for in-depth coverage of how they work and why they are necessary.
 
-The query to create a name association is: 
+The query to create a name association is:
 
 ``` SQL
 INSERT INTO denomination_names(denomination_id, name, series) VALUES("<denomination_id>", "<name>", "<series>");
@@ -182,7 +182,7 @@ Regardless of whether you have a display name or not, `<denomination_id>` must b
 
 As with countries and denominations, face values with display names require name associations. See [Country queries](#country-queries) for an explanation of why and what they do. Face values differ from countries and denominations in that their names need not be unique. Any number of face values can share the same name. For example: A 10 cent coin from Canada and a 10 cent coin from the United States can both be called 'dime'.
 
-The query to create a name association is: 
+The query to create a name association is:
 
 ``` SQL
 INSERT INTO face_values_names(value_id, name, series) VALUES("<value_id>","<name>", "<series>");
