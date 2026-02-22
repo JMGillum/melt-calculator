@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 10 February 2026          ":"         __ __
+#   Date: 21 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -328,3 +328,42 @@ class Queries:
         query = f"SELECT {id_name} FROM {table_name} WHERE {id_name} {specificity} ?"
 
         return (query, (id,))
+
+    def JoinTables(table, joined_tables:list[tuple] = None):
+        """ Creates the query for joining tables in succession.
+
+        Args:
+            joined_tables: A list of two or three element tuples. The tuple should be of the following form:
+                name: table to join onto current table.
+                left_column_name: column name for current table for use with joining
+                right_column_name: (optional. Will be same as left_column_name if not provided) column name for joining table for use with joining.
+
+        Returns: (query, last table joined)
+            
+        """
+        if joined_tables is None or len(joined_tables) == 0:
+            return table, table
+        else:
+            query = table
+            previous_table = table
+            for tab in joined_tables:
+                current_table = tab[0]
+                left_table_col = tab[1]
+                right_table_col = tab[1]
+                if len(tab) > 2:
+                    right_table_col = tab[2]
+                query += f" LEFT JOIN {current_table} ON {previous_table}.{left_table_col} = {current_table}.{right_table_col}"
+                previous_table = current_table
+            return query, previous_table
+
+    def FilterBySeries(columns, table, series, joined_tables=None):
+        table_selection, previous_table = Queries.JoinTables(table, joined_tables)
+
+        if joined_tables is None or len(joined_tables) == 0:
+            query = f"SELECT {', '.join(columns)} FROM {table_selection}"
+        else:
+            query = f"SELECT {table}.{f', {table}.'.join(columns)} FROM {table_selection}"
+        return (f"{query} WHERE {previous_table}.series = ?;",(series,))
+
+    def SeriesPresentInTable(table):
+        return f"SELECT DISTINCT series FROM {table}"

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   Author: Josh Gillum              .
-#   Date: 8 February 2026           ":"         __ __
+#   Date: 21 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -89,7 +89,7 @@ if __name__ == "__main__":
             elif args["command"] == "admin":
                 # Backs up database entries for the various tables
                 if args["admin_command"] == "backup":
-                    backup.Backup(args, db)
+                    backup.Backup(args, db, dir=config["backup_path"])
 
                 # Updates metal prices
                 elif args["admin_command"] == "prices":
