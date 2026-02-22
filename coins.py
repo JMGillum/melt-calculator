@@ -28,44 +28,60 @@ import re
 class Coins:
     """Container class for various functions related to displaying coins."""
 
-    def __unpack(dictionary, key, default_value=None):
-        try:
-            dictionary[key]
-        except KeyError:
-            dictionary[key] = default_value
+    def Price(coin:CoinData, prices:dict):
+        """ Calculates the value of the coin object, using the provided precious metal values
 
-    # Calculates the value of all defined coin objects, using the provided precious metal values
-    def Price(coin, **prices):
-        for key in prices:
-            Coins.__unpack(prices, key)
+        Args:
+            coin: The coin that will be priced.
+            prices: dictionary of metals. Each key should be the key for the metal, as used by the CoinData object. Each value should be a tuple of (name, price)
+        """
+
         try:
             spot = prices[coin.metal][1]
             coin.value = coin.precious_metal_weight.AsTroyOunces() * spot
             coin.TogglePrice(True)
+
+        # The metal defined in the coin is not in the prices dict
         except KeyError:
             coin.value = -1
 
-    def __gainOrLossString(value, config):
+    def __gainOrLossString(value:float, config:dict):
+        """ Generates a string depicting a price change
+
+        Args:
+            value: The change in price that will generate the string
+            config: Must have 'currency_symbol' as a string, 'show_color' as bool, 'colors_8_bit' as bool, and 'misc_colors'['gain'] and 'misc_colors'['loss'] defined.
+
+        Returns: A formatted string with colored output (if appropriate as determined by config)
+            
+        """
+
+        # Gain
+        string_to_print = f"{value}"
+        color = None
         if value > 0:
-            return Colors.PrintColored(
-                f"+{config['currency_symbol']}{value:.2f}",
-                config["show_color"],
-                config["colors_8_bit"],
-                config["misc_colors"]["gain"],
-            )
+            string_to_print = f"+{config['currency_symbol']}{value:.2f}"
+            color = config["misc_colors"]["gain"]
+
+        # Loss
         elif value < 0:
-            return Colors.PrintColored(
-                f"-{config['currency_symbol']}{-value:.2f}",
-                config["show_color"],
-                config["colors_8_bit"],
-                config["misc_colors"]["loss"],
-            )
+            string_to_print = f"-{config['currency_symbol']}{-value:.2f}"
+            color = config["misc_colors"]["loss"]
+
+        # No change
         else:
             return f"{value}"
 
+        return Colors.PrintColored(
+            string_to_print,
+            config["show_color"],
+            config["colors_8_bit"],
+            color
+        )
+
     # Prints summary statistics for a group of purchases (really just a total,count and worth)
     def PrintStatistics(
-        config,
+        config: dict,
         total: float = 0.0,
         count: int = 0,
         value: float = 0.0,
@@ -339,7 +355,7 @@ class Coins:
                         )
                     if coins[entry[mapping["coin_id"]]][1] is not None:
                         if prices:
-                            Coins.Price(coins[entry[mapping["coin_id"]]][1], **prices)
+                            Coins.Price(coins[entry[mapping["coin_id"]]][1], prices)
                         else:
                             coins[entry[mapping["coin_id"]]][1].togglePrice(False)
                     try:
