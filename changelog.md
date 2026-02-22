@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.0.0 (????)
+## v1.0.0 (February 27, 2026)
 
 * Started versioning the database. From now on, database changes will be reflected in the database changelog.
 * Enabled database [version 1.0](./database/changelog.md#v1.0)
@@ -10,6 +10,9 @@
 * Moved config to a static location and changed to toml file.
 * Reorganized structure of arguments and how to call various scripts.
 * Other general housekeeping.
+* Bugfixes:
+  * Able to search by coin id in manage-purchases
+  * backup output directory
 
 ## v0.8.1 (February 6, 2026)
 

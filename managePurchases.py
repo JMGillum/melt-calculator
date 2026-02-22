@@ -154,7 +154,7 @@ def GetCoinInformation(db, additional_search_args: dict = None, config={}):
             coin_find_by_id = False
         if coin_find_by_id:
             coin_id = input("Coin id: ")
-            entries = db.FetchCoinById(coin_id)
+            entries,mapping = db.FetchCoins({"coin_id":coin_id})
         else:
             search_string = input("Search string: ")
             arguments = Coins.ParseSearchString(db, search_string,config=config)

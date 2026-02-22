@@ -29,6 +29,7 @@ class Queries:
         debug = Queries.__unpack(kwargs, "debug")
         show_only_owned = Queries.__unpack(kwargs, "show_only_owned")
         show_only_not_owned = Queries.__unpack(kwargs, "show_only_not_owned")
+        coin_id = Queries.__unpack(kwargs, "coin_id")
         select_cols = Queries.__unpack(kwargs, "select_cols")
 
         if show_only_owned and show_only_not_owned:
@@ -94,9 +95,9 @@ class Queries:
         value_query = ""
         year_query = ""
         queries = [
-            (country_query, country, "country_names"),
-            (denomination_query, denomination, "denomination_names"),
-            (value_name_query, face_value_name, "face_values_names"),
+            ("",country, "country_names"),
+            ("",denomination, "denomination_names"),
+            ("", face_value_name, "face_values_names"),
         ]
         for i in range(len(queries)):
             item = queries[i]
@@ -110,6 +111,16 @@ class Queries:
         if face_value:
             queries.append((value_query, face_value, 1))
             queries[-1] = ("    face_values.value=?", queries[-1][1], queries[-1][2])
+            if found_first_specifier:
+                queries[-1] = (
+                    f"\nAND\n  {queries[-1][0].strip()}",
+                    queries[-1][1],
+                    queries[-1][2],
+                )
+            found_first_specifier = True
+
+        if coin_id:
+            queries.append(("    coins.coin_id=?", coin_id, 1))
             if found_first_specifier:
                 queries[-1] = (
                     f"\nAND\n  {queries[-1][0].strip()}",
