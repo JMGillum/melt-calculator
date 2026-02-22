@@ -1,4 +1,7 @@
-name: melt
+name: metals
 dependencies:
-  - conda-forge::mariadb >= 1.1.13
+  - python >= 3.11
   - colorama >= 0.4.6
+  - pip
+  - pip:
+    - mariadb >= 1.1.13
