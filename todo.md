@@ -4,12 +4,11 @@ This file will contain a list of features that are desired and should be added a
 
 ## Small features
 
-1. SQL optimizations for database and other refactoring.
-2. Change command line arguments for metal prices.
+1. Change command line arguments for metal prices.
     * Use a single argument for all metal prices instead of individual arguments for each metal. This will reduce argument clutter.
     * The argument will be a string in a special format, such as: "metal_id:price;metal_id:price"
 
-3. Allow for specifying multiple values in each of the filter arguments, such as multiple countries with the `-c` country flag.
+2. Allow for specifying multiple values in each of the filter arguments, such as multiple countries with the `-c` country flag.
     * Each one should be separated by a semicolon or some other character.
     * When used in conjunction, a size mismatch will be accepted, and the last value of the smaller one will be repeated.
 

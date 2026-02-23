@@ -241,6 +241,12 @@ def SetupParser() -> argparse.ArgumentParser:
         metavar="STRING",
         help="Path to the directory that will store the backups. Backups will be stored /path/<timestamp>/xx. Default location is ./backups/<timestamp>/xx",
     )
+    backup_parser.add_argument(
+        "-R",
+        "--rows-per-insert",
+        metavar="NUM",
+        help="Number of rows per insert statement. Default value is 1000.",
+    )
 
     subparsers.add_parser(
         "report",
