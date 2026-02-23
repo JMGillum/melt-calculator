@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 February 2026           ":"         __ __
+#   Date: 22 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -45,18 +45,21 @@ class Coins:
         except KeyError:
             coin.value = -1
 
-    def __gainOrLossString(value:float, config:dict):
+    def __GainOrLossString(value:float, config:dict, round_to_places:int=2):
         """ Generates a string depicting a price change
 
         Args:
             value: The change in price that will generate the string
             config: Must have 'currency_symbol' as a string, 'show_color' as bool, 'colors_8_bit' as bool, and 'misc_colors'['gain'] and 'misc_colors'['loss'] defined.
+            round_to_places: Number of places to round value to. Pass 0 or None to perform no rounding.
 
         Returns: A formatted string with colored output (if appropriate as determined by config)
             
         """
 
         # Gain
+        if round_to_places is not None and round_to_places > 0:
+            value = round(value,round_to_places)
         string_to_print = f"{value}"
         color = None
         if value > 0:
@@ -79,7 +82,6 @@ class Coins:
             color
         )
 
-    # Prints summary statistics for a group of purchases (really just a total,count and worth)
     def PrintStatistics(
         config: dict,
         total: float = 0.0,
@@ -88,32 +90,47 @@ class Coins:
         other_value: float = 0.0,
         stats: PurchaseStats = None,
     ):
+        """ Prints summary statistics for a group of purchases (really just a total, count, and worth)
+
+        Args:
+            config: Requires 'currency_symbol' to be set. Passed to __GainOrLossString, so there may be extra requirements.
+            total: Stores the total value
+            count: Stores the number of items counted to arrive at the total
+            value: Stores the value to compare total to.
+            other_value: Stores a second value to compare total to
+            stats: Can be used in place of total, count, value, and other_value.
+
+        Returns: String of the summary statistics.
+            
+        """
+
+        # Uses the stats variable if present
         if stats and isinstance(stats, PurchaseStats):
-            total = round(stats.total, 2)
+            total = stats.total
             count = int(stats.count)
             if count > 0:
-                value = round((stats.total + stats.delta) / stats.count, 2)
+                value = (stats.total + stats.delta) / stats.count
             if count > 0:
-                other_value = round((stats.total + stats.delta2) / stats.count, 2)
-        else:
-            total = round(total, 2)
-            count = int(count)
-            value = round(value, 2)
-            other_value = round(other_value, 2)
+                other_value = (stats.total + stats.delta2) / stats.count
+
         if count > 0:
-            total_value = round(value * count, 2)
-            other_total_value = round(other_value * count, 2)
-            average = round(total / count, 2)
-            gain_loss = round(total_value - total, 2)
-            other_gain_loss = round(other_total_value - total, 2)
-            average_gain_loss = round(value - average, 2)
-            other_average_gain_loss = round(other_value - average, 2)
-            gain_loss_string = Coins.__gainOrLossString(gain_loss, config)
-            average_gain_loss_string = Coins.__gainOrLossString(
+            total_value = value * count
+            other_total_value = other_value * count
+            average = total / count
+
+            # Calculates deltas
+            gain_loss = total_value - total
+            other_gain_loss = other_total_value - total
+            average_gain_loss = value - average
+            other_average_gain_loss = other_value - average
+
+            # Creates strings
+            gain_loss_string = Coins.__GainOrLossString(gain_loss, config)
+            average_gain_loss_string = Coins.__GainOrLossString(
                 average_gain_loss, config
             )
-            other_gain_loss_string = Coins.__gainOrLossString(other_gain_loss, config)
-            other_average_gain_loss_string = Coins.__gainOrLossString(
+            other_gain_loss_string = Coins.__GainOrLossString(other_gain_loss, config)
+            other_average_gain_loss_string = Coins.__GainOrLossString(
                 other_average_gain_loss, config
             )
             return_string = ""
@@ -124,20 +141,34 @@ class Coins:
         return "N/A"
 
     # Adds the summary node to a coin object
-    def __summarizePurchase(coin, config):
+    def __SummarizePurchase(coin:Node, config:dict):
+        """ Calculates statistics for all purchases of a coin, then prints them.
+
+        Args:
+            coin: The coin to summarize the purchases for. Purchases to be summarized must be within the nodes attribute.
+            config: Passed to PrintStatistics, so any requirements for that are needed.
+
+        """
         if isinstance(coin, Node):
             i = 0
             total = 0.0
             count = 0
+
+            # Adds each purchase to summary statistics
             while i < len(coin.nodes):
                 node = coin.nodes[i]
                 if isinstance(node, Purchase):
                     total += node.price * node.quantity
                     count += node.quantity
+
+                # Removes unused strings. Unsure of purpose. Perhaps if a purchase 
+                # was mistakenly added as a string instead of a Purchase object.
                 elif isinstance(node, str):
                     del coin.nodes[i]
                     i -= 1
                 i += 1
+
+            # Appends the summary string after all of the Purchase objects.
             coin.nodes.append(
                 Coins.PrintStatistics(
                     config,
@@ -148,18 +179,17 @@ class Coins:
                 )
             )
 
-        return None
 
     # Returns a tree object for a collection of countries, their denominations, their values, and their coins
     def BuildTree(
-        countries,
-        denominations,
-        values,
-        coins,
-        purchases=None,
-        debug=False,
-        only_coin_ids=False,
-        config={},
+        countries:list[tuple],
+        denominations:list[tuple],
+        values:list[tuple],
+        coins:list[tuple],
+        purchases:list[Purchase]=None,
+        debug:bool=False,
+        only_coin_ids:bool=False,
+        config:dict={},
     ):
         if debug:
             for item in [
@@ -221,7 +251,7 @@ class Coins:
                                                 config["types_colors"]["purchase"],
                                             )
                                         )
-                                    Coins.__summarizePurchase(current_coins[-1], config)
+                                    Coins.__SummarizePurchase(current_coins[-1], config)
                         # Sorts the coins by first year available
                     if only_coin_ids:
                         current_coins = sorted(
@@ -299,6 +329,8 @@ class Coins:
         current_countries = sorted(current_countries, key=lambda x: str(x))
         results = Tree(name="Results", nodes=current_countries)
         return results
+
+
 
     # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
     def Build(
