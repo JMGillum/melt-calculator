@@ -39,7 +39,6 @@ def CollectionReport(args, db, purchases, prices, config):
     results = Coins.Build(
         results,
         mapping,
-        config,
         prices=prices,
         purchases=purchases,
         debug=args["verbose"],
@@ -49,45 +48,28 @@ def CollectionReport(args, db, purchases, prices, config):
         hide_coins=args["no_coins"],
         hide_values=args["no_values"],
         hide_denominations=args["no_denominations"],
-        do_not_build_tree=True,
+        config=config,
     )
-    # Results returned a tuple of (countries,denominations,values,coins)
-    # coins is a dict of {coin_id: (coin_id,CoinData)}
-    for entry in purchases:
-        key = entry[0]  # coin_id purchase is associated with
-        purchase = Purchase(
-            *(entry[1:4] + entry[5:]),
-            config["date_format"],
-            config["currency_symbol"],
-            config["show_color"],
-            config["colors_8_bit"],
-            config["types_colors"]["purchase"],
-        )  # purchase price, quantity, date, mint date, mint mark
-        coin = None
-        try:
-            coin = results[3][key][1]  # CoinData object
-        except KeyError:
-            continue  # Not found when building tree. Just skip and don't calculate statistics on it
-        runner = metal_stats["other"]  # Defaults to other metal
-        try:
-            runner = metal_stats[coin.metal]  # Updates metal to apply statistics to
-        except KeyError:
-            pass
-        runner.addPurchase(purchase, coin.value, coin.value * coin.retention)
+
+    # Adds every purchase to the respective metal total
+    for _,country in results:
+        for _,denomination in country:
+            for _,value in denomination:
+                for _,coin in value:
+                    runner = metal_stats["other"]
+                    try:
+                        runner = metal_stats[coin.data.metal]
+                    except KeyError:
+                        pass
+                    for _,purchase in coin:
+                        if isinstance(purchase,Purchase):
+                            runner.addPurchase(purchase,coin.data.value, coin.data.value * coin.data.retention)
 
     # Adds up all of the metals to the total
     total = metal_stats["other"]
     for _, metal in metal_stats.items():
         total += metal
 
-    # Finishes building tree using saved tuple from Coins.build()
-    results = Coins.BuildTree(
-        *results,
-        purchases=purchases,
-        debug=args["verbose"],
-        only_coin_ids=args["only_coin_ids"],
-        config=config,
-    )
     results.set_fancy(config["tree_fancy_characters"], cascade=True)
 
     # Prints tree
