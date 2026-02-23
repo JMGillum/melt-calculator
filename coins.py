@@ -180,258 +180,7 @@ class Coins:
             )
 
 
-    # Returns a tree object for a collection of countries, their denominations, their values, and their coins
-    def BuildTree(
-        countries:list[tuple],
-        denominations:list[tuple],
-        values:list[tuple],
-        coins:list[tuple],
-        purchases:list[Purchase]=None,
-        debug:bool=False,
-        only_coin_ids:bool=False,
-        config:dict={},
-    ):
-        if debug:
-            for item in [
-                (countries, "Countries"),
-                (denominations, "Denominations"),
-                (values, "Values"),
-                (coins, "Coins"),
-            ]:
-                print(item[1])
-                for key in item[0]:
-                    print(f"  {key}:{item[0][key]}")
-        # Actually builds tree with given information
-        current_countries = []
-        for country in countries:
-            country = countries[country]
-            current_denominations = []
-            for denomination in country[1]:
-                try:
-                    denomination = denominations[denomination]
-                except KeyError:
-                    continue
-                current_values = []
-                for value in denomination[1]:
-                    try:
-                        value = values[value]
-                    except KeyError:
-                        continue
-                    current_coins = []
-                    for coin in value[1]:
-                        try:
-                            coin = coins[coin]
-                        except KeyError:
-                            continue
-                        if not coin[1]:
-                            continue
-                        if only_coin_ids:
-                            current_coins.append((Node(data=coin[1]), coin[0]))
-                        else:
-                            coin_id = coin[0]
-                            # Links purchases as child nodes of the coin
-                            current_coins.append(Node(data=coin[1]))
-                            if purchases:
-                                matches = [x for x in purchases if x[0] == coin_id]
-                                if matches:
-                                    if (
-                                        debug
-                                    ):  # Prints out matched purchases if debugging
-                                        print(f"Coin '{coin_id}' has purchases:")
-                                    for match in matches:
-                                        if debug:
-                                            print(f"  {match}")
-                                        current_coins[-1].nodes.append(
-                                            Purchase(
-                                                *(match[1:4] + match[5:]),
-                                                config["date_format"],
-                                                config["currency_symbol"],
-                                                config["show_color"],
-                                                config["colors_8_bit"],
-                                                config["types_colors"]["purchase"],
-                                            )
-                                        )
-                                    Coins.__SummarizePurchase(current_coins[-1], config)
-                        # Sorts the coins by first year available
-                    if only_coin_ids:
-                        current_coins = sorted(
-                            current_coins, key=lambda x: x[0].data.years[0]
-                        )
-                        current_coins = [x[1] for x in current_coins]
-                    else:
-                        current_coins = sorted(
-                            current_coins, key=lambda x: x.data.years[0]
-                        )
-                    try:  # converts name from decimal to integer if possible
-                        value = (float(value[0]), value[1], value[2])
-                        if value[0] - int(value[0]) < 0.1:
-                            value = (int(value[0]), value[1], value[2])
-                    except (
-                        ValueError
-                    ):  # If name is string, append sorting number to end.
-                        try:
-                            value = (
-                                f"{value[0]} ({round(float(value[2]), 2):.2f})",
-                                value[1],
-                                value[2],
-                            )
-                        except ValueError:
-                            value = (f"{value[0]} ({value[2]})", value[1], value[2])
-                    current_values.append(
-                        (
-                            Tree(
-                                name=Colors.PrintColored(
-                                    str(value[0]).title(),
-                                    config["show_color"],
-                                    config["colors_8_bit"],
-                                    config["types_colors"]["value"],
-                                ),
-                                nodes=current_coins,
-                            ),
-                            value[2],
-                        )
-                    )
-                    # Sorts the list of trees by sorting names
-                    current_values = sorted(current_values, key=lambda x: x[1])
-                # Then converts the list back to a list of trees
-                current_values = [x[0] for x in current_values]
-                # Appends denomination tree
-                name = str(denomination[0]).title()
-                color = config["types_colors"]["denomination"]
-
-                if denomination[2]:
-                    name += config["bullion_hint"]
-                    color = config["tags_colors"]["bullion"]
-                current_denominations.append(
-                    Tree(
-                        name=Colors.PrintColored(
-                            name, config["show_color"], config["colors_8_bit"], color
-                        ),
-                        nodes=current_values,
-                    )
-                )
-
-            # Sorts the denominations by name
-            current_denominations = sorted(current_denominations, key=lambda x: str(x))
-            # Appends country tree
-            current_countries.append(
-                Tree(
-                    name=Colors.PrintColored(
-                        str(country[0]).title(),
-                        config["show_color"],
-                        config["colors_8_bit"],
-                        config["types_colors"]["country"],
-                    ),
-                    nodes=current_denominations,
-                )
-            )
-        # Sorts the countries by name
-        current_countries = sorted(current_countries, key=lambda x: str(x))
-        results = Tree(name="Results", nodes=current_countries)
-        return results
-
-
-    def __SetupCoin(entry,mapping,coins,prices,config):
-
-        # Information to pass to CoinData.__init__()
-        coin_specs = {
-            "weight": entry[mapping["gross_weight"]],
-            "fineness": entry[mapping["fineness"]],
-            "precious_metal_weight": entry[
-                mapping["precious_metal_weight"]
-            ],
-            "years": entry[mapping["years"]],
-            "metal": entry[mapping["metal"]],
-            "nickname": entry[mapping["coin_display_name"]],
-            "config": config,
-        }
-
-        coin = CoinData(**coin_specs)
-        if coin is None:
-            raise ValueError
-
-        # (Coin id of coin, CoinData object of coin)
-        coins[entry[mapping["coin_id"]]] = (
-            coins[entry[mapping["coin_id"]]][0],
-            coin
-        )
-
-        if coin is not None:
-            # Metal prices exist
-            if prices:
-                Coins.Price(coins[entry[mapping["coin_id"]]][1], prices)
-
-            # No metal prices exist, so don't display prices.
-            else:
-                coins[entry[mapping["coin_id"]]][1].togglePrice(False)
-
-
-
-    def __SetupValue(entry,mapping,values):
-        try:
-            values[entry[mapping["value_id"]]]
-        except KeyError:
-            # Display name, child coins, sorting number
-            values[entry[mapping["value_id"]]] = (
-                entry[mapping["value_display_name"]]
-                if entry[mapping["value_display_name"]]
-                else entry[mapping["value"]],
-                [],
-                entry[mapping["value"]],
-            )
-        if (
-            entry[mapping["coin_id"]]
-            not in values[entry[mapping["value_id"]]][1]
-        ):
-            values[entry[mapping["value_id"]]][1].append(
-                entry[mapping["coin_id"]]
-            )
-
-
-    def __SetupDenomination(entry,mapping,denominations):
-
-        # Creates entry for this denomination if it is the first time encountering it.
-        try:
-            denominations[entry[mapping["denomination_id"]]]
-        except KeyError:
-            # Display name, child values, bullion tag
-            denominations[entry[mapping["denomination_id"]]] = (
-                entry[mapping["denomination_display_name"]],
-                [],
-                entry[mapping["tag_bullion"]],
-            )
-
-        # Associates value_id with this denomination if it isn't already
-        if (
-            entry[mapping["value_id"]]
-            not in denominations[entry[mapping["denomination_id"]]][1]
-        ):
-            denominations[entry[mapping["denomination_id"]]][1].append(
-                entry[mapping["value_id"]]
-            )
-
-
-    def __SetupCountry(entry,mapping,countries):
-
-        # Creates entry for this country if it is the first time encountering it.
-        try:
-            countries[entry[mapping["country_id"]]]
-        except KeyError:
-            countries[entry[mapping["country_id"]]] = (
-                entry[mapping["country_display_name"]],
-                [],
-            )
-
-        # Associates denomination_id with this country if it isn't already
-        if (
-            entry[mapping["denomination_id"]]
-            not in countries[entry[mapping["country_id"]]][1]
-        ):
-            countries[entry[mapping["country_id"]]][1].append(
-                entry[mapping["denomination_id"]]
-            )
-
-    def __SetupCoin2(entry,mapping,prices,config,show_id=False):
+    def __SetupCoin(entry,mapping,prices,config,show_id=False):
 
         # Information to pass to CoinData.__init__()
         coin_specs = {
@@ -481,22 +230,42 @@ class Coins:
             tree.set_name(name)
         return tree
 
-    def Sort(root):
-        countries = [(x[0],str(x[1])) for x in root]
-        countries = sorted(countries, key=lambda x: x[1])
-        root.set_display_order([x[0] for x in countries])
+    def __ParseSortString(string,separator="|",default_method=None,default_direction="asc"):
+        if string is None:
+            return default_method, default_direction
+        vals = string.split(separator)
+        if len(vals) != 2:
+            return default_method, default_direction
+        else:
+            vals[0] = str(vals[0]).lower()
+            vals[1] = str(vals[1])
+            if vals[1].lower() == "asc" or vals[1].lower() == "ascend" or vals[1].lower() == "ascending":
+                vals[1] = "asc"
+            elif vals[1].lower() == "desc" or vals[1].lower() == "descend" or vals[1].lower() == "descending":
+                vals[1] = "desc"
+            else:
+                vals[1] = default_direction
 
-        for _,country in root:
+            return vals[0], vals[1]
 
-            denominations = [(x[0],str(x[1])) for x in country]
-            denominations = sorted(denominations, key=lambda x: x[1])
-            country.set_display_order([x[0] for x in denominations])
+            
+    def __SortBasic(tree, sort_string):
+        method, direction = Coins.__ParseSortString(sort_string)
+        if method is not None:
+            direction = True if direction == "desc" else False
+            if method == "name":
+                keys = [(x[0],str(x[1])) for x in tree]
+                keys = sorted(keys, key=lambda x: x[1], reverse=direction)
+                tree.set_display_order([x[0] for x in keys])
 
-            # Sort Values
-            for _,denomination in country:
 
+    def __SortValues(tree, sort_string):
+        method, direction = Coins.__ParseSortString(sort_string)
+        if method is not None:
+            direction = True if direction == "desc" else False
+            if method == "value":
                 values = []
-                for key,val in denomination:
+                for key,val in tree:
                     val = val.name
                     value = None
                 
@@ -516,30 +285,73 @@ class Coins:
                         except ValueError:
                             value = val
                         values.append((key,value))
-                values = sorted(values, key=lambda x: x[1])
-                denomination.set_display_order([x[0] for x in values])
+                values = sorted(values, key=lambda x: x[1], reverse=direction)
+                tree.set_display_order([x[0] for x in values])
+
+    def __SortCoins(tree, sort_string):
+        method, direction = Coins.__ParseSortString(sort_string)
+        if method is not None:
+            direction = True if direction == "desc" else False
+
+            # Sorts by first year the coin was made
+            if method == "year":
+                coins = [(x[0],x[1].data.years[0]) for x in tree]
+                coins = sorted(
+                    coins, key=lambda x: x[1], reverse=direction
+                )
+                tree.set_display_order([x[0] for x in coins])
+
+
+    def __SortPurchases(tree,sort_string):
+        method, direction = Coins.__ParseSortString(sort_string)
+        if method is not None:
+            direction = True if direction == "desc" else False
+
+            # Sorts by first year the coin was made
+            if method == "date":
+                purchases = []
+                extras = []
+                for key,val in tree:
+                    if isinstance(val,Purchase):
+                        purchases.append((key,val.purchase_date))
+                    else:
+                        extras.append(key)
+
+                purchases = sorted(purchases, key=lambda x: x[1], reverse=direction)
+                purchases = [x[0] for x in purchases] + extras
+                tree.set_display_order(purchases)
+
+
+    def Sort(
+        root, 
+        sort_countries="name|asc", 
+        sort_denominations="name|asc", 
+        sort_values="value|asc", 
+        sort_coins="year|asc", 
+        sort_purchases="date|asc"
+    ):
+
+        if sort_countries is not None:
+            Coins.__SortBasic(root,sort_countries)
+
+        for _,country in root:
+
+            if sort_denominations is not None:
+                Coins.__SortBasic(country,sort_denominations)
+
+            # Sort Values
+            for _,denomination in country:
+
+                if sort_values is not None:
+                    Coins.__SortValues(denomination,sort_values)
 
                 # Sorts coins
                 for _,value in denomination:
-                    coins = [(x[0],x[1].data.years[0]) for x in value]
-                    coins = sorted(
-                        coins, key=lambda x: x[1], reverse=True
-                    )
-                    value.set_display_order([x[0] for x in coins])
+                    Coins.__SortCoins(value,sort_coins)
 
+                    # Sorts Purchases
                     for _,coin in value:
-                        purchases = []
-                        extras = []
-                        for key,val in coin:
-                            if isinstance(val,Purchase):
-                                purchases.append((key,val.purchase_date))
-                            else:
-                                extras.append(key)
-
-                        purchases = sorted(purchases, key=lambda x: x[1])
-                        purchases = [x[0] for x in purchases] + extras
-                        coin.set_display_order(purchases)
-                        print(coin.nodes)
+                        Coins.__SortPurchases(coin,sort_purchases)
         
 
     # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
@@ -556,7 +368,7 @@ class Coins:
         hide_values=False,
         hide_denominations=False,
         only_coin_ids=False,
-        do_not_build_tree=False,
+        sorting_methods={},
     ):
 
         if not isinstance(entries, list):
@@ -564,12 +376,10 @@ class Coins:
         if show_only_bullion and show_only_not_bullion:
             show_only_bullion = False
             show_only_not_bullion = False
-        coins = {}
-        values = {}
-        denominations = {}
-        countries = {}
 
         tree_root = Tree(nodes={})
+
+        # How many levels of the tree should be displayed
         tree_keys = ["country_id"]
         if not hide_denominations:
             tree_keys.append("denomination_id")
@@ -590,7 +400,7 @@ class Coins:
 
 
             coin_id = entry[mapping["coin_id"]]
-            coin = Coins.__SetupCoin2(entry,mapping,prices,config,only_coin_ids)
+            coin = Coins.__SetupCoin(entry,mapping,prices,config,only_coin_ids)
 
             vals = Coins.__RecursiveSetupTree(tree_root,[entry[mapping[x]] for x in tree_keys])
 
@@ -620,7 +430,6 @@ class Coins:
                     # Show value
                     if len(vals) > 2:
                         value_tree = vals[2]
-                        #value_name = f"{entry[mapping["value_display_name"]]} ({round(float(entry[mapping["value"]]),2):.2f})" if entry[mapping["value_display_name"]] else entry[mapping["value"]]
                         value_name = Value(
                             entry[mapping["value"]],
                             entry[mapping["value_display_name"]],
@@ -657,52 +466,9 @@ class Coins:
                                         )
                                     Coins.__SummarizePurchase(coin_tree, config)
 
-            
-
-
-            # Default values in case it is not updated in future.
-            coins[entry[mapping["coin_id"]]] = (
-                entry[mapping["coin_id"]],
-                None,
-            )  # (coin_id, CoinData object)
-
-            # Sets up denomination information if needed
-            if not hide_denominations:
-
-                # Sets up value information if needed
-                if not hide_values:
-
-                    # Creates CoinData object and prices it if necessary
-                    if not hide_coins:
-                        Coins.__SetupCoin(entry,mapping,coins,prices,config)
-
-                    Coins.__SetupValue(entry,mapping,values)
-
-                Coins.__SetupDenomination(entry,mapping,denominations)
-
-            Coins.__SetupCountry(entry,mapping,countries)
-
-                    
-        Coins.Sort(tree_root)
-        for line in tree_root.print():
-            print(line)
+        Coins.Sort(tree_root,**sorting_methods)
 
         return tree_root
-
-        if do_not_build_tree:
-            return (countries, denominations, values, coins)
-
-        # Creates the tree display of results
-        return Coins.BuildTree(
-            countries,
-            denominations,
-            values,
-            coins,
-            purchases=purchases,
-            debug=debug,
-            only_coin_ids=only_coin_ids,
-            config=config,
-        )
 
     # Parses a string into the four specifiers (country, denomination, year, and face value)
     # countries should be a list of tuples or lists. Each item of countries represents a
