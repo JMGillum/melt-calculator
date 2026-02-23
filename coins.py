@@ -331,6 +331,105 @@ class Coins:
         return results
 
 
+    def __SetupCoin(entry,mapping,coins,prices,config):
+
+        # Information to pass to CoinData.__init__()
+        coin_specs = {
+            "weight": entry[mapping["gross_weight"]],
+            "fineness": entry[mapping["fineness"]],
+            "precious_metal_weight": entry[
+                mapping["precious_metal_weight"]
+            ],
+            "years": entry[mapping["years"]],
+            "metal": entry[mapping["metal"]],
+            "nickname": entry[mapping["coin_display_name"]],
+            "config": config,
+        }
+
+        coin = CoinData(**coin_specs)
+        if coin is None:
+            raise ValueError
+
+        # (Coin id of coin, CoinData object of coin)
+        coins[entry[mapping["coin_id"]]] = (
+            coins[entry[mapping["coin_id"]]][0],
+            coin
+        )
+
+        if coin is not None:
+            # Metal prices exist
+            if prices:
+                Coins.Price(coins[entry[mapping["coin_id"]]][1], prices)
+
+            # No metal prices exist, so don't display prices.
+            else:
+                coins[entry[mapping["coin_id"]]][1].togglePrice(False)
+
+
+
+    def __SetupValue(entry,mapping,values):
+        try:
+            values[entry[mapping["value_id"]]]
+        except KeyError:
+            # Display name, child coins, sorting number
+            values[entry[mapping["value_id"]]] = (
+                entry[mapping["value_display_name"]]
+                if entry[mapping["value_display_name"]]
+                else entry[mapping["value"]],
+                [],
+                entry[mapping["value"]],
+            )
+        if (
+            entry[mapping["coin_id"]]
+            not in values[entry[mapping["value_id"]]][1]
+        ):
+            values[entry[mapping["value_id"]]][1].append(
+                entry[mapping["coin_id"]]
+            )
+
+
+    def __SetupDenomination(entry,mapping,denominations):
+
+        # Creates entry for this denomination if it is the first time encountering it.
+        try:
+            denominations[entry[mapping["denomination_id"]]]
+        except KeyError:
+            # Display name, child values, bullion tag
+            denominations[entry[mapping["denomination_id"]]] = (
+                entry[mapping["denomination_display_name"]],
+                [],
+                entry[mapping["tag_bullion"]],
+            )
+
+        # Associates value_id with this denomination if it isn't already
+        if (
+            entry[mapping["value_id"]]
+            not in denominations[entry[mapping["denomination_id"]]][1]
+        ):
+            denominations[entry[mapping["denomination_id"]]][1].append(
+                entry[mapping["value_id"]]
+            )
+
+
+    def __SetupCountry(entry,mapping,countries):
+
+        # Creates entry for this country if it is the first time encountering it.
+        try:
+            countries[entry[mapping["country_id"]]]
+        except KeyError:
+            countries[entry[mapping["country_id"]]] = (
+                entry[mapping["country_display_name"]],
+                [],
+            )
+
+        # Associates denomination_id with this country if it isn't already
+        if (
+            entry[mapping["denomination_id"]]
+            not in countries[entry[mapping["country_id"]]][1]
+        ):
+            countries[entry[mapping["country_id"]]][1].append(
+                entry[mapping["denomination_id"]]
+            )
 
     # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
     def Build(
@@ -359,88 +458,39 @@ class Coins:
         denominations = {}
         countries = {}
         for entry in entries:
+
+            # Checks bullion filters and skips entry if necessary
             if show_only_bullion and not entry[mapping["tag_bullion"]]:
                 continue
             if show_only_not_bullion and entry[mapping["tag_bullion"]]:
                 continue
+
+            # Default values in case it is not updated in future.
             coins[entry[mapping["coin_id"]]] = (
                 entry[mapping["coin_id"]],
                 None,
             )  # (coin_id, CoinData object)
+
+            # Sets up denomination information if needed
             if not hide_denominations:
+
+                # Sets up value information if needed
                 if not hide_values:
+
+                    # Creates CoinData object and prices it if necessary
                     if not hide_coins:
-                        coin_specs = {
-                            "weight": entry[mapping["gross_weight"]],
-                            "fineness": entry[mapping["fineness"]],
-                            "precious_metal_weight": entry[
-                                mapping["precious_metal_weight"]
-                            ],
-                            "years": entry[mapping["years"]],
-                            "metal": entry[mapping["metal"]],
-                            "nickname": entry[mapping["coin_display_name"]],
-                            "config": config,
-                        }
-                        coins[entry[mapping["coin_id"]]] = (
-                            coins[entry[mapping["coin_id"]]][0],
-                            CoinData(**coin_specs),
-                        )
-                    if coins[entry[mapping["coin_id"]]][1] is not None:
-                        if prices:
-                            Coins.Price(coins[entry[mapping["coin_id"]]][1], prices)
-                        else:
-                            coins[entry[mapping["coin_id"]]][1].togglePrice(False)
-                    try:
-                        values[entry[mapping["value_id"]]]
-                    except KeyError:
-                        # Display name, child coins, sorting number
-                        values[entry[mapping["value_id"]]] = (
-                            entry[mapping["value_display_name"]]
-                            if entry[mapping["value_display_name"]]
-                            else entry[mapping["value"]],
-                            [],
-                            entry[mapping["value"]],
-                        )
-                    if (
-                        entry[mapping["coin_id"]]
-                        not in values[entry[mapping["value_id"]]][1]
-                    ):
-                        values[entry[mapping["value_id"]]][1].append(
-                            entry[mapping["coin_id"]]
-                        )
-                try:
-                    denominations[entry[mapping["denomination_id"]]]
-                except KeyError:
-                    # Display name, child values, bullion tag
-                    denominations[entry[mapping["denomination_id"]]] = (
-                        entry[mapping["denomination_display_name"]],
-                        [],
-                        entry[mapping["tag_bullion"]],
-                    )
-                if (
-                    entry[mapping["value_id"]]
-                    not in denominations[entry[mapping["denomination_id"]]][1]
-                ):
-                    denominations[entry[mapping["denomination_id"]]][1].append(
-                        entry[mapping["value_id"]]
-                    )
-            try:
-                countries[entry[mapping["country_id"]]]
-            except KeyError:
-                countries[entry[mapping["country_id"]]] = (
-                    entry[mapping["country_display_name"]],
-                    [],
-                )
-            if (
-                entry[mapping["denomination_id"]]
-                not in countries[entry[mapping["country_id"]]][1]
-            ):
-                countries[entry[mapping["country_id"]]][1].append(
-                    entry[mapping["denomination_id"]]
-                )
+                        Coins.__SetupCoin(entry,mapping,coins,prices,config)
+
+                    Coins.__SetupValue(entry,mapping,values)
+
+                Coins.__SetupDenomination(entry,mapping,denominations)
+
+            Coins.__SetupCountry(entry,mapping,countries)
 
         if do_not_build_tree:
             return (countries, denominations, values, coins)
+
+        # Creates the tree display of results
         return Coins.BuildTree(
             countries,
             denominations,
