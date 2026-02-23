@@ -180,7 +180,7 @@ def Search(args, db, purchases, prices, config):
                             f"Results for '{text_year}{text_country}{text_face_value}{text_denomination}'".strip()
                         )
                         # Updates whether the tree will use fancy characters or not
-                        results.cascading_set_fancy(config["tree_fancy_characters"])
+                        results.set_fancy(config["tree_fancy_characters"], cascade=True)
                         if not args["no_tree"]:  # If tree is to be printed, print it.
                             for line in results.print():
                                 print(line)
@@ -207,7 +207,7 @@ def Search(args, db, purchases, prices, config):
             hide_denominations=args["no_denominations"],
             config=config,
         )
-        results.cascading_set_fancy(config["tree_fancy_characters"])
+        results.set_fancy(config["tree_fancy_characters"], cascade=True)
 
         if not args["no_tree"]:
             for line in results.print():

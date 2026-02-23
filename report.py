@@ -88,7 +88,7 @@ def CollectionReport(args, db, purchases, prices, config):
         only_coin_ids=args["only_coin_ids"],
         config=config,
     )
-    results.cascading_set_fancy(config["tree_fancy_characters"])
+    results.set_fancy(config["tree_fancy_characters"], cascade=True)
 
     # Prints tree
     if not args["no_tree"]:
