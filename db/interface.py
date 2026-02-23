@@ -170,7 +170,6 @@ class DB_Interface:
     def FetchCoins(self, search_arguments):
         """search_arguments should be a dictionary for **kwargs of Queries.search()"""
         results = Queries.Search(**search_arguments)
-        print(results)
         return self.Fetch(results[0], results[1]), results[2]
 
     def UpdateMetalPrice(self, args):
