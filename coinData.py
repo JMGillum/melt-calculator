@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 10 February 2026          ":"         __ __
+#   Date: 22 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -312,6 +312,7 @@ class CoinData:
         value=0.0,
         retention=None,
         show_value=True,
+        coin_id = None,
         config={},
     ):
 
@@ -359,6 +360,9 @@ class CoinData:
         if isinstance(nickname, str):
             self.nickname = nickname.title() + " "
 
+        self.coin_id = coin_id
+        if self.coin_id:
+            self.nickname = "{" + f"{coin_id}" + "} " + self.nickname
         self.value = value
 
         # Retention was not sepecified, so use default that was passed in config dictionary.
@@ -540,3 +544,136 @@ class CoinData:
 
     def __str__(self):
         return self.AsAString(self.GetCoinString())
+
+class Value:
+
+    def __init__(
+        self,
+        value = 0.0,
+        value_name: str = None,
+        show_color: bool = True,
+        colors_8_bit: bool = True,
+        value_color: str = None,
+    ):
+        self.value = value
+        self.value_name = value_name
+        self.show_color = show_color
+        self.colors_8_bit = colors_8_bit
+        self.value_color = value_color
+
+
+
+        if self.value_name:
+            self.display_name = f"{self.value_name}"
+            try:
+                self.display_name += f" ({round(float(self.value),2):.2f})"
+            except ValueError:
+                self.display_name += f" ({self.value})"
+            except TypeError:
+                pass
+
+        # No display name set.
+        else:
+            try:
+                self.display_name = f"{int(self.value)}"
+            except ValueError:
+                try:
+                    self.display_name = f"{round(float(self.value),2):.2f}"
+                except ValueError:
+                    self.display_name = f"{self.value}"
+                except TypeError:
+                    pass
+
+        color_options = (
+            self.show_color,
+            self.colors_8_bit,
+            self.value_color,
+        )
+        self.display_name = Colors.PrintColored(self.display_name, *color_options)
+
+
+    def __str__(self):
+        return self.display_name
+
+    def __float__(self):
+        return float(self.value)
+
+    def __int__(self):
+        return int(self.value)
+
+    def __gt__(self,other):
+        return self.value > other.value
+
+    def __lt__(self,other):
+        return self.value < other.value
+
+    def __eq__(self,other):
+        return self.value == other.value
+
+    def __le__(self,other):
+        return self.value <= other.value
+
+    def __ge__(self,other):
+        return self.value >= other.value
+
+    def __ne__(self,other):
+        return self.value != other.value
+
+
+class Denomination:
+
+    def __init__(
+        self,
+        name: str = None,
+        show_color: bool = True,
+        colors_8_bit: bool = True,
+        color: str = None,
+    ):
+        self.name = name
+        self.show_color = show_color
+        self.colors_8_bit = colors_8_bit
+        self.color = color
+
+        if name is None:
+            name = ""
+        name = str(name)
+        self.display_name = name.title()
+
+        color_options = (
+            self.show_color,
+            self.colors_8_bit,
+            self.color,
+        )
+        self.display_name = Colors.PrintColored(self.display_name, *color_options)
+
+    def __str__(self):
+        return self.display_name
+
+class Country:
+
+    def __init__(
+        self,
+        name: str = None,
+        show_color: bool = True,
+        colors_8_bit: bool = True,
+        color: str = None,
+    ):
+        self.name = name
+        self.show_color = show_color
+        self.colors_8_bit = colors_8_bit
+        self.color = color
+
+        if name is None:
+            name = ""
+        name = str(name)
+        self.display_name = name.title()
+
+        color_options = (
+            self.show_color,
+            self.colors_8_bit,
+            self.color,
+        )
+        self.display_name = Colors.PrintColored(self.display_name, *color_options)
+
+    def __str__(self):
+        return self.display_name

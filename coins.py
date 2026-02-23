@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 22 February 2026           ":"         __ __
+#   Date: 23 February 2026           ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -16,7 +16,7 @@
 #
 # ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-from coinData import CoinData, Purchase, PurchaseStats
+from coinData import CoinData, Purchase, PurchaseStats, Value, Denomination, Country
 from tree.tree import Tree
 from tree.node import Node
 from colors import Colors
@@ -431,7 +431,7 @@ class Coins:
                 entry[mapping["denomination_id"]]
             )
 
-    def __SetupCoin2(entry,mapping,prices,config):
+    def __SetupCoin2(entry,mapping,prices,config,show_id=False):
 
         # Information to pass to CoinData.__init__()
         coin_specs = {
@@ -445,6 +445,8 @@ class Coins:
             "nickname": entry[mapping["coin_display_name"]],
             "config": config,
         }
+        if show_id:
+            coin_specs |= {"coin_id":entry[mapping["coin_id"]]}
 
         coin = CoinData(**coin_specs)
         if coin is None:
@@ -478,6 +480,66 @@ class Coins:
         if not existed:
             tree.set_name(name)
         return tree
+
+    def Sort(root):
+        countries = [(x[0],str(x[1])) for x in root]
+        countries = sorted(countries, key=lambda x: x[1])
+        root.set_display_order([x[0] for x in countries])
+
+        for _,country in root:
+
+            denominations = [(x[0],str(x[1])) for x in country]
+            denominations = sorted(denominations, key=lambda x: x[1])
+            country.set_display_order([x[0] for x in denominations])
+
+            # Sort Values
+            for _,denomination in country:
+
+                values = []
+                for key,val in denomination:
+                    val = val.name
+                    value = None
+                
+                    try:  # converts name from decimal to integer if possible
+                        value = float(val)
+                        if value - int(value) < 0.1:
+                            value = int(value)
+
+                        values.append((key,value))
+
+                    # If name is string, append sorting number to end.
+                    except ValueError:
+                        try:
+                            start = val.rfind("(")
+                            end = val.rfind(")",start)
+                            value = round(float(val[start+1:end]), 2)
+                        except ValueError:
+                            value = val
+                        values.append((key,value))
+                values = sorted(values, key=lambda x: x[1])
+                denomination.set_display_order([x[0] for x in values])
+
+                # Sorts coins
+                for _,value in denomination:
+                    coins = [(x[0],x[1].data.years[0]) for x in value]
+                    coins = sorted(
+                        coins, key=lambda x: x[1], reverse=True
+                    )
+                    value.set_display_order([x[0] for x in coins])
+
+                    for _,coin in value:
+                        purchases = []
+                        extras = []
+                        for key,val in coin:
+                            if isinstance(val,Purchase):
+                                purchases.append((key,val.purchase_date))
+                            else:
+                                extras.append(key)
+
+                        purchases = sorted(purchases, key=lambda x: x[1])
+                        purchases = [x[0] for x in purchases] + extras
+                        coin.set_display_order(purchases)
+                        print(coin.nodes)
         
 
     # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
@@ -528,26 +590,46 @@ class Coins:
 
 
             coin_id = entry[mapping["coin_id"]]
-            coin = Coins.__SetupCoin2(entry,mapping,prices,config)
+            coin = Coins.__SetupCoin2(entry,mapping,prices,config,only_coin_ids)
 
             vals = Coins.__RecursiveSetupTree(tree_root,[entry[mapping[x]] for x in tree_keys])
 
             # Show country
             if len(vals) > 0:
                 country_tree = vals[0]
+                country_name = Country(
+                    entry[mapping["country_display_name"]],
+                    config["show_color"],
+                    config["colors_8_bit"],
+                    config["types_colors"]["country"]
+                )
 
-                country_tree = Coins.__NameElement(*country_tree,entry[mapping["country_display_name"]])
+                country_tree = Coins.__NameElement(*country_tree,country_name)
 
                 # Show denomination
                 if len(vals) > 1:
                     denomination_tree = vals[1]
-                    denomination_tree = Coins.__NameElement(*denomination_tree,entry[mapping["denomination_display_name"]])
+                    denomination_name = Denomination(
+                        entry[mapping["denomination_display_name"]],
+                        config["show_color"],
+                        config["colors_8_bit"],
+                        config["types_colors"]["denomination"]
+                    )
+                    denomination_tree = Coins.__NameElement(*denomination_tree,denomination_name)
 
                     # Show value
                     if len(vals) > 2:
                         value_tree = vals[2]
-                        value_name = entry[mapping["value_display_name"]] if entry[mapping["value_display_name"]] else entry[mapping["value"]]
+                        #value_name = f"{entry[mapping["value_display_name"]]} ({round(float(entry[mapping["value"]]),2):.2f})" if entry[mapping["value_display_name"]] else entry[mapping["value"]]
+                        value_name = Value(
+                            entry[mapping["value"]],
+                            entry[mapping["value_display_name"]],
+                            config["show_color"],
+                            config["colors_8_bit"],
+                            config["types_colors"]["value"],
+                        )
                         value_tree = Coins.__NameElement(*value_tree,value_name)
+
 
                         # Show coin
                         if len(vals) > 3:
@@ -575,8 +657,6 @@ class Coins:
                                         )
                                     Coins.__SummarizePurchase(coin_tree, config)
 
-                            for line in tree_root.print():
-                                print(line)
             
 
 
@@ -601,6 +681,13 @@ class Coins:
                 Coins.__SetupDenomination(entry,mapping,denominations)
 
             Coins.__SetupCountry(entry,mapping,countries)
+
+                    
+        Coins.Sort(tree_root)
+        for line in tree_root.print():
+            print(line)
+
+        return tree_root
 
         if do_not_build_tree:
             return (countries, denominations, values, coins)
