@@ -44,7 +44,7 @@ def CollectionReport(args, db, purchases, prices, config):
         debug=args["verbose"],
         show_only_bullion=args["only_bullion"],
         show_only_not_bullion=args["hide_bullion"],
-        only_coin_ids=args["only_coin_ids"],
+        show_coin_ids=args["show_coin_ids"],
         hide_coins=args["no_coins"],
         hide_values=args["no_values"],
         hide_denominations=args["no_denominations"],

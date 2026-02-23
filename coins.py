@@ -180,8 +180,20 @@ class Coins:
             )
 
 
-    def __SetupCoin(entry,mapping,prices,config,show_id=False):
+    def __SetupCoin(entry:list|tuple,mapping:dict,prices:dict,config:dict,show_id:bool=False):
 
+        """ Creates a CoinData object and prices it, if needed.
+
+        Args:
+            entry: Individual row returned from database
+            mapping: Maps keys to indices in entry
+            prices: Stores metal prices
+            config: Config options, passed to CoinData.__init__()
+            show_id: Whether to pass the coin_id to CoinData.__init__()
+
+        Returns: The created CoinDate object
+            
+        """
         # Information to pass to CoinData.__init__()
         coin_specs = {
             "weight": entry[mapping["gross_weight"]],
@@ -194,6 +206,8 @@ class Coins:
             "nickname": entry[mapping["coin_display_name"]],
             "config": config,
         }
+
+        # Passes the coin_id to be displayed by the CoinData object
         if show_id:
             coin_specs |= {"coin_id":entry[mapping["coin_id"]]}
 
@@ -201,94 +215,186 @@ class Coins:
         if coin is None:
             raise ValueError
 
-        else:
-            # Metal prices exist
-            if prices:
-                Coins.Price(coin, prices)
+        # Metal prices exist
+        if prices:
+            Coins.Price(coin, prices)
 
-            # No metal prices exist, so don't display prices.
-            else:
-                coin.togglePrice(False)
+        # No metal prices exist, so don't display prices.
+        else:
+            coin.togglePrice(False)
         return coin
 
-    def __RecursiveSetupTree(parent_tree,keys):
+    def __RecursiveSetupTree(parent_tree:Tree|Node,keys:list[str]):
+        """ Ensures that the arbitrary depth Tree object exists.
+        Recursively traverses the tree, creating new nodes if they don't exist.
+        Functions similarly to `mkdir -p a/b/c`.
+
+        ex: keys= ["a","b","c"]
+        Creates the tree:
+        root -> "a" -> "b" -> "c"
+
+        Args:
+            parent_tree: The tree object to search for the key within
+            keys: Each key specifies one level down in the tree structure. The first
+            element is searched for in the current level. Then the function traverses one level
+            down with the first key popped off.
+
+        Returns: Tuple containing every Tree object along the specified
+            
+        """
+
+        # return condition
         if len(keys) == 0:
             return
+
+        # Looks for key within current tree's nodes
         current_tree = parent_tree.search(keys[0])
         val = (current_tree,True)
+
+        # Key was not within current tree's nodes
         if current_tree is None:
+
+            # Add new Tree object at key index in current tree's nodes
             current_tree = parent_tree.add_node(Tree(nodes={}),keys[0])
             val = (current_tree,False)
+
+        # Recursively traverse deeper
         result = Coins.__RecursiveSetupTree(current_tree,keys[1:])
+
+        # Returns tuple (level1, level2, level3, ...)
         if result is None:
             return (val,)
         else:
             return (val,*result)
 
-    def __NameElement(tree,existed,name):
+    def __NameElement(tree:Tree,existed:bool,name:str):
+        """ Sets the name of the tree if existed is True, otherwise does nothing
+
+        Args:
+            existed: Whether to set the name of the tree or not
+            name: The name of which tree.name will be set to. Only does something if existed is True 
+
+        Returns: tree
+            
+        """
+
         if not existed:
             tree.set_name(name)
         return tree
 
-    def __ParseSortString(string,separator="|",default_method=None,default_direction="asc"):
+    def __ParseSortString(string:str,separator:str="|",default_method:str=None,default_direction:str="asc"):
+        """ Sort strings are of the format <method><separator><direction>. Parses and extracts elements from this.
+
+        Args:
+            string: The string to parse
+            separator: The character that separates method from direction
+            default_method: What to return for the method if an error occured
+            default_direction: What to return for the direction if an error occured
+
+        Returns: (method, direction), both as strings
+            
+        """
+
         if string is None:
             return default_method, default_direction
         vals = string.split(separator)
+
+        # Invalid format
         if len(vals) != 2:
             return default_method, default_direction
         else:
+            # Converts method to lower
             vals[0] = str(vals[0]).lower()
             vals[1] = str(vals[1])
+            
+            # Direction must be some form of ascend or descend
             if vals[1].lower() == "asc" or vals[1].lower() == "ascend" or vals[1].lower() == "ascending":
                 vals[1] = "asc"
             elif vals[1].lower() == "desc" or vals[1].lower() == "descend" or vals[1].lower() == "descending":
                 vals[1] = "desc"
+
+            # Direction is some other value. Use default
             else:
                 vals[1] = default_direction
 
             return vals[0], vals[1]
 
             
-    def __SortBasic(tree, sort_string):
+    def __SortBasic(tree:Tree, sort_string:str):
+        """ Sorts basic tree structures. Can only sort off of what each node cast to str returns.
+        Sorting only occurs at this level. Does not sort deeper.
+
+        Args:
+            tree: The tree to sort the nodes of.
+            sort_string: Formatted sort string of <method>|<direction>. See Coins.__ParseSortString()
+        """
+
         method, direction = Coins.__ParseSortString(sort_string)
         if method is not None:
             direction = True if direction == "desc" else False
+
+            # Sorts alphabetically by name
             if method == "name":
                 keys = [(x[0],str(x[1])) for x in tree]
                 keys = sorted(keys, key=lambda x: x[1], reverse=direction)
                 tree.set_display_order([x[0] for x in keys])
 
 
-    def __SortValues(tree, sort_string):
+    def __SortValues(tree:Tree, sort_string:str):
+        """ Sorts a tree with nodes of Value objects.
+        Sorting only occurs at this level. Does not sort deeper.
+
+        Args:
+            tree: The tree to sort the nodes of.
+            sort_string: Formatted sort string of <method>|<direction>. See Coins.__ParseSortString()
+        """
+
         method, direction = Coins.__ParseSortString(sort_string)
         if method is not None:
             direction = True if direction == "desc" else False
+
+            # Sorts numerically by value
             if method == "value":
                 values = []
                 for key,val in tree:
                     val = val.name
                     value = None
                 
-                    try:  # converts name from decimal to integer if possible
+                    # Attempts to convert value to an integer
+                    try:  
                         value = float(val)
+
+                        # Checks if float value is very close to a whole number. If so,
+                        # truncate it.
                         if value - int(value) < 0.1:
                             value = int(value)
 
                         values.append((key,value))
 
-                    # If name is string, append sorting number to end.
+                    # If value is a string, search within final parentheses for its numeric value
                     except ValueError:
                         try:
                             start = val.rfind("(")
                             end = val.rfind(")",start)
+
+                            # Value is within last () in str
                             value = round(float(val[start+1:end]), 2)
                         except ValueError:
                             value = val
                         values.append((key,value))
+
                 values = sorted(values, key=lambda x: x[1], reverse=direction)
                 tree.set_display_order([x[0] for x in values])
 
-    def __SortCoins(tree, sort_string):
+    def __SortCoins(tree:Tree, sort_string:str):
+        """ Sorts a tree with nodes of CoinData objects.
+        Sorting only occurs at this level. Does not sort deeper.
+
+        Args:
+            tree: The tree to sort the nodes of.
+            sort_string: Formatted sort string of <method>|<direction>. See Coins.__ParseSortString()
+        """
+
         method, direction = Coins.__ParseSortString(sort_string)
         if method is not None:
             direction = True if direction == "desc" else False
@@ -303,11 +409,19 @@ class Coins:
 
 
     def __SortPurchases(tree,sort_string):
+        """ Sorts a tree with nodes of Purchase objects.
+        Sorting only occurs at this level. Does not sort deeper.
+
+        Args:
+            tree: The tree to sort the nodes of.
+            sort_string: Formatted sort string of <method>|<direction>. See Coins.__ParseSortString()
+        """
+
         method, direction = Coins.__ParseSortString(sort_string)
         if method is not None:
             direction = True if direction == "desc" else False
 
-            # Sorts by first year the coin was made
+            # Sorts by the date of the purchase
             if method == "date":
                 purchases = []
                 extras = []
@@ -324,13 +438,22 @@ class Coins:
 
     def Sort(
         root, 
-        sort_countries="name|asc", 
-        sort_denominations="name|asc", 
-        sort_values="value|asc", 
-        sort_coins="year|asc", 
-        sort_purchases="date|asc"
+        sort_countries:str="name|asc", 
+        sort_denominations:str="name|asc", 
+        sort_values:str="value|asc", 
+        sort_coins:str="year|asc", 
+        sort_purchases:str="date|asc"
     ):
 
+        """ Sorts a Tree with levels of country -> denomination -> value -> coin -> purchase
+
+        Args:
+            sort_countries: str to pass to Coins.__SortBasic()
+            sort_denominations: formatted sort str to pass to Coins.__SortBasic()
+            sort_values: formatted sort str to pass to Coins.__SortValues()
+            sort_coins: formatted sort str to pass to Coins.__SortCoins()
+            sort_purchases: formatted sort str to pass to Coins.__SortPurchases()
+        """
         if sort_countries is not None:
             Coins.__SortBasic(root,sort_countries)
 
@@ -356,21 +479,41 @@ class Coins:
 
     # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
     def Build(
-        entries,
-        mapping,
-        config={},
-        prices=None,
-        purchases=None,
-        debug=False,
-        show_only_bullion=False,
-        show_only_not_bullion=False,
-        hide_coins=False,
-        hide_values=False,
-        hide_denominations=False,
-        only_coin_ids=False,
-        sorting_methods={},
+        entries:list|tuple,
+        mapping:dict,
+        config:dict={},
+        prices:dict=None,
+        purchases:list|tuple=None,
+        debug:bool=False,
+        show_only_bullion:bool=False,
+        show_only_not_bullion:bool=False,
+        hide_coins:bool=False,
+        hide_values:bool=False,
+        hide_denominations:bool=False,
+        show_coin_ids:bool=False,
+        sorting_methods:dict={},
     ):
 
+        """ Given a list of rows, create a tree structure to display them.
+
+        Args:
+            entries: Rows from the database. This is the data that will be represented in the tree
+            mapping: Maps keywords to indices in entries.
+            config: Passed to CoinData.__init__()
+            prices: Stores metal prices
+            purchases: Stores purchases
+            debug: Pass True to enable extra printing
+            show_only_bullion: Pass True to display only denominations with the Bullion tag
+            show_only_not_bullion: Pass True to display only denominations without the Bullion tag
+            hide_coins: Will not include any coins in the output.
+            hide_values: Will not include any values or coins in the output.
+            hide_denominations: Will not include any denominations, values, or coins in the output.
+            show_coin_ids: Sends the coin's coin_id to the CoinData object to be displayed.
+            sorting_methods: Unpacked as the args to Coins.__Sort()
+
+        Returns: A Tree object representing all of the data stored within entries.
+            
+        """
         if not isinstance(entries, list):
             entries = [entries]
         if show_only_bullion and show_only_not_bullion:
@@ -393,14 +536,15 @@ class Coins:
         for entry in entries:
 
             # Checks bullion filters and skips entry if necessary
+            # Should really be done in the search function, but that is a problem
+            # for another day
             if show_only_bullion and not entry[mapping["tag_bullion"]]:
                 continue
             if show_only_not_bullion and entry[mapping["tag_bullion"]]:
                 continue
 
-
             coin_id = entry[mapping["coin_id"]]
-            coin = Coins.__SetupCoin(entry,mapping,prices,config,only_coin_ids)
+            coin = Coins.__SetupCoin(entry,mapping,prices,config,show_coin_ids)
 
             vals = Coins.__RecursiveSetupTree(tree_root,[entry[mapping[x]] for x in tree_keys])
 
@@ -446,14 +590,16 @@ class Coins:
                             value_tree.nodes[coin_id] = coin_tree
                             if purchases:
                                 matches = [x for x in purchases if x[0] == coin_id]
+
+                                # Prints out matched purchases if debugging
                                 if matches:
-                                    if (
-                                        debug
-                                    ):  # Prints out matched purchases if debugging
+                                    if debug:
                                         print(f"Coin '{coin_id}' has purchases:")
                                     for match in matches:
                                         if debug:
                                             print(f"  {match}")
+
+                                        # Creates Purchase object and adds to coin tree
                                         coin_tree.nodes.append(
                                             Purchase(
                                                 *(match[1:4] + match[5:]),

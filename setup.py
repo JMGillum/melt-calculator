@@ -155,9 +155,9 @@ def SetupParser() -> argparse.ArgumentParser:
     )
     tree_output_modification_parser.add_argument(
         "-i",
-        "--only-coin-ids",
+        "--show-coin-ids",
         action="store_true",
-        help="Disables printing of actual coin objects, only printing their id's instead",
+        help="Will print out a coin's id along with its ordinary output.",
     )
 
     parser = argparse.ArgumentParser(

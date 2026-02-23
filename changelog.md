@@ -9,6 +9,7 @@
 * Added documentation, namely rewriting the install instructions and creating tutorials.
 * Moved config to a static location and changed to toml file.
 * Reorganized structure of arguments and how to call various scripts.
+* Changed longform of -i flag from --only-coin-ids to --show-coin-ids
 * Other general housekeeping.
 * Bugfixes:
   * Able to search by coin id in manage-purchases
