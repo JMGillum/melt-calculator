@@ -431,6 +431,55 @@ class Coins:
                 entry[mapping["denomination_id"]]
             )
 
+    def __SetupCoin2(entry,mapping,prices,config):
+
+        # Information to pass to CoinData.__init__()
+        coin_specs = {
+            "weight": entry[mapping["gross_weight"]],
+            "fineness": entry[mapping["fineness"]],
+            "precious_metal_weight": entry[
+                mapping["precious_metal_weight"]
+            ],
+            "years": entry[mapping["years"]],
+            "metal": entry[mapping["metal"]],
+            "nickname": entry[mapping["coin_display_name"]],
+            "config": config,
+        }
+
+        coin = CoinData(**coin_specs)
+        if coin is None:
+            raise ValueError
+
+        else:
+            # Metal prices exist
+            if prices:
+                Coins.Price(coin, prices)
+
+            # No metal prices exist, so don't display prices.
+            else:
+                coin.togglePrice(False)
+        return coin
+
+    def __RecursiveSetupTree(parent_tree,keys):
+        if len(keys) == 0:
+            return
+        current_tree = parent_tree.search(keys[0])
+        val = (current_tree,True)
+        if current_tree is None:
+            current_tree = parent_tree.add_node(Tree(nodes={}),keys[0])
+            val = (current_tree,False)
+        result = Coins.__RecursiveSetupTree(current_tree,keys[1:])
+        if result is None:
+            return (val,)
+        else:
+            return (val,*result)
+
+    def __NameElement(tree,existed,name):
+        if not existed:
+            tree.set_name(name)
+        return tree
+        
+
     # Given a set of coins, Fills out dictionaries that can be easily turned into a tree structure
     def Build(
         entries,
@@ -457,6 +506,18 @@ class Coins:
         values = {}
         denominations = {}
         countries = {}
+
+        tree_root = Tree(nodes={})
+        tree_keys = ["country_id"]
+        if not hide_denominations:
+            tree_keys.append("denomination_id")
+
+            if not hide_values:
+                tree_keys.append("value_id")
+
+                if not hide_coins:
+                    tree_keys.append("coin_id")
+        
         for entry in entries:
 
             # Checks bullion filters and skips entry if necessary
@@ -464,6 +525,60 @@ class Coins:
                 continue
             if show_only_not_bullion and entry[mapping["tag_bullion"]]:
                 continue
+
+
+            coin_id = entry[mapping["coin_id"]]
+            coin = Coins.__SetupCoin2(entry,mapping,prices,config)
+
+            vals = Coins.__RecursiveSetupTree(tree_root,[entry[mapping[x]] for x in tree_keys])
+
+            # Show country
+            if len(vals) > 0:
+                country_tree = vals[0]
+
+                country_tree = Coins.__NameElement(*country_tree,entry[mapping["country_display_name"]])
+
+                # Show denomination
+                if len(vals) > 1:
+                    denomination_tree = vals[1]
+                    denomination_tree = Coins.__NameElement(*denomination_tree,entry[mapping["denomination_display_name"]])
+
+                    # Show value
+                    if len(vals) > 2:
+                        value_tree = vals[2]
+                        value_name = entry[mapping["value_display_name"]] if entry[mapping["value_display_name"]] else entry[mapping["value"]]
+                        value_tree = Coins.__NameElement(*value_tree,value_name)
+
+                        # Show coin
+                        if len(vals) > 3:
+                            coin_tree = Node(data=coin)
+                            value_tree.nodes[coin_id] = coin_tree
+                            if purchases:
+                                matches = [x for x in purchases if x[0] == coin_id]
+                                if matches:
+                                    if (
+                                        debug
+                                    ):  # Prints out matched purchases if debugging
+                                        print(f"Coin '{coin_id}' has purchases:")
+                                    for match in matches:
+                                        if debug:
+                                            print(f"  {match}")
+                                        coin_tree.nodes.append(
+                                            Purchase(
+                                                *(match[1:4] + match[5:]),
+                                                config["date_format"],
+                                                config["currency_symbol"],
+                                                config["show_color"],
+                                                config["colors_8_bit"],
+                                                config["types_colors"]["purchase"],
+                                            )
+                                        )
+                                    Coins.__SummarizePurchase(coin_tree, config)
+
+                            for line in tree_root.print():
+                                print(line)
+            
+
 
             # Default values in case it is not updated in future.
             coins[entry[mapping["coin_id"]]] = (
