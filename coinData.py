@@ -565,6 +565,7 @@ class Value:
 
         if self.value_name:
             self.display_name = f"{self.value_name}"
+            self.display_name = self.display_name.title()
             try:
                 self.display_name += f" ({round(float(self.value),2):.2f})"
             except ValueError:
