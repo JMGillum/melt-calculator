@@ -19,22 +19,7 @@ Purchase information is spread out across two tables: `purchases` and `specific_
 ### Adding
 
 1. Determine the `coin_id` of the coin:
-    * The easiest way to do this is by using the main program and refining the search until only the desired coin is found.
-
-    ``` text
-    python3 main.py -S "1933 Polish 10 Zlotych"
-
-    |
-    v
-
-    Results for '1933 Polish 10 zlotych'
-    └─Poland
-      └─Zloty
-        └─10
-          └─[1932-1939] ... 
-    ```
-
-    Then append the -i flag:
+    * The easiest way to do this is by using the main program search with the -i flag.
 
     ``` text
     python3 main.py -S "1933 Polish 10 Zlotych" -i
@@ -46,10 +31,10 @@ Purchase information is spread out across two tables: `purchases` and `specific_
     └─Poland
       └─Zloty
         └─10
-          └─pol_zloty_10_1 
+          └─{pol_zloty_10_1} [1932-1939] ... 
     ```
 
-    This replaced the coin information with its id.
+    The coin_id is within the curly brackets.
     * The other method is to find the country id of the country for it, then the denomination id, then the value id, then find all coins with the value id, and determine which one you are interested in.
 2. If you are not adding specific coin information, skip to step 4. Otherwise, determine if the specific coin information is already stored in the table (perhaps there were other coins with the same mintmark and mint year):
 
