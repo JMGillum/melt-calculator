@@ -616,18 +616,25 @@ class Coins:
 
         return tree_root
 
-    # Parses a string into the four specifiers (country, denomination, year, and face value)
-    # countries should be a list of tuples or lists. Each item of countries represents a
-    # country. The first value in the item is the proper name and each subsequent value
-    # is an alternative name
-    def ParseSearchString(db, text: str, debug: bool = False, config={}):
-        """Parses a string to extract the country's name, year, denomination, and face value"""
+
+    def ParseSearchString(db, text: str, debug: bool = False, config:dict={}):
+        """ Parses a string to extract the country name, denomination, year, face value, and face value's name.
+
+        Args:
+            text: The string to parse
+            debug: Pass True to enable extra output.
+            config: dictionary of config options
+
+        Returns: Tuple storing (country_id, denomination_id, year, face_value_id, face value name)
+            
+        """
 
         # Regex finds all strings of digits
         numbers_matched = [
             x for x in re.findall(r"(((\d+(\s|\-))?\d+\/\d+)|(\d*\.\d+)|(\d+))", text)
         ]
-        print(numbers_matched)
+        if debug:
+            print(f"Numbers matched: {numbers_matched}")
         numbers = []
         for number in numbers_matched:
             test_num = None
@@ -642,15 +649,18 @@ class Coins:
             else:
                 numbers.append(number[0])
         words = re.findall("[a-zA-Z]+", text)  # Same for words
-        print(numbers)
+        print(f"Numbers found: {numbers}")
 
         year = ""
         denomination = ""
         country = ""
         face_value = ""
         face_value_name = ""
+
         # If more than two numbers, picks year and denomination
         if len(numbers) >= 2:
+
+            # Fractinal number
             if isinstance(numbers[0], tuple):
                 if isinstance(numbers[1], tuple):
                     year = numbers[1][0]
@@ -662,39 +672,53 @@ class Coins:
                 year = numbers[0]
                 face_value = numbers[1][0]
                 face_value_name = numbers[1][1]
-            else:  # Neither are tuples (dont have fractional number)
+
+            # Neither of the first two numbers are tuples (dont have fractional number)
+            else:  
                 if len(numbers[0]) != 4 and len(numbers[1]) == 4:
                     year = numbers[1]
                     face_value = numbers[0]
                 else:
                     year = numbers[0]
                     face_value = numbers[1]
-        elif len(numbers) == 1:  # Only one number found
+
+        # Only one number was found
+        elif len(numbers) == 1:  
             if isinstance(numbers[0], tuple):
                 face_value = numbers[0][0]
                 face_value_name = numbers[0][1]
             else:
-                if (
-                    len(numbers[0]) == 4
-                ):  # Checks if number is 4 digits (a year), then checks if within provided range
+
+                # Checks if number is 4 digits (a year), then checks if within provided range
+                if len(numbers[0]) == 4:  
                     temp = int(numbers[0])
                     if (
                         temp >= config["minimum_year"]
                         and temp <= config["current_year"]
                     ):
                         year = numbers[0]
-                    else:  # If not, uses number as face value
+
+                    # Number was not in acceptable range for year,
+                    # so use as face value
+                    else:  
                         face_value = numbers[0]
+
+                # Number is less than four digits, so use as face value
                 else:
                     face_value = numbers[0]
 
         # Sets the country name and denomination
         if len(words) > 0:
+
             # Attempts to find a country name in the string
             for word in words:
                 temp = None
+
+                # Check if word is a name associated with any country
                 result = db.FetchCountryId(word)
                 if result is not None and len(result) > 0:
+
+                    # Fetches the official name to display for the country
                     temp = db.FetchCountryDisplayName(result[0][0])
                     if temp is not None and len(result) > 0:
                         temp = temp[0][0]
@@ -702,10 +726,10 @@ class Coins:
                     print(f"Found country name: {temp if temp else 'None'}")
                 if temp is not None:
                     country = temp
-                    words.remove(
-                        word
-                    )  # Removes the country name from list so it isn't considered a denomination.
+                    # Removes the country name from list so it isn't considered a denomination.
+                    words.remove(word)  
                     break
+
             # If any words are left after searching for country name, the first is the denomination
             if len(words) > 0:
                 denomination = words[0]
@@ -715,8 +739,14 @@ class Coins:
                 f"COUNTRY:{country},DENOMINATION:{denomination},YEAR:{year},FACE VALUE:{face_value},FACE VALUE NAME:{face_value_name}"
             )
 
+        # Checks if the face value name is set and if it's first
+        # character is a '.'
         if face_value_name and face_value_name.strip()[0] == ".":
+            # Prepend a zero to the name. Ex: .0 -> 0.0
             face_value_name = "0" + face_value_name
+
+        # Remove face value name if it is just a copy of the face value
         if face_value == face_value_name:
             face_value_name = None
+
         return (country, denomination, year, face_value, face_value_name)
