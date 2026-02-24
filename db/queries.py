@@ -74,7 +74,6 @@ class Queries:
         if select_columns:
             select_columns = select_columns[:-2]
 
-        # select_columns = "coins.coin_id,coins.gross_weight,coins.fineness,coins.precious_metal_weight,GROUP_CONCAT(year ORDER BY year ASC SEPARATOR ', ') AS combined_years,coins.metal,coins.name,face_values.value_id,face_values.value,face_values.display_name as value_name,denominations.denomination_id,denominations.display_name as denomination_name,countries.country_id,countries.display_name as country_name,tags.bullion"
         base_query = "from coins inner join years on coins.coin_id = years.coin_id inner join face_values on coins.face_value_id = face_values.value_id inner join denominations on face_values.denomination_id = denominations.denomination_id inner join countries on denominations.country_id = countries.country_id inner join tags on denominations.tags = tags.tag_id"
         if country:
             base_query = f"{base_query} inner join country_names on countries.country_id = country_names.country_id"
@@ -184,7 +183,37 @@ class Queries:
         return (query, (price, date, metal_id))
 
     def Purchases():
-        return "SELECT purchases.coin_id,purchases.unit_price,purchases.purchase_quantity,purchases.purchase_date,specific_coins.id,specific_coins.year,specific_coins.mintmark FROM purchases LEFT JOIN specific_coins ON purchases.specific_coin=specific_coins.id ORDER BY purchases.purchase_date,specific_coins.year,specific_coins.mintmark ASC;"
+        cols = {
+            "coin_id": "purchases.coin_id",
+            "unit_price": "purchases.unit_price",
+            "purchase_quantity": "purchases.purchase_quantity",
+            "purchase_date": "purchases.purchase_date",
+            "specific_coin_id": "specific_coins.id",
+            "specific_coin_year": "specific_coins.year",
+            "specific_coin_mintmark": "specific_coins.mintmark",
+        }
+
+        joined_tables = "purchases LEFT JOIN specific_coins ON purchases.specific_coin=specific_coins.id ORDER BY purchases.purchase_date,specific_coins.year,specific_coins.mintmark ASC;"
+
+
+        # Builds the selection criteria and maps
+        return_cols = {}
+        select_columns = ""
+        i = 0
+        for key, value in cols.items():
+            select_columns += f"{value}, "
+
+            # Maps the column index to the key
+            return_cols[key] = i
+            i += 1
+
+        # Removes trailing comma and space
+        if select_columns:
+            select_columns = select_columns[:-2]
+        
+        query = f"SELECT {select_columns} FROM {joined_tables}"
+
+        return (query,return_cols)
 
     def PurchasesByCoinId(coin_id, purchase_id=False, specific_coin_id=False):
         query_purchase_id = ""

@@ -131,7 +131,8 @@ class DB_Interface:
 
     def FetchPurchases(self):
         """Gets all of the defined searches"""
-        return self.Fetch(Queries.Purchases())
+        query, mapping = Queries.Purchases()
+        return (self.Fetch(query),mapping)
 
     def FetchPurchasesByCoinId(
         self, coin_id, purchase_id=False, specific_coin_id=False

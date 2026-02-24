@@ -7,6 +7,8 @@ import data as d
 from datetime import datetime
 from colors import Colors
 
+from coinData import Purchase
+
 
 def SetupParser() -> argparse.ArgumentParser:
     """ Initializes all of the available command line arguments
@@ -366,6 +368,33 @@ def UpdatePrices(prices:dict, args:dict, config:dict, db=None):
                 print(f"{item} was not updated.")
 
 
+def FormatPurchases(purchases,config):
+    purchases, mapping = purchases
+    formatted_purchases = {}
+    for entry in purchases:
+        coin_id = entry[mapping["coin_id"]]
+        purchase = Purchase(
+            price=entry[mapping["unit_price"]],
+            quantity=entry[mapping["purchase_quantity"]],
+            purchase_date=entry[mapping["purchase_date"]],
+            mint_date=entry[mapping["specific_coin_year"]],
+            mint_mark=entry[mapping["specific_coin_mintmark"]],
+            date_format=config["date_format"],
+            currency_symbol=config["currency_symbol"],
+            show_color=config["show_color"],
+            colors_8_bit=config["colors_8_bit"],
+            color_purchase=config["types_colors"]["purchase"]
+        )
+        try:
+            formatted_purchases[coin_id].append(purchase)
+        except KeyError:
+            formatted_purchases |= {coin_id:[purchase]}
+
+    return formatted_purchases
+
+
+
+
 def SetupMetals(db, args:dict, config:dict):
     """ Fetches metal prices from the database, and fetches purchases.
 
@@ -392,6 +421,7 @@ def SetupMetals(db, args:dict, config:dict):
     purchases = None
     if not hide_collection:
         purchases = db.FetchPurchases()
+        purchases = FormatPurchases(purchases,config)
 
     # Fetches prices for the metals, as well as their names.
     # Updates prices if they were specified in the command line

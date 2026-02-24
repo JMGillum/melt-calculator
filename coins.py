@@ -589,27 +589,21 @@ class Coins:
                             coin_tree = Node(data=coin)
                             value_tree.nodes[coin_id] = coin_tree
                             if purchases:
-                                matches = [x for x in purchases if x[0] == coin_id]
+                                matches = []
+                                try:
+                                    matches = purchases[coin_id]
+                                except KeyError:
+                                    pass
+                                #matches = [x for x in purchases if x[0] == coin_id]
 
                                 # Prints out matched purchases if debugging
                                 if matches:
                                     if debug:
                                         print(f"Coin '{coin_id}' has purchases:")
-                                    for match in matches:
-                                        if debug:
-                                            print(f"  {match}")
+                                        print(f"  {matches}")
 
-                                        # Creates Purchase object and adds to coin tree
-                                        coin_tree.nodes.append(
-                                            Purchase(
-                                                *(match[1:4] + match[5:]),
-                                                config["date_format"],
-                                                config["currency_symbol"],
-                                                config["show_color"],
-                                                config["colors_8_bit"],
-                                                config["types_colors"]["purchase"],
-                                            )
-                                        )
+                                    # Creates Purchase object and adds to coin tree
+                                    coin_tree.nodes += matches
                                     Coins.__SummarizePurchase(coin_tree, config)
 
         Coins.Sort(tree_root,**sorting_methods)
