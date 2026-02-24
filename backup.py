@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 February 2026           ":"         __ __
+#   Date: 23 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -16,28 +16,50 @@ import treasure.config
 import treasure.text
 
 
-def BackupResults(results, table, columns, dir, file_name, append, rows_per_insert=1000):
+def BackupResults(results:list|tuple, table:str, columns:list[str]|tuple[str], dir:Path, file_name:str, append:bool, rows_per_insert:int=1000):
+    """ Writes the results of a query to a file as a query. Used to backup information in a table.
+
+    Args:
+        results: Stores rows of information from the database. Elements should directly correspond to the column names in columns.
+        table: Name of the table
+        columns: Names of the columns of the table that are represented in results.
+        dir: The Path to the directory that will store the output file.
+        file_name: Name of the file to store the output
+        append: Pass True to append information to the file instead of truncating
+        rows_per_insert: Number of rows per multi-row insert. Pass <= 1 or None to disable multi-row inserts
+    """
+
     if not results:
         return
 
+    # Sets default rows_per_insert if not explicitly provided
     if rows_per_insert is not None:
         rows_per_insert = int(rows_per_insert)
-    if rows_per_insert is None or rows_per_insert == 0:
-        rows_per_insert = 1000
+
+    # Disables multi row insert
+    if rows_per_insert is None or rows_per_insert < 1:
+        rows_per_insert = 1
 
     output_file = dir / Path(file_name)
+
+    # Determines write mode of file
     write_mode = "w"
     if append:
         write_mode = "a"
+
     with open(output_file, write_mode) as f:
 
         # Print out every result as an insert statement.
         for count in range(len(results)):
             line = results[count]
+
+            # Start of insert statement. Only done every rows_per_insert lines.
             if count % rows_per_insert == 0:
                 f.write(f"INSERT INTO {table}({', '.join(columns)}) VALUES")
                 if rows_per_insert > 1:
                     f.write("\n")
+
+            # Start of values section
             f.write("(")
             for i in range(len(line)):
                 if line[i] is not None:
@@ -56,6 +78,7 @@ def BackupResults(results, table, columns, dir, file_name, append, rows_per_inse
                 if i < len(line)-1:
                     f.write(", ")
             
+            # Ends values section with either comma or semicolon, depending on if more will follow
             if (count + 1) % rows_per_insert == 0 or count == len(results)-1:
                 f.write(");\n")
             else:
@@ -90,17 +113,13 @@ def BasicBackup(db:DB_Interface,dir:Path,columns:list[str],table:str,file_name:s
 
         # Recursively backup each series
         if isinstance(series,list) or isinstance(series,tuple):
-            #print(series)
             for item in series:
                 if (isinstance(item,tuple) or isinstance(item,list)) and len(item) == 1:
                     item = item[0]
-                #print(item)
-                #print(len(item))
                 BasicBackup(db,dir,columns,table,f"{item}_{file_name}",append,order_by,filter_by_series=True,series=item,joined_tables=joined_tables,rows_per_insert=rows_per_insert)
             return
         else:
             query, args = Queries.FilterBySeries(columns,table,series,joined_tables)
-            #print(query)
             if order_by:
                 query.replace(";",f" ORDER BY {order_by};")
             results = db.Fetch(query,args)

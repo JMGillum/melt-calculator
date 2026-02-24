@@ -368,15 +368,29 @@ def UpdatePrices(prices:dict, args:dict, config:dict, db=None):
                 print(f"{item} was not updated.")
 
 
-def FormatPurchases(purchases,config):
+def FormatPurchases(purchases:list|tuple,config:dict)->dict:
+    """ Converts a list of rows of purchase information into a dictionary of Purchase objects
+
+    Args:
+        purchases: Tuple of the rows of data from the database and the mapping
+        config: dictionary of config information
+
+    Returns: Dictionary of Purchase objects, each index is the coin_id that the Purchase is for and the value is a list of Purchase objects.
+        
+    """
+
     purchases, mapping = purchases
     formatted_purchases = {}
     for entry in purchases:
         coin_id = entry[mapping["coin_id"]]
+
+        # Creates the Purchase object.
         purchase = Purchase(
+            purchase_id=entry[mapping["purchase_id"]],
             price=entry[mapping["unit_price"]],
             quantity=entry[mapping["purchase_quantity"]],
             purchase_date=entry[mapping["purchase_date"]],
+            specific_coin_id=entry[mapping["specific_coin_id"]],
             mint_date=entry[mapping["specific_coin_year"]],
             mint_mark=entry[mapping["specific_coin_mintmark"]],
             date_format=config["date_format"],
@@ -385,8 +399,12 @@ def FormatPurchases(purchases,config):
             colors_8_bit=config["colors_8_bit"],
             color_purchase=config["types_colors"]["purchase"]
         )
+
+        # Tries to append purchase to list of purchases for coin_id
         try:
             formatted_purchases[coin_id].append(purchase)
+
+        # This is the first purchase for the coin_id, so add key to dictionary
         except KeyError:
             formatted_purchases |= {coin_id:[purchase]}
 

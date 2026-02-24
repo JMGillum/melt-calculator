@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 19 February 2026          ":"         __ __
+#   Date: 23 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -35,6 +35,15 @@ class Weight:
     """
 
     def __init__(self, weight: float | int, units: Units):
+        """ Creates the weight object with the specified value and units.
+
+        Args:
+            weight: Passing None will default to 0.0
+            units: Object of Units class that specifies the units of the weight. Default is Grams if weight is None
+
+        Returns: weight if it is already a Weight object
+            
+        """
         if isinstance(weight, Weight):
             return weight
 

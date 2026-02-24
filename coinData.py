@@ -21,7 +21,9 @@ class Purchase:
     """Models a coin purchase with information about the price paid, quantity, date of purchase, mint date, and mint mark
 
     Attributes:
+        purchase_id: The purchase id for the object in the table
         purchase_date: A string representing the date of the purchase. Should be a datetime object, or could be a string that will be directly printed.
+        specific_coin_id: id for entry in specific_coin table for year and mintmark information.
         mint_date: The mint date of the coin. Optional.
         mint_mark: The mint mark of the coin. Optional.
         date_format: String for the format to pass to strftime to print the date. Used only if purchase_date is not of str type.
@@ -33,9 +35,11 @@ class Purchase:
 
     def __init__(
         self,
+        purchase_id:str=None,
         price: int | float = None,
         quantity: int = None,
         purchase_date=None,
+        specific_coin_id: str=None,
         mint_date: str | int = None,
         mint_mark: str = None,
         date_format: str = "%m/%d/%y",
@@ -75,6 +79,9 @@ class Purchase:
             self.quantity = -1
 
         # Sets class instance variables
+        self.purchase_id = purchase_id
+        self.specific_coin_id = specific_coin_id
+
         self.purchase_date = purchase_date
         self.mint_date = mint_date
         self.mint_mark = mint_mark
@@ -547,6 +554,16 @@ class CoinData:
 
 class Value:
 
+    """ Stores information about a face value. Used to build a string representation of the face value.
+
+    Attributes: 
+        value: Numeric value of face value
+        value_name: Specific name for the face value (optional)
+        show_color: Whether to show colors or not
+        colors_8_bit: Whether to use 8 bit colors instead of 3 bit colors
+        value_color: The color to print the string in
+        display_name: What is returned when this class is cast to str.
+    """
     def __init__(
         self,
         value = 0.0,
@@ -560,8 +577,6 @@ class Value:
         self.show_color = show_color
         self.colors_8_bit = colors_8_bit
         self.value_color = value_color
-
-
 
         if self.value_name:
             self.display_name = f"{self.value_name}"
@@ -623,6 +638,15 @@ class Value:
 
 class Denomination:
 
+    """ Stores information about a Denomination. Used for building a string representation of the denomination.
+
+    Attributes: 
+        name: The name of the denomination
+        show_color: Whether to display colors or not
+        colors_8_bit: Whether to use 8 bit colors instead of 3 bit colors
+        color: The color to display the denomination in.
+        display_name: What gets returned when this is cast to str.
+    """
     def __init__(
         self,
         name: str = None,
@@ -652,6 +676,15 @@ class Denomination:
 
 class Country:
 
+    """ Stores information about a country. Used to build a string representation of the country
+
+    Attributes: 
+        name: The name of the country
+        show_color: Whether to display color or not
+        colors_8_bit: Whether to use 8 bit colors instead of 3 bit colors.
+        color: Color to display the country in
+        display_name: What gets returned when this is cast to str
+    """
     def __init__(
         self,
         name: str = None,

@@ -10,18 +10,23 @@
 #
 # ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
+# Provides functions for searching for coins and building the results tree
+from coins import Coins  
 
-from coins import (
-    Coins,
-)  # Provides functions for searching for coins and building the results tree
-from coinData import (
-    Purchase,
-    PurchaseStats as Stats,
-)  # Classes for storing purchases for statistical purposes.
+# Classes for storing purchases for statistical purposes.
+from coinData import Purchase, PurchaseStats as Stats
 
 
-def CollectionReport(args, db, purchases, prices, config):
-    """Prints out a tree of owned coins as well as some profit statistics broken down by metal type."""
+def CollectionReport(args:dict, db, purchases:dict, prices:dict, config:dict):
+    """ Same output as searching for owned coins. Then has profit statistics broken down by metal type.
+
+    Args:
+        db (DB_Interface): Object for interacting with the database 
+        args: Passed to Coins.Build().
+        purchases: Stores purchases in lists indexed by their associated coin_ids
+        prices: Stores metal prices indexed by their keys in the database
+        config: Stores config. Passed to Coins.Build()
+    """
 
     metal_stats = {}  # Stores totals for each metal type, key is atomic symbol, and value is Stats() object
     for key, _ in prices.items():
@@ -34,8 +39,11 @@ def CollectionReport(args, db, purchases, prices, config):
         "debug": args["verbose"],
         "show_only_owned": True,
     }
-    # Builds the associations between coins
+
+    # Fetches results
     results, mapping = db.FetchCoins(search_arguments)
+
+    # Builds results into a tree
     results = Coins.Build(
         results,
         mapping,
@@ -55,12 +63,16 @@ def CollectionReport(args, db, purchases, prices, config):
     for _,country in results:
         for _,denomination in country:
             for _,value in denomination:
+
+                # Every coin in results
                 for _,coin in value:
                     runner = metal_stats["other"]
                     try:
                         runner = metal_stats[coin.data.metal]
                     except KeyError:
                         pass
+
+                    # Every purchase for the coin
                     for _,purchase in coin:
                         if isinstance(purchase,Purchase):
                             runner.addPurchase(purchase,coin.data.value, coin.data.value * coin.data.retention)
@@ -70,9 +82,8 @@ def CollectionReport(args, db, purchases, prices, config):
     for _, metal in metal_stats.items():
         total += metal
 
-    results.set_fancy(config["tree_fancy_characters"], cascade=True)
-
     # Prints tree
+    results.set_fancy(config["tree_fancy_characters"], cascade=True)
     if not args["no_tree"]:
         for line in results.print():
             print(line)

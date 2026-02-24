@@ -184,6 +184,7 @@ class Queries:
 
     def Purchases():
         cols = {
+            "purchase_id": "purchases.purchase_id",
             "coin_id": "purchases.coin_id",
             "unit_price": "purchases.unit_price",
             "purchase_quantity": "purchases.purchase_quantity",

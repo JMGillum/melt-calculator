@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   Author: Josh Gillum              .
-#   Date: 21 February 2026          ":"         __ __
+#   Date: 23 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
             # Manage purchases for collection
             elif args["command"] == "manage-purchases":
-                managePurchases.Start(args, db, config)
+                managePurchases.Start(args, db, purchases, config)
 
             # The operation mode is manage, which is managing various database components
             elif args["command"] == "admin":

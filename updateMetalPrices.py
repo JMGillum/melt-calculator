@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 7 February 2026           ":"         __ __
+#   Date: 23 February 2026          ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -18,16 +18,31 @@ from db.interface import DB_Interface
 from datetime import datetime
 
 
-def UpdateMetalPrices(db: DB_Interface, *prices):
-    """Pushes a metal price to the database"""
+def UpdateMetalPrices(db: DB_Interface, *prices)->list:
+    """ Pushes a metal price to the database
+
+    Args:
+        db: Object for interacting with the database
+        *prices: 
+
+    Returns: list of status messages returned by the database
+        
+    """
     results = []  # Stores the status messages returned by the database
     for price in prices:
         results.append((price, db.UpdateMetalPrice(price)))
     return results
 
 
-def GetMetalPricesFromUser(db, metals, config):
-    """Prompts the user to input metal prices and the dates they were valid on."""
+def GetMetalPricesFromUser(db:DB_Interface, metals:dict, config:dict):
+    """ Prompts the user to input metal prices and the dates they were valid on.
+
+    Args:
+        db: The object for interacting with the database
+        metals: Stores metals indexed by the metal_id in the database
+        config: "currency_symbol" must be defined
+    """
+
     # Fetches the defined metals and preps it.
     print(metals)
     updates = []

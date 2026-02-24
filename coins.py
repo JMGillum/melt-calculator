@@ -89,6 +89,7 @@ class Coins:
         value: float = 0.0,
         other_value: float = 0.0,
         stats: PurchaseStats = None,
+        hide_price: bool = False
     ):
         """ Prints summary statistics for a group of purchases (really just a total, count, and worth)
 
@@ -99,6 +100,7 @@ class Coins:
             value: Stores the value to compare total to.
             other_value: Stores a second value to compare total to
             stats: Can be used in place of total, count, value, and other_value.
+            hide_price: Disables printing of delta information
 
         Returns: String of the summary statistics.
             
@@ -118,35 +120,40 @@ class Coins:
             other_total_value = other_value * count
             average = total / count
 
-            # Calculates deltas
-            gain_loss = total_value - total
-            other_gain_loss = other_total_value - total
-            average_gain_loss = value - average
-            other_average_gain_loss = other_value - average
+            if not hide_price:
 
-            # Creates strings
-            gain_loss_string = Coins.__GainOrLossString(gain_loss, config)
-            average_gain_loss_string = Coins.__GainOrLossString(
-                average_gain_loss, config
-            )
-            other_gain_loss_string = Coins.__GainOrLossString(other_gain_loss, config)
-            other_average_gain_loss_string = Coins.__GainOrLossString(
-                other_average_gain_loss, config
-            )
+                # Calculates deltas
+                gain_loss = total_value - total
+                other_gain_loss = other_total_value - total
+                average_gain_loss = value - average
+                other_average_gain_loss = other_value - average
+
+                # Creates strings
+                gain_loss_string = Coins.__GainOrLossString(gain_loss, config)
+                average_gain_loss_string = Coins.__GainOrLossString(
+                    average_gain_loss, config
+                )
+                other_gain_loss_string = Coins.__GainOrLossString(other_gain_loss, config)
+                other_average_gain_loss_string = Coins.__GainOrLossString(
+                    other_average_gain_loss, config
+                )
             return_string = ""
             return_string += f"[Count:{count}] [Sum:{config['currency_symbol']}{total:.2f}] [Avg:{config['currency_symbol']}{average:.2f}]"
-            return_string += f" [Value:{config['currency_symbol']}{total_value:.2f}/{config['currency_symbol']}{other_total_value:.2f}]"
-            return_string += f" [G/L:{gain_loss_string}/{other_gain_loss_string}] [Avg G/L:{average_gain_loss_string}/{other_average_gain_loss_string}]"
+
+            if not hide_price:
+                return_string += f" [Value:{config['currency_symbol']}{total_value:.2f}/{config['currency_symbol']}{other_total_value:.2f}]"
+                return_string += f" [G/L:{gain_loss_string}/{other_gain_loss_string}] [Avg G/L:{average_gain_loss_string}/{other_average_gain_loss_string}]"
             return return_string
         return "N/A"
 
     # Adds the summary node to a coin object
-    def __SummarizePurchase(coin:Node, config:dict):
+    def __SummarizePurchase(coin:Node, config:dict, hide_price:bool=False):
         """ Calculates statistics for all purchases of a coin, then prints them.
 
         Args:
             coin: The coin to summarize the purchases for. Purchases to be summarized must be within the nodes attribute.
             config: Passed to PrintStatistics, so any requirements for that are needed.
+            hide_price: Passed to PrintStatistics. Used to disable showing price
 
         """
         if isinstance(coin, Node):
@@ -161,8 +168,7 @@ class Coins:
                     total += node.price * node.quantity
                     count += node.quantity
 
-                # Removes unused strings. Unsure of purpose. Perhaps if a purchase 
-                # was mistakenly added as a string instead of a Purchase object.
+                # Removes any old purchase summaries
                 elif isinstance(node, str):
                     del coin.nodes[i]
                     i -= 1
@@ -176,6 +182,7 @@ class Coins:
                     count,
                     coin.data.value,
                     coin.data.value * coin.data.retention,
+                    hide_price=hide_price
                 )
             )
 
@@ -221,7 +228,7 @@ class Coins:
 
         # No metal prices exist, so don't display prices.
         else:
-            coin.togglePrice(False)
+            coin.TogglePrice(False)
         return coin
 
     def __RecursiveSetupTree(parent_tree:Tree|Node,keys:list[str]):
@@ -491,6 +498,7 @@ class Coins:
         hide_values:bool=False,
         hide_denominations:bool=False,
         show_coin_ids:bool=False,
+        summarize_purchases:bool=True,
         sorting_methods:dict={},
     ):
 
@@ -509,11 +517,17 @@ class Coins:
             hide_values: Will not include any values or coins in the output.
             hide_denominations: Will not include any denominations, values, or coins in the output.
             show_coin_ids: Sends the coin's coin_id to the CoinData object to be displayed.
+            summarize_purchases: Toggles whether the purchase summary will be appended after purchases.
             sorting_methods: Unpacked as the args to Coins.__Sort()
 
         Returns: A Tree object representing all of the data stored within entries.
             
         """
+
+        hide_prices = False
+        if not prices:
+            hide_prices = True
+
         if not isinstance(entries, list):
             entries = [entries]
         if show_only_bullion and show_only_not_bullion:
@@ -604,7 +618,8 @@ class Coins:
 
                                     # Creates Purchase object and adds to coin tree
                                     coin_tree.nodes += matches
-                                    Coins.__SummarizePurchase(coin_tree, config)
+                                    if summarize_purchases:
+                                        Coins.__SummarizePurchase(coin_tree, config, hide_prices)
 
         Coins.Sort(tree_root,**sorting_methods)
 
