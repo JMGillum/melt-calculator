@@ -8,6 +8,10 @@ weight of coin * fineness of precious metal * spot price of precious metal
 
 This script allows the user to store a personal collection of the defined coins. This is useful for price tracking and determining gain and loss on the coins.
 
+## Schedule
+
+Every effort will be made to meet biweekly releases of the repository. Releases may add change the program, or may simply update / change the data in the database.
+
 ## Requirements
 
 * Python >= 3.11
