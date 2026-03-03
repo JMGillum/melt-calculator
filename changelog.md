@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.1.0 (???)
+
+* Refactored how colors are handled and displayed.
+
 ## v1.0.0 (February 27, 2026)
 
 * Started versioning the database. From now on, database changes will be reflected in the database changelog.
