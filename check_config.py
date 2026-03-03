@@ -31,7 +31,7 @@ show_metal_colors = true # Toggles colored names of metals
 
 # Colors for names of metals. Does nothing if show_metal_colors is false.
 # Each value on left is key used in database.
-# Each value on right is a color defined in colors.py
+# Each value on right is a color defined in treasure/color.py
 [metals_colors]
 ag="silver"
 au="bright_yellow"
