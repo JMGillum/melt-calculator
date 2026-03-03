@@ -14,7 +14,7 @@
 
 import weights
 import data
-from colors import Colors
+from treasure.color import ColoredText
 
 
 class Purchase:
@@ -44,8 +44,6 @@ class Purchase:
         mint_mark: str = None,
         date_format: str = "%m/%d/%y",
         currency_symbol: str = "$",
-        show_color: bool = True,
-        colors_8_bit: bool = True,
         color_purchase: str = "teal",
     ):
         """
@@ -58,8 +56,6 @@ class Purchase:
             mint_mark: The mint mark on the coin. Optional.
             date_format: If purchase_date is a datetime object, display date in this format
             currency_symbol: The currency symbol to print before any price.
-            show_color: Whether to display colors.
-            colors_8_bit: True to use 8 bit colors, False to use 3 bit colors. Does nothing if show_color is False.
             color_purchase: The color to display the purchase in. Does nothing if show_color is False.
         """
 
@@ -88,8 +84,6 @@ class Purchase:
 
         self.date_format = date_format
         self.currency_symbol = currency_symbol
-        self.show_color = show_color
-        self.colors_8_bit = colors_8_bit
         self.color_purchase = color_purchase
 
     def __str__(self):
@@ -139,9 +133,7 @@ class Purchase:
                     )
 
         # Prints the entire string in the self.color_purchase color.
-        return Colors.PrintColored(
-            string, self.show_color, self.colors_8_bit, self.color_purchase
-        )
+        return ColoredText(string,self.color_purchase).Print()
 
 
 class PurchaseStats:
@@ -262,9 +254,6 @@ class CoinData:
         nickname:
         value:
         currency_symbol:
-        show_color:
-        colors_8_bit:
-        show_metal_colors:
         metal_colors:
         use_permille:
         show_value:
@@ -325,9 +314,6 @@ class CoinData:
 
         # Sets output configuration for instance.
         self.currency_symbol = config["currency_symbol"]
-        self.show_color = config["show_color"]
-        self.colors_8_bit = config["colors_8_bit"]
-        self.show_metal_colors = config["show_metal_colors"]
         self.metal_colors = config["metals_colors"]
         self.use_permille = config["use_permille"]
 
@@ -478,19 +464,14 @@ class CoinData:
 
     def MetalString(self):
         # Options for color display to pass to PrintColored. Default is no color
-        color_options = (self.show_color, self.colors_8_bit, "")
+        color = None
 
         # Attempts to fetch the color of the metal if metals are supposed to be colored
-        if self.show_metal_colors:
-            try:
-                color_options = (
-                    self.show_color,
-                    self.colors_8_bit,
-                    self.metal_colors[self.metal],
-                )
-            except KeyError:
-                pass
-        return Colors.PrintColored(data.metals[self.metal][0].title(), *color_options)
+        try:
+            color = self.metal_colors[self.metal]
+        except KeyError:
+            pass
+        return ColoredText(data.metals[self.metal][0].title(), color, "metal").Print()
 
     def AsAString(self, format: str):
         """Very simple attempt at a format string for information
@@ -559,24 +540,18 @@ class Value:
     Attributes: 
         value: Numeric value of face value
         value_name: Specific name for the face value (optional)
-        show_color: Whether to show colors or not
-        colors_8_bit: Whether to use 8 bit colors instead of 3 bit colors
-        value_color: The color to print the string in
+        color: The color to print the string in
         display_name: What is returned when this class is cast to str.
     """
     def __init__(
         self,
         value = 0.0,
         value_name: str = None,
-        show_color: bool = True,
-        colors_8_bit: bool = True,
-        value_color: str = None,
+        color: str = None,
     ):
         self.value = value
         self.value_name = value_name
-        self.show_color = show_color
-        self.colors_8_bit = colors_8_bit
-        self.value_color = value_color
+        self.color = color
 
         if self.value_name:
             self.display_name = f"{self.value_name}"
@@ -600,16 +575,11 @@ class Value:
                 except TypeError:
                     pass
 
-        color_options = (
-            self.show_color,
-            self.colors_8_bit,
-            self.value_color,
-        )
-        self.display_name = Colors.PrintColored(self.display_name, *color_options)
+        self.print_name = ColoredText(self.display_name, self.color)
 
 
     def __str__(self):
-        return self.display_name
+        return str(self.print_name)
 
     def __float__(self):
         return float(self.value)
@@ -635,79 +605,3 @@ class Value:
     def __ne__(self,other):
         return self.value != other.value
 
-
-class Denomination:
-
-    """ Stores information about a Denomination. Used for building a string representation of the denomination.
-
-    Attributes: 
-        name: The name of the denomination
-        show_color: Whether to display colors or not
-        colors_8_bit: Whether to use 8 bit colors instead of 3 bit colors
-        color: The color to display the denomination in.
-        display_name: What gets returned when this is cast to str.
-    """
-    def __init__(
-        self,
-        name: str = None,
-        show_color: bool = True,
-        colors_8_bit: bool = True,
-        color: str = None,
-    ):
-        self.name = name
-        self.show_color = show_color
-        self.colors_8_bit = colors_8_bit
-        self.color = color
-
-        if name is None:
-            name = ""
-        name = str(name)
-        self.display_name = name.title()
-
-        color_options = (
-            self.show_color,
-            self.colors_8_bit,
-            self.color,
-        )
-        self.display_name = Colors.PrintColored(self.display_name, *color_options)
-
-    def __str__(self):
-        return self.display_name
-
-class Country:
-
-    """ Stores information about a country. Used to build a string representation of the country
-
-    Attributes: 
-        name: The name of the country
-        show_color: Whether to display color or not
-        colors_8_bit: Whether to use 8 bit colors instead of 3 bit colors.
-        color: Color to display the country in
-        display_name: What gets returned when this is cast to str
-    """
-    def __init__(
-        self,
-        name: str = None,
-        show_color: bool = True,
-        colors_8_bit: bool = True,
-        color: str = None,
-    ):
-        self.name = name
-        self.show_color = show_color
-        self.colors_8_bit = colors_8_bit
-        self.color = color
-
-        if name is None:
-            name = ""
-        name = str(name)
-        self.display_name = name.title()
-
-        color_options = (
-            self.show_color,
-            self.colors_8_bit,
-            self.color,
-        )
-        self.display_name = Colors.PrintColored(self.display_name, *color_options)
-
-    def __str__(self):
-        return self.display_name

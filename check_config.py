@@ -1,5 +1,6 @@
 from datetime import datetime
 import treasure.config
+from treasure.color import ColoredText
 from db.interface import DB_Interface
 
 default_config_contents = """
@@ -240,8 +241,11 @@ def ValidateConfig() -> (dict,list[str]):
 
 if __name__ == "__main__":
 
-    # Simply validates the config and prints out any errors
+    # Validates the config and prints out any errors
     print(f"Config location: {treasure.config.DefaultConfigPath('metals')}")
-    _, errors = ValidateConfig()
+    config, errors = ValidateConfig()
     for error in errors:
-        print(error)
+        print(error,flush=True)
+
+    print("Color options (If the output is not colored, you may need to modify the `show_color` value in the config file):")
+    ColoredText.PrintAllColors()

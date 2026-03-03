@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   Author: Josh Gillum              .
-#   Date: 23 February 2026          ":"         __ __
+#   Date: 2 March 2026              ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -53,8 +53,7 @@ if __name__ == "__main__":
 
     # Only import modules if config file is setup correctly
     # import config # Various config information
-
-    from setup import InitialSetup, SetupMetals  # Sets up argument parser and metals
+    from setup import InitialSetup, SetupMetals, InitColoredText  # Sets up argument parser and metals
     from db.interface import DB_Interface  # Manages connecting to the database
 
     import managePurchases
@@ -64,8 +63,14 @@ if __name__ == "__main__":
     import report
     import search
 
+
     # Sets up argument parser and then parses them
     args = InitialSetup(config)
+
+    # Sets up colored text
+    if not InitColoredText(config,args["verbose"]):
+        print("Unable to initialize colored text", flush=True)
+        exit(1)
 
     if args["command"] in ["manage-purchases", "report", "admin", "search"]:
         try:

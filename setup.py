@@ -5,9 +5,10 @@ from updateMetalPrices import UpdateMetalPrices
 from colorama import just_fix_windows_console
 import data as d
 from datetime import datetime
-from colors import Colors
 
 from coinData import Purchase
+
+from treasure.color import ColoredText
 
 
 def SetupParser() -> argparse.ArgumentParser:
@@ -395,8 +396,6 @@ def FormatPurchases(purchases:list|tuple,config:dict)->dict:
             mint_mark=entry[mapping["specific_coin_mintmark"]],
             date_format=config["date_format"],
             currency_symbol=config["currency_symbol"],
-            show_color=config["show_color"],
-            colors_8_bit=config["colors_8_bit"],
             color_purchase=config["types_colors"]["purchase"]
         )
 
@@ -466,7 +465,7 @@ def SetupMetals(db, args:dict, config:dict):
                 if config["show_metal_colors"]:
                     try:
                         print(
-                            f"{Colors.PrintColored(name.title(), config['show_color'], config['colors_8_bit'], config['metals_colors'][key])} spot: {config['currency_symbol']}{price:.2f} as of: {date}"
+                            f"{ColoredText(name.title(), config['metals_colors'][key]).Print()} spot: {config['currency_symbol']}{price:.2f} as of: {date}"
                         )
                         printed = True
                     except KeyError:
@@ -482,3 +481,26 @@ if __name__ == "__main__":
     print(
         "This script is not meant to be called on its own. Please use the main script."
     )
+
+def InitColoredText(config,verbose=False):
+    try:
+        if verbose:
+            print("Setting colored text settings")
+            print("Setting enable_color",flush=True)
+        ColoredText.enable_color = config["show_color"]
+
+        if verbose:
+            print("Setting use_8_bit_colors",flush=True)
+        ColoredText.use_8_bit_colors = config["colors_8_bit"]
+        
+        if verbose:
+            print("Setting toggle \'metal\'",flush=True)
+        ColoredText.SetToggleCategory("metal",config["show_metal_colors"])
+
+        if verbose:
+            print("All colored text settings set successfully.",flush=True)
+
+        return True
+    except KeyError:
+        return False
+

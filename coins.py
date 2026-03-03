@@ -16,10 +16,10 @@
 #
 # ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
-from coinData import CoinData, Purchase, PurchaseStats, Value, Denomination, Country
+from coinData import CoinData, Purchase, PurchaseStats, Value
 from tree.tree import Tree
 from tree.node import Node
-from colors import Colors
+from treasure.color import ColoredText
 import treasure.text
 
 import re
@@ -75,10 +75,8 @@ class Coins:
         else:
             return f"{value}"
 
-        return Colors.PrintColored(
+        return ColoredText(
             string_to_print,
-            config["show_color"],
-            config["colors_8_bit"],
             color
         )
 
@@ -565,10 +563,8 @@ class Coins:
             # Show country
             if len(vals) > 0:
                 country_tree = vals[0]
-                country_name = Country(
-                    entry[mapping["country_display_name"]],
-                    config["show_color"],
-                    config["colors_8_bit"],
+                country_name = ColoredText(
+                    entry[mapping["country_display_name"]].title(),
                     config["types_colors"]["country"]
                 )
 
@@ -577,10 +573,8 @@ class Coins:
                 # Show denomination
                 if len(vals) > 1:
                     denomination_tree = vals[1]
-                    denomination_name = Denomination(
-                        entry[mapping["denomination_display_name"]],
-                        config["show_color"],
-                        config["colors_8_bit"],
+                    denomination_name = ColoredText(
+                        entry[mapping["denomination_display_name"]].title(),
                         config["types_colors"]["denomination"]
                     )
                     denomination_tree = Coins.__NameElement(*denomination_tree,denomination_name)
@@ -591,8 +585,6 @@ class Coins:
                         value_name = Value(
                             entry[mapping["value"]],
                             entry[mapping["value_display_name"]],
-                            config["show_color"],
-                            config["colors_8_bit"],
                             config["types_colors"]["value"],
                         )
                         value_tree = Coins.__NameElement(*value_tree,value_name)
