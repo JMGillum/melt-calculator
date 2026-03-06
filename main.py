@@ -63,6 +63,7 @@ if __name__ == "__main__":
     import report
     import search
     import setup_db
+    import update_db
 
 
     # Sets up argument parser and then parses them
@@ -96,6 +97,16 @@ if __name__ == "__main__":
                 # Setup database
                 elif args["admin_command"] == "setup-db":
                     status, errors = setup_db.Start(db,args,config)
+                    if status > 0:
+                        for error in errors:
+                            print(error)
+                        print("",end="",flush=True)
+                        exit(1)
+                    skip_setup_metals = True
+
+                # Update database
+                elif args["admin_command"] == "update-db":
+                    status, errors = update_db.Start(db,args,config)
                     if status > 0:
                         for error in errors:
                             print(error)

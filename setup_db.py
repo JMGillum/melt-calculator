@@ -1,9 +1,7 @@
 import os
 from pathlib import Path
 import treasure.config
-
-def ImmediateSubDirectories(path):
-    return [f.name for f in os.scandir(path) if f.is_dir()]
+from treasure.filesystem import ImmediateSubDirectories
 
 def CheckOrdering(series,order):
     errors = 0
@@ -24,6 +22,8 @@ def SetupDB(db,path):
 def Start(db,args,config):
     errors = []
     path = Path(config["load_path"])
+    if args["input_dir"]:
+        path = Path(args["input_dir"])
     series = ImmediateSubDirectories(path)
 
     order = None

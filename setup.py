@@ -205,6 +205,21 @@ def SetupParser() -> argparse.ArgumentParser:
         metavar="STRING",
         help="The order to introduce each series into the database. Use a string of semicolon separated series names. ex: \'base;bullion;custom\'. They will be loaded in the order specified here.",
     )
+    update_db_parser = admin_subparsers.add_parser(
+        "update-db", parents=[version_parser, verbose_parser, database_parser]
+    )
+    update_db_parser.add_argument(
+        "-i",
+        "--input-dir",
+        metavar="STRING",
+        help="Path to the directory that stores the various series of SQL files for creating the database.",
+    )
+    update_db_parser.add_argument(
+        "-s",
+        "--end-version",
+        metavar="STRING",
+        help="The greatest version to update to. Updating will stop once it reaches this version. Pass a string such as \'2.0\' or \'3.4\'.",
+    )
     new_items_parser = admin_subparsers.add_parser(
         "new-items", parents=[version_parser, verbose_parser, database_parser]
     )

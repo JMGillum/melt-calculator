@@ -10,6 +10,8 @@ backup_path = "/absolute/path/to/store/backups" # Where to store database backup
 # that stores the directories for each series. ex: /database/data, 
 # which houses base/, bullion/, etc.
 load_path = "/absolute/path/to/load/files/for/database"
+# Where update files are stored.
+update_path = "/absolute/path/to/load/files/for/database"
 
 default_retention = 0.97 # Value of coin that a shop will pay. Is percentage of melt.
 
@@ -186,6 +188,7 @@ def ValidateConfig() -> (dict,list[str]):
         ("bullion_hint", " (Bullion)"),
         ("backup_path","~/backups/metals"),
         ("load_path",""),
+        ("update_path",""),
     )
 
     # All variables that should be of bool type
