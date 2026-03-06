@@ -65,7 +65,15 @@ Every effort will be made to meet biweekly releases of the repository. Releases 
     2. Create a user account (or use root)
     3. Follow instructions in the [database creation tutorial](./docs/tutorials/CreateDatabase.md)
 
-6. Create the config file:
+6. Run the program:
+
+    ``` SHELL
+    python3 main.py --help
+    ```
+
+    * If you followed step 4 and created an alias, you can use `metals` in place of `python3 main.py`. You will have to restart your shell for this to take effect however (close and reopen terminal).
+
+7. Create the config file:
 
     ``` SHELL
     python3 check_config.py
@@ -73,15 +81,8 @@ Every effort will be made to meet biweekly releases of the repository. Releases 
 
     * This will create the config file, as well as print out its location.
 
-7. Edit the config file (at least the database section)
+8. Edit the config file (at least the database section)
 
-8. Run the program:
-
-    ``` SHELL
-    python3 main.py --help
-    ```
-
-    * If you followed step 4 and created an alias, you can use `metals` in place of `python3 main.py`. You will have to restart your shell for this to take effect however (close and reopen terminal).
 
 ## Usage
 

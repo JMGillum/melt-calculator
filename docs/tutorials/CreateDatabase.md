@@ -15,24 +15,33 @@ There are two ways to setup the database, automatic and manual. The automatic me
 
 ## Automatic
 
-1. Enter the `database` directory
-2. The script should be used like so `./db.sh <user> <database> <directory>`. Execute the script and follow its prompts.
-    * The user argument specifies which user to connect to the database as.
-    * The database argument specifies which database to connect to.
-    * The directory argument specifies the path to the updates directory. This is optional and defaults to `./` if not provided.
+1. Run the provided script:
+
+    ``` SHELL
+    python3 main.py admin setup-db --help
+    ```
+
+    * This will provide a list of the supported arguments
+    * The most important argument is the `--order` parameter. This specifies which order the series will be loaded in. You must always load the `base` series first.
+    * This method does not drop any tables except within the `setup.sql` of the `base series`. Thus you can load one series, then load another at another time. This method also allows flexibility for which of the optional series you would like.
+
 
 ## Manual
 
-The manual method requires feeding the various files to the database management software by hand. This can be done interactively or by passing the name of the file. The files are all located within the `database` directory and must be passed in the following exact order:
+The manual method requires feeding the various files to the database management software by hand. This can be done interactively or by passing the name of the file.
+Each series belongs is stored within its own directory within the `database/data` directory and must be passed in the following exact order:
 
-1. `base_setup_db.sql`: Stores the queries that creates the tables in the database.
-2. `base_setup_countries.sql`: Stores information about countries.
-3. `base_setup_denominations.sql`: Stores information about denominations.
-4. `base_setup_values.sql`: Stores information about face values of denominations.
-5. `base_setup_coins.sql`: Stores information about series of coins of the various face values.
-6. `base_setup_coins_years.sql`: Stores what years each of the coins in `base_setup_coins.sql` were available.
-7. `base_setup_purchases.sql`: Will not ship with the repository. This file is optional and stores purchases made. It is generated through the use of the program.
+1. `setup.sql`: Stores the queries that creates the tables in the database.
+2. `countries.sql`: Stores information about countries.
+3. `denominations.sql`: Stores information about denominations.
+4. `values.sql`: Stores information about face values of denominations.
+5. `coins.sql`: Stores information about series of coins of the various face values.
+6. `years.sql`: Stores what years each of the coins in `coins.sql` were available.
+7. `purchases.sql`: Will not ship with the repository. This file is optional and stores purchases made. It is generated through the use of the program.
 8. Any files for custom items. See the tutorial in [AddingItems.md](./AddingItems.md) if you would like to add your own custom items.
+
+> [!Warning]
+> The base series must always be loaded first, as this series contains the database schema
 
 ### Interactively
 
