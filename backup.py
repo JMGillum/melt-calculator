@@ -116,7 +116,9 @@ def BasicBackup(db:DB_Interface,dir:Path,columns:list[str],table:str,file_name:s
             for item in series:
                 if (isinstance(item,tuple) or isinstance(item,list)) and len(item) == 1:
                     item = item[0]
-                BasicBackup(db,dir,columns,table,f"{item}_{file_name}",append,order_by,filter_by_series=True,series=item,joined_tables=joined_tables,rows_per_insert=rows_per_insert)
+                child_dir = dir / Path(item)
+                treasure.config.CreateDirectories(child_dir)
+                BasicBackup(db,child_dir,columns,table,file_name,append,order_by,filter_by_series=True,series=item,joined_tables=joined_tables,rows_per_insert=rows_per_insert)
             return
         else:
             query, args = Queries.FilterBySeries(columns,table,series,joined_tables)
@@ -201,28 +203,28 @@ def Backup(args, db: DB_Interface, dir=None):
 
     # Performs each specific backup if specified
     if args["backup_purchases"] or args["backup_all"]:
-        BasicBackup(db,dir,["id","coin_id","year","mintmark"],"specific_coins","setup_purchases.sql",table_for_checking_series="coins",joined_tables=[("coins","coin_id")],rows_per_insert=args["rows_per_insert"])
-        BasicBackup(db,dir,["purchase_id","coin_id","purchase_date","unit_price","purchase_quantity","specific_coin"],"purchases","setup_purchases.sql",table_for_checking_series="coins",joined_tables=[("coins","coin_id")],append=True,rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["id","coin_id","year","mintmark"],"specific_coins","purchases.sql",table_for_checking_series="coins",joined_tables=[("coins","coin_id")],rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["purchase_id","coin_id","purchase_date","unit_price","purchase_quantity","specific_coin"],"purchases","purchases.sql",table_for_checking_series="coins",joined_tables=[("coins","coin_id")],append=True,rows_per_insert=args["rows_per_insert"])
         print("Backup of purchases complete.")
 
     if args["backup_countries"] or args["backup_all"]:
-        BasicBackup(db,dir,["country_id","display_name","tags","series"],"countries","setup_countries.sql",rows_per_insert=args["rows_per_insert"])
-        BasicBackup(db,dir,["country_id","name"],"country_names","setup_countries.sql",append=True,table_for_checking_series="countries",joined_tables=[("countries","country_id")],rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["country_id","display_name","tags","series"],"countries","countries.sql",rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["country_id","name"],"country_names","countries.sql",append=True,table_for_checking_series="countries",joined_tables=[("countries","country_id")],rows_per_insert=args["rows_per_insert"])
         print("Backup of countries complete.")
 
     if args["backup_denominations"] or args["backup_all"]:
-        BasicBackup(db,dir,["denomination_id","country_id","display_name","tags","series"],"denominations","setup_denominations.sql",rows_per_insert=args["rows_per_insert"])
-        BasicBackup(db,dir,["denomination_id","name"],"denomination_names","setup_denominations.sql",append=True,table_for_checking_series="denominations",joined_tables=[("denominations","denomination_id")],rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["denomination_id","country_id","display_name","tags","series"],"denominations","denominations.sql",rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["denomination_id","name"],"denomination_names","denominations.sql",append=True,table_for_checking_series="denominations",joined_tables=[("denominations","denomination_id")],rows_per_insert=args["rows_per_insert"])
         print("Backup of denominations complete.")
 
     if args["backup_face_values"] or args["backup_all"]:
-        BasicBackup(db,dir,["value_id","denomination_id","value","display_name","tags","series"],"face_values","setup_values.sql",rows_per_insert=args["rows_per_insert"])
-        BasicBackup(db,dir,["value_id","name"],"face_values_names","setup_values.sql",append=True,order_by="value_id",table_for_checking_series="face_values",joined_tables=[("face_values","value_id")],rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["value_id","denomination_id","value","display_name","tags","series"],"face_values","values.sql",rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["value_id","name"],"face_values_names","values.sql",append=True,order_by="value_id",table_for_checking_series="face_values",joined_tables=[("face_values","value_id")],rows_per_insert=args["rows_per_insert"])
         print("Backup of face values complete.")
 
     if args["backup_coins"] or args["backup_all"]:
-        BasicBackup(db,dir,["coin_id","face_value_id","gross_weight","fineness","precious_metal_weight","tags","metal","name","series"],"coins","setup_coins.sql",rows_per_insert=args["rows_per_insert"])
-        BasicBackup(db,dir,["coin_id","year","tags"],"years","setup_coins_years.sql",table_for_checking_series="coins",joined_tables=[("coins","coin_id")],rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["coin_id","face_value_id","gross_weight","fineness","precious_metal_weight","tags","metal","name","series"],"coins","coins.sql",rows_per_insert=args["rows_per_insert"])
+        BasicBackup(db,dir,["coin_id","year","tags"],"years","coins_years.sql",table_for_checking_series="coins",joined_tables=[("coins","coin_id")],rows_per_insert=args["rows_per_insert"])
         print("Backup of coins complete.")
 
     if args["backup_config"] or args["backup_all"]:
