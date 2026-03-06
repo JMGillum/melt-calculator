@@ -249,3 +249,6 @@ class DB_Interface:
 
         if commit_on_success:
             self.conn.commit()
+
+    def DatabaseVersion(self):
+        return self.Fetch(Queries.DatabaseVersion())

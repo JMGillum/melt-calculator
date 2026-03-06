@@ -412,3 +412,6 @@ class Queries:
 
     def ExecuteScript(path):
         return f"source `{path}`;"
+
+    def DatabaseVersion():
+        return "SELECT major, minor FROM version"
