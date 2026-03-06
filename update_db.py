@@ -1,5 +1,7 @@
 from pathlib import Path
 from treasure.filesystem import AllRegularFiles
+from treasure.prompt import GetConfirmation
+from treasure.text import CenterText
 import re
 
 class VersionNumber:
@@ -182,7 +184,6 @@ def Start(db, args, config):
                 start = VersionNumber(i[0],i[1])
                 end = VersionNumber(i[2],i[3])
                 update_routes.append((start,end))
-                print(f"{start} -> {end}")
 
 
     if not update_routes:
@@ -196,13 +197,19 @@ def Start(db, args, config):
         return (1,["No possible route"])
     else:
         print(f"Greatest possible version: {result[0]}")
+        print("Route taken will be:")
         for i in range(len(result[1])):
             print(f"{result[1][i]}",end="")
             if i < len(result[1]) -1:
-                print("->",end="")
+                print(" -> ",end="")
 
-        print()
+        print("")
 
+
+    print(CenterText("DANGER"))
+    print("Continuing will alter the database, perhaps irreperably. Please backup before continuing.")
+    if not GetConfirmation("Continue"):
+        return 1,["Aborting..."]
 
     start_version = None
     for route in result[1]:
