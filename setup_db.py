@@ -23,17 +23,16 @@ def SetupDB(db,path):
 
 def Start(db,args,config):
     errors = []
-    path = Path("/home/warlord/projects/personal/preciousMetals/database/data")
+    path = Path(config["load_path"])
     series = ImmediateSubDirectories(path)
 
     order = None
     try:
         order = args["order"]
-        if order is not None:
-            if order.strip().lower() == "all":
-                order = None
-            else:
-                order = treasure.config.ParseSpecificationString(args["order"],allow_dict=False)
+        if not order:
+            order = None
+        else:
+            order = treasure.config.ParseSpecificationString(args["order"],allow_dict=False)
 
     # Key did not exist in args dictionary
     except KeyError:
@@ -50,7 +49,9 @@ def Start(db,args,config):
 
 
     if order is None:
-        order = series
+        errors.append("You must specify the order to load series. Pass the \'--help\' flag to learn how to use it.")
+        return 1,errors
+
     if CheckOrdering(series,order) > 0:
         errors.append(f"Ensure that the series name in the order string was spelled correctly. If it was, check if a directory with the same name as the series exists at this path:\n{path}\nAlso ensure that this is the desired path. If it is not, update the config file or pass \'--help\' to this command to learn how to specify the path.")
         return 1,errors
