@@ -222,6 +222,7 @@ class DB_Interface:
 
     def ExecuteScript(self, path, commit_on_success=True, rollback_on_failure=True, exit_on_failure=True):
         try:
+            commands = []
             with open(path,"r") as fd:
                 contents = fd.read()
                 commands = contents.split(";")
