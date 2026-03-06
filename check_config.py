@@ -5,7 +5,11 @@ from db.interface import DB_Interface
 
 default_config_contents = """
 # Config file for metals program
-backup_path="/absolute/path/to/store/backups" # Where to store database backups
+backup_path = "/absolute/path/to/store/backups" # Where to store database backups
+# Where to source files for setting up the database. Should be the directory
+# that stores the directories for each series. ex: /database/data, 
+# which houses base/, bullion/, etc.
+load_path = "/absolute/path/to/load/files/for/database"
 
 default_retention = 0.97 # Value of coin that a shop will pay. Is percentage of melt.
 
@@ -181,6 +185,7 @@ def ValidateConfig() -> (dict,list[str]):
         ("date_format", "%m/%d/%y"),
         ("bullion_hint", " (Bullion)"),
         ("backup_path","~/backups/metals"),
+        ("load_path",""),
     )
 
     # All variables that should be of bool type

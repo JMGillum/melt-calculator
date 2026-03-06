@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 10 February 2026          ":"         __ __
+#   Date: 5 March 2026              ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -220,3 +220,31 @@ class DB_Interface:
                 return True
             return False
 
+    def ExecuteScript(self, path, commit_on_success=True, rollback_on_failure=True, exit_on_failure=True):
+        try:
+            with open(path,"r") as fd:
+                contents = fd.read()
+                commands = contents.split(";")
+            for command in commands:
+                try:
+                    if command.strip():
+                        self.cursor.execute(command)
+
+                        # Returned results
+                        if self.cursor.description is not None:
+                            for row in self.cursor:
+                                print(row)
+                            print()
+
+                except Exception as e:
+                    print(command)
+                    print(f"Error: {e}")
+                    if rollback_on_failure:
+                        self.conn.rollback()
+                    if exit_on_failure:
+                        exit(1)
+        except FileNotFoundError:
+            print("File does not exist. Skipping...")
+
+        if commit_on_success:
+            self.conn.commit()

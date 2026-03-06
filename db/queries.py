@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 21 February 2026          ":"         __ __
+#   Date: 5 March 2026              ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -408,3 +408,7 @@ class Queries:
 
     def SeriesPresentInTable(table):
         return f"SELECT DISTINCT series FROM {table}"
+
+
+    def ExecuteScript(path):
+        return f"source `{path}`;"

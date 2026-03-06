@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   Author: Josh Gillum              .
-#   Date: 2 March 2026              ":"         __ __
+#   Date: 5 March 2026              ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -62,6 +62,7 @@ if __name__ == "__main__":
     import backup
     import report
     import search
+    import setup_db
 
 
     # Sets up argument parser and then parses them
@@ -79,8 +80,32 @@ if __name__ == "__main__":
             db = DB_Interface(debug=args["verbose"])
             db.Connect(config["db_config"])
 
-            # Fetches all of the purchases and sets up and fetches metal prices
-            purchases, prices = SetupMetals(db, args, config)
+            skip_setup_metals = False
+            # These do not need access to purchases or pricing, so execute them
+            if args["command"] == "admin":
+                # Backs up database entries for the various tables
+                if args["admin_command"] == "backup":
+                    backup.Backup(args, db, dir=config["backup_path"])
+                    skip_setup_metals = True
+
+                # Adds new coins
+                elif args["admin_command"] == "new-items":
+                    addCoins.AddCoins(db, args["prefix"], config)
+                    skip_setup_metals = True
+
+                # Setup database
+                elif args["admin_command"] == "setup-db":
+                    status, errors = setup_db.Start(db,args,config)
+                    if status > 0:
+                        for error in errors:
+                            print(error)
+                        print("",end="",flush=True)
+                        exit(1)
+                    skip_setup_metals = True
+
+            if not skip_setup_metals:
+                # Fetches all of the purchases and sets up and fetches metal prices
+                purchases, prices = SetupMetals(db, args, config)
 
             # Collection report
             if args["command"] == "report":
@@ -92,17 +117,11 @@ if __name__ == "__main__":
 
             # The operation mode is manage, which is managing various database components
             elif args["command"] == "admin":
-                # Backs up database entries for the various tables
-                if args["admin_command"] == "backup":
-                    backup.Backup(args, db, dir=config["backup_path"])
 
                 # Updates metal prices
-                elif args["admin_command"] == "prices":
+                if args["admin_command"] == "prices":
                     updateMetalPrices.GetMetalPricesFromUser(db, prices, config)
 
-                # Adds new coins
-                elif args["admin_command"] == "new-items":
-                    addCoins.AddCoins(db, args["prefix"], config)
 
             # The operation mode is search, which will search the database for coins.
             elif args["command"] == "search":

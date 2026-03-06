@@ -190,6 +190,21 @@ def SetupParser() -> argparse.ArgumentParser:
     prices_parser = admin_subparsers.add_parser(
         "prices", parents=[version_parser, verbose_parser, database_parser]
     )
+    setup_db_parser = admin_subparsers.add_parser(
+        "setup-db", parents=[version_parser, verbose_parser, database_parser]
+    )
+    setup_db_parser.add_argument(
+        "-i",
+        "--input-dir",
+        metavar="STRING",
+        help="Path to the directory that stores the various series of SQL files for creating the database.",
+    )
+    setup_db_parser.add_argument(
+        "-o",
+        "--order",
+        metavar="STRING",
+        help="The order to introduce each series into the database. Use a string of semicolon separated series names. ex: \'base;bullion;custom\'. They will be loaded in the order specified here.",
+    )
     new_items_parser = admin_subparsers.add_parser(
         "new-items", parents=[version_parser, verbose_parser, database_parser]
     )
