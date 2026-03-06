@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 import treasure.config
 from treasure.filesystem import ImmediateSubDirectories
+from treasure.prompt import GetConfirmation
+from treasure.text import CenterText
 
 def CheckOrdering(series,order):
     errors = 0
@@ -59,6 +61,13 @@ def Start(db,args,config):
     print("Series will be loaded in the following order:")
     for o in order:
         print(o)
+
+    print(CenterText("DANGER"))
+    print("Continuing will alter the database, perhaps irreperably. Please backup before continuing.")
+    if not GetConfirmation("Continue"):
+        return 1,["Aborting..."]
+
+    for o in order:
         SetupDB(db, path / Path(o))
 
 
