@@ -3,6 +3,9 @@
 ## v1.1.0 (???)
 
 * Refactored how colors are handled and displayed.
+* Replaced database script for loading seed files. See `admin setup-db`
+* Replaces database script for updating database version. See `admin update-db`
+* Database seed file structure change.
 
 ## v1.0.0 (February 27, 2026)
 

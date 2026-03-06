@@ -27,7 +27,7 @@ You can reuse any existing objects and add children to them as necessary.
 
 ## Storing custom items
 
-All items belong to a series, which identifies where they came from. All of the items that ship with the repository belong to the **base** series. In order to add custom items, you need to decide on a name for the series. The series enables splitting of items during backups and other procedures, so choose a descriptive name other than **base**. The steps below will have you store queries in files. Both the queries and filenames will include `<series>`. Simply replace this (including the angle brackets) with the name of the series you have chosen. Ex if the series is *ngo*: `<series>_setup.sql` -> `ngo_setup.sql`.
+All items belong to a series, which identifies where they came from. All of the items that ship with the repository belong to the **base** series. In order to add custom items, you need to decide on a name for the series. The series enables splitting of items during backups and other procedures, so choose a descriptive name other than **base**. The steps below will have you store queries in files. Both the queries and filenames will include `<series>`. Simply replace this (including the angle brackets) with the name of the series you have chosen. Ex if the series is *ngo*: `<series>/setup.sql` -> `ngo/setup.sql`.
 
 > [!Note]
 > To ensure portability, choose names that use only letters 'a-z', 'A-Z', numbers '0-9', underscores '_', and hyphens '-'
@@ -51,7 +51,7 @@ It is recomomended to read all of the following sections in full before attempti
 
 This section will cover how to add a new country object to the database. The term country will be used, however it refers to any group that issued the items, whether it is a state government or a private company, for instance.
 
-All queries in this section should be stored in the file `<series>_setup_countries.sql`
+All queries in this section should be stored in the file `<series>/countries.sql`
 
 Before continuing, think about how the country can be uniquely identified. The convention for the countries in the **base** series is to use the ISO 3166-1 alpha-3 codes whenever possible. In the event that a code did not exist for the country, it was up to discretion. The code you use must be unique amongst all countries in the table. Any mention of `<country_id>` for the rest of this section is to be replaced with this code.
 
@@ -146,7 +146,7 @@ INSERT INTO denomination_names(denomination_id, name, series) VALUES("<denominat
 
 This section will cover how to create face value objects. Face values represent the nominal amount of the denomination for the coin. For example: A United States quarter dollar is classified under the *cents* denomination. The face value object for it has a value of 25, as the coin is worth 25 cents. All quarter dollars will then derive from this face value object.
 
-All queries in this section should be stored in the file `<series>_setup_values.sql`
+All queries in this section should be stored in the file `<series>/values.sql`
 
 The first order of business for creating a face value object is to determine the id of it, referred to as the `value_id`. This id must be unique amongst all face values in the table. The convention for the **base** series is: `<denomination_id>_<value>`. Where `<denomination_id>` is the same value as the `denomination_id` of the parent. `<value>` is the nominal value of the item.
 
@@ -269,7 +269,7 @@ Option B, combine into one single coin object:
 
 There is no right or wrong approach to this, and it is up to you to decide which is appropriate given the situation. The **base** series has bias and split the United States issues, and consolidate most other issues. This was just due to personal preference however. The route of creating multiple issues is not any special process, it just requires creating more of coin objects.
 
-All queries in this section should be stored in the file `<series>_setup_coins.sql`
+All queries in this section should be stored in the file `<series>/coins.sql`
 
 Coins support an optional display name, similar to face values.
 
@@ -300,6 +300,8 @@ INSERT INTO coins(coin_id, face_value_id, gross_weight, fineness, precious_metal
 
 #### Years
 
+All queries in this section should be stored in the file `<series>/coins_years.sql`
+
 All coin objects need to have additional rows added that state which years the coin object was minted in.
 
 The query to associate a year with a coin:
@@ -318,7 +320,7 @@ INSERT INTO years(coin_id,year,series) VALUES("<coin_id>", <year>,"<series>");
 
 This section will cover how to add new metals (precious or not) to the database. The **base** series comes with the most common precious metals already defined.
 
-All queries in this section should be stored in the file `<series>_setup_db.sql`
+All queries in this section should be stored in the file `<series>/setup.sql`
 
 The query to add a new metal is:
 

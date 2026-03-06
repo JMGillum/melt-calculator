@@ -28,10 +28,9 @@ There are two ways to setup the database, automatic and manual. The automatic me
 
 ## Manual
 
-The manual method requires feeding the various files to the database management software by hand. This can be done interactively or by passing the name of the file.
-Each series belongs is stored within its own directory within the `database/data` directory and must be passed in the following exact order:
+The manual method requires feeding the various files to the database management software by hand. This can be done interactively or by passing the name of the file. Within the `database/data` directory, you must load `setup.sql` first. Each series is then contained within their own directory. For each series, load the files (if they exist) in this order:
 
-1. `setup.sql`: Stores the queries that creates the tables in the database.
+1. `setup.sql`: Stores the queries that creates the tables in the database (Probably never used for a series).
 2. `countries.sql`: Stores information about countries.
 3. `denominations.sql`: Stores information about denominations.
 4. `values.sql`: Stores information about face values of denominations.

@@ -13,12 +13,15 @@ def CheckOrdering(series,order):
             errors += 1
     return errors
 
+def LoadFile(db,path,filename):
+    f = path / Path(filename)
+    print(f"Loading file: {f}")
+    db.ExecuteScript(f, commit_on_success=True, rollback_on_failure=True, exit_on_failure=True)
+
 def SetupDB(db,path):
     files = ["setup.sql","countries.sql","denominations.sql","values.sql","coins.sql","coins_years.sql","purchases.sql"]
     for file in files:
-        f = path / Path(file)
-        print(f"Loading file: {f}")
-        db.ExecuteScript(f, commit_on_success=True, rollback_on_failure=True, exit_on_failure=True)
+        LoadFile(db,path,file)
         
 
 def Start(db,args,config):
@@ -67,7 +70,9 @@ def Start(db,args,config):
     if not GetConfirmation("Continue"):
         return 1,["Aborting..."]
 
+    LoadFile(db,path,"setup.sql")
     for o in order:
+        print(CenterText(o))
         SetupDB(db, path / Path(o))
 
 
