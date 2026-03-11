@@ -21,9 +21,8 @@ def LoadFile(db,path,filename):
 
 def SetupDB(db,path,sql_dir,hash_algorithm="sha1",force_regenerate=False):
     #files = ["setup.sql","countries.sql","denominations.sql","values.sql","coins.sql","coins_years.sql","purchases.sql"]
-    prefixes = ["setup","countries","denominations","values","coins","coins_years","purchases"]
-    file = None
-    sql_path = path / Path(sql_dir)
+    prefixes = ["setup","metals","tags","countries","country_names","denominations","denomination_names","face_values","face_values_names","coins","years","specific_coins","purchases"]
+    sql_path = path / Path("sql") / Path(sql_dir)
     if not sql_path.exists():
         CreateDirectories(sql_path)
 
@@ -72,7 +71,7 @@ def SetupDB(db,path,sql_dir,hash_algorithm="sha1",force_regenerate=False):
                     f.write(new_hash)
 
         # Load file into database
-        LoadFile(db,path,sql_file_path)
+        LoadFile(db,sql_path,f"{prefix}.sql")
         
 
 def Start(db,args,config):
