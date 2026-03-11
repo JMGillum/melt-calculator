@@ -14,6 +14,7 @@
 import sys
 import mariadb
 import getpass
+import csv
 
 #from .queries import Queries
 from .sql import statement
@@ -221,6 +222,32 @@ class DB_Interface:
             if len(results) > 0:
                 return True
             return False
+
+    def LoadFromCSV(self, read_path, write_path, table_name, batch_size=1000, multi_row_insert=True, delimiter=",", quotechar="\""):
+
+        # Truncate file contents
+        with open(write_path,"w") as w:
+            pass
+
+        with open(read_path,"r") as f:
+            csv_reader = csv.reader(f,delimiter=delimiter,quotechar=quotechar)
+            columns = next(csv_reader)
+
+            # Batches rows to be more efficient
+            lines = []
+            for row in csv_reader:
+                lines.append(row)
+                if len(lines) >= batch_size:
+                    statement = Queries.GenerateInsert(table_name, columns, lines, multi=multi_row_insert)
+                    lines = []
+                    with open(write_path,"a") as w:
+                        w.write(statement)
+
+            if lines:
+                statement = Queries.GenerateInsert(table_name, columns, lines, multi=multi_row_insert)
+                with open(write_path,"a") as w:
+                    w.write(statement)
+
 
     def ExecuteScript(self, path, commit_on_success=True, rollback_on_failure=True, exit_on_failure=True):
         try:

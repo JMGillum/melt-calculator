@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 5 March 2026              ":"         __ __
+#   Date: 10 March 2026             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -482,5 +482,23 @@ class Queries:
 
         return statement
 
+    def GenerateInsert(table_name, columns, values, multi=True):
+        statements = []
+        insert = f"INSERT INTO {table_name}({', '.join(columns)}) VALUES"
+        lines = []
+        for row in values:
+            lines.append(f"({', '.join(row)})")
 
-            
+        if multi:
+            statements = f"{insert}\n{',\n'.join(lines)};"
+        else:
+            statements = [f"{insert}{x};" for x in lines]
+
+        return statements
+
+        
+
+
+
+
+                

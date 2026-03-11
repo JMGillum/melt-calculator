@@ -1,9 +1,10 @@
 import os
 from pathlib import Path
 import treasure.config
-from treasure.filesystem import ImmediateSubDirectories
+from treasure.filesystem import ImmediateSubDirectories, GenerateHash, CreateDirectories
 from treasure.prompt import GetConfirmation
 from treasure.text import CenterText
+import db.sql.statement as sql_statements
 
 def CheckOrdering(series,order):
     errors = 0
@@ -18,10 +19,60 @@ def LoadFile(db,path,filename):
     print(f"Loading file: {f}")
     db.ExecuteScript(f, commit_on_success=True, rollback_on_failure=True, exit_on_failure=True)
 
-def SetupDB(db,path):
-    files = ["setup.sql","countries.sql","denominations.sql","values.sql","coins.sql","coins_years.sql","purchases.sql"]
-    for file in files:
-        LoadFile(db,path,file)
+def SetupDB(db,path,sql_dir,hash_algorithm="sha1",force_regenerate=False):
+    #files = ["setup.sql","countries.sql","denominations.sql","values.sql","coins.sql","coins_years.sql","purchases.sql"]
+    prefixes = ["setup","countries","denominations","values","coins","coins_years","purchases"]
+    file = None
+    sql_path = path / Path(sql_dir)
+    if not sql_path.exists():
+        CreateDirectories(sql_path)
+
+    for prefix in prefixes:
+        old_hash = None
+        new_hash = None
+        sql_file_path = sql_path / Path(f"{prefix}.sql")
+        hash_file_path = sql_path / Path(f"{prefix}.{hash_algorithm}")
+        csv_file_path = path / Path(f"{prefix}.csv")
+
+        if not force_regenerate:
+            # Check if generate sql file exists
+            if sql_file_path.exists():
+
+                # Check if hash file exists
+                if hash_file_path.exists():
+                    with hash_file_path.open("r") as f:
+                        old_hash = f.readline()
+
+        # Check if csv file exists in current dir
+        if csv_file_path.exists():
+
+            # Hash file for previous generation exists
+            if old_hash is not None:
+                new_hash = GenerateHash(csv_file_path,hash_algorithm)
+
+            # If new sql file needs to be generated
+            regenerate_sql = False
+
+            # No sql file found
+            if new_hash is None:
+                print("No existing sql file found. Generating new sql file.")
+                regenerate_sql = True
+
+            # Hash mismatch, so file contents have likely changed
+            elif old_hash != new_hash:
+                print("The csv file appears to have been changed. Regenerating sql file.")
+                regenerate_sql = True
+
+            if regenerate_sql:
+                db.LoadFromCSV(csv_file_path, sql_file_path, prefix)
+
+                # Generate new hash and save it
+                new_hash = GenerateHash(csv_file_path, hash_algorithm)
+                with hash_file_path.open("w") as f:
+                    f.write(new_hash)
+
+        # Load file into database
+        LoadFile(db,path,sql_file_path)
         
 
 def Start(db,args,config):
@@ -73,7 +124,7 @@ def Start(db,args,config):
     LoadFile(db,path,"setup.sql")
     for o in order:
         print(CenterText(o))
-        SetupDB(db, path / Path(o))
+        SetupDB(db, path / Path(o), sql_statements.name)
 
 
     return 0,errors
