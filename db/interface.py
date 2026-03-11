@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 5 March 2026              ":"         __ __
+#   Date: 10 March 2026             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -15,7 +15,9 @@ import sys
 import mariadb
 import getpass
 
-from .queries import Queries
+#from .queries import Queries
+from .sql import statement
+Queries = statement.queries.Queries
 
 
 class DB_Interface:

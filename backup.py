@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 23 February 2026          ":"         __ __
+#   Date: 10 March 2026             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -9,11 +9,13 @@
 #
 # ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 from db.interface import DB_Interface
-from db.queries import Queries
+#from db.queries import Queries
 from datetime import datetime
 from pathlib import Path
 import treasure.config
 import treasure.text
+import db.interface
+Queries = db.interface.Queries
 
 
 def BackupResults(results:list|tuple, table:str, columns:list[str]|tuple[str], dir:Path, file_name:str, append:bool, rows_per_insert:int=1000):
