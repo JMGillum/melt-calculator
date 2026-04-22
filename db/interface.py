@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 10 March 2026             ":"         __ __
+#   Date: 22 April 2026             ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -17,8 +17,7 @@ import getpass
 import csv
 
 #from .queries import Queries
-from .sql import statement
-Queries = statement.queries.Queries
+from .sql.statement import Queries
 
 
 class DB_Interface:
