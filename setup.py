@@ -187,6 +187,24 @@ def SetupParser() -> argparse.ArgumentParser:
         ],
     )
 
+    dev_parser = subparsers.add_parser("dev")
+    dev_subparsers = dev_parser.add_subparsers(dest="dev_command")
+    setup_db_parser = dev_subparsers.add_parser(
+        "setup-db", parents=[verbose_parser, database_parser]
+    )
+    setup_db_parser.add_argument(
+        "-i",
+        "--input-dir",
+        metavar="STRING",
+        help="Path to the directory that stores the various series of SQL files for creating the database.",
+    )
+    setup_db_parser.add_argument(
+        "-o",
+        "--order",
+        metavar="STRING",
+        help="The order to introduce each series into the database. Use a string of semicolon separated series names. ex: \'base;bullion;custom\'. They will be loaded in the order specified here.",
+    )
+
     admin_parser = subparsers.add_parser("admin")
     admin_subparsers = admin_parser.add_subparsers(dest="admin_command")
     backup_parser = admin_subparsers.add_parser(
@@ -346,17 +364,15 @@ def InitialSetup(config:dict) -> dict:
     # Command line arguments
     parser = SetupParser()
     args = vars(parser.parse_args())
-    verbose = args.get("verbose",0)
-    quiet = args.get("quiet",0)
+    verbose = args.pop("verbose",0)
+    quiet = args.pop("quiet",0)
     output_level = verbose - quiet
     args["output_level"] = output_level
-    args.pop("verbose")
-    args.pop("quiet")
-    if args.get("output_level",0) > 0:
+    if output_level > 0:
         print(f"arguments: {args}")
 
     # The database was specified in the command line
-    if args["database"]:
+    if args.get("database",None):
         config["db_config"]["database"] = args["database"]
 
     return args
