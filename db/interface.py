@@ -29,12 +29,12 @@ class DB_Interface:
     def ValidateConfig(config):
         if config is not None and isinstance(config, dict):
             fails = []
-            for key, datatype in (
-                ("host", "str"),
-                ("port", "int"),
-                ("user", "str"),
-                ("database", "str"),
-                ("password", "str"),
+            for key, datatype, is_optional in (
+                ("host", "str", False),
+                ("port", "int", False),
+                ("user", "str", False),
+                ("database", "str", True),
+                ("password", "str", True),
             ):
                 try:
                     fail = False
@@ -47,7 +47,7 @@ class DB_Interface:
                     if fail:
                         fails.append(f"Error: db_config {key}")
                 except KeyError:
-                    if key == "password":
+                    if is_optional:
                         pass
                     else:
                         fails.append(f"Missing key: '{key}' of type: {datatype}")
@@ -74,14 +74,14 @@ class DB_Interface:
                 sys.exit(1)
             else:
                 db_config["password"] = getpass.getpass(
-                    f"Password for mariadb database({db_config['database']}): "
+                        f"Password for mariadb database ({db_config.get('database','')}) on {db_config['user']}@{db_config['host']}: "
                 )
 
         try:
             # Creates the connection
             if debug:
                 print("Connecting to MariaDB...")
-            conn = mariadb.connect(**db_config)
+            conn = mariadb.connect(**{key:value for key,value in db_config.items() if key in ["host","port","user","password","database"]})
             if debug:
                 print("Connection successful!")
 
