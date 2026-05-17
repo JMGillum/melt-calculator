@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #   Author: Josh Gillum              .
-#   Date: 5 March 2026              ":"         __ __
+#   Date: 17 May 2026               ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -129,6 +129,11 @@ if __name__ == "__main__":
                             print(error)
                         print("",end="",flush=True)
                         exit(1)
+                    skip_setup_metals = True
+
+                elif args.get(sub_command,None) == "diff":
+                    from development_tools import diff
+                    diff(db, config["db_config"]["database_production"], config["db_config"]["database_dev"], args, config)
                     skip_setup_metals = True
 
 

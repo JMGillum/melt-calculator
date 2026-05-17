@@ -204,6 +204,9 @@ def SetupParser() -> argparse.ArgumentParser:
         metavar="STRING",
         help="The order to introduce each series into the database. Use a string of semicolon separated series names. ex: \'base;bullion;custom\'. They will be loaded in the order specified here.",
     )
+    diff_parser = dev_subparsers.add_parser(
+        "diff", parents=[verbose_parser]
+    )
 
     admin_parser = subparsers.add_parser("admin")
     admin_subparsers = admin_parser.add_subparsers(dest="admin_command")

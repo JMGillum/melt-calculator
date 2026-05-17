@@ -487,3 +487,12 @@ def GenerateInsert(table_name, columns, values, multi=True):
 
     return statements
 
+
+def GenerateSelect(table_name, columns, database=None):
+    return f"SELECT {','.join(columns)} FROM {'' if not database else f'{database}.'}{table_name};" 
+
+def Diff(table_name, columns, database_1, database_2):
+    select_1 = GenerateSelect(table_name, columns, database_1)[:-1]
+    select_2 = GenerateSelect(table_name, columns, database_2)
+
+    return " EXCEPT ".join([select_1,select_2])
