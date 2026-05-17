@@ -40,11 +40,11 @@
 # ~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~~^~
 
 
-# Scripts for various operation modes
-from check_config import ValidateConfig
 
 if __name__ == "__main__":
-    config, errors = ValidateConfig()
+    from check_config import ValidateUserConfig
+
+    config, errors = ValidateUserConfig()
     for error in errors:
         print(error, flush=True)
     if config is None:
@@ -68,6 +68,18 @@ if __name__ == "__main__":
 
     # Sets up argument parser and then parses them
     args = InitialSetup(config)
+
+    if args["command"] == "dev":
+        from check_config import ValidateDevConfig
+        dev_config, errors = ValidateDevConfig()
+        for error in errors:
+            print(error, flush=True)
+        if dev_config is None:
+            print("Dev config error. Aborting...")
+            exit(1)
+        config.pop("db_config")
+        config |= {"db_config": dev_config["db_config"]}
+        config["db_config"] |= {"database_production": dev_config["db_production"]["database"], "database_dev": dev_config["db_dev"]["database"]}
 
     # Sets up colored text
     if not InitColoredText(config,args.get("output_level",0) > 0):
