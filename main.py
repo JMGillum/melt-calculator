@@ -79,7 +79,10 @@ if __name__ == "__main__":
             exit(1)
         config.pop("db_config")
         config |= {"db_config": dev_config["db_config"]}
-        config["db_config"] |= {"database_production": dev_config["db_production"]["database"], "database_dev": dev_config["db_dev"]["database"]}
+        if args["dev_command"] == "setup-db":
+            config["db_config"] |= {"database": dev_config["db_dev"]["database"]}
+        else:
+            config["db_config"] |= {"database_production": dev_config["db_production"]["database"], "database_dev": dev_config["db_dev"]["database"]}
 
     # Sets up colored text
     if not InitColoredText(config,args.get("output_level",0) > 0):
@@ -94,20 +97,22 @@ if __name__ == "__main__":
             db.Connect(config["db_config"])
 
             skip_setup_metals = False
+            action = None
             # These do not need access to purchases or pricing, so execute them
-            if args["command"] == "admin":
+            if args["command"] == "admin" or args["command"] == "dev":
+                sub_command = "admin_command" if args["command"] == "admin" else "dev_command"
                 # Backs up database entries for the various tables
-                if args["admin_command"] == "backup":
+                if args.get(sub_command,None) == "backup":
                     backup.Backup(args, db, dir=config["backup_path"])
                     skip_setup_metals = True
 
                 # Adds new coins
-                elif args["admin_command"] == "new-items":
+                elif args.get(sub_command,None) == "new-items":
                     addCoins.AddCoins(db, args["prefix"], config)
                     skip_setup_metals = True
 
                 # Setup database
-                elif args["admin_command"] == "setup-db":
+                elif args.get(sub_command,None) == "setup-db":
                     status, errors = setup_db.Start(db,args,config)
                     if status > 0:
                         for error in errors:
@@ -117,7 +122,7 @@ if __name__ == "__main__":
                     skip_setup_metals = True
 
                 # Update database
-                elif args["admin_command"] == "update-db":
+                elif args.get(sub_command,None) == "update-db":
                     status, errors = update_db.Start(db,args,config)
                     if status > 0:
                         for error in errors:
@@ -126,8 +131,6 @@ if __name__ == "__main__":
                         exit(1)
                     skip_setup_metals = True
 
-            if args["command"] == "dev":
-                skip_setup_metals = True
 
             if not skip_setup_metals:
                 # Fetches all of the purchases and sets up and fetches metal prices
@@ -148,14 +151,14 @@ if __name__ == "__main__":
                 if args["admin_command"] == "prices":
                     updateMetalPrices.GetMetalPricesFromUser(db, prices, config)
 
-
             # The operation mode is search, which will search the database for coins.
             elif args["command"] == "search":
                 search.Search(args, db, purchases, prices, config)
 
-            # Other / undefined operation mode
-            else:
-                print(f"Error: Unknown command type: {args['command']}")
         finally:
             # Close Cursor and Connection
             db.CloseConnection()
+
+    # Other / undefined operation mode
+    else:
+        print(f"Error: Unknown command type: {args['command']}")
