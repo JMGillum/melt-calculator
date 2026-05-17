@@ -3,76 +3,6 @@ import treasure.config
 from treasure.color import ColoredText
 from db.interface import DB_Interface
 
-default_config_contents = """
-# Config file for metals program
-backup_path = "/absolute/path/to/store/backups" # Where to store database backups
-# Where to source files for setting up the database. Should be the directory
-# that stores the directories for each series. ex: /database/data, 
-# which houses base/, bullion/, etc.
-load_path = "/absolute/path/to/load/files/for/database"
-# Where update files are stored.
-update_path = "/absolute/path/to/load/files/for/database"
-
-default_retention = 0.97 # Value of coin that a shop will pay. Is percentage of melt.
-
-use_permille = false # Uses parts per thousand instead of parts per hundred (percent)
-
-tree_fancy_characters = true
-
-currency_symbol = "$" # displayed before prices
-
-current_year = 2026
-minimum_year = 1800 # Smallest value that will be interpreted as a year and not a face value.
-
-date_format = "%m/%d/%y"
-
-bullion_hint = " (Bullion)" # Displayed after bullion denominations
-
-enforce_prices_set = false
-
-# ----- Color related config -----
-show_color = true # Toggles all color output
-colors_8_bit = true # Toggles 8 bit colors on instead of 3 bit colors
-show_metal_colors = true # Toggles colored names of metals
-
-# Colors for names of metals. Does nothing if show_metal_colors is false.
-# Each value on left is key used in database.
-# Each value on right is a color defined in treasure/color.py
-[metals_colors]
-ag="silver"
-au="bright_yellow"
-pd="bronze"
-pt="rose"
-rh="lime"
-other="red"
-
-[types_colors]
-country="blue"
-denomination="purple"
-value="yellow"
-purchase="teal"
-
-[tags_colors]
-bullion="magenta"
-
-[misc_colors]
-gain="green"
-loss="red"
-
-[db_config]
-host="localhost"
-port=3306
-user="root"
-database="coin_data"
-# Uncomment password line below if you want to connect to database without
-# having to enter your password each time. Be aware that it will be freely visible
-# to other users of the system
-#password="your_password"
-"""
-
-config_name = "config.toml"
-config_dir = "metals"
-
 
 def CheckFloat(item) -> bool:
     """ Returns whether the item is a float or an int
@@ -151,7 +81,7 @@ def CheckValue(datatype:str, item) -> bool:
     return False
 
 
-def ValidateConfig() -> (dict,list[str]):
+def ValidateConfig(float_keys=None, int_keys=None, str_keys=None, bool_keys=None, dict_keys=None, db_config_key=None, config_dir=None, config_file_name=None, default_config_contents=None) -> (dict,list[str]):
     """ Loads the config from the file, checks if the datatypes of the variables match what they are supposed to be.
 
     Returns: (dict object of config, list of strings describing errors)
@@ -160,51 +90,29 @@ def ValidateConfig() -> (dict,list[str]):
     errors = []  # A list of error strings. Allows this to function in non-terminal environments
 
     # Gets the config from the default location
-    config = treasure.config.FetchConfig(config_name, config_dir)
+    config = treasure.config.FetchConfig(config_file_name, config_dir)
 
     # Config was not found, create at default location
     if config is None:
         errors.append(
-            f"Config file not found. Creating {config_name}: {treasure.config.DefaultConfigPath(config_dir)}"
+            f"Config file not found. Creating {config_file_name}: {treasure.config.DefaultConfigPath(config_dir)}"
         )
-
         # Creates config file with default contents.
-        treasure.config.CreateConfig(default_config_contents, config_name, config_dir)
+        treasure.config.CreateConfig(default_config_contents, config_file_name, config_dir)
         return (None, errors)
 
     # Validate basic config options are of the correct datatypes
     # Each item is a tuple of (key,default value)
 
-    # All variables that should be of float type
-    float_keys = (("default_retention", 0.97),)
-
-    # All variables that should be of int type
-    int_keys = (("current_year", datetime.now().year), ("minimum_year", 1800))
-
-    # All variables that should be of str type
-    str_keys = (
-        ("currency_symbol", "$"),
-        ("date_format", "%m/%d/%y"),
-        ("bullion_hint", " (Bullion)"),
-        ("backup_path","~/backups/metals"),
-        ("load_path",""),
-        ("update_path",""),
-    )
-
-    # All variables that should be of bool type
-    bool_keys = (
-        ("use_permille", False),
-        ("tree_fancy_characters", True),
-        ("enforce_prices_set", True),
-        ("show_color", True),
-        ("colors_8_bit", True),
-        ("show_metal_colors", True),
-    )
-
     keys = {"float": float_keys, "int": int_keys, "str": str_keys, "bool": bool_keys}
 
     # Loops through each key, setting default value if not present in config file.
     for datatype, type_keys in keys.items():
+
+        if type_keys is None:
+            # Skip those that do not exist
+            continue
+
         for key in type_keys:
             key, default = key
 
@@ -215,18 +123,10 @@ def ValidateConfig() -> (dict,list[str]):
                 if not CheckValue(datatype, config[key]):
                     errors.append(f"Error: {key}")
 
-    # Validate each of the color dictionaries
-    dict_keys = (
-        ("metals_colors", ("ag", "au", "pd", "pt", "rh", "other")),
-        ("types_colors", ("country", "denomination", "value", "purchase")),
-        ("tags_colors", ("bullion",)),
-        ("misc_colors", ("gain", "loss")),
-    )
-
+    # Validate each of the dictionaries
     for key, sub_keys in dict_keys:
 
-        # If config item is missing, use empty dictionary. This allows the user
-        # to disable color output for specific items.
+        # If config item is missing, use empty dictionary.
         if treasure.config.ExtractConfigItem(config, key, {}):
 
             # Checks each dict object
@@ -241,17 +141,163 @@ def ValidateConfig() -> (dict,list[str]):
                             errors.append(f"Error: {key} {sub_key}")
 
     # Let db_interface class handle validating the db config
-    treasure.config.ExtractConfigItem(config, "db_config", None)
-    errors += DB_Interface.ValidateConfig(config["db_config"])
+    treasure.config.ExtractConfigItem(config, db_config_key, None)
+    errors += DB_Interface.ValidateConfig(config[db_config_key])
 
     return (config, errors)
+
+
+def ValidateUserConfig():
+
+    config_specifications = {
+        # Each item is a tuple of (key,default value)
+        "float_keys": (("default_retention", 0.97),),
+        "int_keys": (("current_year", datetime.now().year), ("minimum_year", 1800)),
+        "str_keys": (
+            ("currency_symbol", "$"),
+            ("date_format", "%m/%d/%y"),
+            ("bullion_hint", " (Bullion)"),
+            ("backup_path","~/backups/metals"),
+            ("load_path",""),
+            ("update_path",""),
+        ),
+        "bool_keys": (
+            ("use_permille", False),
+            ("tree_fancy_characters", True),
+            ("enforce_prices_set", True),
+            ("show_color", True),
+            ("colors_8_bit", True),
+            ("show_metal_colors", True),
+        ),
+        "dict_keys": (
+            ("metals_colors", ("ag", "au", "pd", "pt", "rh", "other")),
+            ("types_colors", ("country", "denomination", "value", "purchase")),
+            ("tags_colors", ("bullion",)),
+            ("misc_colors", ("gain", "loss")),
+        ),
+        "db_config_key": "db_config",
+        "config_file_name": "config.toml",
+        "config_dir": "metals",
+        "default_config_contents": 
+            """
+            # Config file for metals program
+            backup_path = "/absolute/path/to/store/backups" # Where to store database backups
+            # Where to source files for setting up the database. Should be the directory
+            # that stores the directories for each series. ex: /database/data, 
+            # which houses base/, bullion/, etc.
+            load_path = "/absolute/path/to/load/files/for/database"
+            # Where update files are stored.
+            update_path = "/absolute/path/to/load/files/for/database"
+
+            default_retention = 0.97 # Value of coin that a shop will pay. Is percentage of melt.
+
+            use_permille = false # Uses parts per thousand instead of parts per hundred (percent)
+
+            tree_fancy_characters = true
+
+            currency_symbol = "$" # displayed before prices
+
+            current_year = 2026
+            minimum_year = 1800 # Smallest value that will be interpreted as a year and not a face value.
+
+            date_format = "%m/%d/%y"
+
+            bullion_hint = " (Bullion)" # Displayed after bullion denominations
+
+            enforce_prices_set = false
+
+            # ----- Color related config -----
+            show_color = true # Toggles all color output
+            colors_8_bit = true # Toggles 8 bit colors on instead of 3 bit colors
+            show_metal_colors = true # Toggles colored names of metals
+
+            # Colors for names of metals. Does nothing if show_metal_colors is false.
+            # Each value on left is key used in database.
+            # Each value on right is a color defined in treasure/color.py
+            [metals_colors]
+            ag="silver"
+            au="bright_yellow"
+            pd="bronze"
+            pt="rose"
+            rh="lime"
+            other="red"
+
+            [types_colors]
+            country="blue"
+            denomination="purple"
+            value="yellow"
+            purchase="teal"
+
+            [tags_colors]
+            bullion="magenta"
+
+            [misc_colors]
+            gain="green"
+            loss="red"
+
+            [db_config]
+            host="localhost"
+            port=3306
+            user="metals"
+            database="coin_data"
+            # Uncomment password line below if you want to connect to database without
+            # having to enter your password each time. Be aware that it will be freely visible
+            # to other users of the system
+            #password="your_password"
+            """
+    }
+    return ValidateConfig(**config_specifications)
+
+
+
+def ValidateDevConfig():
+
+    config_specifications = {
+        # Each item is a tuple of (key,default value)
+        "dict_keys": (
+            ("db_production", ("database",)),
+            ("db_dev", ("database",)),
+        ),
+        "db_config_key": "db_config",
+        "config_file_name": "config-dev.toml",
+        "config_dir": "metals",
+        "default_config_contents": 
+            """
+            # Config file for metals program developer tools
+            [db_config]
+            host="localhost"
+            port=3306
+            user="metals-dev"
+            # Uncomment password line below if you want to connect to database without
+            # having to enter your password each time. Be aware that it will be freely visible
+            # to other users of the system
+            #password="your_password"
+
+            [db_production]
+            database="coin_data"
+
+            [db_dev]
+            database="coin_data_dev"
+            """
+    }
+    return ValidateConfig(**config_specifications)
 
 
 if __name__ == "__main__":
 
     # Validates the config and prints out any errors
     print(f"Config location: {treasure.config.DefaultConfigPath('metals')}")
-    config, errors = ValidateConfig()
+    config, errors = ValidateUserConfig()
+    if not errors:
+        print("No errors in config.")
+    for error in errors:
+        print(error,flush=True)
+
+    # Validates the config and prints out any errors
+    print(f"Config location: {treasure.config.DefaultConfigPath('metals')}")
+    config, errors = ValidateDevConfig()
+    if not errors:
+        print("No errors in config.")
     for error in errors:
         print(error,flush=True)
 
