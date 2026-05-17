@@ -87,6 +87,7 @@ class DB_Interface:
 
             # 3. Create a Cursor Object
         except mariadb.Error as e:
+            print("Connection error.")
             print(f"An error occurred: {e}")
             sys.exit(1)
         self.conn = conn
