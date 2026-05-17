@@ -136,6 +136,11 @@ if __name__ == "__main__":
                     diff(db, config["db_config"]["database_production"], config["db_config"]["database_dev"], args, config)
                     skip_setup_metals = True
 
+                elif args.get(sub_command,None) == "export":
+                    from development_tools import export_changes
+                    export_changes(db,config["db_config"]["database_production"],config["db_config"]["database_dev"],args,config,export_format=args["export_format"])
+                    skip_setup_metals = True
+
 
             if not skip_setup_metals:
                 # Fetches all of the purchases and sets up and fetches metal prices

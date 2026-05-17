@@ -204,8 +204,27 @@ def SetupParser() -> argparse.ArgumentParser:
         metavar="STRING",
         help="The order to introduce each series into the database. Use a string of semicolon separated series names. ex: \'base;bullion;custom\'. They will be loaded in the order specified here.",
     )
+    export_parser = dev_subparsers.add_parser(
+            "export", parents=[verbose_parser]
+            )
+    export_parser.add_argument(
+            "-f",
+            "--export-format",
+            default="json",
+            help="Which format to output the changes. Default is json. Currently supported is: json."
+            )
+    export_parser.add_argument(
+            "-o",
+            "--output_file",
+            help="Which file to store the output in."
+            )
     diff_parser = dev_subparsers.add_parser(
         "diff", parents=[verbose_parser]
+    )
+    diff_parser.add_argument(
+        "-i",
+        "--input-file",
+        help="Path to the json file that stores the structures of the tables of the database."
     )
 
     admin_parser = subparsers.add_parser("admin")
