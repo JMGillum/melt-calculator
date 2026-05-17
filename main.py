@@ -86,7 +86,7 @@ if __name__ == "__main__":
         print("Unable to initialize colored text", flush=True)
         exit(1)
 
-    if args["command"] in ["manage-purchases", "report", "admin", "search"]:
+    if args["command"] in ["manage-purchases", "report", "admin", "search", "dev"]:
         try:
             # Perform setup for whichever operation mode
             # Connects to database
@@ -125,6 +125,9 @@ if __name__ == "__main__":
                         print("",end="",flush=True)
                         exit(1)
                     skip_setup_metals = True
+
+            if args["command"] == "dev":
+                skip_setup_metals = True
 
             if not skip_setup_metals:
                 # Fetches all of the purchases and sets up and fetches metal prices
