@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 23 February 2026          ":"         __ __
+#   Date: 17 May 2026               ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -23,7 +23,7 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
     Args:
         db (DB_Interface): The object for interacting with the database. 
         args: command line arguments. Must have "country", "denomination", "year",
-        "face_value", "face_value_name", "search_file", and "verbose" defined
+        "face_value", "face_value_name", "search_file", and "output_level" defined
         purchases: Stores lists of purchases indexed by their associated coin ids
         prices: Stores prices indexed by their metal_id in the database
         config: Stores config options. Passed to Coins.Build()
@@ -67,7 +67,7 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
 
     # Parses all of the search strings and gets 4 element tuples of arguments
     for item in input_strings:
-        arguments_list.append(Coins.ParseSearchString(db, item, debug=args["verbose"],config=config))
+        arguments_list.append(Coins.ParseSearchString(db, item, debug=args.get("output_level",0),config=config))
 
     # Goes through each set of arguments and searches
     if arguments_list:
@@ -100,12 +100,12 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
                             arguments[FACE_VALUE],
                             arguments[FACE_VALUE_NAME],
                         )
-                        if args["verbose"]:
+                        if args.get("output_level",0) > 0:
                             print(f"Year was successfully converted to {year}")
 
                     # Argument for year was not specified
                     else:
-                        if args["verbose"]:
+                        if args.get("output_level",0) > 0:
                             print("Year was not provided. Ignoring...")
                 except ValueError:
                     print(
@@ -136,12 +136,12 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
 
                 # Argument for face value was not specified
                 else:
-                    if args["verbose"]:
+                    if args.get("output_level",0) > 0:
                         print("face_value was not provided. Ignoring...")
 
                 # The year and face_value could be converted to numeric types (if applicable)
                 if (not fail_year and not fail_face_value):
-                    if args["verbose"]:
+                    if args.get("output_level",0) > 0:
                         print(
                             "The year and/or face_value arguments were successfully converted."
                         )
@@ -151,7 +151,7 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
                         "year": arguments[YEAR],
                         "face_value": arguments[FACE_VALUE],
                         "face_value_name": arguments[FACE_VALUE_NAME],
-                        "debug": args["verbose"],
+                        "debug": args.get("output_level",0) > 0,
                         "show_only_owned": args["owned"],
                         "show_only_not_owned": args["not_owned"],
                     }
@@ -166,7 +166,7 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
                         config=config,
                         prices=prices,
                         purchases=purchases,
-                        debug=args["verbose"],
+                        debug=args.get("output_level",0) > 0,
                         show_only_bullion=args["only_bullion"],
                         show_only_not_bullion=args["hide_bullion"],
                         show_coin_ids=args["show_coin_ids"],
@@ -221,7 +221,7 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
     # Simply print out all of the coins.
     else:
         search_arguments = {
-            "debug": args["verbose"],
+            "debug": args.get("output_level",0) > 0,
             "show_only_owned": args["owned"],
             "show_only_not_owned": args["not_owned"],
         }
@@ -233,7 +233,7 @@ def Search(args:dict, db, purchases:dict, prices:dict, config:dict):
             mapping,
             prices=prices,
             purchases=purchases,
-            debug=args["verbose"],
+            debug=args.get("output_level",0) > 0,
             show_only_bullion=args["only_bullion"],
             show_only_not_bullion=args["hide_bullion"],
             show_coin_ids=args["show_coin_ids"],

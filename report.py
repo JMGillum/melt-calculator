@@ -36,7 +36,7 @@ def CollectionReport(args:dict, db, purchases:dict, prices:dict, config:dict):
 
     # Only filter applied is to show only owned.
     search_arguments = {
-        "debug": args["verbose"],
+        "debug": args.get("output_level",0) > 0,
         "show_only_owned": True,
     }
 
@@ -49,7 +49,7 @@ def CollectionReport(args:dict, db, purchases:dict, prices:dict, config:dict):
         mapping,
         prices=prices,
         purchases=purchases,
-        debug=args["verbose"],
+        debug=args.get("output_level",0) > 0,
         show_only_bullion=args["only_bullion"],
         show_only_not_bullion=args["hide_bullion"],
         show_coin_ids=args["show_coin_ids"],

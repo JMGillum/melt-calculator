@@ -186,7 +186,7 @@ def Backup(args, db: DB_Interface, dir=None):
         dir = Path(args["output_destination"])
     try:
         # Attempts to create directory that will store all backups
-        if args["verbose"]:
+        if args.get("output_level",0) > 0:
             print(f"Attempting to create directory: {dir}")
         dir.mkdir(parents=True, exist_ok=True)
     except PermissionError:
@@ -196,7 +196,7 @@ def Backup(args, db: DB_Interface, dir=None):
         # Backups are stored in a timestamped directory within the backups directory
         # Attempts to create that directory
         dir = dir / Path(datetime.now().strftime("%Y%m%d_%H%M%S"))
-        if args["verbose"]:
+        if args.get("output_level",0) > 0:
             print(f"Attempting to create directory: {dir}")
         dir.mkdir(parents=True, exist_ok=True)
     except PermissionError:

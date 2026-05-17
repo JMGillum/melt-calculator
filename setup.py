@@ -17,16 +17,20 @@ def SetupParser() -> argparse.ArgumentParser:
     Returns: The ArgumentParser object for the arguments
         
     """
-    version_parser = argparse.ArgumentParser(add_help=False)
-    version_parser.add_argument(
-        "-v", "--version", action="version", version=f"%(prog)s {__version__}"
-    )
     verbose_parser = argparse.ArgumentParser(add_help=False)
     verbose_parser.add_argument(
-        "-V",
+        "-v",
         "--verbose",
-        action="store_true",
-        help="Turns on additional printing. Useful for debugging.",
+        action="count",
+        default=0,
+        help="Increases output by one level. May be used multiple times.",
+    )
+    verbose_parser.add_argument(
+        "-q",
+        "--quiet",
+        action="count",
+        default=0,
+        help="Reduces output by one level. May be used multiple times.",
     )
     database_parser = argparse.ArgumentParser(add_help=False)
     database_parser.add_argument(
@@ -165,7 +169,9 @@ def SetupParser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(
         description="Prints information and prices on various coins made of gold and silver. These command line arguments are optional.",
-        parents=[version_parser],
+    )
+    parser.add_argument(
+        "-v", "--version", action="version", version=f"%(prog)s {__version__}"
     )
 
     subparsers = parser.add_subparsers(dest="command")
@@ -175,23 +181,22 @@ def SetupParser() -> argparse.ArgumentParser:
             metal_prices_parser,
             bullion_parser,
             search_parameter_parser,
-            version_parser,
             verbose_parser,
             database_parser,
             tree_output_modification_parser,
         ],
     )
 
-    admin_parser = subparsers.add_parser("admin", parents=[version_parser])
+    admin_parser = subparsers.add_parser("admin")
     admin_subparsers = admin_parser.add_subparsers(dest="admin_command")
     backup_parser = admin_subparsers.add_parser(
-        "backup", parents=[version_parser, verbose_parser, database_parser]
+        "backup", parents=[verbose_parser, database_parser]
     )
     prices_parser = admin_subparsers.add_parser(
-        "prices", parents=[version_parser, verbose_parser, database_parser]
+        "prices", parents=[verbose_parser, database_parser]
     )
     setup_db_parser = admin_subparsers.add_parser(
-        "setup-db", parents=[version_parser, verbose_parser, database_parser]
+        "setup-db", parents=[verbose_parser, database_parser]
     )
     setup_db_parser.add_argument(
         "-i",
@@ -206,7 +211,7 @@ def SetupParser() -> argparse.ArgumentParser:
         help="The order to introduce each series into the database. Use a string of semicolon separated series names. ex: \'base;bullion;custom\'. They will be loaded in the order specified here.",
     )
     update_db_parser = admin_subparsers.add_parser(
-        "update-db", parents=[version_parser, verbose_parser, database_parser]
+        "update-db", parents=[verbose_parser, database_parser]
     )
     update_db_parser.add_argument(
         "-i",
@@ -221,7 +226,7 @@ def SetupParser() -> argparse.ArgumentParser:
         help="The greatest version to update to. Updating will stop once it reaches this version. Pass a string such as \'2.0\' or \'3.4\'.",
     )
     new_items_parser = admin_subparsers.add_parser(
-        "new-items", parents=[version_parser, verbose_parser, database_parser]
+        "new-items", parents=[verbose_parser, database_parser]
     )
     new_items_parser.add_argument(
         "-p",
@@ -286,14 +291,13 @@ def SetupParser() -> argparse.ArgumentParser:
         parents=[
             metal_prices_parser,
             bullion_parser,
-            version_parser,
             verbose_parser,
             database_parser,
             tree_output_modification_parser,
         ],
     )
     collection_manage_parser = subparsers.add_parser(
-        "manage-purchases", parents=[database_parser, version_parser, verbose_parser]
+        "manage-purchases", parents=[database_parser, verbose_parser]
     )
     collection_manage_parser.add_argument(
         "-d",
@@ -342,7 +346,13 @@ def InitialSetup(config:dict) -> dict:
     # Command line arguments
     parser = SetupParser()
     args = vars(parser.parse_args())
-    if args["verbose"]:
+    verbose = args.get("verbose",0)
+    quiet = args.get("quiet",0)
+    output_level = verbose - quiet
+    args["output_level"] = output_level
+    args.pop("verbose")
+    args.pop("quiet")
+    if args.get("output_level",0) > 0:
         print(f"arguments: {args}")
 
     # The database was specified in the command line
@@ -381,7 +391,7 @@ def UpdatePrices(prices:dict, args:dict, config:dict, db=None):
                             updates.append((key, prices[key][1], current_date))
                 except KeyError:
                     try:
-                        if args["verbose"]:
+                        if args.get("output_level",0) > 0:
                             print(f"Error updating price for key: {key}")
                     except KeyError:
                         pass

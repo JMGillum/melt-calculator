@@ -70,7 +70,7 @@ if __name__ == "__main__":
     args = InitialSetup(config)
 
     # Sets up colored text
-    if not InitColoredText(config,args["verbose"]):
+    if not InitColoredText(config,args.get("output_level",0) > 0):
         print("Unable to initialize colored text", flush=True)
         exit(1)
 
@@ -78,7 +78,7 @@ if __name__ == "__main__":
         try:
             # Perform setup for whichever operation mode
             # Connects to database
-            db = DB_Interface(debug=args["verbose"])
+            db = DB_Interface(debug=args.get("output_level",0) > 0)
             db.Connect(config["db_config"])
 
             skip_setup_metals = False
