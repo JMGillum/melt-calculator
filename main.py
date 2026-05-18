@@ -131,15 +131,26 @@ if __name__ == "__main__":
                         exit(1)
                     skip_setup_metals = True
 
-                elif args.get(sub_command,None) == "diff":
-                    from development_tools import diff
-                    diff(db, config["db_config"]["database_production"], config["db_config"]["database_dev"], args, config)
+                elif args.get(sub_command,None) in ["diff", "export"]:
+                    from development_tools import Diff, PrintDiff, ExportDiff
+                    pro_db = config["db_config"]["database_production"]
+                    dev_db = config["db_config"]["database_dev"]
+                    changes = []
+                    for only_in_database_1, only_in_database_2, columns, table_name in Diff(db, pro_db, dev_db, config.get("load_path"), args.get("input_file")):
+                        if args.get(sub_command,None) == "diff":
+                            PrintDiff(table_name, only_in_database_1, only_in_database_2, pro_db, dev_db)
+                        if args.get(sub_command,None) == "export":
+                            change = ExportDiff(only_in_database_1, only_in_database_2, table_name, columns)
+                            if change:
+                                changes.append(change)
+
+                    if args.get(sub_command) == "export":
+                        import json
+                        print(json.dumps(changes, indent=4))
+                        with open("output","w") as f:
+                            json.dump(changes, f, indent=2)
                     skip_setup_metals = True
 
-                elif args.get(sub_command,None) == "export":
-                    from development_tools import export_changes
-                    export_changes(db,config["db_config"]["database_production"],config["db_config"]["database_dev"],args,config,export_format=args["export_format"])
-                    skip_setup_metals = True
 
 
             if not skip_setup_metals:

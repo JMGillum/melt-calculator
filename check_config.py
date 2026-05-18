@@ -254,6 +254,9 @@ def ValidateDevConfig():
 
     config_specifications = {
         # Each item is a tuple of (key,default value)
+        "str_keys": (
+            ("updates_storage_path",""),
+        ),
         "dict_keys": (
             ("db_production", ("database",)),
             ("db_dev", ("database",)),
@@ -264,6 +267,7 @@ def ValidateDevConfig():
         "default_config_contents": 
             """
             # Config file for metals program developer tools
+            updates_storage_path = ""
             [db_config]
             host="localhost"
             port=3306
