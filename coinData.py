@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 23 February 2026          ":"         __ __
+#   Date: 18 May 2026               ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -317,36 +317,20 @@ class CoinData:
         self.metal_colors = config["metals_colors"]
         self.use_permille = config["use_permille"]
 
-        self.metal = metal
-        self.ValidateMetal()
+        self.SetMetal(metal)
         self.face_value = face_value
         self.denomination = denomination
 
         # Sets country name and converts to title if it is a string
-        self.country = ""
-        if isinstance(country, str):
-            self.country = country.title()
+        self.SetCountry(country)
 
-        # Converts weights to weights.Weight objects
-        self.weight = weights.Weight(weight, weights.Units.GRAMS)
-        self.precious_metal_weight = weights.Weight(
-            precious_metal_weight, weights.Units.TROY_OUNCES
-        )
-        self.fineness = float(fineness)
-
-        # Precious metal weight was not specified, so calculate it
-        if (
-            self.precious_metal_weight is None
-            and self.weight is not None
-            and self.fineness is not None
-        ):
-            self.precious_metal_weight = weights.Weight(
-                self.weight.AsTroyOunces() * self.fineness,
-                weights.Units.TROY_OUNCES,
-            )
-
-        self.years = years
-        self.FormatYears()
+        # Sets weights and fineness
+        self.weight = None
+        self.fineness = None
+        self.precious_metal_weight = None
+        self.SetWeight(weight, fineness, precious_metal_weight)
+        
+        self.SetYears(years)
 
         # Sets nickname and converts to title if it is a string
         self.nickname = ""
@@ -370,6 +354,42 @@ class CoinData:
 
         # Updated with self.TogglePrice()
         self.show_value = show_value
+
+
+    def SetMetal(self, metal):
+        self.metal = metal
+        self.ValidateMetal()
+
+    def SetCountry(self, country):
+        self.country = str(country).title()
+
+    def SetWeight(self, weight=None, fineness=None, precious_metal_weight=None):
+
+        # Converts weights to weights.Weight objects
+        if weight is not None:
+            self.weight = weights.Weight(weight, weights.Units.GRAMS)
+        if precious_metal_weight is not None:
+            self.precious_metal_weight = weights.Weight(
+                precious_metal_weight, weights.Units.TROY_OUNCES
+            )
+        if fineness is not None:
+            self.fineness = float(fineness)
+
+        # Precious metal weight was not specified, so calculate it
+        if (
+            self.precious_metal_weight is None
+            and self.weight is not None
+            and self.fineness is not None
+        ):
+            self.precious_metal_weight = weights.Weight(
+                self.weight.AsTroyOunces() * self.fineness,
+                weights.Units.TROY_OUNCES,
+            )
+
+
+    def SetYears(self,years):
+        self.years = years
+        self.FormatYears()
 
     def TogglePrice(self, show_price: bool | None = None):
         """Toggles whether this object will print out values when cast to string.
@@ -547,10 +567,14 @@ class Value:
         self,
         value = 0.0,
         value_name: str = None,
+        value_id: str = None,
+        show_value_id: bool = False,
         color: str = None,
     ):
         self.value = value
         self.value_name = value_name
+        self.value_id = value_id
+        self.show_value_id = show_value_id
         self.color = color
 
         if self.value_name:
@@ -574,6 +598,9 @@ class Value:
                     self.display_name = f"{self.value}"
                 except TypeError:
                     pass
+
+        if self.show_value_id:
+            self.display_name = self.display_name + " {" + self.value_id + "}"
 
         self.print_name = ColoredText(self.display_name, self.color)
 
