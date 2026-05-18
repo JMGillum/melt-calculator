@@ -226,6 +226,9 @@ def SetupParser() -> argparse.ArgumentParser:
         "--input-file",
         help="Path to the json file that stores the structures of the tables of the database."
     )
+    modify_data_parser = dev_subparsers.add_parser(
+            "modify-data", parents=[verbose_parser]
+            )
 
     admin_parser = subparsers.add_parser("admin")
     admin_subparsers = admin_parser.add_subparsers(dest="admin_command")

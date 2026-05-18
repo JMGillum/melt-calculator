@@ -79,7 +79,7 @@ if __name__ == "__main__":
             exit(1)
         config.pop("db_config")
         config |= {"db_config": dev_config["db_config"]}
-        if args["dev_command"] == "setup-db":
+        if args["dev_command"] in ["setup-db", "modify-data"]:
             config["db_config"] |= {"database": dev_config["db_dev"]["database"]}
         else:
             config["db_config"] |= {"database_production": dev_config["db_production"]["database"], "database_dev": dev_config["db_dev"]["database"]}
@@ -175,6 +175,11 @@ if __name__ == "__main__":
             # The operation mode is search, which will search the database for coins.
             elif args["command"] == "search":
                 search.Search(args, db, purchases, prices, config)
+
+            elif args["command"] == "dev":
+                if args["dev_command"] == "modify-data":
+                    import modify_data
+                    modify_data.ModifyDataInteractive(db)
 
         finally:
             # Close Cursor and Connection
