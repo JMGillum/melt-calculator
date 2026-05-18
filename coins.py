@@ -1,5 +1,5 @@
 #   Author: Josh Gillum              .
-#   Date: 23 February 2026           ":"         __ __
+#   Date: 18 May 2026               ":"         __ __
 #                                  __|___       \ V /
 #                                .'      '.      | |
 #                                |  O       \____/  |
@@ -496,6 +496,9 @@ class Coins:
         hide_values:bool=False,
         hide_denominations:bool=False,
         show_coin_ids:bool=False,
+        show_value_ids:bool=False,
+        show_denomination_ids:bool=False,
+        show_country_ids:bool=False,
         summarize_purchases:bool=True,
         sorting_methods:dict={},
     ):
@@ -563,8 +566,11 @@ class Coins:
             # Show country
             if len(vals) > 0:
                 country_tree = vals[0]
+                name = entry[mapping["country_display_name"]].title()
+                if show_country_ids:
+                    name = name + " {" + entry[mapping["country_id"]] +"}" 
                 country_name = ColoredText(
-                    entry[mapping["country_display_name"]].title(),
+                    name,
                     config["types_colors"]["country"]
                 )
 
@@ -573,8 +579,11 @@ class Coins:
                 # Show denomination
                 if len(vals) > 1:
                     denomination_tree = vals[1]
+                    name = entry[mapping["denomination_display_name"]].title()
+                    if show_denomination_ids:
+                        name = name + " {" + entry[mapping["denomination_id"]] +"}" 
                     denomination_name = ColoredText(
-                        entry[mapping["denomination_display_name"]].title(),
+                        name,
                         config["types_colors"]["denomination"]
                     )
                     denomination_tree = Coins.__NameElement(*denomination_tree,denomination_name)
@@ -585,6 +594,8 @@ class Coins:
                         value_name = Value(
                             entry[mapping["value"]],
                             entry[mapping["value_display_name"]],
+                            entry[mapping["value_id"]],
+                            show_value_ids,
                             config["types_colors"]["value"],
                         )
                         value_tree = Coins.__NameElement(*value_tree,value_name)
